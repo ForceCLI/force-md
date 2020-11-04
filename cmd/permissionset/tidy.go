@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/permissionset"
 )
 
@@ -19,15 +20,12 @@ var TidyCmd = &cobra.Command{
 }
 
 func tidy(file string) {
-	p, err := permissionset.ParsePermissionSet(file)
+	p, err := permissionset.Open(file)
 	if err != nil {
 		log.Warn("parsing permission set failed: " + err.Error())
 		return
 	}
-	p.Tidy()
-	err = p.Write(file)
-	if err != nil {
-		log.Warn("update failed: " + err.Error())
-		return
+	if err := general.Tidy(p, file); err != nil {
+		log.Warn("tidying failed: " + err.Error())
 	}
 }

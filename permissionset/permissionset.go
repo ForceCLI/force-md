@@ -2,11 +2,12 @@ package permissionset
 
 import (
 	"encoding/xml"
-	"fmt"
+	"io"
 	"os"
 
 	"github.com/pkg/errors"
-	"golang.org/x/net/html/charset"
+
+	"github.com/octoberswimmer/force-md/internal"
 )
 
 type PermissionSet struct {
@@ -116,43 +117,15 @@ type PermissionSet struct {
 	} `xml:"recordTypeVisibilities"`
 }
 
-func (r *PermissionSet) Write(fileName string) error {
-	f, err := os.Create(fileName)
-	if err != nil {
-		return errors.Wrap(err, "opening file")
-	}
-	defer f.Close()
-	fmt.Fprintln(f, `<?xml version="1.0" encoding="UTF-8"?>`)
-	b, err := xml.MarshalIndent(r, "", "    ")
-	if err != nil {
-		return errors.Wrap(err, "serializing permission set")
-	}
-	_, err = f.Write(b)
-	if err != nil {
-		return errors.Wrap(err, "writing xml")
-	}
-	fmt.Fprintln(f, "")
-	return nil
+func Parse(r io.Reader) (*PermissionSet, error) {
+	p := PermissionSet{}
+	return &p, internal.ParseMetadataXml(p, r)
 }
 
-func ParsePermissionSet(permissionSetPath string) (*PermissionSet, error) {
-	f, err := os.Open(permissionSetPath)
+func Open(path string) (*PermissionSet, error) {
+	f, err := os.Open(path)
 	if err != nil {
-		return nil, errors.Wrap(err, "opening permission set")
+		return nil, errors.Wrap(err, "opening file")
 	}
-	defer f.Close()
-	dec := xml.NewDecoder(f)
-	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = false
-
-	var doc PermissionSet
-	if err := dec.Decode(&doc); err != nil {
-		return nil, errors.Wrap(err, "parsing xml")
-	}
-	_, err = f.Seek(0, 0)
-	if err != nil {
-		return &doc, errors.Wrap(err, "reading header")
-	}
-
-	return &doc, nil
+	return Parse(f)
 }

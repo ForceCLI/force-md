@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/profile"
 )
 
@@ -38,7 +39,7 @@ var cloneCmd = &cobra.Command{
 }
 
 func addNewField(file string) {
-	p, err := profile.ParseProfile(file)
+	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
@@ -48,7 +49,7 @@ func addNewField(file string) {
 		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
 		return
 	}
-	err = p.Write(file)
+	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return

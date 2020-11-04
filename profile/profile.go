@@ -2,11 +2,12 @@ package profile
 
 import (
 	"encoding/xml"
-	"fmt"
+	"io"
 	"os"
 
 	"github.com/pkg/errors"
-	"golang.org/x/net/html/charset"
+
+	"github.com/octoberswimmer/force-md/internal"
 )
 
 type FieldPermission struct {
@@ -126,43 +127,15 @@ type Profile struct {
 	} `xml:"userPermissions"`
 }
 
-func (p *Profile) Write(fileName string) error {
-	f, err := os.Create(fileName)
-	if err != nil {
-		return errors.Wrap(err, "opening file")
-	}
-	defer f.Close()
-	fmt.Fprintln(f, `<?xml version="1.0" encoding="UTF-8"?>`)
-	b, err := xml.MarshalIndent(p, "", "    ")
-	if err != nil {
-		return errors.Wrap(err, "serializing profile")
-	}
-	_, err = f.Write(b)
-	if err != nil {
-		return errors.Wrap(err, "writing xml")
-	}
-	fmt.Fprintln(f, "")
-	return nil
+func Parse(r io.Reader) (*Profile, error) {
+	p := Profile{}
+	return &p, internal.ParseMetadataXml(p, r)
 }
 
-func ParseProfile(profilePath string) (*Profile, error) {
-	f, err := os.Open(profilePath)
+func Open(path string) (*Profile, error) {
+	f, err := os.Open(path)
 	if err != nil {
-		return nil, errors.Wrap(err, "opening profile")
+		return nil, errors.Wrap(err, "opening file")
 	}
-	defer f.Close()
-	dec := xml.NewDecoder(f)
-	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = false
-
-	var doc Profile
-	if err := dec.Decode(&doc); err != nil {
-		return nil, errors.Wrap(err, "parsing xml")
-	}
-	_, err = f.Seek(0, 0)
-	if err != nil {
-		return &doc, errors.Wrap(err, "reading header")
-	}
-
-	return &doc, nil
+	return Parse(f)
 }
