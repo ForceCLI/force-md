@@ -1,4 +1,4 @@
-package profile
+package permissionset
 
 import (
 	"encoding/xml"
@@ -9,32 +9,9 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
-type FieldPermission struct {
-	Editable struct {
-		Text string `xml:",chardata"`
-	} `xml:"editable"`
-	Field struct {
-		Text string `xml:",chardata"`
-	} `xml:"field"`
-	Readable struct {
-		Text string `xml:",chardata"`
-	} `xml:"readable"`
-}
-
-type Profile struct {
-	XMLName                 xml.Name `xml:"Profile"`
-	Xmlns                   string   `xml:"xmlns,attr"`
-	ApplicationVisibilities []struct {
-		Application struct {
-			Text string `xml:",chardata"`
-		} `xml:"application"`
-		Default struct {
-			Text string `xml:",chardata"`
-		} `xml:"default"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"applicationVisibilities"`
+type PermissionSet struct {
+	XMLName       xml.Name `xml:"PermissionSet"`
+	Xmlns         string   `xml:"xmlns,attr"`
 	ClassAccesses []struct {
 		ApexClass struct {
 			Text string `xml:",chardata"`
@@ -43,26 +20,26 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"enabled"`
 	} `xml:"classAccesses"`
-	Custom struct {
+	Description struct {
 		Text string `xml:",chardata"`
-	} `xml:"custom"`
-	FieldPermissions []FieldPermission `xml:"fieldPermissions"`
-	FlowAccesses     []struct {
-		Enabled struct {
+	} `xml:"description"`
+	FieldPermissions []struct {
+		Editable struct {
 			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-		Flow struct {
+		} `xml:"editable"`
+		Field struct {
 			Text string `xml:",chardata"`
-		} `xml:"flow"`
-	} `xml:"flowAccesses"`
-	LayoutAssignments []struct {
-		Layout struct {
+		} `xml:"field"`
+		Readable struct {
 			Text string `xml:",chardata"`
-		} `xml:"layout"`
-		RecordType struct {
-			Text string `xml:",chardata"`
-		} `xml:"recordType"`
-	} `xml:"layoutAssignments"`
+		} `xml:"readable"`
+	} `xml:"fieldPermissions"`
+	HasActivationRequired struct {
+		Text string `xml:",chardata"`
+	} `xml:"hasActivationRequired"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
 	ObjectPermissions []struct {
 		AllowCreate struct {
 			Text string `xml:",chardata"`
@@ -94,28 +71,17 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"enabled"`
 	} `xml:"pageAccesses"`
-	RecordTypeVisibilities []struct {
-		Default struct {
-			Text string `xml:",chardata"`
-		} `xml:"default"`
-		RecordType struct {
-			Text string `xml:",chardata"`
-		} `xml:"recordType"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"recordTypeVisibilities"`
-	TabVisibilities []struct {
-		Tab struct {
-			Text string `xml:",chardata"`
-		} `xml:"tab"`
-		Visibility struct {
-			Text string `xml:",chardata"`
-		} `xml:"visibility"`
-	} `xml:"tabVisibilities"`
-	UserLicense struct {
+	License struct {
 		Text string `xml:",chardata"`
-	} `xml:"userLicense"`
+	} `xml:"license"`
+	CustomPermissions []struct {
+		Enabled struct {
+			Text string `xml:",chardata"`
+		} `xml:"enabled"`
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+	} `xml:"customPermissions"`
 	UserPermissions []struct {
 		Enabled struct {
 			Text string `xml:",chardata"`
@@ -124,18 +90,42 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"userPermissions"`
+	TabSettings []struct {
+		Tab struct {
+			Text string `xml:",chardata"`
+		} `xml:"tab"`
+		Visibility struct {
+			Text string `xml:",chardata"`
+		} `xml:"visibility"`
+	} `xml:"tabSettings"`
+	ApplicationVisibilities []struct {
+		Application struct {
+			Text string `xml:",chardata"`
+		} `xml:"application"`
+		Visible struct {
+			Text string `xml:",chardata"`
+		} `xml:"visible"`
+	} `xml:"applicationVisibilities"`
+	RecordTypeVisibilities []struct {
+		RecordType struct {
+			Text string `xml:",chardata"`
+		} `xml:"recordType"`
+		Visible struct {
+			Text string `xml:",chardata"`
+		} `xml:"visible"`
+	} `xml:"recordTypeVisibilities"`
 }
 
-func (p *Profile) Write(fileName string) error {
+func (r *PermissionSet) Write(fileName string) error {
 	f, err := os.Create(fileName)
 	if err != nil {
 		return errors.Wrap(err, "opening file")
 	}
 	defer f.Close()
 	fmt.Fprintln(f, `<?xml version="1.0" encoding="UTF-8"?>`)
-	b, err := xml.MarshalIndent(p, "", "    ")
+	b, err := xml.MarshalIndent(r, "", "    ")
 	if err != nil {
-		return errors.Wrap(err, "serializing profile")
+		return errors.Wrap(err, "serializing permission set")
 	}
 	_, err = f.Write(b)
 	if err != nil {
@@ -145,17 +135,17 @@ func (p *Profile) Write(fileName string) error {
 	return nil
 }
 
-func ParseProfile(profilePath string) (*Profile, error) {
-	f, err := os.Open(profilePath)
+func ParsePermissionSet(permissionSetPath string) (*PermissionSet, error) {
+	f, err := os.Open(permissionSetPath)
 	if err != nil {
-		return nil, errors.Wrap(err, "opening profile")
+		return nil, errors.Wrap(err, "opening permission set")
 	}
 	defer f.Close()
 	dec := xml.NewDecoder(f)
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
 
-	var doc Profile
+	var doc PermissionSet
 	if err := dec.Decode(&doc); err != nil {
 		return nil, errors.Wrap(err, "parsing xml")
 	}
