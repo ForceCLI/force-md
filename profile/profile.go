@@ -1,13 +1,9 @@
 package profile
 
 import (
-	"bufio"
 	"encoding/xml"
-	"fmt"
-	"os"
 
-	"github.com/pkg/errors"
-	"golang.org/x/net/html/charset"
+	"github.com/octoberswimmer/force-md/internal"
 )
 
 type FieldPermission struct {
@@ -23,7 +19,6 @@ type FieldPermission struct {
 }
 
 type Profile struct {
-	Declaration             string   `xml:"-"`
 	XMLName                 xml.Name `xml:"Profile"`
 	Xmlns                   string   `xml:"xmlns,attr"`
 	ApplicationVisibilities []struct {
@@ -48,11 +43,22 @@ type Profile struct {
 	Custom struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	FieldPermissions  []FieldPermission `xml:"fieldPermissions"`
+	FieldPermissions []FieldPermission `xml:"fieldPermissions"`
+	FlowAccesses     []struct {
+		Enabled struct {
+			Text string `xml:",chardata"`
+		} `xml:"enabled"`
+		Flow struct {
+			Text string `xml:",chardata"`
+		} `xml:"flow"`
+	} `xml:"flowAccesses"`
 	LayoutAssignments []struct {
 		Layout struct {
 			Text string `xml:",chardata"`
 		} `xml:"layout"`
+		RecordType struct {
+			Text string `xml:",chardata"`
+		} `xml:"recordType"`
 	} `xml:"layoutAssignments"`
 	ObjectPermissions []struct {
 		AllowCreate struct {
@@ -85,6 +91,17 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"enabled"`
 	} `xml:"pageAccesses"`
+	RecordTypeVisibilities []struct {
+		Default struct {
+			Text string `xml:",chardata"`
+		} `xml:"default"`
+		RecordType struct {
+			Text string `xml:",chardata"`
+		} `xml:"recordType"`
+		Visible struct {
+			Text string `xml:",chardata"`
+		} `xml:"visible"`
+	} `xml:"recordTypeVisibilities"`
 	TabVisibilities []struct {
 		Tab struct {
 			Text string `xml:",chardata"`
@@ -106,52 +123,9 @@ type Profile struct {
 	} `xml:"userPermissions"`
 }
 
-func (p *Profile) Write(fileName string) error {
-	f, err := os.Create(fileName)
-	if err != nil {
-		return errors.Wrap(err, "opening file")
-	}
-	defer f.Close()
-	fmt.Fprintln(f, p.Declaration)
-	b, err := xml.MarshalIndent(p, "", "    ")
-	if err != nil {
-		return errors.Wrap(err, "serializing profile")
-	}
-	_, err = f.Write(b)
-	if err != nil {
-		return errors.Wrap(err, "writing xml")
-	}
-	fmt.Fprintln(f, "")
-	return nil
-}
+func (p *Profile) MetaCheck() {}
 
-func ParseProfile(profilePath string) (*Profile, error) {
-	f, err := os.Open(profilePath)
-	if err != nil {
-		return nil, errors.Wrap(err, "opening profile")
-	}
-	defer f.Close()
-	dec := xml.NewDecoder(f)
-	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = false
-
-	var doc Profile
-	if err := dec.Decode(&doc); err != nil {
-		return nil, errors.Wrap(err, "parsing xml")
-	}
-	_, err = f.Seek(0, 0)
-	if err != nil {
-		return &doc, errors.Wrap(err, "reading header")
-	}
-	b := bufio.NewReader(f)
-	declaration, isPrefix, err := b.ReadLine()
-	if isPrefix {
-		return &doc, errors.New("reading xml declaration")
-	}
-	if err != nil {
-		return &doc, errors.Wrap(err, "reading header")
-	}
-	doc.Declaration = string(declaration)
-
-	return &doc, nil
+func Open(path string) (*Profile, error) {
+	p := &Profile{}
+	return p, internal.ParseMetadataXml(p, path)
 }

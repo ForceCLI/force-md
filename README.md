@@ -20,3 +20,13 @@ from another field.
 ```
 force-md profile field-permissions clone -s Account.My_Field__c -f Account.New_Field__c src/profiles/*
 ```
+
+## Developing
+
+To add support for a new metadata type, [zek](https://github.com/miku/zek) can
+be useful for getting started by generating a `struct` that matches the XML
+structure, e.g.
+
+```
+$ zek -C -m src/queues/*
+```
