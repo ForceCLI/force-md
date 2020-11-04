@@ -119,7 +119,7 @@ type PermissionSet struct {
 
 func Parse(r io.Reader) (*PermissionSet, error) {
 	p := PermissionSet{}
-	return &p, internal.ParseMetadataXml(p, r)
+	return &p, internal.ParseMetadataXml(&p, r)
 }
 
 func Open(path string) (*PermissionSet, error) {

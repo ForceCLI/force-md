@@ -129,7 +129,7 @@ type Profile struct {
 
 func Parse(r io.Reader) (*Profile, error) {
 	p := Profile{}
-	return &p, internal.ParseMetadataXml(p, r)
+	return &p, internal.ParseMetadataXml(&p, r)
 }
 
 func Open(path string) (*Profile, error) {
