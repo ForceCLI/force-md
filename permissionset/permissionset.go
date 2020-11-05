@@ -117,6 +117,8 @@ type PermissionSet struct {
 	} `xml:"recordTypeVisibilities"`
 }
 
+func (p *PermissionSet) MetaCheck() {}
+
 func Parse(r io.Reader) (*PermissionSet, error) {
 	p := PermissionSet{}
 	return &p, internal.ParseMetadataXml(&p, r)

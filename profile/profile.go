@@ -127,6 +127,8 @@ type Profile struct {
 	} `xml:"userPermissions"`
 }
 
+func (p *Profile) MetaCheck() {}
+
 func Parse(r io.Reader) (*Profile, error) {
 	p := Profile{}
 	return &p, internal.ParseMetadataXml(&p, r)
