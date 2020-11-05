@@ -1,10 +1,10 @@
-package profile
+package permissionset
 
 import (
 	"sort"
 )
 
-func (p *Profile) Tidy() {
+func (p *PermissionSet) Tidy() {
 	sort.Slice(p.ApplicationVisibilities, func(i, j int) bool {
 		return p.ApplicationVisibilities[i].Application.Text < p.ApplicationVisibilities[j].Application.Text
 	})
@@ -20,16 +20,16 @@ func (p *Profile) Tidy() {
 	sort.Slice(p.PageAccesses, func(i, j int) bool {
 		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
 	})
-	sort.Slice(p.TabVisibilities, func(i, j int) bool {
-		return p.TabVisibilities[i].Tab.Text < p.TabVisibilities[j].Tab.Text
+	sort.Slice(p.TabSettings, func(i, j int) bool {
+		return p.TabSettings[i].Tab.Text < p.TabSettings[j].Tab.Text
+	})
+	sort.Slice(p.UserPermissions, func(i, j int) bool {
+		return p.UserPermissions[i].Name.Text < p.UserPermissions[j].Name.Text
 	})
 	sort.Slice(p.RecordTypeVisibilities, func(i, j int) bool {
 		return p.RecordTypeVisibilities[i].RecordType.Text < p.RecordTypeVisibilities[j].RecordType.Text
 	})
-	sort.Slice(p.FlowAccesses, func(i, j int) bool {
-		return p.FlowAccesses[i].Flow.Text < p.FlowAccesses[j].Flow.Text
-	})
-	sort.Slice(p.UserPermissions, func(i, j int) bool {
-		return p.UserPermissions[i].Name.Text < p.UserPermissions[j].Name.Text
+	sort.Slice(p.CustomPermissions, func(i, j int) bool {
+		return p.CustomPermissions[i].Name.Text < p.CustomPermissions[j].Name.Text
 	})
 }
