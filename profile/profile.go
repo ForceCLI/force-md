@@ -2,10 +2,6 @@ package profile
 
 import (
 	"encoding/xml"
-	"io"
-	"os"
-
-	"github.com/pkg/errors"
 
 	"github.com/octoberswimmer/force-md/internal"
 )
@@ -129,15 +125,7 @@ type Profile struct {
 
 func (p *Profile) MetaCheck() {}
 
-func Parse(r io.Reader) (*Profile, error) {
-	p := Profile{}
-	return &p, internal.ParseMetadataXml(&p, r)
-}
-
 func Open(path string) (*Profile, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, errors.Wrap(err, "opening file")
-	}
-	return Parse(f)
+	p := &Profile{}
+	return p, internal.ParseMetadataXml(p, path)
 }

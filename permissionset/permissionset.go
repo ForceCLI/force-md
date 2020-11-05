@@ -2,10 +2,6 @@ package permissionset
 
 import (
 	"encoding/xml"
-	"io"
-	"os"
-
-	"github.com/pkg/errors"
 
 	"github.com/octoberswimmer/force-md/internal"
 )
@@ -119,15 +115,7 @@ type PermissionSet struct {
 
 func (p *PermissionSet) MetaCheck() {}
 
-func Parse(r io.Reader) (*PermissionSet, error) {
-	p := PermissionSet{}
-	return &p, internal.ParseMetadataXml(&p, r)
-}
-
 func Open(path string) (*PermissionSet, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, errors.Wrap(err, "opening file")
-	}
-	return Parse(f)
+	p := &PermissionSet{}
+	return p, internal.ParseMetadataXml(p, path)
 }

@@ -2,7 +2,7 @@ package internal
 
 import (
 	"encoding/xml"
-	"io"
+	"os"
 
 	"github.com/pkg/errors"
 	"golang.org/x/net/html/charset"
@@ -14,7 +14,11 @@ type MetadataPointer interface {
 	MetaCheck()
 }
 
-func ParseMetadataXml(i MetadataPointer, r io.Reader) error {
+func ParseMetadataXml(i MetadataPointer, path string) error {
+	r, err := os.Open(path)
+	if err != nil {
+		return errors.Wrap(err, "opening file")
+	}
 	dec := xml.NewDecoder(r)
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
