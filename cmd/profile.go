@@ -9,6 +9,7 @@ import (
 func init() {
 	profileCmd.AddCommand(profile.FieldPermissionsCmd)
 	profileCmd.AddCommand(profile.TidyCmd)
+	profileCmd.AddCommand(profile.ObjectPermissionsCmd)
 	rootCmd.AddCommand(profileCmd)
 }
 

@@ -21,6 +21,16 @@ from another field.
 force-md profile field-permissions clone -s Account.My_Field__c -f Account.New_Field__c src/profiles/*
 ```
 
+### Update Object Permissions
+
+Update the Read, Create, Edit, Delete, View All, and Modify All permissions on
+Profiles.  Any permissions not specified on the command line will be left
+unchanged.
+
+```
+force-md profile object-permissions -o Account -e -D src/profiles/*
+```
+
 ## Developing
 
 To add support for a new metadata type, [zek](https://github.com/miku/zek) can
