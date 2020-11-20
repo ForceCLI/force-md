@@ -18,6 +18,10 @@ type FieldPermission struct {
 	} `xml:"readable"`
 }
 
+type RecordType struct {
+	Text string `xml:",chardata"`
+}
+
 type Profile struct {
 	XMLName                 xml.Name `xml:"Profile"`
 	Xmlns                   string   `xml:"xmlns,attr"`
@@ -56,9 +60,7 @@ type Profile struct {
 		Layout struct {
 			Text string `xml:",chardata"`
 		} `xml:"layout"`
-		RecordType struct {
-			Text string `xml:",chardata"`
-		} `xml:"recordType"`
+		RecordType *RecordType `xml:"recordType"`
 	} `xml:"layoutAssignments"`
 	ObjectPermissions []struct {
 		AllowCreate struct {
