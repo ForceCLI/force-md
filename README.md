@@ -2,6 +2,25 @@
 
 Manipulate Salesforce metadata.
 
+## Permission Sets
+
+### Tidy
+
+Clean up metadata by sorting groups of elements in natural order.
+
+```
+force-md permissionset tidy src/permissionsets/*
+```
+
+### Add Class
+
+Enable access to an apex class
+
+```
+force-md permissionset add-class -c MyClass src/permissionsets/My_Permission_Set.permissionset
+```
+
+
 ## Profiles
 
 ### Tidy

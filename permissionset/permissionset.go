@@ -6,22 +6,20 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type ApexClass struct {
+	ApexClass string `xml:"apexClass"`
+	Enabled   string `xml:"enabled"`
+}
+
 type License struct {
 	Text string `xml:",chardata"`
 }
 
 type PermissionSet struct {
-	XMLName       xml.Name `xml:"PermissionSet"`
-	Xmlns         string   `xml:"xmlns,attr"`
-	ClassAccesses []struct {
-		ApexClass struct {
-			Text string `xml:",chardata"`
-		} `xml:"apexClass"`
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-	} `xml:"classAccesses"`
-	Description struct {
+	XMLName       xml.Name    `xml:"PermissionSet"`
+	Xmlns         string      `xml:"xmlns,attr"`
+	ClassAccesses []ApexClass `xml:"classAccesses"`
+	Description   struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
 	FieldPermissions []struct {

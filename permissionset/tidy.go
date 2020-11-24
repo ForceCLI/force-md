@@ -9,7 +9,7 @@ func (p *PermissionSet) Tidy() {
 		return p.ApplicationVisibilities[i].Application.Text < p.ApplicationVisibilities[j].Application.Text
 	})
 	sort.Slice(p.ClassAccesses, func(i, j int) bool {
-		return p.ClassAccesses[i].ApexClass.Text < p.ClassAccesses[j].ApexClass.Text
+		return p.ClassAccesses[i].ApexClass < p.ClassAccesses[j].ApexClass
 	})
 	sort.Slice(p.FieldPermissions, func(i, j int) bool {
 		return p.FieldPermissions[i].Field.Text < p.FieldPermissions[j].Field.Text
