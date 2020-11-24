@@ -6,6 +6,10 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type License struct {
+	Text string `xml:",chardata"`
+}
+
 type PermissionSet struct {
 	XMLName       xml.Name `xml:"PermissionSet"`
 	Xmlns         string   `xml:"xmlns,attr"`
@@ -68,9 +72,7 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"enabled"`
 	} `xml:"pageAccesses"`
-	License struct {
-		Text string `xml:",chardata"`
-	} `xml:"license"`
+	License           *License `xml:"license"`
 	CustomPermissions []struct {
 		Enabled struct {
 			Text string `xml:",chardata"`
