@@ -12,6 +12,15 @@ Clean up metadata by sorting groups of elements in natural order.
 force-md permissionset tidy src/permissionsets/*
 ```
 
+### Clone Field Permissions
+
+Add field permissions for a new field to Permission Sets by copying the
+permissions from another field.
+
+```
+force-md permissionset field-permissions clone -s Account.My_Field__c -f Account.New_Field__c src/permissionsets/*
+```
+
 ### Add Class
 
 Enable access to an apex class

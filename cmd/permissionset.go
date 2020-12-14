@@ -7,6 +7,7 @@ import (
 )
 
 func init() {
+	permissionSetCmd.AddCommand(permissionset.FieldPermissionsCmd)
 	permissionSetCmd.AddCommand(permissionset.TidyCmd)
 	permissionSetCmd.AddCommand(permissionset.AddClassCmd)
 	rootCmd.AddCommand(permissionSetCmd)
