@@ -11,6 +11,18 @@ type ApexClass struct {
 	Enabled   string `xml:"enabled"`
 }
 
+type FieldPermission struct {
+	Editable struct {
+		Text string `xml:",chardata"`
+	} `xml:"editable"`
+	Field struct {
+		Text string `xml:",chardata"`
+	} `xml:"field"`
+	Readable struct {
+		Text string `xml:",chardata"`
+	} `xml:"readable"`
+}
+
 type License struct {
 	Text string `xml:",chardata"`
 }
@@ -22,17 +34,7 @@ type PermissionSet struct {
 	Description   struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	FieldPermissions []struct {
-		Editable struct {
-			Text string `xml:",chardata"`
-		} `xml:"editable"`
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Readable struct {
-			Text string `xml:",chardata"`
-		} `xml:"readable"`
-	} `xml:"fieldPermissions"`
+	FieldPermissions      []FieldPermission `xml:"fieldPermissions"`
 	HasActivationRequired struct {
 		Text string `xml:",chardata"`
 	} `xml:"hasActivationRequired"`
