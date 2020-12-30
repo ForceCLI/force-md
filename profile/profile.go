@@ -18,17 +18,23 @@ type FieldPermission struct {
 	} `xml:"readable"`
 }
 
+type ObjectPermissionsList []ObjectPermissions
+
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
 	AllowDelete      BooleanText `xml:"allowDelete"`
 	AllowEdit        BooleanText `xml:"allowEdit"`
 	AllowRead        BooleanText `xml:"allowRead"`
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
-	Object           BooleanText `xml:"object"`
+	Object           ObjectName  `xml:"object"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
 }
 
 type RecordType struct {
+	Text string `xml:",chardata"`
+}
+
+type ObjectName struct {
 	Text string `xml:",chardata"`
 }
 
@@ -76,7 +82,7 @@ type Profile struct {
 		} `xml:"layout"`
 		RecordType *RecordType `xml:"recordType"`
 	} `xml:"layoutAssignments"`
-	ObjectPermissions []ObjectPermissions `xml:"objectPermissions"`
+	ObjectPermissions ObjectPermissionsList `xml:"objectPermissions"`
 	PageAccesses      []struct {
 		ApexPage struct {
 			Text string `xml:",chardata"`
