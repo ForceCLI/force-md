@@ -31,6 +31,9 @@ func init() {
 	ObjectPermissionsCmd.Flags().BoolP("no-view-all", "V", false, "disallow view all")
 	ObjectPermissionsCmd.Flags().SortFlags = false
 	ObjectPermissionsCmd.MarkFlagRequired("object")
+
+	AddObjectPermissionsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	AddObjectPermissionsCmd.MarkFlagRequired("object")
 }
 
 var ObjectPermissionsCmd = &cobra.Command{
@@ -41,6 +44,17 @@ var ObjectPermissionsCmd = &cobra.Command{
 		perms := permissionsToUpdate(cmd)
 		for _, file := range args {
 			updateObjectPermissions(file, perms)
+		}
+	},
+}
+
+var AddObjectPermissionsCmd = &cobra.Command{
+	Use:   "add-object-permissions",
+	Short: "Add object permissions",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addObjectPermissions(file)
 		}
 	},
 }
@@ -80,6 +94,24 @@ func updateObjectPermissions(file string, perms profile.ObjectPermissions) {
 		return
 	}
 	err = p.SetObjectPermissions(objectName, perms)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func addObjectPermissions(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.AddObjectPermissions(objectName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

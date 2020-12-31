@@ -21,3 +21,32 @@ func (p *Profile) SetObjectPermissions(objectName string, updates ObjectPermissi
 	}
 	return nil
 }
+
+func defaultObjectPermissions(objectName string) ObjectPermissions {
+	var falseBooleanText = BooleanText{
+		Text: "false",
+	}
+
+	op := ObjectPermissions{
+		Object:           ObjectName{objectName},
+		AllowCreate:      falseBooleanText,
+		AllowDelete:      falseBooleanText,
+		AllowEdit:        falseBooleanText,
+		AllowRead:        falseBooleanText,
+		ModifyAllRecords: falseBooleanText,
+		ViewAllRecords:   falseBooleanText,
+	}
+	return op
+}
+
+func (p *Profile) AddObjectPermissions(objectName string) error {
+	for _, f := range p.ObjectPermissions {
+		if f.Object.Text == objectName {
+			return errors.New("object already exists")
+		}
+	}
+
+	p.ObjectPermissions = append(p.ObjectPermissions, defaultObjectPermissions(objectName))
+	p.ObjectPermissions.Tidy()
+	return nil
+}
