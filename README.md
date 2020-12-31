@@ -49,6 +49,15 @@ from another field.
 force-md profile field-permissions clone -s Account.My_Field__c -f Account.New_Field__c src/profiles/*
 ```
 
+### Add Object Permissions
+
+Add object permissions to Profiles.  All permissions will default to false; use `profile object-permissions` to update.
+
+```
+force-md profile add-object-permissions -o Account src/profiles/*
+```
+
+
 ### Update Object Permissions
 
 Update the Read, Create, Edit, Delete, View All, and Modify All permissions on
