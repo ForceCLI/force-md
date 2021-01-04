@@ -21,7 +21,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	}
 	dec := xml.NewDecoder(r)
 	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = false
+	dec.Strict = true
 
 	if err := dec.Decode(i); err != nil {
 		return errors.Wrap(err, "parsing xml")
