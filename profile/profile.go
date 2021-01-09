@@ -6,17 +6,13 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
-type FieldPermission struct {
-	Editable struct {
-		Text string `xml:",chardata"`
-	} `xml:"editable"`
-	Field struct {
-		Text string `xml:",chardata"`
-	} `xml:"field"`
-	Readable struct {
-		Text string `xml:",chardata"`
-	} `xml:"readable"`
+type FieldPermissions struct {
+	Editable BooleanText `xml:"editable"`
+	Field    FieldName   `xml:"field"`
+	Readable BooleanText `xml:"readable"`
 }
+
+type FieldPermissionsList []FieldPermissions
 
 type ObjectPermissionsList []ObjectPermissions
 
@@ -31,6 +27,10 @@ type ObjectPermissions struct {
 }
 
 type RecordType struct {
+	Text string `xml:",chardata"`
+}
+
+type FieldName struct {
 	Text string `xml:",chardata"`
 }
 
@@ -67,7 +67,7 @@ type Profile struct {
 	Custom struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	FieldPermissions []FieldPermission `xml:"fieldPermissions"`
+	FieldPermissions FieldPermissionsList `xml:"fieldPermissions"`
 	FlowAccesses     []struct {
 		Enabled struct {
 			Text string `xml:",chardata"`
