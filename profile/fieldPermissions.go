@@ -24,14 +24,17 @@ func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions
 
 func (p *Profile) DeleteFieldPermissions(fieldName string) error {
 	found := false
-	for i, f := range p.FieldPermissions {
+	newPerms := p.FieldPermissions[:0]
+	for _, f := range p.FieldPermissions {
 		if f.Field.Text == fieldName {
-			p.FieldPermissions = append(p.FieldPermissions[:i], p.FieldPermissions[i+1:]...)
 			found = true
+		} else {
+			newPerms = append(newPerms, f)
 		}
 	}
 	if !found {
 		return errors.New("field not found")
 	}
+	p.FieldPermissions = newPerms
 	return nil
 }

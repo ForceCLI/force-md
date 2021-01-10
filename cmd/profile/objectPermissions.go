@@ -35,8 +35,12 @@ func init() {
 	addObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	addObjectCmd.MarkFlagRequired("object")
 
+	deleteObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	deleteObjectCmd.MarkFlagRequired("object")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
+	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
 }
 
 var ObjectPermissionsCmd = &cobra.Command{
@@ -63,6 +67,18 @@ var addObjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			addObjectPermissions(file)
+		}
+	},
+}
+
+var deleteObjectCmd = &cobra.Command{
+	Use:   "delete",
+	Short: "Delete object permissions",
+	Long:  "Delete object permissions and related field permissions in profiles",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteObjectPermissions(file, objectName)
 		}
 	},
 }
@@ -124,6 +140,20 @@ func addObjectPermissions(file string) {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteObjectPermissions(file string, objectName string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	p.DeleteObjectPermissions(objectName)
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
