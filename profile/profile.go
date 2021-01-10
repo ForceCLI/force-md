@@ -16,6 +16,8 @@ type FieldPermissionsList []FieldPermissions
 
 type ObjectPermissionsList []ObjectPermissions
 
+type TabVisibilityList []TabVisibility
+
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
 	AllowDelete      BooleanText `xml:"allowDelete"`
@@ -24,6 +26,15 @@ type ObjectPermissions struct {
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
 	Object           ObjectName  `xml:"object"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
+}
+
+type TabVisibility struct {
+	Tab struct {
+		Text string `xml:",chardata"`
+	} `xml:"tab"`
+	Visibility struct {
+		Text string `xml:",chardata"`
+	} `xml:"visibility"`
 }
 
 type RecordType struct {
@@ -107,15 +118,8 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"visible"`
 	} `xml:"recordTypeVisibilities"`
-	TabVisibilities []struct {
-		Tab struct {
-			Text string `xml:",chardata"`
-		} `xml:"tab"`
-		Visibility struct {
-			Text string `xml:",chardata"`
-		} `xml:"visibility"`
-	} `xml:"tabVisibilities"`
-	UserLicense struct {
+	TabVisibilities TabVisibilityList `xml:"tabVisibilities"`
+	UserLicense     struct {
 		Text string `xml:",chardata"`
 	} `xml:"userLicense"`
 	UserPermissions []struct {
