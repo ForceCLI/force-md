@@ -16,40 +16,48 @@ var (
 )
 
 func init() {
-	ObjectPermissionsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
-	ObjectPermissionsCmd.Flags().BoolP("create", "c", false, "allow create")
-	ObjectPermissionsCmd.Flags().BoolP("delete", "d", false, "allow delete")
-	ObjectPermissionsCmd.Flags().BoolP("edit", "e", false, "allow edit")
-	ObjectPermissionsCmd.Flags().BoolP("read", "r", false, "allow read")
-	ObjectPermissionsCmd.Flags().BoolP("modify-all", "m", false, "allow modify all")
-	ObjectPermissionsCmd.Flags().BoolP("view-all", "v", false, "allow view all")
-	ObjectPermissionsCmd.Flags().BoolP("no-create", "C", false, "disallow create")
-	ObjectPermissionsCmd.Flags().BoolP("no-delete", "D", false, "disallow delete")
-	ObjectPermissionsCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
-	ObjectPermissionsCmd.Flags().BoolP("no-read", "R", false, "disallow read")
-	ObjectPermissionsCmd.Flags().BoolP("no-modify-all", "M", false, "disallow modify all")
-	ObjectPermissionsCmd.Flags().BoolP("no-view-all", "V", false, "disallow view all")
-	ObjectPermissionsCmd.Flags().SortFlags = false
-	ObjectPermissionsCmd.MarkFlagRequired("object")
+	editObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	editObjectCmd.Flags().BoolP("create", "c", false, "allow create")
+	editObjectCmd.Flags().BoolP("delete", "d", false, "allow delete")
+	editObjectCmd.Flags().BoolP("edit", "e", false, "allow edit")
+	editObjectCmd.Flags().BoolP("read", "r", false, "allow read")
+	editObjectCmd.Flags().BoolP("modify-all", "m", false, "allow modify all")
+	editObjectCmd.Flags().BoolP("view-all", "v", false, "allow view all")
+	editObjectCmd.Flags().BoolP("no-create", "C", false, "disallow create")
+	editObjectCmd.Flags().BoolP("no-delete", "D", false, "disallow delete")
+	editObjectCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
+	editObjectCmd.Flags().BoolP("no-read", "R", false, "disallow read")
+	editObjectCmd.Flags().BoolP("no-modify-all", "M", false, "disallow modify all")
+	editObjectCmd.Flags().BoolP("no-view-all", "V", false, "disallow view all")
+	editObjectCmd.Flags().SortFlags = false
+	editObjectCmd.MarkFlagRequired("object")
 
-	AddObjectPermissionsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
-	AddObjectPermissionsCmd.MarkFlagRequired("object")
+	addObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	addObjectCmd.MarkFlagRequired("object")
+
+	ObjectPermissionsCmd.AddCommand(editObjectCmd)
+	ObjectPermissionsCmd.AddCommand(addObjectCmd)
 }
 
 var ObjectPermissionsCmd = &cobra.Command{
 	Use:   "object-permissions",
 	Short: "Update object permissions",
+}
+
+var editObjectCmd = &cobra.Command{
+	Use:   "edit",
+	Short: "Update object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		perms := permissionsToUpdate(cmd)
+		perms := objectPermissionsToUpdate(cmd)
 		for _, file := range args {
 			updateObjectPermissions(file, perms)
 		}
 	},
 }
 
-var AddObjectPermissionsCmd = &cobra.Command{
-	Use:   "add-object-permissions",
+var addObjectCmd = &cobra.Command{
+	Use:   "add",
 	Short: "Add object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -76,7 +84,7 @@ func textValue(cmd *cobra.Command, flag string) (t profile.BooleanText) {
 	return t
 }
 
-func permissionsToUpdate(cmd *cobra.Command) profile.ObjectPermissions {
+func objectPermissionsToUpdate(cmd *cobra.Command) profile.ObjectPermissions {
 	perms := profile.ObjectPermissions{}
 	perms.AllowCreate = textValue(cmd, "create")
 	perms.AllowDelete = textValue(cmd, "delete")
