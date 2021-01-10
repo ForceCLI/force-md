@@ -1,8 +1,6 @@
 package profile
 
 import (
-	"fmt"
-
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 )
@@ -10,7 +8,6 @@ import (
 func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
-		fmt.Printf("checking %s against %s\n", f.Field.Text, fieldName)
 		if f.Field.Text == fieldName {
 			found = true
 			if err := mergo.Merge(&updates, f); err != nil {
