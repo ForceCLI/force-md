@@ -10,6 +10,7 @@ func init() {
 	profileCmd.AddCommand(profile.FieldPermissionsCmd)
 	profileCmd.AddCommand(profile.TidyCmd)
 	profileCmd.AddCommand(profile.ObjectPermissionsCmd)
+	profileCmd.AddCommand(profile.UserPermissionsCmd)
 	rootCmd.AddCommand(profileCmd)
 }
 

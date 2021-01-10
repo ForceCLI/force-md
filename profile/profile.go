@@ -16,6 +16,8 @@ type FieldPermissionsList []FieldPermissions
 
 type ObjectPermissionsList []ObjectPermissions
 
+type UserPermissionList []UserPermission
+
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
 	AllowDelete      BooleanText `xml:"allowDelete"`
@@ -24,6 +26,13 @@ type ObjectPermissions struct {
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
 	Object           ObjectName  `xml:"object"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
+}
+
+type UserPermission struct {
+	Enabled BooleanText `xml:"enabled"`
+	Name    struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
 }
 
 type RecordType struct {
@@ -118,14 +127,7 @@ type Profile struct {
 	UserLicense struct {
 		Text string `xml:",chardata"`
 	} `xml:"userLicense"`
-	UserPermissions []struct {
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-	} `xml:"userPermissions"`
+	UserPermissions UserPermissionList `xml:"userPermissions"`
 }
 
 func (p *Profile) MetaCheck() {}
