@@ -42,6 +42,10 @@ type BooleanText struct {
 	Text string `xml:",chardata"`
 }
 
+type PersonAccountDefault struct {
+	Text string `xml:",chardata"`
+}
+
 type Profile struct {
 	XMLName                 xml.Name `xml:"Profile"`
 	Xmlns                   string   `xml:"xmlns,attr"`
@@ -95,7 +99,8 @@ type Profile struct {
 		Default struct {
 			Text string `xml:",chardata"`
 		} `xml:"default"`
-		RecordType struct {
+		PersonAccountDefault *PersonAccountDefault `xml:"personAccountDefault"`
+		RecordType           struct {
 			Text string `xml:",chardata"`
 		} `xml:"recordType"`
 		Visible struct {
