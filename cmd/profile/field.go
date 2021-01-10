@@ -19,8 +19,8 @@ func init() {
 	editFieldCmd.Flags().BoolP("read", "r", false, "allow read")
 	editFieldCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
 	editFieldCmd.Flags().BoolP("no-read", "R", false, "disallow read")
-	editObjectCmd.Flags().SortFlags = false
-	editObjectCmd.MarkFlagRequired("object")
+	editFieldCmd.Flags().SortFlags = false
+	editFieldCmd.MarkFlagRequired("field")
 
 	cloneCmd.Flags().StringVarP(&sourceField, "source", "s", "", "source field name")
 	cloneCmd.Flags().StringVarP(&fieldName, "field", "f", "", "new field name")
