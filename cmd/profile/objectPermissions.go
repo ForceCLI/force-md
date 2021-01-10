@@ -153,11 +153,7 @@ func deleteObjectPermissions(file string, objectName string) {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	err = p.DeleteObjectPermissions(objectName)
-	if err != nil {
-		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
-		return
-	}
+	p.DeleteObjectPermissions(objectName)
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

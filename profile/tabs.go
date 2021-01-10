@@ -6,12 +6,15 @@ import (
 
 func (p *Profile) DeleteTabVisibility(tabName string) error {
 	found := false
-	for i, f := range p.TabVisibilities {
+	newTabs := p.TabVisibilities[:0]
+	for _, f := range p.TabVisibilities {
 		if f.Tab.Text == tabName {
-			p.TabVisibilities = append(p.TabVisibilities[:i], p.TabVisibilities[i+1:]...)
 			found = true
+		} else {
+			newTabs = append(newTabs, f)
 		}
 	}
+	p.TabVisibilities = newTabs
 	if !found {
 		return errors.New("tab not found")
 	}

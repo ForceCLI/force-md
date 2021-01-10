@@ -5,6 +5,7 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 func (p *Profile) SetObjectPermissions(objectName string, updates ObjectPermissions) error {
@@ -53,23 +54,55 @@ func (p *Profile) AddObjectPermissions(objectName string) error {
 	return nil
 }
 
-func (p *Profile) DeleteObjectPermissions(objectName string) error {
+func (p *Profile) DeleteObjectPermissions(objectName string) {
 	found := false
-	for i, f := range p.ObjectPermissions {
+	newObjectPerms := p.ObjectPermissions[:0]
+	for _, f := range p.ObjectPermissions {
 		if f.Object.Text == objectName {
-			p.ObjectPermissions = append(p.ObjectPermissions[:i], p.ObjectPermissions[i+1:]...)
 			found = true
+		} else {
+			newObjectPerms = append(newObjectPerms, f)
 		}
 	}
+	p.ObjectPermissions = newObjectPerms
 	if !found {
-		return errors.New("object not found")
+		log.Warn(errors.New("object not found"))
 	}
+
+	p.DeleteObjectFieldPermissions(objectName)
+	p.DeleteObjectTabVisibility(objectName)
+	p.DeleteObjectLayoutAssignments(objectName)
+}
+
+func (p *Profile) DeleteObjectFieldPermissions(objectName string) {
+	newFieldPerms := p.FieldPermissions[:0]
 	fieldPrefix := objectName + "."
-	for i, f := range p.FieldPermissions {
-		if strings.HasPrefix(f.Field.Text, fieldPrefix) {
-			p.FieldPermissions = append(p.FieldPermissions[:i], p.FieldPermissions[i+1:]...)
-			found = true
+	for _, f := range p.FieldPermissions {
+		if !strings.HasPrefix(f.Field.Text, fieldPrefix) {
+			newFieldPerms = append(newFieldPerms, f)
 		}
 	}
-	return nil
+	p.FieldPermissions = newFieldPerms
+}
+
+func (p *Profile) DeleteObjectLayoutAssignments(objectName string) {
+	layoutPrefix := objectName + "-"
+	newLayouts := p.LayoutAssignments[:0]
+	for _, f := range p.LayoutAssignments {
+		if !strings.HasPrefix(f.Layout.Text, layoutPrefix) {
+			newLayouts = append(newLayouts, f)
+		}
+	}
+	p.LayoutAssignments = newLayouts
+}
+
+func (p *Profile) DeleteObjectTabVisibility(objectName string) {
+	tabPrefix := objectName + "-"
+	newTabs := p.TabVisibilities[:0]
+	for _, f := range p.TabVisibilities {
+		if !strings.HasPrefix(f.Tab.Text, tabPrefix) {
+			newTabs = append(newTabs, f)
+		}
+	}
+	p.TabVisibilities = newTabs
 }
