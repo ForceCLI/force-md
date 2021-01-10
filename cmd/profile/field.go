@@ -19,8 +19,11 @@ func init() {
 	editFieldCmd.Flags().BoolP("read", "r", false, "allow read")
 	editFieldCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
 	editFieldCmd.Flags().BoolP("no-read", "R", false, "disallow read")
-	editObjectCmd.Flags().SortFlags = false
-	editObjectCmd.MarkFlagRequired("object")
+	editFieldCmd.Flags().SortFlags = false
+	editFieldCmd.MarkFlagRequired("field")
+
+	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	deleteFieldCmd.MarkFlagRequired("field")
 
 	cloneCmd.Flags().StringVarP(&sourceField, "source", "s", "", "source field name")
 	cloneCmd.Flags().StringVarP(&fieldName, "field", "f", "", "new field name")
@@ -28,6 +31,7 @@ func init() {
 	cloneCmd.MarkFlagRequired("field")
 
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
+	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
 	FieldPermissionsCmd.AddCommand(cloneCmd)
 }
 
@@ -61,6 +65,18 @@ var editFieldCmd = &cobra.Command{
 	},
 }
 
+var deleteFieldCmd = &cobra.Command{
+	Use:   "delete",
+	Short: "Delete field permissions",
+	Long:  "Delete field permissions in profiles",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteFieldPermissions(file, fieldName)
+		}
+	},
+}
+
 func fieldPermissionsToUpdate(cmd *cobra.Command) profile.FieldPermissions {
 	perms := profile.FieldPermissions{}
 	perms.Editable = textValue(cmd, "edit")
@@ -77,6 +93,24 @@ func addNewField(file string) {
 	err = p.CloneFieldPermissions(sourceField, fieldName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteFieldPermissions(file string, fieldName string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.DeleteFieldPermissions(fieldName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
 	err = internal.WriteToFile(p, file)

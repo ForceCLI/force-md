@@ -21,3 +21,17 @@ func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions
 	}
 	return nil
 }
+
+func (p *Profile) DeleteFieldPermissions(fieldName string) error {
+	found := false
+	for i, f := range p.FieldPermissions {
+		if f.Field.Text == fieldName {
+			p.FieldPermissions = append(p.FieldPermissions[:i], p.FieldPermissions[i+1:]...)
+			found = true
+		}
+	}
+	if !found {
+		return errors.New("field not found")
+	}
+	return nil
+}
