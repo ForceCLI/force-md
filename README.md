@@ -68,6 +68,15 @@ unchanged.
 force-md profile object-permissions -o Account -e -D src/profiles/*
 ```
 
+### Delete Visibility/Access Permissions
+
+```
+force profile flow delete -f MyFlow src/profiles/*
+force profile apex delete -c MyClass src/profiles/*
+force profile application delete -a MyApplication src/profiles/*
+force profile visualforce delete -p MyPage src/profiles/*
+```
+
 ## Developing
 
 To add support for a new metadata type, [zek](https://github.com/miku/zek) can
