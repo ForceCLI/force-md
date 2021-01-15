@@ -26,7 +26,7 @@ force-md permissionset field-permissions clone -s Account.My_Field__c -f Account
 Enable access to an apex class
 
 ```
-force-md permissionset add-class -c MyClass src/permissionsets/My_Permission_Set.permissionset
+force-md permissionset apex add -c MyClass src/permissionsets/My_Permission_Set.permissionset
 ```
 
 

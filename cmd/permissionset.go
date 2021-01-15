@@ -9,7 +9,7 @@ import (
 func init() {
 	permissionSetCmd.AddCommand(permissionset.FieldPermissionsCmd)
 	permissionSetCmd.AddCommand(permissionset.TidyCmd)
-	permissionSetCmd.AddCommand(permissionset.AddClassCmd)
+	permissionSetCmd.AddCommand(permissionset.ApexClassCmd)
 	rootCmd.AddCommand(permissionSetCmd)
 }
 
