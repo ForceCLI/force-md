@@ -12,6 +12,10 @@ func init() {
 	profileCmd.AddCommand(profile.ObjectPermissionsCmd)
 	profileCmd.AddCommand(profile.TabCmd)
 	profileCmd.AddCommand(profile.UserPermissionsCmd)
+	profileCmd.AddCommand(profile.ApplicationCmd)
+	profileCmd.AddCommand(profile.FlowCmd)
+	profileCmd.AddCommand(profile.ApexCmd)
+	profileCmd.AddCommand(profile.VisualforceCmd)
 	rootCmd.AddCommand(profileCmd)
 }
 
