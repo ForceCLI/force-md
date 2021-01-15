@@ -100,7 +100,7 @@ func (p *Profile) DeleteObjectTabVisibility(objectName string) {
 	tabPrefix := objectName + "-"
 	newTabs := p.TabVisibilities[:0]
 	for _, f := range p.TabVisibilities {
-		if !strings.HasPrefix(f.Tab.Text, tabPrefix) {
+		if !strings.HasPrefix(f.Tab, tabPrefix) {
 			newTabs = append(newTabs, f)
 		}
 	}

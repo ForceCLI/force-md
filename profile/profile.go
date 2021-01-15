@@ -33,12 +33,8 @@ type ObjectPermissions struct {
 }
 
 type TabVisibility struct {
-	Tab struct {
-		Text string `xml:",chardata"`
-	} `xml:"tab"`
-	Visibility struct {
-		Text string `xml:",chardata"`
-	} `xml:"visibility"`
+	Tab        string `xml:"tab"`
+	Visibility string `xml:"visibility"`
 }
 
 type UserPermission struct {

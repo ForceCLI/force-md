@@ -27,6 +27,11 @@ type License struct {
 	Text string `xml:",chardata"`
 }
 
+type TabSettings struct {
+	Tab        string `xml:"tab"`
+	Visibility string `xml:"visibility"`
+}
+
 type PermissionSet struct {
 	XMLName       xml.Name    `xml:"PermissionSet"`
 	Xmlns         string      `xml:"xmlns,attr"`
@@ -89,14 +94,7 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"userPermissions"`
-	TabSettings []struct {
-		Tab struct {
-			Text string `xml:",chardata"`
-		} `xml:"tab"`
-		Visibility struct {
-			Text string `xml:",chardata"`
-		} `xml:"visibility"`
-	} `xml:"tabSettings"`
+	TabSettings             []TabSettings `xml:"tabSettings"`
 	ApplicationVisibilities []struct {
 		Application struct {
 			Text string `xml:",chardata"`
