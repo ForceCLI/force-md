@@ -51,12 +51,11 @@ force-md profile field-permissions clone -s Account.My_Field__c -f Account.New_F
 
 ### Add Object Permissions
 
-Add object permissions to Profiles.  All permissions will default to false; use `profile object-permissions` to update.
+Add object permissions to Profiles.  All permissions will default to false; use `profile object-permissions edit` to update.
 
 ```
-force-md profile add-object-permissions -o Account src/profiles/*
+force-md profile object-permissions add -o Account src/profiles/*
 ```
-
 
 ### Update Object Permissions
 
@@ -65,7 +64,7 @@ Profiles.  Any permissions not specified on the command line will be left
 unchanged.
 
 ```
-force-md profile object-permissions -o Account -e -D src/profiles/*
+force-md profile object-permissions edit -o Account -e -D src/profiles/*
 ```
 
 ### Delete Visibility/Access Permissions
