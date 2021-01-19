@@ -21,7 +21,7 @@ func (p *PermissionSet) Tidy() {
 		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
 	})
 	sort.Slice(p.TabSettings, func(i, j int) bool {
-		return p.TabSettings[i].Tab.Text < p.TabSettings[j].Tab.Text
+		return p.TabSettings[i].Tab < p.TabSettings[j].Tab
 	})
 	sort.Slice(p.UserPermissions, func(i, j int) bool {
 		return p.UserPermissions[i].Name.Text < p.UserPermissions[j].Name.Text

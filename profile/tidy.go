@@ -19,7 +19,7 @@ func (p *Profile) Tidy() {
 		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
 	})
 	sort.Slice(p.TabVisibilities, func(i, j int) bool {
-		return p.TabVisibilities[i].Tab.Text < p.TabVisibilities[j].Tab.Text
+		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
 	sort.Slice(p.RecordTypeVisibilities, func(i, j int) bool {
 		return p.RecordTypeVisibilities[i].RecordType.Text < p.RecordTypeVisibilities[j].RecordType.Text

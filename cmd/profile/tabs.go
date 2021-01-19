@@ -13,15 +13,30 @@ import (
 var tabName string
 
 func init() {
+	addTabCmd.Flags().StringVarP(&tabName, "tab", "t", "", "tab name")
+	addTabCmd.MarkFlagRequired("tab")
+
 	deleteTabCmd.Flags().StringVarP(&tabName, "tab", "t", "", "tab name")
 	deleteTabCmd.MarkFlagRequired("tab")
 
+	TabCmd.AddCommand(addTabCmd)
 	TabCmd.AddCommand(deleteTabCmd)
 }
 
 var TabCmd = &cobra.Command{
 	Use:   "tab",
 	Short: "Manage tab visibility",
+}
+
+var addTabCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add tab visibility",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addTab(file)
+		}
+	},
 }
 
 var deleteTabCmd = &cobra.Command{
@@ -47,6 +62,20 @@ func deleteTabVisibility(file string, tabName string) {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func addTab(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing permission set failed: " + err.Error())
+		return
+	}
+	p.AddTab(tabName)
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

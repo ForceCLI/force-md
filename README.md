@@ -29,6 +29,13 @@ Enable access to an apex class
 force-md permissionset add-class -c MyClass src/permissionsets/My_Permission_Set.permissionset
 ```
 
+### Add Tab
+
+Enable tab visibility
+
+```
+force-md permissionset tab add -t My_Tab src/permissionsets/My_Permission_Set.permissionset
+```
 
 ## Profiles
 
@@ -65,6 +72,14 @@ unchanged.
 
 ```
 force-md profile object-permissions edit -o Account -e -D src/profiles/*
+```
+
+### Add Tab
+
+Enable tab visibility, setting to DefaultOn
+
+```
+force-md profile tab add -t My_Tab src/profiles/*
 ```
 
 ### Delete Visibility/Access Permissions
