@@ -9,12 +9,19 @@ import (
 )
 
 func init() {
-	AddClassCmd.Flags().StringP("class", "c", "", "class name")
-	AddClassCmd.MarkFlagRequired("class")
+	addClassCmd.Flags().StringP("class", "c", "", "class name")
+	addClassCmd.MarkFlagRequired("class")
+
+	ApexClassCmd.AddCommand(addClassCmd)
 }
 
-var AddClassCmd = &cobra.Command{
-	Use:   "add-class",
+var ApexClassCmd = &cobra.Command{
+	Use:   "apex-class",
+	Short: "Manage apex class visibility",
+}
+
+var addClassCmd = &cobra.Command{
+	Use:   "add",
 	Short: "Add Apex Class to Permission Set",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
