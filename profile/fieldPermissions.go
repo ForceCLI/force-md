@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"fmt"
+
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 )
@@ -17,7 +19,7 @@ func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions
 		}
 	}
 	if !found {
-		return errors.New("field not found")
+		return fmt.Errorf("field not found: %s", fieldName)
 	}
 	return nil
 }

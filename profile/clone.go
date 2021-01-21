@@ -1,12 +1,16 @@
 package profile
 
 import (
+	"fmt"
 	"sort"
-
-	"github.com/pkg/errors"
 )
 
 func (p *Profile) CloneFieldPermissions(src, dest string) error {
+	for _, f := range p.FieldPermissions {
+		if f.Field.Text == dest {
+			return fmt.Errorf("%s field already exists", dest)
+		}
+	}
 	found := false
 	for _, f := range p.FieldPermissions {
 		if f.Field.Text == src {
@@ -19,7 +23,7 @@ func (p *Profile) CloneFieldPermissions(src, dest string) error {
 		}
 	}
 	if !found {
-		return errors.New("source field not found")
+		return fmt.Errorf("source field %s not found", src)
 	}
 	sort.Slice(p.FieldPermissions, func(i, j int) bool {
 		return p.FieldPermissions[i].Field.Text < p.FieldPermissions[j].Field.Text
