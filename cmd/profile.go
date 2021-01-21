@@ -16,6 +16,7 @@ func init() {
 	profileCmd.AddCommand(profile.FlowCmd)
 	profileCmd.AddCommand(profile.ApexCmd)
 	profileCmd.AddCommand(profile.VisualforceCmd)
+	profileCmd.AddCommand(profile.LayoutCmd)
 	rootCmd.AddCommand(profileCmd)
 }
 
