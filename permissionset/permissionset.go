@@ -86,6 +86,7 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"customPermissions"`
+	TabSettings     []TabSettings `xml:"tabSettings"`
 	UserPermissions []struct {
 		Enabled struct {
 			Text string `xml:",chardata"`
@@ -94,7 +95,6 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"userPermissions"`
-	TabSettings             []TabSettings `xml:"tabSettings"`
 	ApplicationVisibilities []struct {
 		Application struct {
 			Text string `xml:",chardata"`
