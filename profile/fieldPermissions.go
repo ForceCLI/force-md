@@ -40,3 +40,28 @@ func (p *Profile) DeleteFieldPermissions(fieldName string) error {
 	p.FieldPermissions = newPerms
 	return nil
 }
+
+func (p *Profile) AddFieldPermissions(fieldName string) error {
+	for _, f := range p.FieldPermissions {
+		if f.Field.Text == fieldName {
+			return errors.New("field already exists")
+		}
+	}
+
+	p.FieldPermissions = append(p.FieldPermissions, defaultFieldPermissions(fieldName))
+	p.FieldPermissions.Tidy()
+	return nil
+}
+
+func defaultFieldPermissions(fieldName string) FieldPermissions {
+	var falseBooleanText = BooleanText{
+		Text: "false",
+	}
+
+	fp := FieldPermissions{
+		Field:    FieldName{fieldName},
+		Editable: falseBooleanText,
+		Readable: falseBooleanText,
+	}
+	return fp
+}

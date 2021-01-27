@@ -22,6 +22,9 @@ func init() {
 	editFieldCmd.Flags().SortFlags = false
 	editFieldCmd.MarkFlagRequired("field")
 
+	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	addFieldCmd.MarkFlagRequired("field")
+
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	deleteFieldCmd.MarkFlagRequired("field")
 
@@ -30,6 +33,7 @@ func init() {
 	cloneCmd.MarkFlagRequired("source")
 	cloneCmd.MarkFlagRequired("field")
 
+	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
 	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
 	FieldPermissionsCmd.AddCommand(cloneCmd)
@@ -47,7 +51,7 @@ var cloneCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
-			addNewField(file)
+			cloneField(file)
 		}
 	},
 }
@@ -61,6 +65,18 @@ var editFieldCmd = &cobra.Command{
 		perms := fieldPermissionsToUpdate(cmd)
 		for _, file := range args {
 			updateFieldPermissions(file, perms)
+		}
+	},
+}
+
+var addFieldCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add field permissions",
+	Long:  "Add field permissions in profiles",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addFieldPermissions(file)
 		}
 	},
 }
@@ -84,7 +100,7 @@ func fieldPermissionsToUpdate(cmd *cobra.Command) profile.FieldPermissions {
 	return perms
 }
 
-func addNewField(file string) {
+func cloneField(file string) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
@@ -93,6 +109,24 @@ func addNewField(file string) {
 	err = p.CloneFieldPermissions(sourceField, fieldName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func addFieldPermissions(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.AddFieldPermissions(fieldName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
 	err = internal.WriteToFile(p, file)

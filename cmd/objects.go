@@ -7,6 +7,7 @@ import (
 )
 
 func init() {
+	objectsCmd.AddCommand(objects.FieldCmd)
 	objectsCmd.AddCommand(objects.TidyCmd)
 	rootCmd.AddCommand(objectsCmd)
 }
