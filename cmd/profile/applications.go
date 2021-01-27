@@ -11,11 +11,17 @@ import (
 )
 
 var applicationName string
+var isDefault bool
 
 func init() {
 	deleteApplicationCmd.Flags().StringVarP(&applicationName, "application", "a", "", "application name")
 	deleteApplicationCmd.MarkFlagRequired("application")
 
+	addApplicationCmd.Flags().StringVarP(&applicationName, "application", "a", "", "application name")
+	addApplicationCmd.Flags().BoolVarP(&isDefault, "default", "d", false, "make default application")
+	addApplicationCmd.MarkFlagRequired("application")
+
+	ApplicationCmd.AddCommand(addApplicationCmd)
 	ApplicationCmd.AddCommand(deleteApplicationCmd)
 }
 
@@ -36,6 +42,18 @@ var deleteApplicationCmd = &cobra.Command{
 	},
 }
 
+var addApplicationCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add application visibility",
+	Long:  "Add application visibility in profiles",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addApplicationVisibility(file, applicationName, isDefault)
+		}
+	},
+}
+
 func deleteApplicationVisibility(file string, applicationName string) {
 	p, err := profile.Open(file)
 	if err != nil {
@@ -43,6 +61,24 @@ func deleteApplicationVisibility(file string, applicationName string) {
 		return
 	}
 	err = p.DeleteApplicationVisibility(applicationName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func addApplicationVisibility(file string, applicationName string, isDefault bool) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.AddApplicationVisibility(applicationName, isDefault)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

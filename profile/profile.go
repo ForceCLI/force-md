@@ -16,6 +16,8 @@ type FieldPermissionsList []FieldPermissions
 
 type ObjectPermissionsList []ObjectPermissions
 
+type ApplicationVisibilityList []ApplicationVisibility
+
 type TabVisibilityList []TabVisibility
 
 type UserPermissionList []UserPermission
@@ -39,9 +41,7 @@ type TabVisibility struct {
 
 type UserPermission struct {
 	Enabled BooleanText `xml:"enabled"`
-	Name    struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
+	Name    string      `xml:"name"`
 }
 
 type LayoutAssignment struct {
@@ -49,6 +49,12 @@ type LayoutAssignment struct {
 		Text string `xml:",chardata"`
 	} `xml:"layout"`
 	RecordType *RecordType `xml:"recordType"`
+}
+
+type ApplicationVisibility struct {
+	Application string      `xml:"application"`
+	Default     BooleanText `xml:"default"`
+	Visible     BooleanText `xml:"visible"`
 }
 
 type RecordType struct {
@@ -72,20 +78,10 @@ type PersonAccountDefault struct {
 }
 
 type Profile struct {
-	XMLName                 xml.Name `xml:"Profile"`
-	Xmlns                   string   `xml:"xmlns,attr"`
-	ApplicationVisibilities []struct {
-		Application struct {
-			Text string `xml:",chardata"`
-		} `xml:"application"`
-		Default struct {
-			Text string `xml:",chardata"`
-		} `xml:"default"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"applicationVisibilities"`
-	ClassAccesses []struct {
+	XMLName                 xml.Name                  `xml:"Profile"`
+	Xmlns                   string                    `xml:"xmlns,attr"`
+	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
+	ClassAccesses           []struct {
 		ApexClass struct {
 			Text string `xml:",chardata"`
 		} `xml:"apexClass"`
@@ -127,11 +123,15 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"visible"`
 	} `xml:"recordTypeVisibilities"`
-	TabVisibilities TabVisibilityList `xml:"tabVisibilities"`
-	UserLicense     struct {
-		Text string `xml:",chardata"`
-	} `xml:"userLicense"`
+	TabVisibilities TabVisibilityList  `xml:"tabVisibilities"`
+	UserLicense     string             `xml:"userLicense"`
 	UserPermissions UserPermissionList `xml:"userPermissions"`
+}
+
+func NewBooleanText(val string) BooleanText {
+	return BooleanText{
+		Text: val,
+	}
 }
 
 func (p *Profile) MetaCheck() {}
