@@ -6,6 +6,189 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type BooleanText struct {
+	Text string `xml:",chardata"`
+}
+
+type Field struct {
+	FullName struct {
+		Text string `xml:",chardata"`
+	} `xml:"fullName"`
+	CaseSensitive *struct {
+		Text string `xml:",chardata"`
+	} `xml:"caseSensitive"`
+	DefaultValue *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"defaultValue"`
+	DeleteConstraint *struct {
+		Text string `xml:",chardata"`
+	} `xml:"deleteConstraint"`
+	Description *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"description"`
+	DisplayFormat *struct {
+		Text string `xml:",chardata"`
+	} `xml:"displayFormat"`
+	DisplayLocationInDecimal *struct {
+		Text string `xml:",chardata"`
+	} `xml:"displayLocationInDecimal"`
+	ExternalId *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalId"`
+	Formula *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"formula"`
+	FormulaTreatBlanksAs *struct {
+		Text string `xml:",chardata"`
+	} `xml:"formulaTreatBlanksAs"`
+	InlineHelpText *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"inlineHelpText"`
+	Label *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"label"`
+	LookupFilter *struct {
+		Active struct {
+			Text string `xml:",chardata"`
+		} `xml:"active"`
+		ErrorMessage *struct {
+			Text string `xml:",innerxml"`
+		} `xml:"errorMessage"`
+		FilterItems []struct {
+			Field struct {
+				Text string `xml:",chardata"`
+			} `xml:"field"`
+			Operation struct {
+				Text string `xml:",chardata"`
+			} `xml:"operation"`
+			Value *struct {
+				Text string `xml:",chardata"`
+			} `xml:"value"`
+			ValueField *struct {
+				Text string `xml:",chardata"`
+			} `xml:"valueField"`
+		} `xml:"filterItems"`
+		IsOptional struct {
+			Text string `xml:",chardata"`
+		} `xml:"isOptional"`
+	} `xml:"lookupFilter"`
+	Precision *struct {
+		Text string `xml:",chardata"`
+	} `xml:"precision"`
+	Length *struct {
+		Text string `xml:",chardata"`
+	} `xml:"length"`
+	ReferenceTo *struct {
+		Text string `xml:",chardata"`
+	} `xml:"referenceTo"`
+	RelationshipLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"relationshipLabel"`
+	RelationshipName *struct {
+		Text string `xml:",chardata"`
+	} `xml:"relationshipName"`
+	Required *struct {
+		Text string `xml:",chardata"`
+	} `xml:"required"`
+	Scale *struct {
+		Text string `xml:",chardata"`
+	} `xml:"scale"`
+	TrackFeedHistory *struct {
+		Text string `xml:",chardata"`
+	} `xml:"trackFeedHistory"`
+	SummarizedField *struct {
+		Text string `xml:",chardata"`
+	} `xml:"summarizedField"`
+	SummaryFilterItems []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Operation struct {
+			Text string `xml:",chardata"`
+		} `xml:"operation"`
+		Value struct {
+			Text string `xml:",chardata"`
+		} `xml:"value"`
+	} `xml:"summaryFilterItems"`
+	SummaryForeignKey *struct {
+		Text string `xml:",chardata"`
+	} `xml:"summaryForeignKey"`
+	SummaryOperation *struct {
+		Text string `xml:",chardata"`
+	} `xml:"summaryOperation"`
+	RelationshipOrder *struct {
+		Text string `xml:",chardata"`
+	} `xml:"relationshipOrder"`
+	ReparentableMasterDetail *struct {
+		Text string `xml:",chardata"`
+	} `xml:"reparentableMasterDetail"`
+	FieldManageability *struct {
+		Text string `xml:",chardata"`
+	} `xml:"fieldManageability"`
+	MetadataRelationshipControllingField *struct {
+		Text string `xml:",chardata"`
+	} `xml:"metadataRelationshipControllingField"`
+	TrackHistory *struct {
+		Text string `xml:",chardata"`
+	} `xml:"trackHistory"`
+	TrackTrending *struct {
+		Text string `xml:",chardata"`
+	} `xml:"trackTrending"`
+	Type *struct {
+		Text string `xml:",chardata"`
+	} `xml:"type"`
+	Unique *struct {
+		Text string `xml:",chardata"`
+	} `xml:"unique"`
+	WriteRequiresMasterRead *struct {
+		Text string `xml:",chardata"`
+	} `xml:"writeRequiresMasterRead"`
+	ValueSet *struct {
+		ControllingField *struct {
+			Text string `xml:",chardata"`
+		} `xml:"controllingField"`
+		Restricted *struct {
+			Text string `xml:",chardata"`
+		} `xml:"restricted"`
+		ValueSetDefinition *struct {
+			Sorted struct {
+				Text string `xml:",chardata"`
+			} `xml:"sorted"`
+			Value []struct {
+				FullName struct {
+					Text string `xml:",innerxml"`
+				} `xml:"fullName"`
+				Default struct {
+					Text string `xml:",chardata"`
+				} `xml:"default"`
+				IsActive *struct {
+					Text string `xml:",chardata"`
+				} `xml:"isActive"`
+				Label struct {
+					Text string `xml:",innerxml"`
+				} `xml:"label"`
+				Color *struct {
+					Text string `xml:",chardata"`
+				} `xml:"color"`
+			} `xml:"value"`
+		} `xml:"valueSetDefinition"`
+		ValueSetName *struct {
+			Text string `xml:",chardata"`
+		} `xml:"valueSetName"`
+		ValueSettings []struct {
+			ControllingFieldValue []struct {
+				Text string `xml:",innerxml"`
+			} `xml:"controllingFieldValue"`
+			ValueName struct {
+				Text string `xml:",chardata"`
+			} `xml:"valueName"`
+		} `xml:"valueSettings"`
+	} `xml:"valueSet"`
+	VisibleLines *struct {
+		Text string `xml:",chardata"`
+	} `xml:"visibleLines"`
+}
+
 type CustomObject struct {
 	XMLName         xml.Name `xml:"CustomObject"`
 	Xmlns           string   `xml:"xmlns,attr"`
@@ -118,185 +301,8 @@ type CustomObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 	} `xml:"fieldSets"`
-	Fields []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		CaseSensitive *struct {
-			Text string `xml:",chardata"`
-		} `xml:"caseSensitive"`
-		DefaultValue *struct {
-			Text string `xml:",chardata"`
-		} `xml:"defaultValue"`
-		DeleteConstraint *struct {
-			Text string `xml:",chardata"`
-		} `xml:"deleteConstraint"`
-		Description *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"description"`
-		DisplayFormat *struct {
-			Text string `xml:",chardata"`
-		} `xml:"displayFormat"`
-		DisplayLocationInDecimal *struct {
-			Text string `xml:",chardata"`
-		} `xml:"displayLocationInDecimal"`
-		ExternalId *struct {
-			Text string `xml:",chardata"`
-		} `xml:"externalId"`
-		Formula *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"formula"`
-		FormulaTreatBlanksAs *struct {
-			Text string `xml:",chardata"`
-		} `xml:"formulaTreatBlanksAs"`
-		InlineHelpText *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"inlineHelpText"`
-		Label *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"label"`
-		LookupFilter *struct {
-			Active struct {
-				Text string `xml:",chardata"`
-			} `xml:"active"`
-			ErrorMessage *struct {
-				Text string `xml:",innerxml"`
-			} `xml:"errorMessage"`
-			FilterItems []struct {
-				Field struct {
-					Text string `xml:",chardata"`
-				} `xml:"field"`
-				Operation struct {
-					Text string `xml:",chardata"`
-				} `xml:"operation"`
-				Value *struct {
-					Text string `xml:",chardata"`
-				} `xml:"value"`
-				ValueField *struct {
-					Text string `xml:",chardata"`
-				} `xml:"valueField"`
-			} `xml:"filterItems"`
-			IsOptional struct {
-				Text string `xml:",chardata"`
-			} `xml:"isOptional"`
-		} `xml:"lookupFilter"`
-		Precision *struct {
-			Text string `xml:",chardata"`
-		} `xml:"precision"`
-		Length *struct {
-			Text string `xml:",chardata"`
-		} `xml:"length"`
-		ReferenceTo *struct {
-			Text string `xml:",chardata"`
-		} `xml:"referenceTo"`
-		RelationshipLabel *struct {
-			Text string `xml:",chardata"`
-		} `xml:"relationshipLabel"`
-		RelationshipName *struct {
-			Text string `xml:",chardata"`
-		} `xml:"relationshipName"`
-		Required *struct {
-			Text string `xml:",chardata"`
-		} `xml:"required"`
-		Scale *struct {
-			Text string `xml:",chardata"`
-		} `xml:"scale"`
-		TrackFeedHistory *struct {
-			Text string `xml:",chardata"`
-		} `xml:"trackFeedHistory"`
-		SummarizedField *struct {
-			Text string `xml:",chardata"`
-		} `xml:"summarizedField"`
-		SummaryFilterItems []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operation struct {
-				Text string `xml:",chardata"`
-			} `xml:"operation"`
-			Value struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-		} `xml:"summaryFilterItems"`
-		SummaryForeignKey *struct {
-			Text string `xml:",chardata"`
-		} `xml:"summaryForeignKey"`
-		SummaryOperation *struct {
-			Text string `xml:",chardata"`
-		} `xml:"summaryOperation"`
-		RelationshipOrder *struct {
-			Text string `xml:",chardata"`
-		} `xml:"relationshipOrder"`
-		ReparentableMasterDetail *struct {
-			Text string `xml:",chardata"`
-		} `xml:"reparentableMasterDetail"`
-		FieldManageability *struct {
-			Text string `xml:",chardata"`
-		} `xml:"fieldManageability"`
-		MetadataRelationshipControllingField *struct {
-			Text string `xml:",chardata"`
-		} `xml:"metadataRelationshipControllingField"`
-		TrackHistory *struct {
-			Text string `xml:",chardata"`
-		} `xml:"trackHistory"`
-		TrackTrending *struct {
-			Text string `xml:",chardata"`
-		} `xml:"trackTrending"`
-		Type *struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
-		Unique *struct {
-			Text string `xml:",chardata"`
-		} `xml:"unique"`
-		WriteRequiresMasterRead *struct {
-			Text string `xml:",chardata"`
-		} `xml:"writeRequiresMasterRead"`
-		ValueSet *struct {
-			ControllingField *struct {
-				Text string `xml:",chardata"`
-			} `xml:"controllingField"`
-			Restricted *struct {
-				Text string `xml:",chardata"`
-			} `xml:"restricted"`
-			ValueSetDefinition *struct {
-				Sorted struct {
-					Text string `xml:",chardata"`
-				} `xml:"sorted"`
-				Value []struct {
-					FullName struct {
-						Text string `xml:",innerxml"`
-					} `xml:"fullName"`
-					Default struct {
-						Text string `xml:",chardata"`
-					} `xml:"default"`
-					IsActive *struct {
-						Text string `xml:",chardata"`
-					} `xml:"isActive"`
-					Label struct {
-						Text string `xml:",innerxml"`
-					} `xml:"label"`
-					Color *struct {
-						Text string `xml:",chardata"`
-					} `xml:"color"`
-				} `xml:"value"`
-			} `xml:"valueSetDefinition"`
-			ValueSetName *struct {
-				Text string `xml:",chardata"`
-			} `xml:"valueSetName"`
-			ValueSettings []struct {
-				ControllingFieldValue []struct {
-					Text string `xml:",innerxml"`
-				} `xml:"controllingFieldValue"`
-				ValueName struct {
-					Text string `xml:",chardata"`
-				} `xml:"valueName"`
-			} `xml:"valueSettings"`
-		} `xml:"valueSet"`
-		VisibleLines *struct {
-			Text string `xml:",chardata"`
-		} `xml:"visibleLines"`
-	} `xml:"fields"`
-	Label *struct {
+	Fields []Field `xml:"fields"`
+	Label  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	ListViews []struct {
