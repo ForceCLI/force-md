@@ -11,7 +11,7 @@ func init() {
 	permissionSetCmd.AddCommand(permissionset.TidyCmd)
 	permissionSetCmd.AddCommand(permissionset.TabCmd)
 	permissionSetCmd.AddCommand(permissionset.ApexClassCmd)
-	rootCmd.AddCommand(permissionSetCmd)
+	RootCmd.AddCommand(permissionSetCmd)
 }
 
 var permissionSetCmd = &cobra.Command{
