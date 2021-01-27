@@ -11,7 +11,7 @@ var (
 	version = "0.1"
 )
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "force-md",
 	Short: "force-md manipulate Salesforce metadata",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}

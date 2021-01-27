@@ -31,7 +31,10 @@ $(basename $(WINDOWS)).zip: $(WINDOWS)
 
 dist: $(addsuffix .zip,$(basename $(ALL)))
 
+docs:
+	go run docs/mkdocs.go
+
 clean:
 	-rm -f $(EXECUTABLE) $(EXECUTABLE)_*
 
-.PHONY: default dist clean
+.PHONY: default dist clean docs

@@ -18,7 +18,7 @@ func init() {
 	profileCmd.AddCommand(profile.VisualforceCmd)
 	profileCmd.AddCommand(profile.LayoutCmd)
 	profileCmd.AddCommand(profile.NewCmd)
-	rootCmd.AddCommand(profileCmd)
+	RootCmd.AddCommand(profileCmd)
 }
 
 var profileCmd = &cobra.Command{
