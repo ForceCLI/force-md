@@ -1,6 +1,9 @@
 package objects
 
-import ()
+import (
+	"github.com/imdario/mergo"
+	"github.com/pkg/errors"
+)
 
 type FieldFilter func(Field) bool
 
@@ -16,4 +19,21 @@ FIELDS:
 		fields = append(fields, f)
 	}
 	return fields
+}
+
+func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
+	found := false
+	for i, f := range o.Fields {
+		if f.FullName.Text == fieldName {
+			found = true
+			if err := mergo.Merge(&updates, f); err != nil {
+				return errors.Wrap(err, "merging field updates")
+			}
+			o.Fields[i] = updates
+		}
+	}
+	if !found {
+		return errors.New("field not found")
+	}
+	return nil
 }
