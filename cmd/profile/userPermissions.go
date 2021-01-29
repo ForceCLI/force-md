@@ -21,6 +21,7 @@ func init() {
 
 	UserPermissionsCmd.AddCommand(addUserPermissionCmd)
 	UserPermissionsCmd.AddCommand(deleteUserPermissionCmd)
+	UserPermissionsCmd.AddCommand(listUserPermissionsCmd)
 }
 
 var UserPermissionsCmd = &cobra.Command{
@@ -36,6 +37,17 @@ var addUserPermissionCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			addUserPermission(file, permissionName)
+		}
+	},
+}
+
+var listUserPermissionsCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List user permissions enabled",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listUserPermissions(file)
 		}
 	},
 }
@@ -85,5 +97,17 @@ func deleteUserPermission(file string, permissionName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listUserPermissions(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	permissions := p.GetUserPermissions()
+	for _, perm := range permissions {
+		fmt.Printf("%s\n", perm.Name)
 	}
 }

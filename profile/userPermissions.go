@@ -34,3 +34,7 @@ func (p *Profile) DeleteUserPermission(permissionName string) error {
 	p.UserPermissions = newPerms
 	return nil
 }
+
+func (p *Profile) GetUserPermissions() UserPermissionList {
+	return p.UserPermissions
+}
