@@ -27,7 +27,7 @@ var FieldPermissionsCmd = &cobra.Command{
 }
 
 var cloneCmd = &cobra.Command{
-	Use:   "clone",
+	Use:   "clone -s SObject.Field -f SObject.Field [flags] [filename]...",
 	Short: "Clone field permissions",
 	Long:  "Clone field permissions in permission sets for a new field",
 	Args:  cobra.MinimumNArgs(1),

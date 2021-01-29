@@ -7,7 +7,7 @@ Add tab visibility
 Add tab visibility
 
 ```
-force-md permissionset tab add [flags]
+force-md permissionset tab add -t TabName [flags] [filename]...
 ```
 
 ### Options

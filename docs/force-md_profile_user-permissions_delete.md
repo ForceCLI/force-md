@@ -7,7 +7,7 @@ Delete user permission
 Delete user permission in profiles
 
 ```
-force-md profile user-permissions delete [flags]
+force-md profile user-permissions delete -p Permission [flags] [filename]...
 ```
 
 ### Options

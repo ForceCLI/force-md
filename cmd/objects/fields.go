@@ -32,7 +32,7 @@ var FieldCmd = &cobra.Command{
 }
 
 var listFieldsCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list [flags] [filename]...",
 	Short: "List object fields",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -43,7 +43,7 @@ var listFieldsCmd = &cobra.Command{
 }
 
 var editFieldCmd = &cobra.Command{
-	Use:   "edit",
+	Use:   "edit -f Field [flags] [filename]...",
 	Short: "Edit object fields",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

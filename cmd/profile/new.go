@@ -19,7 +19,7 @@ func init() {
 }
 
 var NewCmd = &cobra.Command{
-	Use:   "new",
+	Use:   "new [flags] [filename]...",
 	Short: "Create new profile",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

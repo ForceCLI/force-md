@@ -7,7 +7,7 @@ Tidy Permission Set metadata
 Tidy Permission Set metadata
 
 ```
-force-md permissionset tidy [flags]
+force-md permissionset tidy [flags] [filename]...
 ```
 
 ### Options

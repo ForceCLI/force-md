@@ -7,7 +7,7 @@ Tidy profile metadata
 Tidy profile metadata
 
 ```
-force-md profile tidy [flags]
+force-md profile tidy [flags] [filename]...
 ```
 
 ### Options

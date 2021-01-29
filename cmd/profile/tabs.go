@@ -29,7 +29,7 @@ var TabCmd = &cobra.Command{
 }
 
 var addTabCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -t TabName [flags] [filename]...",
 	Short: "Add tab visibility",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -40,7 +40,7 @@ var addTabCmd = &cobra.Command{
 }
 
 var deleteTabCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -t TabName [flags] [filename]...",
 	Short: "Delete tab visibility",
 	Long:  "Delete tab visibility in profiles",
 	Args:  cobra.MinimumNArgs(1),

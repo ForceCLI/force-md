@@ -31,7 +31,7 @@ var ApplicationCmd = &cobra.Command{
 }
 
 var deleteApplicationCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -a ApplicationName [flags] [filename]...",
 	Short: "Delete application visibility",
 	Long:  "Delete application visibility in profiles",
 	Args:  cobra.MinimumNArgs(1),
@@ -43,7 +43,7 @@ var deleteApplicationCmd = &cobra.Command{
 }
 
 var addApplicationCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -a ApplicationName [flags] [filename]...",
 	Short: "Add application visibility",
 	Long:  "Add application visibility in profiles",
 	Args:  cobra.MinimumNArgs(1),

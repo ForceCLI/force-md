@@ -49,7 +49,7 @@ var ObjectPermissionsCmd = &cobra.Command{
 }
 
 var editObjectCmd = &cobra.Command{
-	Use:   "edit",
+	Use:   "edit -o SObject [flags] [filename]...",
 	Short: "Update object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -61,7 +61,7 @@ var editObjectCmd = &cobra.Command{
 }
 
 var addObjectCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -o SObject [flags] [filename]...",
 	Short: "Add object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -72,7 +72,7 @@ var addObjectCmd = &cobra.Command{
 }
 
 var deleteObjectCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -o SObject [flags] [filename]...",
 	Short: "Delete object permissions",
 	Long:  "Delete object permissions and related field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),

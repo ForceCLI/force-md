@@ -23,7 +23,7 @@ var TabCmd = &cobra.Command{
 }
 
 var addTabCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -t TabName [flags] [filename]...",
 	Short: "Add tab visibility",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

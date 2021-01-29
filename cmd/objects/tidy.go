@@ -9,7 +9,7 @@ import (
 )
 
 var TidyCmd = &cobra.Command{
-	Use:   "tidy",
+	Use:   "tidy [flags] [filename]...",
 	Short: "Tidy object metadata",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

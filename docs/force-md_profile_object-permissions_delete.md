@@ -7,7 +7,7 @@ Delete object permissions
 Delete object permissions and related field permissions in profiles
 
 ```
-force-md profile object-permissions delete [flags]
+force-md profile object-permissions delete -o SObject [flags] [filename]...
 ```
 
 ### Options

@@ -7,7 +7,7 @@ List user permissions enabled
 List user permissions enabled
 
 ```
-force-md profile user-permissions list [flags]
+force-md profile user-permissions list [flags] [filename]...
 ```
 
 ### Options

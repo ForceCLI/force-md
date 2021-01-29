@@ -7,7 +7,7 @@ Edit object fields
 Edit object fields
 
 ```
-force-md objects field edit [flags]
+force-md objects field edit -f Field [flags] [filename]...
 ```
 
 ### Options

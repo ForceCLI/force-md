@@ -7,7 +7,7 @@ Update field permissions
 Update field permissions in profiles
 
 ```
-force-md profile field-permissions edit [flags]
+force-md profile field-permissions edit -f SObject.Field [flags] [filename]...
 ```
 
 ### Options

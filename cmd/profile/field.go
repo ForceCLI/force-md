@@ -45,7 +45,7 @@ var FieldPermissionsCmd = &cobra.Command{
 }
 
 var cloneCmd = &cobra.Command{
-	Use:   "clone",
+	Use:   "clone -s SObject.Field -f SObject.Field [flags] [filename]...",
 	Short: "Clone field permissions",
 	Long:  "Clone field permissions in profiles for a new field",
 	Args:  cobra.MinimumNArgs(1),
@@ -57,7 +57,7 @@ var cloneCmd = &cobra.Command{
 }
 
 var editFieldCmd = &cobra.Command{
-	Use:   "edit",
+	Use:   "edit -f SObject.Field [flags] [filename]...",
 	Short: "Update field permissions",
 	Long:  "Update field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),
@@ -70,7 +70,7 @@ var editFieldCmd = &cobra.Command{
 }
 
 var addFieldCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -f SObject.Field [flags] [filename]...",
 	Short: "Add field permissions",
 	Long:  "Add field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),
@@ -82,7 +82,7 @@ var addFieldCmd = &cobra.Command{
 }
 
 var deleteFieldCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -f SObject.Field [flags] [filename]...",
 	Short: "Delete field permissions",
 	Long:  "Delete field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),

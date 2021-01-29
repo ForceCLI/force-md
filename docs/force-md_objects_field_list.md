@@ -7,7 +7,7 @@ List object fields
 List object fields
 
 ```
-force-md objects field list [flags]
+force-md objects field list [flags] [filename]...
 ```
 
 ### Options

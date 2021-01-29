@@ -7,7 +7,7 @@ Delete apex class visibility
 Delete apex class visibility in profiles
 
 ```
-force-md profile apex delete [flags]
+force-md profile apex delete -c ClassName [flags] [filename]...
 ```
 
 ### Options

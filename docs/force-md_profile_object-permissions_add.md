@@ -7,7 +7,7 @@ Add object permissions
 Add object permissions
 
 ```
-force-md profile object-permissions add [flags]
+force-md profile object-permissions add -o SObject [flags] [filename]...
 ```
 
 ### Options

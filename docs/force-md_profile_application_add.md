@@ -7,7 +7,7 @@ Add application visibility
 Add application visibility in profiles
 
 ```
-force-md profile application add [flags]
+force-md profile application add -a ApplicationName [flags] [filename]...
 ```
 
 ### Options

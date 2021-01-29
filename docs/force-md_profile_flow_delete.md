@@ -7,7 +7,7 @@ Delete flow access
 Delete flow access in profiles
 
 ```
-force-md profile flow delete [flags]
+force-md profile flow delete -f FlowName [flags] [filename]...
 ```
 
 ### Options

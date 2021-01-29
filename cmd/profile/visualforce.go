@@ -25,7 +25,7 @@ var VisualforceCmd = &cobra.Command{
 }
 
 var deleteVisualforcePageCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -p PageName [flags] [filename]...",
 	Short: "Delete visualforce page access",
 	Long:  "Delete visualforce page access in profiles",
 	Args:  cobra.MinimumNArgs(1),

@@ -21,7 +21,7 @@ var ApexClassCmd = &cobra.Command{
 }
 
 var addClassCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -c ClassName [flags] [filename]...",
 	Short: "Add Apex Class to Permission Set",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

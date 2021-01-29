@@ -7,7 +7,7 @@ Clone field permissions
 Clone field permissions in permission sets for a new field
 
 ```
-force-md permissionset field-permissions clone [flags]
+force-md permissionset field-permissions clone -s SObject.Field -f SObject.Field [flags] [filename]...
 ```
 
 ### Options
