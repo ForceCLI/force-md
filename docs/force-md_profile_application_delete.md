@@ -7,7 +7,7 @@ Delete application visibility
 Delete application visibility in profiles
 
 ```
-force-md profile application delete [flags]
+force-md profile application delete -a ApplicationName [flags] [filename]...
 ```
 
 ### Options

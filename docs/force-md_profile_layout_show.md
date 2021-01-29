@@ -7,7 +7,7 @@ Show page layout assignment
 Show page layout assignment
 
 ```
-force-md profile layout show [flags]
+force-md profile layout show -o SObject [flags] [filename]...
 ```
 
 ### Options

@@ -7,7 +7,7 @@ Add user permission
 Add user permission in profiles
 
 ```
-force-md profile user-permissions add [flags]
+force-md profile user-permissions add -p Permission [flags] [filename]...
 ```
 
 ### Options

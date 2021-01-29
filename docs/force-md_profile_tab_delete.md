@@ -7,7 +7,7 @@ Delete tab visibility
 Delete tab visibility in profiles
 
 ```
-force-md profile tab delete [flags]
+force-md profile tab delete -t TabName [flags] [filename]...
 ```
 
 ### Options

@@ -22,7 +22,7 @@ var LayoutCmd = &cobra.Command{
 }
 
 var showLayoutCmd = &cobra.Command{
-	Use:   "show",
+	Use:   "show -o SObject [flags] [filename]...",
 	Short: "Show page layout assignment",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

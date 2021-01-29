@@ -7,7 +7,7 @@ Create new profile
 Create new profile
 
 ```
-force-md profile new [flags]
+force-md profile new [flags] [filename]...
 ```
 
 ### Options

@@ -25,7 +25,7 @@ var FlowCmd = &cobra.Command{
 }
 
 var deleteFlowCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -f FlowName [flags] [filename]...",
 	Short: "Delete flow access",
 	Long:  "Delete flow access in profiles",
 	Args:  cobra.MinimumNArgs(1),

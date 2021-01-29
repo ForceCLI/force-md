@@ -7,7 +7,7 @@ Tidy object metadata
 Tidy object metadata
 
 ```
-force-md objects tidy [flags]
+force-md objects tidy [flags] [filename]...
 ```
 
 ### Options

@@ -30,7 +30,7 @@ var UserPermissionsCmd = &cobra.Command{
 }
 
 var addUserPermissionCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add -p Permission [flags] [filename]...",
 	Short: "Add user permission",
 	Long:  "Add user permission in profiles",
 	Args:  cobra.MinimumNArgs(1),
@@ -42,7 +42,7 @@ var addUserPermissionCmd = &cobra.Command{
 }
 
 var listUserPermissionsCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list [flags] [filename]...",
 	Short: "List user permissions enabled",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -53,7 +53,7 @@ var listUserPermissionsCmd = &cobra.Command{
 }
 
 var deleteUserPermissionCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -p Permission [flags] [filename]...",
 	Short: "Delete user permission",
 	Long:  "Delete user permission in profiles",
 	Args:  cobra.MinimumNArgs(1),

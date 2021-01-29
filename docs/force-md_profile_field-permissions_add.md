@@ -7,7 +7,7 @@ Add field permissions
 Add field permissions in profiles
 
 ```
-force-md profile field-permissions add [flags]
+force-md profile field-permissions add -f SObject.Field [flags] [filename]...
 ```
 
 ### Options

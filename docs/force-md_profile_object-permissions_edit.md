@@ -7,7 +7,7 @@ Update object permissions
 Update object permissions
 
 ```
-force-md profile object-permissions edit [flags]
+force-md profile object-permissions edit -o SObject [flags] [filename]...
 ```
 
 ### Options

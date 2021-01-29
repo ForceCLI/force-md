@@ -7,7 +7,7 @@ Clone field permissions
 Clone field permissions in profiles for a new field
 
 ```
-force-md profile field-permissions clone [flags]
+force-md profile field-permissions clone -s SObject.Field -f SObject.Field [flags] [filename]...
 ```
 
 ### Options

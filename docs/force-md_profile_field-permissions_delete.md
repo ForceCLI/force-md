@@ -7,7 +7,7 @@ Delete field permissions
 Delete field permissions in profiles
 
 ```
-force-md profile field-permissions delete [flags]
+force-md profile field-permissions delete -f SObject.Field [flags] [filename]...
 ```
 
 ### Options

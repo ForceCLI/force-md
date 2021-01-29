@@ -25,7 +25,7 @@ var ApexCmd = &cobra.Command{
 }
 
 var deleteApexClassCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete -c ClassName [flags] [filename]...",
 	Short: "Delete apex class visibility",
 	Long:  "Delete apex class visibility in profiles",
 	Args:  cobra.MinimumNArgs(1),
