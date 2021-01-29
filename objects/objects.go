@@ -10,6 +10,10 @@ type BooleanText struct {
 	Text string `xml:",chardata"`
 }
 
+type TextLiteral struct {
+	Text string `xml:",innerxml"`
+}
+
 type Field struct {
 	FullName struct {
 		Text string `xml:",chardata"`
@@ -44,9 +48,7 @@ type Field struct {
 	InlineHelpText *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"inlineHelpText"`
-	Label *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"label"`
+	Label        *TextLiteral `xml:"label"`
 	LookupFilter *struct {
 		Active struct {
 			Text string `xml:",chardata"`
