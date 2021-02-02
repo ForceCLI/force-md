@@ -235,7 +235,7 @@ type CustomObject struct {
 		Text string `xml:",chardata"`
 	} `xml:"deploymentStatus"`
 	Description *struct {
-		Text string `xml:",chardata"`
+		Text string `xml:",innerxml"`
 	} `xml:"description"`
 	EnableActivities *struct {
 		Text string `xml:",chardata"`
