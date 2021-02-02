@@ -37,3 +37,20 @@ func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
 	}
 	return nil
 }
+
+func (p *CustomObject) DeleteField(fieldName string) error {
+	found := false
+	newFields := p.Fields[:0]
+	for _, f := range p.Fields {
+		if f.FullName.Text == fieldName {
+			found = true
+		} else {
+			newFields = append(newFields, f)
+		}
+	}
+	if !found {
+		return errors.New("field not found")
+	}
+	p.Fields = newFields
+	return nil
+}

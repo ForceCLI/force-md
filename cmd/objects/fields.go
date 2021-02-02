@@ -22,8 +22,12 @@ func init() {
 	editFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	editFieldCmd.MarkFlagRequired("field")
 
+	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	deleteFieldCmd.MarkFlagRequired("field")
+
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(editFieldCmd)
+	FieldCmd.AddCommand(deleteFieldCmd)
 }
 
 var FieldCmd = &cobra.Command{
@@ -50,6 +54,17 @@ var editFieldCmd = &cobra.Command{
 		fieldUpdates := fieldUpdates(cmd)
 		for _, file := range args {
 			updateField(file, fieldUpdates)
+		}
+	},
+}
+
+var deleteFieldCmd = &cobra.Command{
+	Use:   "delete -f Field [flags] [filename]...",
+	Short: "Delete object field",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteField(file, fieldName)
 		}
 	},
 }
@@ -87,6 +102,24 @@ func updateField(file string, fieldUpdates objects.Field) {
 		return
 	}
 	err = o.UpdateField(fieldName, fieldUpdates)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteField(file string, fieldName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	err = o.DeleteField(fieldName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
