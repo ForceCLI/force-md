@@ -27,7 +27,7 @@ func init() {
 }
 
 var FieldCmd = &cobra.Command{
-	Use:   "field",
+	Use:   "fields",
 	Short: "Manage object field metadata",
 }
 
