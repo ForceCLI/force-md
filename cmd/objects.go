@@ -13,6 +13,6 @@ func init() {
 }
 
 var objectsCmd = &cobra.Command{
-	Use:   "objects",
+	Use:   "objects [command] [flags] [filename]...",
 	Short: "Manage Custom and Standard Objects",
 }

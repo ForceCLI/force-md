@@ -3,6 +3,7 @@ package objects
 import (
 	"fmt"
 	"path"
+	"strconv"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -13,13 +14,18 @@ import (
 )
 
 var requiredOnly bool
-var fieldLabel, fieldName string
+var fieldName string
+var unique bool
 
 func init() {
 	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
 
-	editFieldCmd.Flags().StringVarP(&fieldLabel, "label", "l", "", "field label")
 	editFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	editFieldCmd.Flags().StringP("label", "l", "", "field label")
+	editFieldCmd.Flags().BoolP("unique", "u", false, "unique")
+	editFieldCmd.Flags().BoolP("no-unique", "U", false, "not unique")
+	editFieldCmd.Flags().BoolP("external-id", "e", false, "external id")
+	editFieldCmd.Flags().BoolP("no-external-id", "C", false, "not external id")
 	editFieldCmd.MarkFlagRequired("field")
 
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -31,8 +37,9 @@ func init() {
 }
 
 var FieldCmd = &cobra.Command{
-	Use:   "fields",
-	Short: "Manage object field metadata",
+	Use:                   "fields",
+	Short:                 "Manage object field metadata",
+	DisableFlagsInUseLine: true,
 }
 
 var listFieldsCmd = &cobra.Command{
@@ -134,6 +141,8 @@ func deleteField(file string, fieldName string) {
 func fieldUpdates(cmd *cobra.Command) objects.Field {
 	field := objects.Field{}
 	field.Label = textValue(cmd, "label")
+	field.Unique = booleanTextValue(cmd, "unique")
+	field.ExternalId = booleanTextValue(cmd, "external-id")
 	return field
 }
 
@@ -142,6 +151,23 @@ func textValue(cmd *cobra.Command, flag string) (t *objects.TextLiteral) {
 		val, _ := cmd.Flags().GetString(flag)
 		t = &objects.TextLiteral{
 			Text: val,
+		}
+	}
+	return t
+}
+
+func booleanTextValue(cmd *cobra.Command, flag string) (t *objects.BooleanText) {
+	if cmd.Flags().Changed(flag) {
+		val, _ := cmd.Flags().GetBool(flag)
+		t = &objects.BooleanText{
+			Text: strconv.FormatBool(val),
+		}
+	}
+	antiFlag := "no-" + flag
+	if cmd.Flags().Changed(antiFlag) {
+		val, _ := cmd.Flags().GetBool(antiFlag)
+		t = &objects.BooleanText{
+			Text: strconv.FormatBool(!val),
 		}
 	}
 	return t
