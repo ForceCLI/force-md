@@ -18,6 +18,7 @@ var RootCmd = &cobra.Command{
 		cmd.Help()
 		os.Exit(1)
 	},
+	DisableFlagsInUseLine: true,
 }
 
 func Execute() {

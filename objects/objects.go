@@ -36,10 +36,8 @@ type Field struct {
 	DisplayLocationInDecimal *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayLocationInDecimal"`
-	ExternalId *struct {
-		Text string `xml:",chardata"`
-	} `xml:"externalId"`
-	Formula *struct {
+	ExternalId *BooleanText `xml:"externalId"`
+	Formula    *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"formula"`
 	FormulaTreatBlanksAs *struct {
@@ -139,9 +137,7 @@ type Field struct {
 	Type *struct {
 		Text string `xml:",chardata"`
 	} `xml:"type"`
-	Unique *struct {
-		Text string `xml:",chardata"`
-	} `xml:"unique"`
+	Unique                  *BooleanText `xml:"unique"`
 	WriteRequiresMasterRead *struct {
 		Text string `xml:",chardata"`
 	} `xml:"writeRequiresMasterRead"`
