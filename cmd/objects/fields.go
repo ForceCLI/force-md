@@ -16,9 +16,11 @@ import (
 var requiredOnly bool
 var fieldName string
 var unique bool
+var fieldType string
 
 func init() {
 	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
+	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
 
 	editFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	editFieldCmd.Flags().StringP("label", "l", "", "field label")
@@ -94,6 +96,12 @@ func listFields(file string) {
 			isRequired := alwaysRequired[f.FullName.Text] || (f.Required != nil && f.Required.Text == "true")
 			isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 			return isRequired || isMasterDetail
+		})
+	}
+	if fieldType != "" {
+		filters = append(filters, func(f objects.Field) bool {
+			t := strings.ToLower(fieldType)
+			return f.Type != nil && strings.ToLower(f.Type.Text) == t
 		})
 	}
 	fields := o.GetFields(filters...)
