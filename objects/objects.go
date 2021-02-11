@@ -14,10 +14,10 @@ type TextLiteral struct {
 	Text string `xml:",innerxml"`
 }
 
+type FieldList []Field
+
 type Field struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
+	FullName      string `xml:"fullName"`
 	CaseSensitive *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
@@ -299,7 +299,7 @@ type CustomObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 	} `xml:"fieldSets"`
-	Fields []Field `xml:"fields"`
+	Fields FieldList `xml:"fields"`
 	Label  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`

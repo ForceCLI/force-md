@@ -7,6 +7,13 @@ import (
 
 type FieldFilter func(Field) bool
 
+func defaultField(name string) Field {
+	f := Field{
+		FullName: name,
+	}
+	return f
+}
+
 func (o *CustomObject) GetFields(filters ...FieldFilter) []Field {
 	var fields []Field
 FIELDS:
@@ -21,10 +28,22 @@ FIELDS:
 	return fields
 }
 
+func (o *CustomObject) AddField(fieldName string) error {
+	for _, f := range o.Fields {
+		if f.FullName == fieldName {
+			return errors.New("field already exists")
+		}
+	}
+	f := defaultField(fieldName)
+	o.Fields = append(o.Fields, f)
+	o.Fields.Tidy()
+	return nil
+}
+
 func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
 	found := false
 	for i, f := range o.Fields {
-		if f.FullName.Text == fieldName {
+		if f.FullName == fieldName {
 			found = true
 			if err := mergo.Merge(&updates, f); err != nil {
 				return errors.Wrap(err, "merging field updates")
@@ -42,7 +61,7 @@ func (p *CustomObject) DeleteField(fieldName string) error {
 	found := false
 	newFields := p.Fields[:0]
 	for _, f := range p.Fields {
-		if f.FullName.Text == fieldName {
+		if f.FullName == fieldName {
 			found = true
 		} else {
 			newFields = append(newFields, f)

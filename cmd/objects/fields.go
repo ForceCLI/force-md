@@ -20,6 +20,9 @@ var unique bool
 func init() {
 	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
 
+	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	addFieldCmd.MarkFlagRequired("field")
+
 	editFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	editFieldCmd.Flags().StringP("label", "l", "", "field label")
 	editFieldCmd.Flags().BoolP("unique", "u", false, "unique")
@@ -32,6 +35,7 @@ func init() {
 	deleteFieldCmd.MarkFlagRequired("field")
 
 	FieldCmd.AddCommand(listFieldsCmd)
+	FieldCmd.AddCommand(addFieldCmd)
 	FieldCmd.AddCommand(editFieldCmd)
 	FieldCmd.AddCommand(deleteFieldCmd)
 }
@@ -49,6 +53,19 @@ var listFieldsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			listFields(file)
+		}
+	},
+}
+
+var addFieldCmd = &cobra.Command{
+	Use:                   "add -f Field [filename]...",
+	Short:                 "Add field",
+	Long:                  "Add field to object",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addField(file, fieldName)
 		}
 	},
 }
@@ -91,14 +108,32 @@ func listFields(file string) {
 	var filters []objects.FieldFilter
 	if requiredOnly {
 		filters = append(filters, func(f objects.Field) bool {
-			isRequired := alwaysRequired[f.FullName.Text] || (f.Required != nil && f.Required.Text == "true")
+			isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
 			isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 			return isRequired || isMasterDetail
 		})
 	}
 	fields := o.GetFields(filters...)
 	for _, f := range fields {
-		fmt.Printf("%s.%s\n", objectName, f.FullName.Text)
+		fmt.Printf("%s.%s\n", objectName, f.FullName)
+	}
+}
+
+func addField(file string, fieldName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	err = o.AddField(fieldName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }
 
