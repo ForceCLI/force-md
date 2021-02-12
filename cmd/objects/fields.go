@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"encoding/xml"
 	"fmt"
 	"path"
 	"strconv"
@@ -31,8 +32,12 @@ func init() {
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	deleteFieldCmd.MarkFlagRequired("field")
 
+	showFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	showFieldCmd.MarkFlagRequired("field")
+
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(editFieldCmd)
+	FieldCmd.AddCommand(showFieldCmd)
 	FieldCmd.AddCommand(deleteFieldCmd)
 }
 
@@ -72,6 +77,18 @@ var deleteFieldCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteField(file, fieldName)
+		}
+	},
+}
+
+var showFieldCmd = &cobra.Command{
+	Use:                   "show -f Field [filename]...",
+	Short:                 "Show object field",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			showField(file, fieldName)
 		}
 	},
 }
@@ -118,6 +135,27 @@ func updateField(file string, fieldUpdates objects.Field) {
 		log.Warn("update failed: " + err.Error())
 		return
 	}
+}
+
+func showField(file string, fieldName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	fields := o.GetFields(func(f objects.Field) bool {
+		return f.FullName.Text == fieldName
+	})
+	if len(fields) == 0 {
+		log.Warn(fmt.Sprintf("field not found in %s", file))
+		return
+	}
+	b, err := xml.MarshalIndent(fields[0], "", "    ")
+	if err != nil {
+		log.Warn("marshal failed: " + err.Error())
+		return
+	}
+	fmt.Println(string(b))
 }
 
 func deleteField(file string, fieldName string) {
