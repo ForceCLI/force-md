@@ -6,14 +6,23 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/profile"
 )
+
+var layoutName string
 
 func init() {
 	showLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	showLayoutCmd.MarkFlagRequired("object")
 
+	editLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	editLayoutCmd.Flags().StringVarP(&layoutName, "layout", "l", "", "layout name")
+	editLayoutCmd.MarkFlagRequired("layout")
+	editLayoutCmd.MarkFlagRequired("object")
+
 	LayoutCmd.AddCommand(showLayoutCmd)
+	LayoutCmd.AddCommand(editLayoutCmd)
 }
 
 var LayoutCmd = &cobra.Command{
@@ -22,12 +31,25 @@ var LayoutCmd = &cobra.Command{
 }
 
 var showLayoutCmd = &cobra.Command{
-	Use:   "show -o SObject [flags] [filename]...",
-	Short: "Show page layout assignment",
-	Args:  cobra.MinimumNArgs(1),
+	Use:                   "show -o SObject [filename]...",
+	Short:                 "Show page layout assignment",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			showLayout(file)
+		}
+	},
+}
+
+var editLayoutCmd = &cobra.Command{
+	Use:                   "edit -o SObject -l Layout [filename]...",
+	Short:                 "Show page layout assignment",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			editLayout(file, objectName, layoutName)
 		}
 	},
 }
@@ -45,5 +67,23 @@ func showLayout(file string) {
 		} else {
 			fmt.Println(l.Layout.Text)
 		}
+	}
+}
+
+func editLayout(file string, object, layout string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.SetObjectLayout(object, layout)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }

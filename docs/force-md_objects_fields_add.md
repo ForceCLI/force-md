@@ -1,20 +1,20 @@
-## force-md objects fields delete
+## force-md objects fields add
 
-Delete object field
+Add field
 
 ### Synopsis
 
-Delete object field
+Add field to object
 
 ```
-force-md objects fields delete -f Field [flags] [filename]...
+force-md objects fields add -f Field [filename]...
 ```
 
 ### Options
 
 ```
   -f, --field string   field name
-  -h, --help           help for delete
+  -h, --help           help for add
 ```
 
 ### SEE ALSO

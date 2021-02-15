@@ -1,6 +1,8 @@
 package permissionset
 
 import (
+	"fmt"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -8,11 +10,17 @@ import (
 	"github.com/octoberswimmer/force-md/permissionset"
 )
 
+var apexClassName string
+
 func init() {
 	addClassCmd.Flags().StringP("class", "c", "", "class name")
 	addClassCmd.MarkFlagRequired("class")
 
+	deleteClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "apex classname")
+	deleteClassCmd.MarkFlagRequired("class")
+
 	ApexClassCmd.AddCommand(addClassCmd)
+	ApexClassCmd.AddCommand(deleteClassCmd)
 }
 
 var ApexClassCmd = &cobra.Command{
@@ -21,13 +29,27 @@ var ApexClassCmd = &cobra.Command{
 }
 
 var addClassCmd = &cobra.Command{
-	Use:   "add -c ClassName [flags] [filename]...",
-	Short: "Add Apex Class to Permission Set",
-	Args:  cobra.MinimumNArgs(1),
+	Use:                   "add -c ClassName [flags] [filename]...",
+	Short:                 "Add Apex Class to Permission Set",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		className, _ := cmd.Flags().GetString("class")
 		for _, file := range args {
 			addClass(file, className)
+		}
+	},
+}
+
+var deleteClassCmd = &cobra.Command{
+	Use:                   "delete -c ClassName [filename]...",
+	Short:                 "Delete apex class visibility",
+	Long:                  "Delete apex class visibility in permission sets",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteApexClassVisibility(file, apexClassName)
 		}
 	},
 }
@@ -39,6 +61,24 @@ func addClass(file, className string) {
 		return
 	}
 	p.AddClass(className)
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteApexClassVisibility(file string, apexClassName string) {
+	p, err := permissionset.Open(file)
+	if err != nil {
+		log.Warn("parsing permission set failed: " + err.Error())
+		return
+	}
+	err = p.DeleteApexClassAccess(apexClassName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

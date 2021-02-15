@@ -1,4 +1,4 @@
-## force-md profile layout show
+## force-md profile layout edit
 
 Show page layout assignment
 
@@ -7,13 +7,14 @@ Show page layout assignment
 Show page layout assignment
 
 ```
-force-md profile layout show -o SObject [filename]...
+force-md profile layout edit -o SObject -l Layout [filename]...
 ```
 
 ### Options
 
 ```
-  -h, --help            help for show
+  -h, --help            help for edit
+  -l, --layout string   layout name
   -o, --object string   object name
 ```
 

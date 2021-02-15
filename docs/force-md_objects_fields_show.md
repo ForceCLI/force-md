@@ -1,20 +1,20 @@
-## force-md objects fields delete
+## force-md objects fields show
 
-Delete object field
+Show object field
 
 ### Synopsis
 
-Delete object field
+Show object field
 
 ```
-force-md objects fields delete -f Field [flags] [filename]...
+force-md objects fields show -f Field [filename]...
 ```
 
 ### Options
 
 ```
   -f, --field string   field name
-  -h, --help           help for delete
+  -h, --help           help for show
 ```
 
 ### SEE ALSO
