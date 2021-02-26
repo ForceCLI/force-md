@@ -11,16 +11,8 @@ type ApexClass struct {
 	Enabled   string `xml:"enabled"`
 }
 
-type FieldPermission struct {
-	Editable struct {
-		Text string `xml:",chardata"`
-	} `xml:"editable"`
-	Field struct {
-		Text string `xml:",chardata"`
-	} `xml:"field"`
-	Readable struct {
-		Text string `xml:",chardata"`
-	} `xml:"readable"`
+type Description struct {
+	Text string `xml:",chardata"`
 }
 
 type License struct {
@@ -32,44 +24,48 @@ type TabSettings struct {
 	Visibility string `xml:"visibility"`
 }
 
+type BooleanText struct {
+	Text string `xml:",chardata"`
+}
+
+type ObjectPermissions struct {
+	AllowCreate      BooleanText `xml:"allowCreate"`
+	AllowDelete      BooleanText `xml:"allowDelete"`
+	AllowEdit        BooleanText `xml:"allowEdit"`
+	AllowRead        BooleanText `xml:"allowRead"`
+	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
+	Object           ObjectName  `xml:"object"`
+	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
+}
+
+type ObjectName struct {
+	Text string `xml:",chardata"`
+}
+
+type FieldName struct {
+	Text string `xml:",chardata"`
+}
+
+type ObjectPermissionsList []ObjectPermissions
+
+type FieldPermissions struct {
+	Editable BooleanText `xml:"editable"`
+	Field    FieldName   `xml:"field"`
+	Readable BooleanText `xml:"readable"`
+}
+
+type FieldPermissionsList []FieldPermissions
+
 type PermissionSet struct {
-	XMLName       xml.Name    `xml:"PermissionSet"`
-	Xmlns         string      `xml:"xmlns,attr"`
-	ClassAccesses []ApexClass `xml:"classAccesses"`
-	Description   struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	FieldPermissions      []FieldPermission `xml:"fieldPermissions"`
-	HasActivationRequired struct {
-		Text string `xml:",chardata"`
-	} `xml:"hasActivationRequired"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	ObjectPermissions []struct {
-		AllowCreate struct {
-			Text string `xml:",chardata"`
-		} `xml:"allowCreate"`
-		AllowDelete struct {
-			Text string `xml:",chardata"`
-		} `xml:"allowDelete"`
-		AllowEdit struct {
-			Text string `xml:",chardata"`
-		} `xml:"allowEdit"`
-		AllowRead struct {
-			Text string `xml:",chardata"`
-		} `xml:"allowRead"`
-		ModifyAllRecords struct {
-			Text string `xml:",chardata"`
-		} `xml:"modifyAllRecords"`
-		Object struct {
-			Text string `xml:",chardata"`
-		} `xml:"object"`
-		ViewAllRecords struct {
-			Text string `xml:",chardata"`
-		} `xml:"viewAllRecords"`
-	} `xml:"objectPermissions"`
-	PageAccesses []struct {
+	XMLName               xml.Name              `xml:"PermissionSet"`
+	Xmlns                 string                `xml:"xmlns,attr"`
+	ClassAccesses         []ApexClass           `xml:"classAccesses"`
+	Description           *Description          `xml:"description"`
+	FieldPermissions      FieldPermissionsList  `xml:"fieldPermissions"`
+	HasActivationRequired BooleanText           `xml:"hasActivationRequired"`
+	Label                 string                `xml:"label"`
+	ObjectPermissions     ObjectPermissionsList `xml:"objectPermissions"`
+	PageAccesses          []struct {
 		ApexPage struct {
 			Text string `xml:",chardata"`
 		} `xml:"apexPage"`

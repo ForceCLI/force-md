@@ -11,6 +11,8 @@ func init() {
 	permissionSetCmd.AddCommand(permissionset.TidyCmd)
 	permissionSetCmd.AddCommand(permissionset.TabCmd)
 	permissionSetCmd.AddCommand(permissionset.ApexClassCmd)
+	permissionSetCmd.AddCommand(permissionset.NewCmd)
+	permissionSetCmd.AddCommand(permissionset.ObjectPermissionsCmd)
 	RootCmd.AddCommand(permissionSetCmd)
 }
 

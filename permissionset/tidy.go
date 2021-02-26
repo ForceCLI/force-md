@@ -11,12 +11,8 @@ func (p *PermissionSet) Tidy() {
 	sort.Slice(p.ClassAccesses, func(i, j int) bool {
 		return p.ClassAccesses[i].ApexClass < p.ClassAccesses[j].ApexClass
 	})
-	sort.Slice(p.FieldPermissions, func(i, j int) bool {
-		return p.FieldPermissions[i].Field.Text < p.FieldPermissions[j].Field.Text
-	})
-	sort.Slice(p.ObjectPermissions, func(i, j int) bool {
-		return p.ObjectPermissions[i].Object.Text < p.ObjectPermissions[j].Object.Text
-	})
+	p.FieldPermissions.Tidy()
+	p.ObjectPermissions.Tidy()
 	sort.Slice(p.PageAccesses, func(i, j int) bool {
 		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
 	})
@@ -31,5 +27,17 @@ func (p *PermissionSet) Tidy() {
 	})
 	sort.Slice(p.CustomPermissions, func(i, j int) bool {
 		return p.CustomPermissions[i].Name.Text < p.CustomPermissions[j].Name.Text
+	})
+}
+
+func (op ObjectPermissionsList) Tidy() {
+	sort.Slice(op, func(i, j int) bool {
+		return op[i].Object.Text < op[j].Object.Text
+	})
+}
+
+func (fp FieldPermissionsList) Tidy() {
+	sort.Slice(fp, func(i, j int) bool {
+		return fp[i].Field.Text < fp[j].Field.Text
 	})
 }

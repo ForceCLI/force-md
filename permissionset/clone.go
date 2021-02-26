@@ -11,7 +11,7 @@ func (p *PermissionSet) CloneFieldPermissions(src, dest string) error {
 	for _, f := range p.FieldPermissions {
 		if f.Field.Text == src {
 			found = true
-			clone := FieldPermission{}
+			clone := FieldPermissions{}
 			clone.Editable.Text = f.Editable.Text
 			clone.Readable.Text = f.Readable.Text
 			clone.Field.Text = dest
