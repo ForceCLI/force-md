@@ -9,3 +9,5 @@ require (
 	github.com/spf13/cobra v0.0.6
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 )
+
+replace github.com/imdario/mergo => github.com/cwarden/mergo v0.3.12-0.20210528180603-9b708ca2c584
