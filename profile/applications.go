@@ -4,6 +4,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+type ApplicationFilter func(ApplicationVisibility) bool
+
 var falseBooleanText = BooleanText{
 	Text: "false",
 }
@@ -50,4 +52,19 @@ func (p *Profile) AddApplicationVisibility(appName string, defaultApp bool) erro
 	})
 	p.ApplicationVisibilities.Tidy()
 	return nil
+}
+
+func (p *Profile) GetApplications(filters ...ApplicationFilter) []ApplicationVisibility {
+	var applications []ApplicationVisibility
+APPS:
+	for _, v := range p.ApplicationVisibilities {
+		for _, filter := range filters {
+			if !filter(v) {
+				continue APPS
+			}
+		}
+		applications = append(applications, v)
+	}
+	return applications
+
 }
