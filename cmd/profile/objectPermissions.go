@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"encoding/xml"
 	"fmt"
 	"strconv"
 
@@ -38,8 +39,12 @@ func init() {
 	deleteObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	deleteObjectCmd.MarkFlagRequired("object")
 
+	showObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	showObjectCmd.MarkFlagRequired("object")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
+	ObjectPermissionsCmd.AddCommand(showObjectCmd)
 	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
 }
 
@@ -79,6 +84,18 @@ var deleteObjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteObjectPermissions(file, objectName)
+		}
+	},
+}
+
+var showObjectCmd = &cobra.Command{
+	Use:                   "show -f Object [filename]...",
+	Short:                 "Show object permissions",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			showObjectPermissions(file, objectName)
 		}
 	},
 }
@@ -159,4 +176,25 @@ func deleteObjectPermissions(file string, objectName string) {
 		log.Warn("update failed: " + err.Error())
 		return
 	}
+}
+
+func showObjectPermissions(file string, objectName string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	objects := p.GetObjectPermissions(func(o profile.ObjectPermissions) bool {
+		return o.Object.Text == objectName
+	})
+	if len(objects) == 0 {
+		log.Warn(fmt.Sprintf("object not found in %s", file))
+		return
+	}
+	b, err := xml.MarshalIndent(objects[0], "", "    ")
+	if err != nil {
+		log.Warn("marshal failed: " + err.Error())
+		return
+	}
+	fmt.Println(string(b))
 }
