@@ -63,9 +63,9 @@ func showLayout(file string) {
 	layouts := p.GetLayouts(objectName)
 	for _, l := range layouts {
 		if l.RecordType != nil {
-			fmt.Printf("%s (%s)\n", l.Layout.Text, l.RecordType.Text)
+			fmt.Printf("%s (%s)\n", l.Layout, l.RecordType.Text)
 		} else {
-			fmt.Println(l.Layout.Text)
+			fmt.Println(l.Layout)
 		}
 	}
 }
@@ -76,11 +76,7 @@ func editLayout(file string, object, layout string) {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	err = p.SetObjectLayout(object, layout)
-	if err != nil {
-		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
-		return
-	}
+	p.SetObjectLayout(object, layout)
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

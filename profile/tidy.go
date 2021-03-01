@@ -11,6 +11,7 @@ func (p *Profile) Tidy() {
 	})
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
+	p.LayoutAssignments.Tidy()
 	sort.Slice(p.PageAccesses, func(i, j int) bool {
 		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
 	})
@@ -41,6 +42,12 @@ func (fp FieldPermissionsList) Tidy() {
 func (av ApplicationVisibilityList) Tidy() {
 	sort.Slice(av, func(i, j int) bool {
 		return av[i].Application < av[j].Application
+	})
+}
+
+func (la LayoutAssignmentList) Tidy() {
+	sort.Slice(la, func(i, j int) bool {
+		return la[i].Layout < la[j].Layout
 	})
 }
 

@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -9,7 +8,7 @@ func (p *Profile) GetLayouts(objectName string) LayoutAssignmentList {
 	layoutPrefix := objectName + "-"
 	var layouts LayoutAssignmentList
 	for _, layout := range p.LayoutAssignments {
-		if strings.HasPrefix(layout.Layout.Text, layoutPrefix) {
+		if strings.HasPrefix(layout.Layout, layoutPrefix) {
 			layouts = append(layouts, layout)
 		}
 
@@ -17,13 +16,16 @@ func (p *Profile) GetLayouts(objectName string) LayoutAssignmentList {
 	return layouts
 }
 
-func (p *Profile) SetObjectLayout(objectName, layoutName string) error {
+func (p *Profile) SetObjectLayout(objectName, layoutName string) {
 	layoutPrefix := objectName + "-"
 	for i, f := range p.LayoutAssignments {
-		if strings.HasPrefix(f.Layout.Text, layoutPrefix) {
-			p.LayoutAssignments[i].Layout.Text = layoutPrefix + layoutName
-			return nil
+		if strings.HasPrefix(f.Layout, layoutPrefix) {
+			p.LayoutAssignments[i].Layout = layoutPrefix + layoutName
+			return
 		}
 	}
-	return errors.New("object layout not found")
+	p.LayoutAssignments = append(p.LayoutAssignments, LayoutAssignment{
+		Layout: layoutPrefix + layoutName,
+	})
+	p.LayoutAssignments.Tidy()
 }

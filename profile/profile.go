@@ -45,9 +45,7 @@ type UserPermission struct {
 }
 
 type LayoutAssignment struct {
-	Layout struct {
-		Text string `xml:",chardata"`
-	} `xml:"layout"`
+	Layout     string      `xml:"layout"`
 	RecordType *RecordType `xml:"recordType"`
 }
 

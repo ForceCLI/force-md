@@ -89,7 +89,7 @@ func (p *Profile) DeleteObjectLayoutAssignments(objectName string) {
 	layoutPrefix := objectName + "-"
 	newLayouts := p.LayoutAssignments[:0]
 	for _, f := range p.LayoutAssignments {
-		if !strings.HasPrefix(f.Layout.Text, layoutPrefix) {
+		if !strings.HasPrefix(f.Layout, layoutPrefix) {
 			newLayouts = append(newLayouts, f)
 		}
 	}
