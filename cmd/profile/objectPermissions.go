@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -185,7 +186,7 @@ func showObjectPermissions(file string, objectName string) {
 		return
 	}
 	objects := p.GetObjectPermissions(func(o profile.ObjectPermissions) bool {
-		return o.Object.Text == objectName
+		return strings.ToLower(o.Object.Text) == strings.ToLower(objectName)
 	})
 	if len(objects) == 0 {
 		log.Warn(fmt.Sprintf("object not found in %s", file))
