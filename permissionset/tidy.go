@@ -19,9 +19,7 @@ func (p *PermissionSet) Tidy() {
 	sort.Slice(p.TabSettings, func(i, j int) bool {
 		return p.TabSettings[i].Tab < p.TabSettings[j].Tab
 	})
-	sort.Slice(p.UserPermissions, func(i, j int) bool {
-		return p.UserPermissions[i].Name.Text < p.UserPermissions[j].Name.Text
-	})
+	p.UserPermissions.Tidy()
 	sort.Slice(p.RecordTypeVisibilities, func(i, j int) bool {
 		return p.RecordTypeVisibilities[i].RecordType.Text < p.RecordTypeVisibilities[j].RecordType.Text
 	})
@@ -39,5 +37,11 @@ func (op ObjectPermissionsList) Tidy() {
 func (fp FieldPermissionsList) Tidy() {
 	sort.Slice(fp, func(i, j int) bool {
 		return fp[i].Field.Text < fp[j].Field.Text
+	})
+}
+
+func (up UserPermissionList) Tidy() {
+	sort.Slice(up, func(i, j int) bool {
+		return up[i].Name < up[j].Name
 	})
 }

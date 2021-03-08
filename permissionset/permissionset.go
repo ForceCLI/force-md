@@ -56,6 +56,13 @@ type FieldPermissions struct {
 
 type FieldPermissionsList []FieldPermissions
 
+type UserPermission struct {
+	Enabled BooleanText `xml:"enabled"`
+	Name    string      `xml:"name"`
+}
+
+type UserPermissionList []UserPermission
+
 type PermissionSet struct {
 	XMLName               xml.Name              `xml:"PermissionSet"`
 	Xmlns                 string                `xml:"xmlns,attr"`
@@ -82,15 +89,8 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"customPermissions"`
-	TabSettings     []TabSettings `xml:"tabSettings"`
-	UserPermissions []struct {
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-	} `xml:"userPermissions"`
+	TabSettings             []TabSettings      `xml:"tabSettings"`
+	UserPermissions         UserPermissionList `xml:"userPermissions"`
 	ApplicationVisibilities []struct {
 		Application struct {
 			Text string `xml:",chardata"`
