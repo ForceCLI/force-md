@@ -57,7 +57,7 @@ var editLayoutCmd = &cobra.Command{
 func showLayout(file string) {
 	p, err := profile.Open(file)
 	if err != nil {
-		log.Warn("parsing permission set failed: " + err.Error())
+		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
 	layouts := p.GetLayouts(objectName)
