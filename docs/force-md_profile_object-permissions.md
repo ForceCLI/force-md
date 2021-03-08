@@ -18,4 +18,5 @@ Update object permissions
 * [force-md profile object-permissions add](force-md_profile_object-permissions_add.md)	 - Add object permissions
 * [force-md profile object-permissions delete](force-md_profile_object-permissions_delete.md)	 - Delete object permissions
 * [force-md profile object-permissions edit](force-md_profile_object-permissions_edit.md)	 - Update object permissions
+* [force-md profile object-permissions show](force-md_profile_object-permissions_show.md)	 - Show object permissions
 

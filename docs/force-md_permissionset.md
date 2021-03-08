@@ -21,4 +21,5 @@ Manage Permission Sets
 * [force-md permissionset object-permissions](force-md_permissionset_object-permissions.md)	 - Update object permissions
 * [force-md permissionset tab](force-md_permissionset_tab.md)	 - Manage tab visibility
 * [force-md permissionset tidy](force-md_permissionset_tidy.md)	 - Tidy Permission Set metadata
+* [force-md permissionset user-permissions](force-md_permissionset_user-permissions.md)	 - Manage user permissions
 
