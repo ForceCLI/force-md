@@ -1,6 +1,10 @@
 package profile
 
 import (
+	"fmt"
+	"strings"
+
+	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 )
 
@@ -67,4 +71,21 @@ APPS:
 	}
 	return applications
 
+}
+
+func (p *Profile) SetApplicationVisibility(applicationName string, updates ApplicationVisibility) error {
+	found := false
+	for i, f := range p.ApplicationVisibilities {
+		if strings.ToLower(f.Application) == strings.ToLower(applicationName) {
+			found = true
+			if err := mergo.Merge(&updates, f); err != nil {
+				return errors.Wrap(err, "merging permissions")
+			}
+			p.ApplicationVisibilities[i] = updates
+		}
+	}
+	if !found {
+		return fmt.Errorf("application not found: %s", applicationName)
+	}
+	return nil
 }
