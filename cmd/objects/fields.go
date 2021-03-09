@@ -14,13 +14,17 @@ import (
 	"github.com/octoberswimmer/force-md/objects"
 )
 
-var requiredOnly bool
-var fieldName string
-var unique bool
-var fieldType string
+var (
+	requiredOnly bool
+	tracked      bool
+	unique       bool
+	fieldName    string
+	fieldType    string
+)
 
 func init() {
 	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
+	listFieldsCmd.Flags().BoolVarP(&tracked, "tracked", "k", false, "with history tracking")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -130,6 +134,11 @@ func listFields(file string) {
 			isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
 			isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 			return isRequired || isMasterDetail
+		})
+	}
+	if tracked {
+		filters = append(filters, func(f objects.Field) bool {
+			return f.TrackHistory.Text == "true"
 		})
 	}
 	if fieldType != "" {
