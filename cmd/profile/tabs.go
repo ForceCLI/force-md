@@ -21,6 +21,7 @@ func init() {
 
 	TabCmd.AddCommand(addTabCmd)
 	TabCmd.AddCommand(deleteTabCmd)
+	TabCmd.AddCommand(listTabsCmd)
 }
 
 var TabCmd = &cobra.Command{
@@ -47,6 +48,19 @@ var deleteTabCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteTabVisibility(file, tabName)
+		}
+	},
+}
+
+var listTabsCmd = &cobra.Command{
+	Use:                   "list -[filename]...",
+	Short:                 "List tab visibility",
+	Long:                  "List tab visibility in profiles",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listTabVisibility(file)
 		}
 	},
 }
@@ -80,5 +94,17 @@ func addTab(file string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listTabVisibility(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	tabs := p.GetTabs()
+	for _, t := range tabs {
+		fmt.Printf("%s: %s\n", t.Tab, t.Visibility)
 	}
 }

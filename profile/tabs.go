@@ -32,3 +32,7 @@ func (p *Profile) AddTab(tabName string) {
 		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
 }
+
+func (p *Profile) GetTabs() TabVisibilityList {
+	return p.TabVisibilities
+}
