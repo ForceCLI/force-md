@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"strings"
+
 	"github.com/pkg/errors"
 )
 
@@ -32,6 +34,34 @@ func (p *Profile) DeleteUserPermission(permissionName string) error {
 		return errors.New("permission not found")
 	}
 	p.UserPermissions = newPerms
+	return nil
+}
+
+func (p *Profile) EnableUserPermission(permissionName string) error {
+	found := false
+	for i, u := range p.UserPermissions {
+		if strings.ToLower(u.Name) == strings.ToLower(permissionName) {
+			found = true
+			p.UserPermissions[i].Enabled.Text = "true"
+		}
+	}
+	if !found {
+		return errors.New("permission not found")
+	}
+	return nil
+}
+
+func (p *Profile) DisableUserPermission(permissionName string) error {
+	found := false
+	for i, u := range p.UserPermissions {
+		if strings.ToLower(u.Name) == strings.ToLower(permissionName) {
+			found = true
+			p.UserPermissions[i].Enabled.Text = "false"
+		}
+	}
+	if !found {
+		return errors.New("permission not found")
+	}
 	return nil
 }
 
