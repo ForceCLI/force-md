@@ -53,6 +53,10 @@ func (p *Profile) AddFieldPermissions(fieldName string) error {
 	return nil
 }
 
+func (p *Profile) GetFieldPermissions() FieldPermissionsList {
+	return p.FieldPermissions
+}
+
 func defaultFieldPermissions(fieldName string) FieldPermissions {
 	var falseBooleanText = BooleanText{
 		Text: "false",
