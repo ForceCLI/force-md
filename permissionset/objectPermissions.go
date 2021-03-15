@@ -8,6 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type ObjectFilter func(ObjectPermissions) bool
+
 func (p *PermissionSet) SetObjectPermissions(objectName string, updates ObjectPermissions) error {
 	found := false
 	for i, f := range p.ObjectPermissions {
@@ -92,4 +94,18 @@ func (p *PermissionSet) DeleteObjectTabVisibility(objectName string) {
 		}
 	}
 	p.TabSettings = newTabs
+}
+
+func (p *PermissionSet) GetObjectPermissions(filters ...ObjectFilter) []ObjectPermissions {
+	var objectPermissions []ObjectPermissions
+OBJECTS:
+	for _, o := range p.ObjectPermissions {
+		for _, filter := range filters {
+			if !filter(o) {
+				continue OBJECTS
+			}
+		}
+		objectPermissions = append(objectPermissions, o)
+	}
+	return objectPermissions
 }

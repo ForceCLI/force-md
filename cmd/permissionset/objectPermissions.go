@@ -1,8 +1,10 @@
 package permissionset
 
 import (
+	"encoding/xml"
 	"fmt"
 	"strconv"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -38,8 +40,13 @@ func init() {
 	deleteObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	deleteObjectCmd.MarkFlagRequired("object")
 
+	showObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	showObjectCmd.MarkFlagRequired("object")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
+	ObjectPermissionsCmd.AddCommand(showObjectCmd)
+	ObjectPermissionsCmd.AddCommand(listObjectsCmd)
 	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
 }
 
@@ -79,6 +86,31 @@ var deleteObjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteObjectPermissions(file, objectName)
+		}
+	},
+}
+
+var showObjectCmd = &cobra.Command{
+	Use:                   "show -f Object [filename]...",
+	Short:                 "Show object permissions",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			showObjectPermissions(file, objectName)
+		}
+	},
+}
+
+var listObjectsCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List objects",
+	Long:                  "List objects with permissions defined in permission set",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listObjectPermissions(file)
 		}
 	},
 }
@@ -159,4 +191,41 @@ func deleteObjectPermissions(file string, objectName string) {
 		log.Warn("update failed: " + err.Error())
 		return
 	}
+}
+
+func listObjectPermissions(file string) {
+	p, err := permissionset.Open(file)
+	if err != nil {
+		log.Warn("parsing permission set failed: " + err.Error())
+		return
+	}
+	objects := p.GetObjectPermissions()
+	if len(objects) == 0 {
+		log.Warn(fmt.Sprintf("no object permissions found in %s", file))
+		return
+	}
+	for _, o := range objects {
+		fmt.Println(o.Object.Text)
+	}
+}
+
+func showObjectPermissions(file string, objectName string) {
+	p, err := permissionset.Open(file)
+	if err != nil {
+		log.Warn("parsing permission set failed: " + err.Error())
+		return
+	}
+	objects := p.GetObjectPermissions(func(o permissionset.ObjectPermissions) bool {
+		return strings.ToLower(o.Object.Text) == strings.ToLower(objectName)
+	})
+	if len(objects) == 0 {
+		log.Warn(fmt.Sprintf("object not found in %s", file))
+		return
+	}
+	b, err := xml.MarshalIndent(objects[0], "", "    ")
+	if err != nil {
+		log.Warn("marshal failed: " + err.Error())
+		return
+	}
+	fmt.Println(string(b))
 }
