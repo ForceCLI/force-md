@@ -15,6 +15,7 @@ force-md objects fields list [flags] [filename]...
 ```
   -h, --help          help for list
   -r, --required      required fields only
+  -k, --tracked       with history tracking
   -t, --type string   field type
 ```
 

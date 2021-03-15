@@ -19,4 +19,5 @@ Manage field permissions
 * [force-md profile field-permissions clone](force-md_profile_field-permissions_clone.md)	 - Clone field permissions
 * [force-md profile field-permissions delete](force-md_profile_field-permissions_delete.md)	 - Delete field permissions
 * [force-md profile field-permissions edit](force-md_profile_field-permissions_edit.md)	 - Update field permissions
+* [force-md profile field-permissions list](force-md_profile_field-permissions_list.md)	 - List fields
 

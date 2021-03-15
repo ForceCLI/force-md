@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -36,6 +37,7 @@ func init() {
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
 	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
+	FieldPermissionsCmd.AddCommand(listFieldsCmd)
 	FieldPermissionsCmd.AddCommand(cloneCmd)
 }
 
@@ -89,6 +91,18 @@ var deleteFieldCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteFieldPermissions(file, fieldName)
+		}
+	},
+}
+
+var listFieldsCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List fields",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listFields(file)
 		}
 	},
 }
@@ -169,5 +183,28 @@ func updateFieldPermissions(file string, perms profile.FieldPermissions) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listFields(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	fields := p.GetFieldPermissions()
+	for _, a := range fields {
+		var perms []string
+		if a.Readable.Text == "true" {
+			perms = append(perms, "read")
+		}
+		if a.Editable.Text == "true" {
+			perms = append(perms, "write")
+		}
+		permsString := "no access"
+		if len(perms) > 0 {
+			permsString = strings.Join(perms, "-")
+		}
+		fmt.Printf("%s: %s\n", a.Field.Text, permsString)
 	}
 }

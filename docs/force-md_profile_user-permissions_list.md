@@ -1,10 +1,10 @@
 ## force-md profile user-permissions list
 
-List user permissions enabled
+List user permissions
 
 ### Synopsis
 
-List user permissions enabled
+List user permissions defined in profile
 
 ```
 force-md profile user-permissions list [flags] [filename]...
