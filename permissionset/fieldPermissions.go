@@ -5,7 +5,11 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
+
+var FieldExistsError = errors.New("field already exists")
 
 func (p *PermissionSet) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
 	found := false
@@ -44,7 +48,7 @@ func (p *PermissionSet) DeleteFieldPermissions(fieldName string) error {
 func (p *PermissionSet) AddFieldPermissions(fieldName string) error {
 	for _, f := range p.FieldPermissions {
 		if f.Field.Text == fieldName {
-			return errors.New("field already exists")
+			return FieldExistsError
 		}
 	}
 
@@ -58,14 +62,10 @@ func (p *PermissionSet) GetFieldPermissions() FieldPermissionsList {
 }
 
 func defaultFieldPermissions(fieldName string) FieldPermissions {
-	var falseBooleanText = BooleanText{
-		Text: "false",
-	}
-
 	fp := FieldPermissions{
 		Field:    FieldName{fieldName},
-		Editable: falseBooleanText,
-		Readable: falseBooleanText,
+		Editable: FalseText,
+		Readable: FalseText,
 	}
 	return fp
 }

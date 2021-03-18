@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/profile"
 )
@@ -101,17 +102,17 @@ var showObjectCmd = &cobra.Command{
 	},
 }
 
-func textValue(cmd *cobra.Command, flag string) (t profile.BooleanText) {
+func textValue(cmd *cobra.Command, flag string) (t BooleanText) {
 	if cmd.Flags().Changed(flag) {
 		val, _ := cmd.Flags().GetBool(flag)
-		t = profile.BooleanText{
+		t = BooleanText{
 			Text: strconv.FormatBool(val),
 		}
 	}
 	antiFlag := "no-" + flag
 	if cmd.Flags().Changed(antiFlag) {
 		val, _ := cmd.Flags().GetBool(antiFlag)
-		t = profile.BooleanText{
+		t = BooleanText{
 			Text: strconv.FormatBool(!val),
 		}
 	}

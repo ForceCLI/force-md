@@ -5,32 +5,56 @@ import (
 )
 
 func (p *PermissionSet) Tidy() {
-	sort.Slice(p.ApplicationVisibilities, func(i, j int) bool {
-		return p.ApplicationVisibilities[i].Application.Text < p.ApplicationVisibilities[j].Application.Text
-	})
-	sort.Slice(p.ClassAccesses, func(i, j int) bool {
-		return p.ClassAccesses[i].ApexClass < p.ClassAccesses[j].ApexClass
-	})
+	p.ApplicationVisibilities.Tidy()
+	p.ClassAccesses.Tidy()
+	p.CustomPermissions.Tidy()
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
-	sort.Slice(p.PageAccesses, func(i, j int) bool {
-		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
-	})
-	sort.Slice(p.TabSettings, func(i, j int) bool {
-		return p.TabSettings[i].Tab < p.TabSettings[j].Tab
-	})
+	p.PageAccesses.Tidy()
+	p.RecordTypeVisibilities.Tidy()
+	p.TabSettings.Tidy()
 	p.UserPermissions.Tidy()
-	sort.Slice(p.RecordTypeVisibilities, func(i, j int) bool {
-		return p.RecordTypeVisibilities[i].RecordType.Text < p.RecordTypeVisibilities[j].RecordType.Text
-	})
-	sort.Slice(p.CustomPermissions, func(i, j int) bool {
-		return p.CustomPermissions[i].Name.Text < p.CustomPermissions[j].Name.Text
-	})
 }
 
 func (op ObjectPermissionsList) Tidy() {
 	sort.Slice(op, func(i, j int) bool {
 		return op[i].Object.Text < op[j].Object.Text
+	})
+}
+
+func (av ApplicationVisibilityList) Tidy() {
+	sort.Slice(av, func(i, j int) bool {
+		return av[i].Application < av[j].Application
+	})
+}
+
+func (ca ApexClassList) Tidy() {
+	sort.Slice(ca, func(i, j int) bool {
+		return ca[i].ApexClass < ca[j].ApexClass
+	})
+}
+
+func (pa PageAccessList) Tidy() {
+	sort.Slice(pa, func(i, j int) bool {
+		return pa[i].ApexPage < pa[j].ApexPage
+	})
+}
+
+func (ts TabSettingsList) Tidy() {
+	sort.Slice(ts, func(i, j int) bool {
+		return ts[i].Tab < ts[j].Tab
+	})
+}
+
+func (rt RecordTypeList) Tidy() {
+	sort.Slice(rt, func(i, j int) bool {
+		return rt[i].RecordType < rt[j].RecordType
+	})
+}
+
+func (cp CustomPermissionList) Tidy() {
+	sort.Slice(cp, func(i, j int) bool {
+		return cp[i].Name < cp[j].Name
 	})
 }
 

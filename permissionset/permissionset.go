@@ -3,13 +3,9 @@ package permissionset
 import (
 	"encoding/xml"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 )
-
-type ApexClass struct {
-	ApexClass string `xml:"apexClass"`
-	Enabled   string `xml:"enabled"`
-}
 
 type Description struct {
 	Text string `xml:",chardata"`
@@ -19,14 +15,20 @@ type License struct {
 	Text string `xml:",chardata"`
 }
 
-type TabSettings struct {
-	Tab        string `xml:"tab"`
-	Visibility string `xml:"visibility"`
-}
-
-type BooleanText struct {
+type ObjectName struct {
 	Text string `xml:",chardata"`
 }
+
+type FieldName struct {
+	Text string `xml:",chardata"`
+}
+
+type ApexClass struct {
+	ApexClass string      `xml:"apexClass"`
+	Enabled   BooleanText `xml:"enabled"`
+}
+
+type ApexClassList []ApexClass
 
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
@@ -36,14 +38,6 @@ type ObjectPermissions struct {
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
 	Object           ObjectName  `xml:"object"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
-}
-
-type ObjectName struct {
-	Text string `xml:",chardata"`
-}
-
-type FieldName struct {
-	Text string `xml:",chardata"`
 }
 
 type ObjectPermissionsList []ObjectPermissions
@@ -56,6 +50,13 @@ type FieldPermissions struct {
 
 type FieldPermissionsList []FieldPermissions
 
+type TabSettings struct {
+	Tab        string `xml:"tab"`
+	Visibility string `xml:"visibility"`
+}
+
+type TabSettingsList []TabSettings
+
 type UserPermission struct {
 	Enabled BooleanText `xml:"enabled"`
 	Name    string      `xml:"name"`
@@ -63,50 +64,50 @@ type UserPermission struct {
 
 type UserPermissionList []UserPermission
 
+type RecordType struct {
+	RecordType string      `xml:"recordType"`
+	Visible    BooleanText `xml:"visible"`
+}
+
+type RecordTypeList []RecordType
+
+type CustomPermission struct {
+	Enabled BooleanText `xml:"enabled"`
+	Name    string      `xml:"name"`
+}
+
+type CustomPermissionList []CustomPermission
+
+type PageAccess struct {
+	ApexPage string      `xml:"apexPage"`
+	Enabled  BooleanText `xml:"enabled"`
+}
+
+type PageAccessList []PageAccess
+
+type ApplicationVisibility struct {
+	Application string      `xml:"application"`
+	Visible     BooleanText `xml:"visible"`
+}
+
+type ApplicationVisibilityList []ApplicationVisibility
+
 type PermissionSet struct {
-	XMLName               xml.Name              `xml:"PermissionSet"`
-	Xmlns                 string                `xml:"xmlns,attr"`
-	ClassAccesses         []ApexClass           `xml:"classAccesses"`
-	Description           *Description          `xml:"description"`
-	FieldPermissions      FieldPermissionsList  `xml:"fieldPermissions"`
-	HasActivationRequired BooleanText           `xml:"hasActivationRequired"`
-	Label                 string                `xml:"label"`
-	ObjectPermissions     ObjectPermissionsList `xml:"objectPermissions"`
-	PageAccesses          []struct {
-		ApexPage struct {
-			Text string `xml:",chardata"`
-		} `xml:"apexPage"`
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-	} `xml:"pageAccesses"`
-	License           *License `xml:"license"`
-	CustomPermissions []struct {
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-	} `xml:"customPermissions"`
-	TabSettings             []TabSettings      `xml:"tabSettings"`
-	UserPermissions         UserPermissionList `xml:"userPermissions"`
-	ApplicationVisibilities []struct {
-		Application struct {
-			Text string `xml:",chardata"`
-		} `xml:"application"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"applicationVisibilities"`
-	RecordTypeVisibilities []struct {
-		RecordType struct {
-			Text string `xml:",chardata"`
-		} `xml:"recordType"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"recordTypeVisibilities"`
+	XMLName                 xml.Name                  `xml:"PermissionSet"`
+	Xmlns                   string                    `xml:"xmlns,attr"`
+	ClassAccesses           ApexClassList             `xml:"classAccesses"`
+	Description             *Description              `xml:"description"`
+	FieldPermissions        FieldPermissionsList      `xml:"fieldPermissions"`
+	HasActivationRequired   BooleanText               `xml:"hasActivationRequired"`
+	Label                   string                    `xml:"label"`
+	ObjectPermissions       ObjectPermissionsList     `xml:"objectPermissions"`
+	PageAccesses            PageAccessList            `xml:"pageAccesses"`
+	License                 *License                  `xml:"license"`
+	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
+	TabSettings             TabSettingsList           `xml:"tabSettings"`
+	UserPermissions         UserPermissionList        `xml:"userPermissions"`
+	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
+	RecordTypeVisibilities  RecordTypeList            `xml:"recordTypeVisibilities"`
 }
 
 func (p *PermissionSet) MetaCheck() {}

@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/xml"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 )
 
@@ -64,10 +65,6 @@ type FieldName struct {
 }
 
 type ObjectName struct {
-	Text string `xml:",chardata"`
-}
-
-type BooleanText struct {
 	Text string `xml:",chardata"`
 }
 

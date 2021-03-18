@@ -2,17 +2,21 @@ package permissionset
 
 import (
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
+
+var UserPermissionExistsError = errors.New("user permissions already exists")
 
 func (p *PermissionSet) AddUserPermission(permissionName string) error {
 	for _, f := range p.UserPermissions {
 		if f.Name == permissionName {
-			return errors.New("permission already exists")
+			return UserPermissionExistsError
 		}
 	}
 	p.UserPermissions = append(p.UserPermissions, UserPermission{
 		Name:    permissionName,
-		Enabled: BooleanText{"true"},
+		Enabled: TrueText,
 	})
 	p.UserPermissions.Tidy()
 	return nil

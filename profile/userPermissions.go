@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
 func (p *Profile) AddUserPermission(permissionName string) error {

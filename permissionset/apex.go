@@ -1,19 +1,25 @@
 package permissionset
 
 import (
-	"sort"
-
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
-func (p *PermissionSet) AddClass(className string) {
+var ClassExistsError = errors.New("apex class already exists")
+
+func (p *PermissionSet) AddClass(className string) error {
+	for _, c := range p.ClassAccesses {
+		if c.ApexClass == className {
+			return ClassExistsError
+		}
+	}
 	p.ClassAccesses = append(p.ClassAccesses, ApexClass{
 		ApexClass: className,
-		Enabled:   "true",
+		Enabled:   TrueText,
 	})
-	sort.Slice(p.ClassAccesses, func(i, j int) bool {
-		return p.ClassAccesses[i].ApexClass < p.ClassAccesses[j].ApexClass
-	})
+	p.ClassAccesses.Tidy()
+	return nil
 }
 
 func (p *PermissionSet) DeleteApexClassAccess(apexClassName string) error {

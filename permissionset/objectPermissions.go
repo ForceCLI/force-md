@@ -6,9 +6,13 @@ import (
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
 type ObjectFilter func(ObjectPermissions) bool
+
+var ObjectExistsError = errors.New("object already exists")
 
 func (p *PermissionSet) SetObjectPermissions(objectName string, updates ObjectPermissions) error {
 	found := false
@@ -28,18 +32,14 @@ func (p *PermissionSet) SetObjectPermissions(objectName string, updates ObjectPe
 }
 
 func defaultObjectPermissions(objectName string) ObjectPermissions {
-	var falseBooleanText = BooleanText{
-		Text: "false",
-	}
-
 	op := ObjectPermissions{
 		Object:           ObjectName{objectName},
-		AllowCreate:      falseBooleanText,
-		AllowDelete:      falseBooleanText,
-		AllowEdit:        falseBooleanText,
-		AllowRead:        falseBooleanText,
-		ModifyAllRecords: falseBooleanText,
-		ViewAllRecords:   falseBooleanText,
+		AllowCreate:      FalseText,
+		AllowDelete:      FalseText,
+		AllowEdit:        FalseText,
+		AllowRead:        FalseText,
+		ModifyAllRecords: FalseText,
+		ViewAllRecords:   FalseText,
 	}
 	return op
 }
@@ -47,7 +47,7 @@ func defaultObjectPermissions(objectName string) ObjectPermissions {
 func (p *PermissionSet) AddObjectPermissions(objectName string) error {
 	for _, f := range p.ObjectPermissions {
 		if f.Object.Text == objectName {
-			return errors.New("object already exists")
+			return ObjectExistsError
 		}
 	}
 
