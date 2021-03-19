@@ -21,15 +21,11 @@ type Field struct {
 	CaseSensitive *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
-	DefaultValue *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"defaultValue"`
+	DefaultValue     *TextLiteral `xml:"defaultValue"`
 	DeleteConstraint *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deleteConstraint"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
+	Description   *TextLiteral `xml:"description"`
 	DisplayFormat *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayFormat"`
@@ -43,11 +39,9 @@ type Field struct {
 	FormulaTreatBlanksAs *struct {
 		Text string `xml:",chardata"`
 	} `xml:"formulaTreatBlanksAs"`
-	InlineHelpText *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"inlineHelpText"`
-	Label        *TextLiteral `xml:"label"`
-	LookupFilter *struct {
+	InlineHelpText *TextLiteral `xml:"inlineHelpText"`
+	Label          *TextLiteral `xml:"label"`
+	LookupFilter   *struct {
 		Active struct {
 			Text string `xml:",chardata"`
 		} `xml:"active"`
@@ -134,9 +128,7 @@ type Field struct {
 	TrackTrending *struct {
 		Text string `xml:",chardata"`
 	} `xml:"trackTrending"`
-	Type *struct {
-		Text string `xml:",chardata"`
-	} `xml:"type"`
+	Type                    *TextLiteral `xml:"type"`
 	Unique                  *BooleanText `xml:"unique"`
 	WriteRequiresMasterRead *struct {
 		Text string `xml:",chardata"`
