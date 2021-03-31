@@ -31,7 +31,11 @@ func init() {
 	addFieldCmd.MarkFlagRequired("field")
 
 	editFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
-	editFieldCmd.Flags().StringP("label", "l", "", "field label")
+	editFieldCmd.Flags().StringP("label", "l", "", "label")
+	editFieldCmd.Flags().StringP("type", "t", "", "field type")
+	editFieldCmd.Flags().StringP("description", "d", "", "description")
+	editFieldCmd.Flags().StringP("default", "v", "", "default value")
+	editFieldCmd.Flags().StringP("inline-help", "i", "", "inline help")
 	editFieldCmd.Flags().BoolP("unique", "u", false, "unique")
 	editFieldCmd.Flags().BoolP("no-unique", "U", false, "not unique")
 	editFieldCmd.Flags().BoolP("external-id", "e", false, "external id")
@@ -233,6 +237,10 @@ func fieldUpdates(cmd *cobra.Command) objects.Field {
 	field.Label = textValue(cmd, "label")
 	field.Unique = booleanTextValue(cmd, "unique")
 	field.ExternalId = booleanTextValue(cmd, "external-id")
+	field.Description = textValue(cmd, "description")
+	field.Type = textValue(cmd, "type")
+	field.InlineHelpText = textValue(cmd, "inline-help")
+	field.DefaultValue = textValue(cmd, "default")
 	return field
 }
 
