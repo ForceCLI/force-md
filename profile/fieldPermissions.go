@@ -5,6 +5,8 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
 func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions) error {

@@ -32,6 +32,14 @@ permissions from another field.
 $ force-md permissionset field-permissions clone -s Account.My_Field__c -f Account.New_Field__c src/permissionsets/*
 ```
 
+### Merge Permission Sets
+
+Grant all permissions from a source permission set to another permission set.
+
+```
+$ force-md permissionset merge -s src/permissionsets/Subset.permissionset src/permissionsets/Superset.permissionset
+```
+
 ### Add Class
 
 Enable access to an apex class

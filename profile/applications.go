@@ -6,16 +6,14 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
 type ApplicationFilter func(ApplicationVisibility) bool
 
 var falseBooleanText = BooleanText{
 	Text: "false",
-}
-
-var trueBooleanText = BooleanText{
-	Text: "true",
 }
 
 func (p *Profile) DeleteApplicationVisibility(applicationName string) error {
@@ -37,9 +35,9 @@ func (p *Profile) DeleteApplicationVisibility(applicationName string) error {
 
 func boolToText(v bool) BooleanText {
 	if v {
-		return trueBooleanText
+		return TrueText
 	}
-	return falseBooleanText
+	return FalseText
 }
 
 func (p *Profile) AddApplicationVisibility(appName string, defaultApp bool) error {
@@ -51,7 +49,7 @@ func (p *Profile) AddApplicationVisibility(appName string, defaultApp bool) erro
 
 	p.ApplicationVisibilities = append(p.ApplicationVisibilities, ApplicationVisibility{
 		Application: appName,
-		Visible:     trueBooleanText,
+		Visible:     TrueText,
 		Default:     boolToText(defaultApp),
 	})
 	p.ApplicationVisibilities.Tidy()

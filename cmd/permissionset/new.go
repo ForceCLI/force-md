@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/permissionset"
 )
@@ -17,14 +18,6 @@ func init() {
 	NewCmd.Flags().StringVarP(&label, "label", "l", "", "label")
 	NewCmd.Flags().StringVarP(&description, "description", "d", "", "description")
 	NewCmd.MarkFlagRequired("label")
-}
-
-var trueBooleanText = permissionset.BooleanText{
-	Text: "true",
-}
-
-var falseBooleanText = permissionset.BooleanText{
-	Text: "true",
 }
 
 var NewCmd = &cobra.Command{
@@ -41,7 +34,7 @@ var NewCmd = &cobra.Command{
 func addPermissionSet(file string) {
 	p := &permissionset.PermissionSet{
 		Xmlns:                 "http://soap.sforce.com/2006/04/metadata",
-		HasActivationRequired: falseBooleanText,
+		HasActivationRequired: FalseText,
 		Label:                 label,
 	}
 	if description != "" {
