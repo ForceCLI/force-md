@@ -89,7 +89,6 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"customPermissions"`
-	TabSettings             []TabSettings      `xml:"tabSettings"`
 	UserPermissions         UserPermissionList `xml:"userPermissions"`
 	ApplicationVisibilities []struct {
 		Application struct {
@@ -107,6 +106,7 @@ type PermissionSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"visible"`
 	} `xml:"recordTypeVisibilities"`
+	TabSettings []TabSettings `xml:"tabSettings"`
 }
 
 func (p *PermissionSet) MetaCheck() {}
