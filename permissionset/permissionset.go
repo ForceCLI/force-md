@@ -104,10 +104,10 @@ type PermissionSet struct {
 	PageAccesses            PageAccessList            `xml:"pageAccesses"`
 	License                 *License                  `xml:"license"`
 	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
-	TabSettings             TabSettingsList           `xml:"tabSettings"`
 	UserPermissions         UserPermissionList        `xml:"userPermissions"`
 	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
 	RecordTypeVisibilities  RecordTypeList            `xml:"recordTypeVisibilities"`
+	TabSettings             TabSettingsList           `xml:"tabSettings"`
 }
 
 func (p *PermissionSet) MetaCheck() {}

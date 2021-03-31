@@ -2,6 +2,7 @@ package permissionset
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -9,6 +10,9 @@ import (
 func (p *PermissionSet) CloneFieldPermissions(src, dest string) error {
 	found := false
 	for _, f := range p.FieldPermissions {
+		if strings.ToLower(dest) == strings.ToLower(f.Field.Text) {
+			return errors.New("field already exists")
+		}
 		if f.Field.Text == src {
 			found = true
 			clone := FieldPermissions{}
