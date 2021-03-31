@@ -13,13 +13,17 @@ force-md objects fields edit -f Field [flags] [filename]...
 ### Options
 
 ```
-  -e, --external-id      external id
-  -f, --field string     field name
-  -h, --help             help for edit
-  -l, --label string     field label
-  -C, --no-external-id   not external id
-  -U, --no-unique        not unique
-  -u, --unique           unique
+  -v, --default string       default value
+  -d, --description string   description
+  -e, --external-id          external id
+  -f, --field string         field name
+  -h, --help                 help for edit
+  -i, --inline-help string   inline help
+  -l, --label string         label
+  -C, --no-external-id       not external id
+  -U, --no-unique            not unique
+  -t, --type string          field type
+  -u, --unique               unique
 ```
 
 ### SEE ALSO
