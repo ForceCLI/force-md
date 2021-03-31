@@ -1,0 +1,42 @@
+package pkg
+
+import (
+	"encoding/xml"
+	"sort"
+
+	"github.com/octoberswimmer/force-md/internal"
+)
+
+type MetadataItems struct {
+	Members []string `xml:"members"`
+	Name    string   `xml:"name"`
+}
+
+type Package struct {
+	XMLName xml.Name        `xml:"Package"`
+	Xmlns   string          `xml:"xmlns,attr"`
+	Types   []MetadataItems `xml:"types"`
+	Version string          `xml:"version"`
+}
+
+func (p *Package) MetaCheck() {}
+
+func Open(path string) (*Package, error) {
+	p := &Package{}
+	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (p *Package) Tidy() {
+	sort.Slice(p.Types, func(i, j int) bool {
+		return p.Types[i].Name < p.Types[j].Name
+	})
+	for i, _ := range p.Types {
+		p.Types[i].Tidy()
+	}
+}
+
+func (members *MetadataItems) Tidy() {
+	sort.Slice(members.Members, func(i, j int) bool {
+		return members.Members[i] < members.Members[j]
+	})
+}
