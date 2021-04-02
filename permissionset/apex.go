@@ -38,3 +38,7 @@ func (p *PermissionSet) DeleteApexClassAccess(apexClassName string) error {
 	p.ClassAccesses = newClasses
 	return nil
 }
+
+func (p *PermissionSet) GetApexClasses() ApexClassList {
+	return p.ClassAccesses
+}

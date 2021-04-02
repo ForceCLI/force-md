@@ -21,6 +21,7 @@ func init() {
 
 	ApexClassCmd.AddCommand(addClassCmd)
 	ApexClassCmd.AddCommand(deleteClassCmd)
+	ApexClassCmd.AddCommand(listClassesCmd)
 }
 
 var ApexClassCmd = &cobra.Command{
@@ -54,6 +55,18 @@ var deleteClassCmd = &cobra.Command{
 	},
 }
 
+var listClassesCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List apex classes",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listClasses(file)
+		}
+	},
+}
+
 func addClass(file, className string) {
 	p, err := permissionset.Open(file)
 	if err != nil {
@@ -83,5 +96,19 @@ func deleteApexClassVisibility(file string, apexClassName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listClasses(file string) {
+	p, err := permissionset.Open(file)
+	if err != nil {
+		log.Warn("parsing permissionset failed: " + err.Error())
+		return
+	}
+	classes := p.GetApexClasses()
+	for _, a := range classes {
+		if a.Enabled.Text == "true" {
+			fmt.Println(a.ApexClass)
+		}
 	}
 }
