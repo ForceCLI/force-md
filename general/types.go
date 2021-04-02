@@ -9,7 +9,7 @@ var TrueText = BooleanText{
 }
 
 var FalseText = BooleanText{
-	Text: "true",
+	Text: "false",
 }
 
 type BooleanText struct {
