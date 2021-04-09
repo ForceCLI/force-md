@@ -13,10 +13,15 @@ import (
 var apexClassName string
 
 func init() {
-	deleteApexClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "apex classname")
-	deleteApexClassCmd.MarkFlagRequired("class")
+	addClassCmd.Flags().StringP("class", "c", "", "class name")
+	addClassCmd.MarkFlagRequired("class")
 
-	ApexCmd.AddCommand(deleteApexClassCmd)
+	deleteClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "apex classname")
+	deleteClassCmd.MarkFlagRequired("class")
+
+	ApexCmd.AddCommand(addClassCmd)
+	ApexCmd.AddCommand(deleteClassCmd)
+	ApexCmd.AddCommand(listClassesCmd)
 }
 
 var ApexCmd = &cobra.Command{
@@ -24,7 +29,20 @@ var ApexCmd = &cobra.Command{
 	Short: "Manage apex class visibility",
 }
 
-var deleteApexClassCmd = &cobra.Command{
+var addClassCmd = &cobra.Command{
+	Use:                   "add -c ClassName [flags] [filename]...",
+	Short:                 "Add Apex Class to Profile",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		className, _ := cmd.Flags().GetString("class")
+		for _, file := range args {
+			addClass(file, className)
+		}
+	},
+}
+
+var deleteClassCmd = &cobra.Command{
 	Use:   "delete -c ClassName [flags] [filename]...",
 	Short: "Delete apex class visibility",
 	Long:  "Delete apex class visibility in profiles",
@@ -34,6 +52,32 @@ var deleteApexClassCmd = &cobra.Command{
 			deleteApexClassVisibility(file, apexClassName)
 		}
 	},
+}
+
+var listClassesCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List apex classes",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listClasses(file)
+		}
+	},
+}
+
+func addClass(file, className string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	p.AddClass(className)
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
 }
 
 func deleteApexClassVisibility(file string, apexClassName string) {
@@ -51,5 +95,19 @@ func deleteApexClassVisibility(file string, apexClassName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listClasses(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	classes := p.GetApexClasses()
+	for _, a := range classes {
+		if a.Enabled.Text == "true" {
+			fmt.Println(a.ApexClass)
+		}
 	}
 }

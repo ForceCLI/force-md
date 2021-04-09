@@ -19,13 +19,13 @@ func init() {
 	deleteClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "apex classname")
 	deleteClassCmd.MarkFlagRequired("class")
 
-	ApexClassCmd.AddCommand(addClassCmd)
-	ApexClassCmd.AddCommand(deleteClassCmd)
-	ApexClassCmd.AddCommand(listClassesCmd)
+	ApexCmd.AddCommand(addClassCmd)
+	ApexCmd.AddCommand(deleteClassCmd)
+	ApexCmd.AddCommand(listClassesCmd)
 }
 
-var ApexClassCmd = &cobra.Command{
-	Use:   "apex-class",
+var ApexCmd = &cobra.Command{
+	Use:   "apex",
 	Short: "Manage apex class visibility",
 }
 
