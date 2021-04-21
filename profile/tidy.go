@@ -6,9 +6,7 @@ import (
 
 func (p *Profile) Tidy() {
 	p.ApplicationVisibilities.Tidy()
-	sort.Slice(p.ClassAccesses, func(i, j int) bool {
-		return p.ClassAccesses[i].ApexClass.Text < p.ClassAccesses[j].ApexClass.Text
-	})
+	p.ClassAccesses.Tidy()
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
 	p.LayoutAssignments.Tidy()
@@ -30,6 +28,12 @@ func (p *Profile) Tidy() {
 func (op ObjectPermissionsList) Tidy() {
 	sort.Slice(op, func(i, j int) bool {
 		return op[i].Object.Text < op[j].Object.Text
+	})
+}
+
+func (ca ApexClassList) Tidy() {
+	sort.Slice(ca, func(i, j int) bool {
+		return ca[i].ApexClass < ca[j].ApexClass
 	})
 }
 

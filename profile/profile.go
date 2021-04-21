@@ -72,19 +72,19 @@ type PersonAccountDefault struct {
 	Text string `xml:",chardata"`
 }
 
+type ApexClass struct {
+	ApexClass string      `xml:"apexClass"`
+	Enabled   BooleanText `xml:"enabled"`
+}
+
+type ApexClassList []ApexClass
+
 type Profile struct {
 	XMLName                 xml.Name                  `xml:"Profile"`
 	Xmlns                   string                    `xml:"xmlns,attr"`
 	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
-	ClassAccesses           []struct {
-		ApexClass struct {
-			Text string `xml:",chardata"`
-		} `xml:"apexClass"`
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-	} `xml:"classAccesses"`
-	Custom struct {
+	ClassAccesses           ApexClassList             `xml:"classAccesses"`
+	Custom                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
 	FieldPermissions FieldPermissionsList `xml:"fieldPermissions"`
