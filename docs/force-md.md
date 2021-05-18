@@ -23,6 +23,7 @@ force-md
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
+* [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingRules](force-md_sharingRules.md)	 - Manage Sharing Rules
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow
 
