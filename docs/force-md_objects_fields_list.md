@@ -13,6 +13,7 @@ force-md objects fields list [flags] [filename]...
 ### Options
 
 ```
+  -u, --formula       formula fields only
   -h, --help          help for list
   -r, --required      required fields only
   -k, --tracked       with history tracking
