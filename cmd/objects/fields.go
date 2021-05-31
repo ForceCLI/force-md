@@ -199,6 +199,8 @@ func showField(file string, fieldName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
 	fields := o.GetFields(func(f objects.Field) bool {
 		return f.FullName == fieldName
 	})
