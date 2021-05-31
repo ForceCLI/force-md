@@ -45,7 +45,7 @@ func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
 	for i, f := range o.Fields {
 		if f.FullName == fieldName {
 			found = true
-			if err := mergo.Merge(&updates, f); err != nil {
+			if err := mergo.Merge(&updates, f, mergo.WithNoOverrideEmptyStructValues); err != nil {
 				return errors.Wrap(err, "merging field updates")
 			}
 			o.Fields[i] = updates
