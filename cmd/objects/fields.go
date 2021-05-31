@@ -18,6 +18,7 @@ var (
 	requiredOnly bool
 	tracked      bool
 	unique       bool
+	formulaField bool
 	fieldName    string
 	fieldType    string
 )
@@ -25,6 +26,7 @@ var (
 func init() {
 	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
 	listFieldsCmd.Flags().BoolVarP(&tracked, "tracked", "k", false, "with history tracking")
+	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "u", false, "formula fields only")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -143,6 +145,11 @@ func listFields(file string) {
 	if tracked {
 		filters = append(filters, func(f objects.Field) bool {
 			return f.TrackHistory.Text == "true"
+		})
+	}
+	if formulaField {
+		filters = append(filters, func(f objects.Field) bool {
+			return f.Formula != nil
 		})
 	}
 	if fieldType != "" {
