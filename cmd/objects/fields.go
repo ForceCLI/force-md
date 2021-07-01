@@ -21,6 +21,7 @@ var (
 	formulaField bool
 	fieldName    string
 	fieldType    string
+	references   string
 )
 
 func init() {
@@ -28,6 +29,7 @@ func init() {
 	listFieldsCmd.Flags().BoolVarP(&tracked, "tracked", "k", false, "with history tracking")
 	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "u", false, "formula fields only")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
+	listFieldsCmd.Flags().StringVarP(&references, "references", "R", "", "references object")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	addFieldCmd.MarkFlagRequired("field")
@@ -156,6 +158,12 @@ func listFields(file string) {
 		filters = append(filters, func(f objects.Field) bool {
 			t := strings.ToLower(fieldType)
 			return f.Type != nil && strings.ToLower(f.Type.Text) == t
+		})
+	}
+	if references != "" {
+		filters = append(filters, func(f objects.Field) bool {
+			r := strings.ToLower(references)
+			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
 		})
 	}
 	fields := o.GetFields(filters...)
