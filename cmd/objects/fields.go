@@ -215,9 +215,9 @@ func showField(file string, fieldName string) {
 		return
 	}
 	objectName := strings.TrimSuffix(path.Base(file), ".object")
-	fieldName = strings.TrimPrefix(fieldName, objectName+".")
+	fieldName = strings.ToLower(strings.TrimPrefix(fieldName, objectName+"."))
 	fields := o.GetFields(func(f objects.Field) bool {
-		return f.FullName == fieldName
+		return strings.ToLower(f.FullName) == fieldName
 	})
 	if len(fields) == 0 {
 		log.Warn(fmt.Sprintf("field not found in %s", file))
