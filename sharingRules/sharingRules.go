@@ -13,7 +13,7 @@ type CriteriaRule struct {
 	AccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"accessLevel"`
-	AccountSettings struct {
+	AccountSettings *struct {
 		CaseAccessLevel struct {
 			Text string `xml:",chardata"`
 		} `xml:"caseAccessLevel"`
@@ -24,22 +24,22 @@ type CriteriaRule struct {
 			Text string `xml:",chardata"`
 		} `xml:"opportunityAccessLevel"`
 	} `xml:"accountSettings"`
-	Description struct {
-		Text string `xml:",chardata"`
+	Description *struct {
+		Text string `xml:",innerxml"`
 	} `xml:"description"`
 	Label struct {
-		Text string `xml:",chardata"`
+		Text string `xml:",innerxml"`
 	} `xml:"label"`
 	SharedTo struct {
-		Group struct {
+		Group *struct {
 			Text string `xml:",chardata"`
 		} `xml:"group"`
-		Role struct {
+		Role *struct {
 			Text string `xml:",chardata"`
 		} `xml:"role"`
-		AllInternalUsers struct {
+		AllInternalUsers *struct {
 		} `xml:"allInternalUsers"`
-		RoleAndSubordinates struct {
+		RoleAndSubordinates *struct {
 			Text string `xml:",chardata"`
 		} `xml:"roleAndSubordinates"`
 	} `xml:"sharedTo"`
@@ -54,7 +54,7 @@ type CriteriaRule struct {
 			Text string `xml:",chardata"`
 		} `xml:"value"`
 	} `xml:"criteriaItems"`
-	BooleanFilter struct {
+	BooleanFilter *struct {
 		Text string `xml:",chardata"`
 	} `xml:"booleanFilter"`
 }
@@ -66,39 +66,39 @@ type OwnerRule struct {
 	AccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"accessLevel"`
+	Description *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"description"`
 	Label struct {
-		Text string `xml:",chardata"`
+		Text string `xml:",innerxml"`
 	} `xml:"label"`
 	SharedTo struct {
-		Role struct {
+		Role *struct {
 			Text string `xml:",chardata"`
 		} `xml:"role"`
-		Group struct {
+		Group *struct {
 			Text string `xml:",chardata"`
 		} `xml:"group"`
-		RoleAndSubordinates struct {
+		RoleAndSubordinates *struct {
 			Text string `xml:",chardata"`
 		} `xml:"roleAndSubordinates"`
 	} `xml:"sharedTo"`
 	SharedFrom struct {
-		RoleAndSubordinates struct {
+		RoleAndSubordinates *struct {
 			Text string `xml:",chardata"`
 		} `xml:"roleAndSubordinates"`
-		Group struct {
+		Group *struct {
 			Text string `xml:",chardata"`
 		} `xml:"group"`
-		Queue struct {
+		Queue *struct {
 			Text string `xml:",chardata"`
 		} `xml:"queue"`
-		Role struct {
+		Role *struct {
 			Text string `xml:",chardata"`
 		} `xml:"role"`
-		AllInternalUsers struct {
+		AllInternalUsers *struct {
 		} `xml:"allInternalUsers"`
 	} `xml:"sharedFrom"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 type SharingRules struct {
