@@ -237,6 +237,8 @@ func deleteField(file string, fieldName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
 	err = o.DeleteField(fieldName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
