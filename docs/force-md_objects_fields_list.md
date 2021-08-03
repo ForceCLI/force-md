@@ -15,9 +15,10 @@ force-md objects fields list [flags] [filename]...
 ```
   -u, --formula             formula fields only
   -h, --help                help for list
+  -k, --history             with history tracking
   -R, --references string   references object
   -r, --required            required fields only
-  -k, --tracked             with history tracking
+  -d, --trending            with trending tracking
   -t, --type string         field type
 ```
 
