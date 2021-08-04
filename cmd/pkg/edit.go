@@ -60,6 +60,18 @@ var TidyCmd = &cobra.Command{
 	},
 }
 
+var ListCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "list items in package.xml",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listMembers(file)
+		}
+	},
+}
+
 func add(file string, metadataType string, member string) {
 	p, err := pkg.Open(file)
 	if err != nil {
@@ -93,6 +105,19 @@ func deleteMember(file string, metadataType string, member string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listMembers(file string) {
+	p, err := pkg.Open(file)
+	if err != nil {
+		log.Warn("parsing package.xml failed: " + err.Error())
+		return
+	}
+	for _, t := range p.Types {
+		for _, m := range t.Members {
+			fmt.Printf("%s: %s\n", t.Name, m)
+		}
 	}
 }
 
