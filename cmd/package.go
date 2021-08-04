@@ -10,6 +10,7 @@ func init() {
 	packageCmd.AddCommand(pkg.AddCmd)
 	packageCmd.AddCommand(pkg.DeleteCmd)
 	packageCmd.AddCommand(pkg.TidyCmd)
+	packageCmd.AddCommand(pkg.ListCmd)
 	RootCmd.AddCommand(packageCmd)
 }
 
