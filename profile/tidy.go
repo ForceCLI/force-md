@@ -10,9 +10,7 @@ func (p *Profile) Tidy() {
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
 	p.LayoutAssignments.Tidy()
-	sort.Slice(p.PageAccesses, func(i, j int) bool {
-		return p.PageAccesses[i].ApexPage.Text < p.PageAccesses[j].ApexPage.Text
-	})
+	p.PageAccesses.Tidy()
 	sort.Slice(p.TabVisibilities, func(i, j int) bool {
 		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
@@ -58,5 +56,11 @@ func (la LayoutAssignmentList) Tidy() {
 func (up UserPermissionList) Tidy() {
 	sort.Slice(up, func(i, j int) bool {
 		return up[i].Name < up[j].Name
+	})
+}
+
+func (pa PageAccessList) Tidy() {
+	sort.Slice(pa, func(i, j int) bool {
+		return pa[i].ApexPage < pa[j].ApexPage
 	})
 }
