@@ -25,6 +25,8 @@ type UserPermissionList []UserPermission
 
 type LayoutAssignmentList []LayoutAssignment
 
+type PageAccessList []PageAccess
+
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
 	AllowDelete      BooleanText `xml:"allowDelete"`
@@ -38,6 +40,11 @@ type ObjectPermissions struct {
 type TabVisibility struct {
 	Tab        string `xml:"tab"`
 	Visibility string `xml:"visibility"`
+}
+
+type PageAccess struct {
+	ApexPage string      `xml:"apexPage"`
+	Enabled  BooleanText `xml:"enabled"`
 }
 
 type UserPermission struct {
@@ -96,16 +103,9 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"flow"`
 	} `xml:"flowAccesses"`
-	LayoutAssignments LayoutAssignmentList  `xml:"layoutAssignments"`
-	ObjectPermissions ObjectPermissionsList `xml:"objectPermissions"`
-	PageAccesses      []struct {
-		ApexPage struct {
-			Text string `xml:",chardata"`
-		} `xml:"apexPage"`
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-	} `xml:"pageAccesses"`
+	LayoutAssignments      LayoutAssignmentList  `xml:"layoutAssignments"`
+	ObjectPermissions      ObjectPermissionsList `xml:"objectPermissions"`
+	PageAccesses           PageAccessList        `xml:"pageAccesses"`
 	RecordTypeVisibilities []struct {
 		Default struct {
 			Text string `xml:",chardata"`
