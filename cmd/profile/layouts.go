@@ -21,8 +21,12 @@ func init() {
 	editLayoutCmd.MarkFlagRequired("layout")
 	editLayoutCmd.MarkFlagRequired("object")
 
+	deleteLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	deleteLayoutCmd.MarkFlagRequired("object")
+
 	LayoutCmd.AddCommand(showLayoutCmd)
 	LayoutCmd.AddCommand(editLayoutCmd)
+	LayoutCmd.AddCommand(deleteLayoutCmd)
 }
 
 var LayoutCmd = &cobra.Command{
@@ -54,6 +58,19 @@ var editLayoutCmd = &cobra.Command{
 	},
 }
 
+var deleteLayoutCmd = &cobra.Command{
+	Use:                   "delete -o SObject [filename]...",
+	Short:                 "Delete page layout assignment",
+	Long:                  "Delete page layout assignment for object from profiles",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteLayout(file, objectName)
+		}
+	},
+}
+
 func showLayout(file string) {
 	p, err := profile.Open(file)
 	if err != nil {
@@ -77,6 +94,20 @@ func editLayout(file string, object, layout string) {
 		return
 	}
 	p.SetObjectLayout(object, layout)
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteLayout(file string, object string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	p.DeleteObjectLayout(object)
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

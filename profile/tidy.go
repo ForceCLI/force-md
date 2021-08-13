@@ -49,7 +49,16 @@ func (av ApplicationVisibilityList) Tidy() {
 
 func (la LayoutAssignmentList) Tidy() {
 	sort.Slice(la, func(i, j int) bool {
-		return la[i].Layout < la[j].Layout
+		left := la[i].Layout
+		right := la[j].Layout
+		if la[i].RecordType != nil {
+			left += la[i].RecordType.Text
+		}
+		if la[j].RecordType != nil {
+			right += la[j].RecordType.Text
+		}
+
+		return left < right
 	})
 }
 

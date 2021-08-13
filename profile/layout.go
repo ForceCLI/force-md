@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -28,4 +29,23 @@ func (p *Profile) SetObjectLayout(objectName, layoutName string) {
 		Layout: layoutPrefix + layoutName,
 	})
 	p.LayoutAssignments.Tidy()
+}
+
+func (p *Profile) DeleteObjectLayout(objectName string) error {
+	found := false
+	newLayouts := p.LayoutAssignments[:0]
+	layoutPrefix := strings.ToLower(objectName + "-")
+	for _, l := range p.LayoutAssignments {
+		if strings.HasPrefix(strings.ToLower(l.Layout), layoutPrefix) {
+			found = true
+		} else {
+			newLayouts = append(newLayouts, l)
+		}
+	}
+	if !found {
+		return errors.New("layout assignment not found")
+	}
+	p.LayoutAssignments = newLayouts
+	p.LayoutAssignments.Tidy()
+	return nil
 }
