@@ -20,8 +20,13 @@ func init() {
 	AddCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
 	AddCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
 
+	DeleteCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
+	DeleteCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
+
 	AddCmd.MarkFlagRequired("type")
 	AddCmd.MarkFlagRequired("name")
+	DeleteCmd.MarkFlagRequired("type")
+	DeleteCmd.MarkFlagRequired("name")
 }
 
 var AddCmd = &cobra.Command{
