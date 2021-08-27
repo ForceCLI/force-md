@@ -1,4 +1,4 @@
-package sharingRules
+package sharingrules
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/octoberswimmer/force-md/internal"
-	"github.com/octoberswimmer/force-md/sharingRules"
+	"github.com/octoberswimmer/force-md/sharingrules"
 )
 
 var ruleName string
@@ -20,20 +20,20 @@ func init() {
 	deleteOwnerRulesCmd.Flags().StringVarP(&ruleName, "rule", "r", "", "rule name")
 	deleteOwnerRulesCmd.MarkFlagRequired("rule")
 
-	CriteriaRulesCmd.AddCommand(listCriteriaRulesCmd)
-	CriteriaRulesCmd.AddCommand(deleteCriteriaRulesCmd)
+	CriteriaCmd.AddCommand(listCriteriaRulesCmd)
+	CriteriaCmd.AddCommand(deleteCriteriaRulesCmd)
 
-	OwnerRulesCmd.AddCommand(listOwnerRulesCmd)
-	OwnerRulesCmd.AddCommand(deleteOwnerRulesCmd)
+	OwnerCmd.AddCommand(listOwnerRulesCmd)
+	OwnerCmd.AddCommand(deleteOwnerRulesCmd)
 }
 
-var CriteriaRulesCmd = &cobra.Command{
-	Use:   "criteria-rules",
+var CriteriaCmd = &cobra.Command{
+	Use:   "criteria",
 	Short: "Manage criteria-based sharing rules",
 }
 
-var OwnerRulesCmd = &cobra.Command{
-	Use:   "owner-rules",
+var OwnerCmd = &cobra.Command{
+	Use:   "owner",
 	Short: "Manage owner-based sharing rules",
 }
 
@@ -60,7 +60,7 @@ var listOwnerRulesCmd = &cobra.Command{
 }
 
 func listCriteriaRules(file string) {
-	w, err := sharingRules.Open(file)
+	w, err := sharingrules.Open(file)
 	if err != nil {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
@@ -73,7 +73,7 @@ func listCriteriaRules(file string) {
 }
 
 func listOwnerRules(file string) {
-	w, err := sharingRules.Open(file)
+	w, err := sharingrules.Open(file)
 	if err != nil {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
@@ -112,7 +112,7 @@ var deleteOwnerRulesCmd = &cobra.Command{
 }
 
 func deleteCriteriaRule(file string, ruleName string) {
-	p, err := sharingRules.Open(file)
+	p, err := sharingrules.Open(file)
 	if err != nil {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
@@ -132,7 +132,7 @@ func deleteCriteriaRule(file string, ruleName string) {
 }
 
 func deleteOwnerRule(file string, ruleName string) {
-	p, err := sharingRules.Open(file)
+	p, err := sharingrules.Open(file)
 	if err != nil {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return

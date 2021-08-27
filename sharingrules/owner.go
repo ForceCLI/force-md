@@ -1,4 +1,4 @@
-package sharingRules
+package sharingrules
 
 import (
 	"github.com/pkg/errors"
