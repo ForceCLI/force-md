@@ -13,7 +13,9 @@ force-md package delete -t Type -n Name [filename]...
 ### Options
 
 ```
-  -h, --help   help for delete
+  -h, --help          help for delete
+  -n, --name string   metadata item name
+  -t, --type string   metadata type
 ```
 
 ### SEE ALSO

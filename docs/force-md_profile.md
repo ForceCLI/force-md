@@ -20,6 +20,7 @@ Manage Profiles
 * [force-md profile field-permissions](force-md_profile_field-permissions.md)	 - Manage field permissions
 * [force-md profile flow](force-md_profile_flow.md)	 - Manage flow visibility
 * [force-md profile layout](force-md_profile_layout.md)	 - Manage page layouts
+* [force-md profile merge](force-md_profile_merge.md)	 - Merge profiles
 * [force-md profile new](force-md_profile_new.md)	 - Create new profile
 * [force-md profile object-permissions](force-md_profile_object-permissions.md)	 - Update object permissions
 * [force-md profile tab](force-md_profile_tab.md)	 - Manage tab visibility

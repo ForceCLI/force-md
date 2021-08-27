@@ -14,14 +14,24 @@ import (
 var (
 	metadataType string
 	name         string
+	version      string
 )
+
+var defaultVersion = "51.0"
 
 func init() {
 	AddCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
 	AddCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
 
+	DeleteCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
+	DeleteCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
+
+	CreateCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API versin")
+
 	AddCmd.MarkFlagRequired("type")
 	AddCmd.MarkFlagRequired("name")
+	DeleteCmd.MarkFlagRequired("type")
+	DeleteCmd.MarkFlagRequired("name")
 }
 
 var AddCmd = &cobra.Command{
@@ -44,6 +54,18 @@ var DeleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteMember(file, metadataType, name)
+		}
+	},
+}
+
+var CreateCmd = &cobra.Command{
+	Use:                   "create [filename]...",
+	Short:                 "Create new package.xml file",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			createFile(file)
 		}
 	},
 }
@@ -104,6 +126,15 @@ func deleteMember(file string, metadataType string, member string) {
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func createFile(file string) {
+	p := pkg.NewPackage(version)
+	err := internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("create failed: " + err.Error())
 		return
 	}
 }

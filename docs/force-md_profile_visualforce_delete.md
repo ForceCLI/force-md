@@ -4,7 +4,7 @@ Delete visualforce page access
 
 ### Synopsis
 
-Delete visualforce page access in profiles
+Delete visualforce page access from profiles
 
 ```
 force-md profile visualforce delete -p PageName [flags] [filename]...

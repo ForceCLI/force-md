@@ -19,6 +19,14 @@ type Package struct {
 	Version string          `xml:"version"`
 }
 
+func NewPackage(version string) Package {
+	p := Package{
+		Version: version,
+		Xmlns:   "http://soap.sforce.com/2006/04/metadata",
+	}
+	return p
+}
+
 func (p *Package) MetaCheck() {}
 
 func Open(path string) (*Package, error) {
