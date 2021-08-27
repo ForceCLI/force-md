@@ -8,10 +8,12 @@ import (
 	. "github.com/octoberswimmer/force-md/general"
 )
 
+var UserPermissionExistsError = errors.New("user permissions already exists")
+
 func (p *Profile) AddUserPermission(permissionName string) error {
 	for _, f := range p.UserPermissions {
 		if f.Name == permissionName {
-			return errors.New("permission already exists")
+			return UserPermissionExistsError
 		}
 	}
 	p.UserPermissions = append(p.UserPermissions, UserPermission{

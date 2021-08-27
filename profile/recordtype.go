@@ -1,4 +1,4 @@
-package permissionset
+package profile
 
 import (
 	"github.com/pkg/errors"
@@ -8,13 +8,13 @@ import (
 
 var RecordTypeExistsError = errors.New("record type already exists")
 
-func (p *PermissionSet) AddRecordType(recordType string) error {
+func (p *Profile) AddRecordType(recordType string) error {
 	for _, r := range p.RecordTypeVisibilities {
 		if r.RecordType == recordType {
 			return RecordTypeExistsError
 		}
 	}
-	p.RecordTypeVisibilities = append(p.RecordTypeVisibilities, RecordType{
+	p.RecordTypeVisibilities = append(p.RecordTypeVisibilities, RecordTypeVisibility{
 		RecordType: recordType,
 		Visible:    TrueText,
 	})

@@ -18,6 +18,7 @@ func init() {
 	profileCmd.AddCommand(profile.VisualforceCmd)
 	profileCmd.AddCommand(profile.LayoutCmd)
 	profileCmd.AddCommand(profile.NewCmd)
+	profileCmd.AddCommand(profile.MergeCmd)
 	RootCmd.AddCommand(profileCmd)
 }
 

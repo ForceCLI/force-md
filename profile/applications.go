@@ -10,11 +10,9 @@ import (
 	. "github.com/octoberswimmer/force-md/general"
 )
 
-type ApplicationFilter func(ApplicationVisibility) bool
+var ApplicationExistsError = errors.New("application already exists")
 
-var falseBooleanText = BooleanText{
-	Text: "false",
-}
+type ApplicationFilter func(ApplicationVisibility) bool
 
 func (p *Profile) DeleteApplicationVisibility(applicationName string) error {
 	found := false
@@ -43,7 +41,7 @@ func boolToText(v bool) BooleanText {
 func (p *Profile) AddApplicationVisibility(appName string, defaultApp bool) error {
 	for _, f := range p.ApplicationVisibilities {
 		if f.Application == appName {
-			return errors.New("application already exists")
+			return ApplicationExistsError
 		}
 	}
 

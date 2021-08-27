@@ -27,6 +27,8 @@ type LayoutAssignmentList []LayoutAssignment
 
 type PageAccessList []PageAccess
 
+type RecordTypeVisibilityList []RecordTypeVisibility
+
 type ObjectPermissions struct {
 	AllowCreate      BooleanText `xml:"allowCreate"`
 	AllowDelete      BooleanText `xml:"allowDelete"`
@@ -61,6 +63,15 @@ type ApplicationVisibility struct {
 	Application string      `xml:"application"`
 	Default     BooleanText `xml:"default"`
 	Visible     BooleanText `xml:"visible"`
+}
+
+type RecordTypeVisibility struct {
+	Default struct {
+		Text string `xml:",chardata"`
+	} `xml:"default"`
+	PersonAccountDefault *PersonAccountDefault `xml:"personAccountDefault"`
+	RecordType           string                `xml:"recordType"`
+	Visible              BooleanText           `xml:"visible"`
 }
 
 type RecordType struct {
@@ -103,24 +114,13 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"flow"`
 	} `xml:"flowAccesses"`
-	LayoutAssignments      LayoutAssignmentList  `xml:"layoutAssignments"`
-	ObjectPermissions      ObjectPermissionsList `xml:"objectPermissions"`
-	PageAccesses           PageAccessList        `xml:"pageAccesses"`
-	RecordTypeVisibilities []struct {
-		Default struct {
-			Text string `xml:",chardata"`
-		} `xml:"default"`
-		PersonAccountDefault *PersonAccountDefault `xml:"personAccountDefault"`
-		RecordType           struct {
-			Text string `xml:",chardata"`
-		} `xml:"recordType"`
-		Visible struct {
-			Text string `xml:",chardata"`
-		} `xml:"visible"`
-	} `xml:"recordTypeVisibilities"`
-	TabVisibilities TabVisibilityList  `xml:"tabVisibilities"`
-	UserLicense     string             `xml:"userLicense"`
-	UserPermissions UserPermissionList `xml:"userPermissions"`
+	LayoutAssignments      LayoutAssignmentList     `xml:"layoutAssignments"`
+	ObjectPermissions      ObjectPermissionsList    `xml:"objectPermissions"`
+	PageAccesses           PageAccessList           `xml:"pageAccesses"`
+	RecordTypeVisibilities RecordTypeVisibilityList `xml:"recordTypeVisibilities"`
+	TabVisibilities        TabVisibilityList        `xml:"tabVisibilities"`
+	UserLicense            string                   `xml:"userLicense"`
+	UserPermissions        UserPermissionList       `xml:"userPermissions"`
 }
 
 func NewBooleanText(val string) BooleanText {

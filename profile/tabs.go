@@ -6,6 +6,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+var TabExistsError = errors.New("tab already exists")
+
 func (p *Profile) DeleteTabVisibility(tabName string) error {
 	found := false
 	newTabs := p.TabVisibilities[:0]
@@ -23,7 +25,12 @@ func (p *Profile) DeleteTabVisibility(tabName string) error {
 	return nil
 }
 
-func (p *Profile) AddTab(tabName string) {
+func (p *Profile) AddTab(tabName string) error {
+	for _, t := range p.TabVisibilities {
+		if t.Tab == tabName {
+			return TabExistsError
+		}
+	}
 	p.TabVisibilities = append(p.TabVisibilities, TabVisibility{
 		Tab:        tabName,
 		Visibility: "DefaultOn",
@@ -31,6 +38,7 @@ func (p *Profile) AddTab(tabName string) {
 	sort.Slice(p.TabVisibilities, func(i, j int) bool {
 		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
+	return nil
 }
 
 func (p *Profile) GetTabs() TabVisibilityList {

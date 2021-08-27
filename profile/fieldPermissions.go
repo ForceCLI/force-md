@@ -9,6 +9,8 @@ import (
 	. "github.com/octoberswimmer/force-md/general"
 )
 
+var FieldExistsError = errors.New("field already exists")
+
 func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
@@ -46,7 +48,7 @@ func (p *Profile) DeleteFieldPermissions(fieldName string) error {
 func (p *Profile) AddFieldPermissions(fieldName string) error {
 	for _, f := range p.FieldPermissions {
 		if f.Field.Text == fieldName {
-			return errors.New("field already exists")
+			return FieldExistsError
 		}
 	}
 

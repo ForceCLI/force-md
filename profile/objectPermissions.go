@@ -12,6 +12,8 @@ import (
 
 type ObjectFilter func(ObjectPermissions) bool
 
+var ObjectExistsError = errors.New("object already exists")
+
 func (p *Profile) SetObjectPermissions(objectName string, updates ObjectPermissions) error {
 	found := false
 	for i, f := range p.ObjectPermissions {
@@ -49,7 +51,7 @@ func defaultObjectPermissions(objectName string) ObjectPermissions {
 func (p *Profile) AddObjectPermissions(objectName string) error {
 	for _, f := range p.ObjectPermissions {
 		if f.Object.Text == objectName {
-			return errors.New("object already exists")
+			return ObjectExistsError
 		}
 	}
 

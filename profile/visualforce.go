@@ -8,10 +8,12 @@ import (
 	. "github.com/octoberswimmer/force-md/general"
 )
 
+var VisualforcePageExistsError = errors.New("visualforce page already exists")
+
 func (p *Profile) AddVisualforcePageAccess(pageName string) error {
 	for _, f := range p.PageAccesses {
 		if f.ApexPage == pageName {
-			return errors.New("Page already exists")
+			return VisualforcePageExistsError
 		}
 	}
 
