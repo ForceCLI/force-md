@@ -26,7 +26,7 @@ func init() {
 	DeleteCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
 	DeleteCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
 
-	CreateCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API versin")
+	NewCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API versin")
 
 	AddCmd.MarkFlagRequired("type")
 	AddCmd.MarkFlagRequired("name")
@@ -58,8 +58,8 @@ var DeleteCmd = &cobra.Command{
 	},
 }
 
-var CreateCmd = &cobra.Command{
-	Use:                   "create [filename]...",
+var NewCmd = &cobra.Command{
+	Use:                   "new [filename]...",
 	Short:                 "Create new package.xml file",
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.MinimumNArgs(1),
