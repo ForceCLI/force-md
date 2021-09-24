@@ -11,7 +11,7 @@ func init() {
 	packageCmd.AddCommand(pkg.DeleteCmd)
 	packageCmd.AddCommand(pkg.TidyCmd)
 	packageCmd.AddCommand(pkg.ListCmd)
-	packageCmd.AddCommand(pkg.CreateCmd)
+	packageCmd.AddCommand(pkg.NewCmd)
 	RootCmd.AddCommand(packageCmd)
 }
 

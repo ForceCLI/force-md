@@ -1,4 +1,4 @@
-## force-md package create
+## force-md package new
 
 Create new package.xml file
 
@@ -7,13 +7,13 @@ Create new package.xml file
 Create new package.xml file
 
 ```
-force-md package create [filename]...
+force-md package new [filename]...
 ```
 
 ### Options
 
 ```
-  -h, --help             help for create
+  -h, --help             help for new
   -v, --version string   API versin (default "51.0")
 ```
 
