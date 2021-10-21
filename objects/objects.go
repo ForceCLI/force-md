@@ -164,6 +164,38 @@ type Field struct {
 	} `xml:"visibleLines"`
 }
 
+type FieldSet struct {
+	FullName        string `xml:"fullName"`
+	AvailableFields []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		IsFieldManaged struct {
+			Text string `xml:",chardata"`
+		} `xml:"isFieldManaged"`
+		IsRequired struct {
+			Text string `xml:",chardata"`
+		} `xml:"isRequired"`
+	} `xml:"availableFields"`
+	Description struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	DisplayedFields []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		IsFieldManaged struct {
+			Text string `xml:",chardata"`
+		} `xml:"isFieldManaged"`
+		IsRequired struct {
+			Text string `xml:",chardata"`
+		} `xml:"isRequired"`
+	} `xml:"displayedFields"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+}
+
 type CustomObject struct {
 	XMLName         xml.Name `xml:"CustomObject"`
 	Xmlns           string   `xml:"xmlns,attr"`
@@ -243,41 +275,9 @@ type CustomObject struct {
 	ExternalSharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"externalSharingModel"`
-	FieldSets []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		AvailableFields []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			IsFieldManaged struct {
-				Text string `xml:",chardata"`
-			} `xml:"isFieldManaged"`
-			IsRequired struct {
-				Text string `xml:",chardata"`
-			} `xml:"isRequired"`
-		} `xml:"availableFields"`
-		Description struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		DisplayedFields []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			IsFieldManaged struct {
-				Text string `xml:",chardata"`
-			} `xml:"isFieldManaged"`
-			IsRequired struct {
-				Text string `xml:",chardata"`
-			} `xml:"isRequired"`
-		} `xml:"displayedFields"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-	} `xml:"fieldSets"`
-	Fields FieldList `xml:"fields"`
-	Label  *struct {
+	FieldSets []FieldSet `xml:"fieldSets"`
+	Fields    FieldList  `xml:"fields"`
+	Label     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	ListViews []struct {

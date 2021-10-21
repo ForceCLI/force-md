@@ -6,7 +6,7 @@ import (
 
 func (p *CustomObject) Tidy() {
 	sort.Slice(p.FieldSets, func(i, j int) bool {
-		return p.FieldSets[i].FullName.Text < p.FieldSets[j].FullName.Text
+		return p.FieldSets[i].FullName < p.FieldSets[j].FullName
 	})
 	p.Fields.Tidy()
 	sort.Slice(p.ValidationRules, func(i, j int) bool {
