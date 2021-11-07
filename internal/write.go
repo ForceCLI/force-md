@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const declaraction = `<?xml version="1.0" encoding="UTF-8"?>`
+const declaration = `<?xml version="1.0" encoding="UTF-8"?>`
 
 func WriteToFile(t interface{}, fileName string) error {
 	f, err := os.Create(fileName)
@@ -16,7 +16,7 @@ func WriteToFile(t interface{}, fileName string) error {
 		return errors.Wrap(err, "opening file")
 	}
 	defer f.Close()
-	fmt.Fprintln(f, declaraction)
+	fmt.Fprintln(f, declaration)
 	b, err := xml.MarshalIndent(t, "", "    ")
 	if err != nil {
 		return errors.Wrap(err, "serializing metadata")
