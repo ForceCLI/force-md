@@ -7,6 +7,18 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type Recipient struct {
+	Field struct {
+		Text string `xml:",chardata"`
+	} `xml:"field"`
+	Type struct {
+		Text string `xml:",chardata"`
+	} `xml:"type"`
+	Recipient struct {
+		Text string `xml:",chardata"`
+	} `xml:"recipient"`
+}
+
 type Alert struct {
 	FullName struct {
 		Text string `xml:",chardata"`
@@ -17,24 +29,14 @@ type Alert struct {
 	Protected struct {
 		Text string `xml:",chardata"`
 	} `xml:"protected"`
-	Recipients struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Type struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
-		Recipient struct {
-			Text string `xml:",chardata"`
-		} `xml:"recipient"`
-	} `xml:"recipients"`
+	Recipients []Recipient `xml:"recipients"`
 	SenderType struct {
 		Text string `xml:",chardata"`
 	} `xml:"senderType"`
 	Template struct {
 		Text string `xml:",chardata"`
 	} `xml:"template"`
-	CcEmails struct {
+	CcEmails []struct {
 		Text string `xml:",chardata"`
 	} `xml:"ccEmails"`
 }
