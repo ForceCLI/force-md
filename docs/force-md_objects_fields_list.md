@@ -13,6 +13,7 @@ force-md objects fields list [flags] [filename]...
 ### Options
 
 ```
+  -x, --external-id         external id fields only
   -u, --formula             formula fields only
   -h, --help                help for list
   -k, --history             with history tracking

@@ -3,12 +3,9 @@ package objects
 import (
 	"encoding/xml"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 )
-
-type BooleanText struct {
-	Text string `xml:",chardata"`
-}
 
 type TextLiteral struct {
 	Text string `xml:",innerxml"`
