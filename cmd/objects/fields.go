@@ -10,11 +10,13 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/objects"
 )
 
 var (
+	externalId   bool
 	requiredOnly bool
 	withHistory  bool
 	withTrending bool
@@ -30,6 +32,7 @@ func init() {
 	listFieldsCmd.Flags().BoolVarP(&withHistory, "history", "k", false, "with history tracking")
 	listFieldsCmd.Flags().BoolVarP(&withTrending, "trending", "d", false, "with trending tracking")
 	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "u", false, "formula fields only")
+	listFieldsCmd.Flags().BoolVarP(&externalId, "external-id", "x", false, "external id fields only")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
 	listFieldsCmd.Flags().StringVarP(&references, "references", "R", "", "references object")
 
@@ -161,6 +164,11 @@ func listFields(file string) {
 			return f.Formula != nil
 		})
 	}
+	if externalId {
+		filters = append(filters, func(f objects.Field) bool {
+			return f.ExternalId.ToBool()
+		})
+	}
 	if fieldType != "" {
 		filters = append(filters, func(f objects.Field) bool {
 			t := strings.ToLower(fieldType)
@@ -280,17 +288,17 @@ func textValue(cmd *cobra.Command, flag string) (t *objects.TextLiteral) {
 	return t
 }
 
-func booleanTextValue(cmd *cobra.Command, flag string) (t *objects.BooleanText) {
+func booleanTextValue(cmd *cobra.Command, flag string) (t *BooleanText) {
 	if cmd.Flags().Changed(flag) {
 		val, _ := cmd.Flags().GetBool(flag)
-		t = &objects.BooleanText{
+		t = &BooleanText{
 			Text: strconv.FormatBool(val),
 		}
 	}
 	antiFlag := "no-" + flag
 	if cmd.Flags().Changed(antiFlag) {
 		val, _ := cmd.Flags().GetBool(antiFlag)
-		t = &objects.BooleanText{
+		t = &BooleanText{
 			Text: strconv.FormatBool(!val),
 		}
 	}
