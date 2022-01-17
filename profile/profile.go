@@ -25,6 +25,8 @@ type UserPermissionList []UserPermission
 
 type LayoutAssignmentList []LayoutAssignment
 
+type LoginFlowsList []LoginFlow
+
 type PageAccessList []PageAccess
 
 type RecordTypeVisibilityList []RecordTypeVisibility
@@ -57,6 +59,14 @@ type UserPermission struct {
 type LayoutAssignment struct {
 	Layout     string      `xml:"layout"`
 	RecordType *RecordType `xml:"recordType"`
+}
+
+type LoginFlow struct {
+	Flow                string      `xml:"flow"`
+	FlowType            string      `xml:"flowType"`
+	FriendlyName        string      `xml:"friendlyName"`
+	UILoginFlowType     string      `xml:"uiLoginFlowType"`
+	UseLightningRuntime BooleanText `xml:"useLightningRuntime"`
 }
 
 type ApplicationVisibility struct {
@@ -115,6 +125,7 @@ type Profile struct {
 		} `xml:"flow"`
 	} `xml:"flowAccesses"`
 	LayoutAssignments      LayoutAssignmentList     `xml:"layoutAssignments"`
+	LoginFlows             LoginFlowsList           `xml:"loginFlows"`
 	ObjectPermissions      ObjectPermissionsList    `xml:"objectPermissions"`
 	PageAccesses           PageAccessList           `xml:"pageAccesses"`
 	RecordTypeVisibilities RecordTypeVisibilityList `xml:"recordTypeVisibilities"`
