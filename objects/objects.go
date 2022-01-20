@@ -119,12 +119,8 @@ type Field struct {
 	MetadataRelationshipControllingField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"metadataRelationshipControllingField"`
-	TrackHistory *struct {
-		Text string `xml:",chardata"`
-	} `xml:"trackHistory"`
-	TrackTrending *struct {
-		Text string `xml:",chardata"`
-	} `xml:"trackTrending"`
+	TrackHistory            *BooleanText `xml:"trackHistory"`
+	TrackTrending           *BooleanText `xml:"trackTrending"`
 	Type                    *TextLiteral `xml:"type"`
 	Unique                  *BooleanText `xml:"unique"`
 	WriteRequiresMasterRead *struct {
