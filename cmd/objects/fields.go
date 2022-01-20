@@ -151,7 +151,7 @@ func listFields(file string) {
 	}
 	if withHistory {
 		filters = append(filters, func(f objects.Field) bool {
-			return f.TrackHistory.Text == "true"
+			return f.TrackHistory.ToBool()
 		})
 	}
 	if withTrending {
