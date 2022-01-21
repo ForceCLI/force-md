@@ -1,6 +1,8 @@
 package objects
 
 import (
+	"strings"
+
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 )
@@ -43,7 +45,7 @@ func (o *CustomObject) AddField(fieldName string) error {
 func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
 	found := false
 	for i, f := range o.Fields {
-		if f.FullName == fieldName {
+		if strings.ToLower(f.FullName) == strings.ToLower(fieldName) {
 			found = true
 			if err := mergo.Merge(&updates, f, mergo.WithNoOverrideEmptyStructValues); err != nil {
 				return errors.Wrap(err, "merging field updates")

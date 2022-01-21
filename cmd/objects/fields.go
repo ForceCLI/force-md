@@ -49,6 +49,8 @@ func init() {
 	editFieldCmd.Flags().BoolP("no-unique", "U", false, "not unique")
 	editFieldCmd.Flags().BoolP("external-id", "e", false, "external id")
 	editFieldCmd.Flags().BoolP("no-external-id", "C", false, "not external id")
+	editFieldCmd.Flags().BoolP("history-tracking", "k", false, "history tracking")
+	editFieldCmd.Flags().BoolP("no-history-tracking", "K", false, "no history tracking")
 	editFieldCmd.MarkFlagRequired("field")
 
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -211,6 +213,8 @@ func updateField(file string, fieldUpdates objects.Field) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	fieldName = strings.ToLower(strings.TrimPrefix(fieldName, objectName+"."))
 	err = o.UpdateField(fieldName, fieldUpdates)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
@@ -271,6 +275,7 @@ func fieldUpdates(cmd *cobra.Command) objects.Field {
 	field.Label = textValue(cmd, "label")
 	field.Unique = booleanTextValue(cmd, "unique")
 	field.ExternalId = booleanTextValue(cmd, "external-id")
+	field.TrackHistory = booleanTextValue(cmd, "history-tracking")
 	field.Description = textValue(cmd, "description")
 	field.Type = textValue(cmd, "type")
 	field.InlineHelpText = textValue(cmd, "inline-help")
