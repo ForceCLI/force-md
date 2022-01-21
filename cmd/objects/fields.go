@@ -52,8 +52,8 @@ func init() {
 	editFieldCmd.Flags().BoolP("no-required", "R", false, "not required")
 	editFieldCmd.Flags().BoolP("unique", "u", false, "unique")
 	editFieldCmd.Flags().BoolP("no-unique", "U", false, "not unique")
-	editFieldCmd.Flags().BoolP("external-id", "e", false, "external id")
-	editFieldCmd.Flags().BoolP("no-external-id", "C", false, "not external id")
+	editFieldCmd.Flags().BoolP("external-id", "x", false, "external id")
+	editFieldCmd.Flags().BoolP("no-external-id", "X", false, "not external id")
 	editFieldCmd.Flags().BoolP("history-tracking", "k", false, "history tracking")
 	editFieldCmd.Flags().BoolP("no-history-tracking", "K", false, "no history tracking")
 	editFieldCmd.MarkFlagRequired("field")
@@ -288,6 +288,7 @@ func fieldUpdates(cmd *cobra.Command) objects.Field {
 	field.DefaultValue = textValue(cmd, "default")
 	field.Precision = integerValue(cmd, "precision")
 	field.Scale = integerValue(cmd, "scale")
+	field.Length = integerValue(cmd, "length")
 	return field
 }
 
