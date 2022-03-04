@@ -45,6 +45,11 @@ func init() {
 	editFieldCmd.Flags().StringP("description", "d", "", "description")
 	editFieldCmd.Flags().StringP("default", "v", "", "default value")
 	editFieldCmd.Flags().StringP("inline-help", "i", "", "inline help")
+	editFieldCmd.Flags().IntP("precision", "p", 0, "precision")
+	editFieldCmd.Flags().IntP("scale", "s", 0, "scale")
+	editFieldCmd.Flags().IntP("length", "n", 0, "length")
+	editFieldCmd.Flags().BoolP("required", "r", false, "required")
+	editFieldCmd.Flags().BoolP("no-required", "R", false, "not required")
 	editFieldCmd.Flags().BoolP("unique", "u", false, "unique")
 	editFieldCmd.Flags().BoolP("no-unique", "U", false, "not unique")
 	editFieldCmd.Flags().BoolP("external-id", "e", false, "external id")
@@ -276,10 +281,13 @@ func fieldUpdates(cmd *cobra.Command) objects.Field {
 	field.Unique = booleanTextValue(cmd, "unique")
 	field.ExternalId = booleanTextValue(cmd, "external-id")
 	field.TrackHistory = booleanTextValue(cmd, "history-tracking")
+	field.Required = booleanTextValue(cmd, "required")
 	field.Description = textValue(cmd, "description")
 	field.Type = textValue(cmd, "type")
 	field.InlineHelpText = textValue(cmd, "inline-help")
 	field.DefaultValue = textValue(cmd, "default")
+	field.Precision = integerValue(cmd, "precision")
+	field.Scale = integerValue(cmd, "scale")
 	return field
 }
 
@@ -288,6 +296,16 @@ func textValue(cmd *cobra.Command, flag string) (t *objects.TextLiteral) {
 		val, _ := cmd.Flags().GetString(flag)
 		t = &objects.TextLiteral{
 			Text: val,
+		}
+	}
+	return t
+}
+
+func integerValue(cmd *cobra.Command, flag string) (t *IntegerText) {
+	if cmd.Flags().Changed(flag) {
+		val, _ := cmd.Flags().GetInt(flag)
+		t = &IntegerText{
+			Text: strconv.Itoa(val),
 		}
 	}
 	return t
