@@ -63,12 +63,8 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"isOptional"`
 	} `xml:"lookupFilter"`
-	Precision *struct {
-		Text string `xml:",chardata"`
-	} `xml:"precision"`
-	Length *struct {
-		Text string `xml:",chardata"`
-	} `xml:"length"`
+	Precision   *IntegerText `xml:"precision"`
+	Length      *IntegerText `xml:"length"`
 	ReferenceTo *struct {
 		Text string `xml:",chardata"`
 	} `xml:"referenceTo"`
@@ -78,12 +74,8 @@ type Field struct {
 	RelationshipName *struct {
 		Text string `xml:",chardata"`
 	} `xml:"relationshipName"`
-	Required *struct {
-		Text string `xml:",chardata"`
-	} `xml:"required"`
-	Scale *struct {
-		Text string `xml:",chardata"`
-	} `xml:"scale"`
+	Required         *BooleanText `xml:"required"`
+	Scale            *IntegerText `xml:"scale"`
 	TrackFeedHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"trackFeedHistory"`

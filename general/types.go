@@ -16,6 +16,10 @@ type BooleanText struct {
 	Text string `xml:",chardata"`
 }
 
+type IntegerText struct {
+	Text string `xml:",chardata"`
+}
+
 func (b *BooleanText) ToBool() bool {
 	return b != nil && strings.ToLower(b.Text) == "true"
 }
