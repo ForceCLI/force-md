@@ -7,7 +7,7 @@ List tab visibility
 List tab visibility in profiles
 
 ```
-force-md profile tab list -[filename]...
+force-md profile tab list [filename]...
 ```
 
 ### Options

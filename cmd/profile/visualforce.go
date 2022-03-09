@@ -28,6 +28,7 @@ func init() {
 	VisualforceCmd.AddCommand(addVisualforcePageCmd)
 	VisualforceCmd.AddCommand(cloneVisualforcePageCmd)
 	VisualforceCmd.AddCommand(deleteVisualforcePageCmd)
+	VisualforceCmd.AddCommand(listVisualforcePageCmd)
 }
 
 var VisualforceCmd = &cobra.Command{
@@ -70,6 +71,19 @@ var deleteVisualforcePageCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteVisualforceAccess(file, pageName)
+		}
+	},
+}
+
+var listVisualforcePageCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List VisualForce page visibility",
+	Long:                  "List VisualForce page visibility in profiles",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listVisualforcePages(file)
 		}
 	},
 }
@@ -125,5 +139,21 @@ func cloneVisualforcePageAccess(file string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listVisualforcePages(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	pages := p.GetVisualforcePageVisibility()
+	for _, p := range pages {
+		access := "disabled"
+		if p.Enabled.ToBool() {
+			access = "enabled"
+		}
+		fmt.Printf("%s: %s\n", p.ApexPage, access)
 	}
 }

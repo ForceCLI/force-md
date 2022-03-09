@@ -39,6 +39,10 @@ func (p *Profile) DeleteVisualforcePageAccess(pageName string) error {
 	return nil
 }
 
+func (p *Profile) GetVisualforcePageVisibility() PageAccessList {
+	return p.PageAccesses
+}
+
 func (p *Profile) CloneVisualforcePageAccess(src, dest string) error {
 	for _, f := range p.PageAccesses {
 		if f.ApexPage == dest {
