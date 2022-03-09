@@ -31,6 +31,24 @@ func (p *Profile) SetObjectLayout(objectName, layoutName string) {
 	p.LayoutAssignments.Tidy()
 }
 
+func (p *Profile) SetObjectLayoutForRecordType(objectName, layoutName, recordType string) {
+	layoutPrefix := objectName + "-"
+	fullRecordTypeName := objectName + "." + recordType
+	for i, f := range p.LayoutAssignments {
+		if strings.HasPrefix(f.Layout, layoutPrefix) && f.RecordType != nil && f.RecordType.Text == fullRecordTypeName {
+			p.LayoutAssignments[i].Layout = layoutPrefix + layoutName
+			return
+		}
+	}
+	p.LayoutAssignments = append(p.LayoutAssignments, LayoutAssignment{
+		Layout: layoutPrefix + layoutName,
+		RecordType: &RecordType{
+			Text: fullRecordTypeName,
+		},
+	})
+	p.LayoutAssignments.Tidy()
+}
+
 func (p *Profile) DeleteObjectLayout(objectName string) error {
 	found := false
 	newLayouts := p.LayoutAssignments[:0]
