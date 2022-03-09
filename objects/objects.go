@@ -193,7 +193,7 @@ type CustomObject struct {
 	CompactLayoutAssignment struct {
 		Text string `xml:",chardata"`
 	} `xml:"compactLayoutAssignment"`
-	CompactLayouts *struct {
+	CompactLayouts []struct {
 		FullName struct {
 			Text string `xml:",chardata"`
 		} `xml:"fullName"`
