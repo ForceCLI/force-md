@@ -53,7 +53,7 @@ var deleteTabCmd = &cobra.Command{
 }
 
 var listTabsCmd = &cobra.Command{
-	Use:                   "list -[filename]...",
+	Use:                   "list [filename]...",
 	Short:                 "List tab visibility",
 	Long:                  "List tab visibility in profiles",
 	DisableFlagsInUseLine: true,
