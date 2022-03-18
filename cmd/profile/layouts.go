@@ -11,6 +11,7 @@ import (
 )
 
 var layoutName string
+var recordType string
 
 func init() {
 	showLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
@@ -18,6 +19,7 @@ func init() {
 
 	editLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	editLayoutCmd.Flags().StringVarP(&layoutName, "layout", "l", "", "layout name")
+	editLayoutCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
 	editLayoutCmd.MarkFlagRequired("layout")
 	editLayoutCmd.MarkFlagRequired("object")
 
@@ -53,7 +55,7 @@ var editLayoutCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
-			editLayout(file, objectName, layoutName)
+			editLayout(file, objectName, layoutName, recordType)
 		}
 	},
 }
@@ -87,13 +89,17 @@ func showLayout(file string) {
 	}
 }
 
-func editLayout(file string, object, layout string) {
+func editLayout(file string, object, layout string, recordType string) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	p.SetObjectLayout(object, layout)
+	if recordType != "" {
+		p.SetObjectLayoutForRecordType(object, layout, recordType)
+	} else {
+		p.SetObjectLayout(object, layout)
+	}
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
