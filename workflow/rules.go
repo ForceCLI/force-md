@@ -1,7 +1,19 @@
 package workflow
 
-func (w *Workflow) GetRules() []Rule {
-	return w.Rules
+type RuleFilter func(Rule) bool
+
+func (w *Workflow) GetRules(filters ...RuleFilter) []Rule {
+	var rules []Rule
+RULES:
+	for _, r := range w.Rules {
+		for _, filter := range filters {
+			if !filter(r) {
+				continue RULES
+			}
+		}
+		rules = append(rules, r)
+	}
+	return rules
 }
 
 func (w *Workflow) GetAlerts() []Alert {

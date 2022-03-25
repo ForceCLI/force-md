@@ -11,7 +11,12 @@ import (
 	"github.com/octoberswimmer/force-md/workflow"
 )
 
+var (
+	active bool
+)
+
 func init() {
+	listRulesCmd.Flags().BoolVarP(&active, "active", "a", false, "active")
 	RulesCmd.AddCommand(listRulesCmd)
 }
 
@@ -38,8 +43,18 @@ func listRules(file string) {
 		return
 	}
 	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
-	rules := w.GetRules()
+	var filters []workflow.RuleFilter
+	if active {
+		filters = append(filters, func(r workflow.Rule) bool {
+			return r.Active.Text == "true"
+		})
+	}
+	rules := w.GetRules(filters...)
 	for _, r := range rules {
-		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
+		active := "inactive"
+		if r.Active.ToBool() {
+			active = "active"
+		}
+		fmt.Printf("%s.%s: %s\n", objectName, r.FullName.Text, active)
 	}
 }

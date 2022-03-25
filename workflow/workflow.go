@@ -3,6 +3,7 @@ package workflow
 import (
 	"encoding/xml"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 )
 
@@ -86,9 +87,7 @@ type Rule struct {
 			Text string `xml:",chardata"`
 		} `xml:"type"`
 	} `xml:"actions"`
-	Active struct {
-		Text string `xml:",chardata"`
-	} `xml:"active"`
+	Active        BooleanText `xml:"active"`
 	CriteriaItems []struct {
 		Field struct {
 			Text string `xml:",chardata"`
