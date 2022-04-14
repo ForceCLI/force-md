@@ -13,7 +13,8 @@ force-md workflows rules list [flags] [filename]...
 ### Options
 
 ```
-  -h, --help   help for list
+  -a, --active   active
+  -h, --help     help for list
 ```
 
 ### SEE ALSO

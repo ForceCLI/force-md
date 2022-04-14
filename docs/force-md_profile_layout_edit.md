@@ -13,9 +13,10 @@ force-md profile layout edit -o SObject -l Layout [filename]...
 ### Options
 
 ```
-  -h, --help            help for edit
-  -l, --layout string   layout name
-  -o, --object string   object name
+  -h, --help                help for edit
+  -l, --layout string       layout name
+  -o, --object string       object name
+  -r, --recordtype string   record type
 ```
 
 ### SEE ALSO
