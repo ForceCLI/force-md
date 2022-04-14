@@ -15,14 +15,14 @@ force-md objects fields edit -f Field [flags] [filename]...
 ```
   -v, --default string        default value
   -d, --description string    description
-  -e, --external-id           external id
+  -x, --external-id           external id
   -f, --field string          field name
   -h, --help                  help for edit
   -k, --history-tracking      history tracking
   -i, --inline-help string    inline help
   -l, --label string          label
   -n, --length int            length
-  -C, --no-external-id        not external id
+  -X, --no-external-id        not external id
   -K, --no-history-tracking   no history tracking
   -R, --no-required           not required
   -U, --no-unique             not unique
