@@ -63,20 +63,14 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"isOptional"`
 	} `xml:"lookupFilter"`
-	Precision   *IntegerText `xml:"precision"`
-	Length      *IntegerText `xml:"length"`
-	ReferenceTo *struct {
-		Text string `xml:",chardata"`
-	} `xml:"referenceTo"`
-	RelationshipLabel *struct {
-		Text string `xml:",chardata"`
-	} `xml:"relationshipLabel"`
-	RelationshipName *struct {
-		Text string `xml:",chardata"`
-	} `xml:"relationshipName"`
-	Required         *BooleanText `xml:"required"`
-	Scale            *IntegerText `xml:"scale"`
-	TrackFeedHistory *struct {
+	Precision         *IntegerText `xml:"precision"`
+	Length            *IntegerText `xml:"length"`
+	ReferenceTo       *TextLiteral `xml:"referenceTo"`
+	RelationshipLabel *TextLiteral `xml:"relationshipLabel"`
+	RelationshipName  *TextLiteral `xml:"relationshipName"`
+	Required          *BooleanText `xml:"required"`
+	Scale             *IntegerText `xml:"scale"`
+	TrackFeedHistory  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"trackFeedHistory"`
 	SummarizedField *struct {
