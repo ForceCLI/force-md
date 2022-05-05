@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"fmt"
 	"sort"
 
 	"github.com/pkg/errors"
@@ -38,6 +39,20 @@ func (p *Profile) AddTab(tabName string) error {
 	sort.Slice(p.TabVisibilities, func(i, j int) bool {
 		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
+	return nil
+}
+
+func (p *Profile) SetTabVisibility(tabName string, visibility string) error {
+	found := false
+	for i, f := range p.TabVisibilities {
+		if f.Tab == tabName {
+			found = true
+			p.TabVisibilities[i].Visibility = visibility
+		}
+	}
+	if !found {
+		return fmt.Errorf("tab not found: %s", tabName)
+	}
 	return nil
 }
 
