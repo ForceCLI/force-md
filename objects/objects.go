@@ -190,6 +190,31 @@ type FieldSet struct {
 	} `xml:"label"`
 }
 
+type RecordType struct {
+	FullName string `xml:"fullName"`
+	Active   struct {
+		Text string `xml:",chardata"`
+	} `xml:"active"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	PicklistValues []struct {
+		Picklist struct {
+			Text string `xml:",chardata"`
+		} `xml:"picklist"`
+		Values []struct {
+			FullName struct {
+				Text string `xml:",chardata"`
+			} `xml:"fullName"`
+			Default struct {
+				Text string `xml:",chardata"`
+			} `xml:"default"`
+		} `xml:"values"`
+	} `xml:"picklistValues"`
+}
 type CustomObject struct {
 	XMLName         xml.Name `xml:"CustomObject"`
 	Xmlns           string   `xml:"xmlns,attr"`
@@ -345,33 +370,7 @@ type CustomObject struct {
 	RecordTypeTrackHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordTypeTrackHistory"`
-	RecordTypes []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Active struct {
-			Text string `xml:",chardata"`
-		} `xml:"active"`
-		Description *struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		PicklistValues []struct {
-			Picklist struct {
-				Text string `xml:",chardata"`
-			} `xml:"picklist"`
-			Values []struct {
-				FullName struct {
-					Text string `xml:",chardata"`
-				} `xml:"fullName"`
-				Default struct {
-					Text string `xml:",chardata"`
-				} `xml:"default"`
-			} `xml:"values"`
-		} `xml:"picklistValues"`
-	} `xml:"recordTypes"`
+	RecordTypes   []RecordType `xml:"recordTypes"`
 	SearchLayouts struct {
 		CustomTabListAdditionalFields []struct {
 			Text string `xml:",chardata"`

@@ -17,6 +17,7 @@ func init() {
 	profileCmd.AddCommand(profile.ApexCmd)
 	profileCmd.AddCommand(profile.VisualforceCmd)
 	profileCmd.AddCommand(profile.LayoutCmd)
+	profileCmd.AddCommand(profile.RecordTypeCmd)
 	profileCmd.AddCommand(profile.NewCmd)
 	profileCmd.AddCommand(profile.MergeCmd)
 	RootCmd.AddCommand(profileCmd)
