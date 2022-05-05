@@ -23,6 +23,7 @@ Manage Profiles
 * [force-md profile merge](force-md_profile_merge.md)	 - Merge profiles
 * [force-md profile new](force-md_profile_new.md)	 - Create new profile
 * [force-md profile object-permissions](force-md_profile_object-permissions.md)	 - Update object permissions
+* [force-md profile recordtype](force-md_profile_recordtype.md)	 - Manage record type visibility
 * [force-md profile tab](force-md_profile_tab.md)	 - Manage tab visibility
 * [force-md profile tidy](force-md_profile_tidy.md)	 - Tidy profile metadata
 * [force-md profile user-permissions](force-md_profile_user-permissions.md)	 - Manage user permissions

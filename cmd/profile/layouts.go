@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -96,6 +97,7 @@ func editLayout(file string, object, layout string, recordType string) {
 		return
 	}
 	if recordType != "" {
+		recordType = strings.TrimPrefix(recordType, object+".")
 		p.SetObjectLayoutForRecordType(object, layout, recordType)
 	} else {
 		p.SetObjectLayout(object, layout)
