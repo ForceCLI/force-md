@@ -47,7 +47,7 @@ var RecordTypeCmd = &cobra.Command{
 }
 
 var cloneRecordTypeCmd = &cobra.Command{
-	Use:                   "clone -s SObject.RecordType -f SObject.RecordType [filename]...",
+	Use:                   "clone -s SObject.RecordType -r SObject.RecordType [filename]...",
 	Short:                 "Clone record type visibility",
 	Long:                  "Clone record type visibility in profiles for a new record type",
 	DisableFlagsInUseLine: true,
@@ -60,7 +60,7 @@ var cloneRecordTypeCmd = &cobra.Command{
 }
 
 var editRecordTypeCmd = &cobra.Command{
-	Use:   "edit -f SObject.RecordType [flags] [filename]...",
+	Use:   "edit -r SObject.RecordType [flags] [filename]...",
 	Short: "Update record types",
 	Long:  "Update record types in profiles",
 	Args:  cobra.MinimumNArgs(1),
@@ -73,7 +73,7 @@ var editRecordTypeCmd = &cobra.Command{
 }
 
 var addRecordTypeCmd = &cobra.Command{
-	Use:                   "add -f SObject.RecordType [filename]...",
+	Use:                   "add -r SObject.RecordType [filename]...",
 	Short:                 "Add record type",
 	Long:                  "Add record type to profiles",
 	Args:                  cobra.MinimumNArgs(1),
@@ -86,7 +86,7 @@ var addRecordTypeCmd = &cobra.Command{
 }
 
 var deleteRecordTypeCmd = &cobra.Command{
-	Use:                   "delete -f SObject.RecordType [filename]...",
+	Use:                   "delete -r SObject.RecordType [filename]...",
 	Short:                 "Delete record type",
 	Long:                  "Delete record type visisiblity from profiles",
 	Args:                  cobra.MinimumNArgs(1),
