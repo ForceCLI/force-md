@@ -7,7 +7,7 @@ Add record type
 Add record type to profiles
 
 ```
-force-md profile recordtype add -f SObject.RecordType [filename]...
+force-md profile recordtype add -r SObject.RecordType [filename]...
 ```
 
 ### Options

@@ -7,7 +7,7 @@ Clone record type visibility
 Clone record type visibility in profiles for a new record type
 
 ```
-force-md profile recordtype clone -s SObject.RecordType -f SObject.RecordType [filename]...
+force-md profile recordtype clone -s SObject.RecordType -r SObject.RecordType [filename]...
 ```
 
 ### Options

@@ -7,7 +7,7 @@ Update record types
 Update record types in profiles
 
 ```
-force-md profile recordtype edit -f SObject.RecordType [flags] [filename]...
+force-md profile recordtype edit -r SObject.RecordType [flags] [filename]...
 ```
 
 ### Options

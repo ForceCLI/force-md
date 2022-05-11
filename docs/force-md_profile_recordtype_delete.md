@@ -7,7 +7,7 @@ Delete record type
 Delete record type visisiblity from profiles
 
 ```
-force-md profile recordtype delete -f SObject.RecordType [filename]...
+force-md profile recordtype delete -r SObject.RecordType [filename]...
 ```
 
 ### Options
