@@ -44,10 +44,24 @@ func init() {
 	showObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	showObjectCmd.MarkFlagRequired("object")
 
+	listObjectCmd.Flags().BoolP("create", "c", false, "has create")
+	listObjectCmd.Flags().BoolP("delete", "d", false, "has delete")
+	listObjectCmd.Flags().BoolP("edit", "e", false, "has edit")
+	listObjectCmd.Flags().BoolP("read", "r", false, "has read")
+	listObjectCmd.Flags().BoolP("modify-all", "m", false, "has modify all")
+	listObjectCmd.Flags().BoolP("view-all", "v", false, "has view all")
+	listObjectCmd.Flags().BoolP("no-create", "C", false, "does not have create")
+	listObjectCmd.Flags().BoolP("no-delete", "D", false, "does not have delete")
+	listObjectCmd.Flags().BoolP("no-edit", "E", false, "does not have edit")
+	listObjectCmd.Flags().BoolP("no-read", "R", false, "does not have read")
+	listObjectCmd.Flags().BoolP("no-modify-all", "M", false, "does not have modify all")
+	listObjectCmd.Flags().BoolP("no-view-all", "V", false, "does not have view all")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
 	ObjectPermissionsCmd.AddCommand(showObjectCmd)
 	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
+	ObjectPermissionsCmd.AddCommand(listObjectCmd)
 }
 
 var ObjectPermissionsCmd = &cobra.Command{
@@ -60,7 +74,7 @@ var editObjectCmd = &cobra.Command{
 	Short: "Update object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		perms := objectPermissionsToUpdate(cmd)
+		perms := objectPermissionsFromFlags(cmd)
 		for _, file := range args {
 			updateObjectPermissions(file, perms)
 		}
@@ -102,6 +116,18 @@ var showObjectCmd = &cobra.Command{
 	},
 }
 
+var listObjectCmd = &cobra.Command{
+	Use:   "list [flags] [filename]...",
+	Short: "List object permissions",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		perms := objectPermissionsFromFlags(cmd)
+		for _, file := range args {
+			listObjectPermissions(file, perms)
+		}
+	},
+}
+
 func textValue(cmd *cobra.Command, flag string) (t BooleanText) {
 	if cmd.Flags().Changed(flag) {
 		val, _ := cmd.Flags().GetBool(flag)
@@ -119,7 +145,7 @@ func textValue(cmd *cobra.Command, flag string) (t BooleanText) {
 	return t
 }
 
-func objectPermissionsToUpdate(cmd *cobra.Command) profile.ObjectPermissions {
+func objectPermissionsFromFlags(cmd *cobra.Command) profile.ObjectPermissions {
 	perms := profile.ObjectPermissions{}
 	perms.AllowCreate = textValue(cmd, "create")
 	perms.AllowDelete = textValue(cmd, "delete")
@@ -199,4 +225,55 @@ func showObjectPermissions(file string, objectName string) {
 		return
 	}
 	fmt.Println(string(b))
+}
+
+func listObjectPermissions(file string, filter profile.ObjectPermissions) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	flagFilter := func(o profile.ObjectPermissions) bool {
+		if filter.AllowCreate.Text != "" && filter.AllowCreate.ToBool() != o.AllowCreate.ToBool() {
+			return false
+		}
+		if filter.AllowRead.Text != "" && filter.AllowRead.ToBool() != o.AllowRead.ToBool() {
+			return false
+		}
+		if filter.AllowEdit.Text != "" && filter.AllowEdit.ToBool() != o.AllowEdit.ToBool() {
+			return false
+		}
+		if filter.AllowDelete.Text != "" && filter.AllowDelete.ToBool() != o.AllowDelete.ToBool() {
+			return false
+		}
+		if filter.ViewAllRecords.Text != "" && filter.ViewAllRecords.ToBool() != o.ViewAllRecords.ToBool() {
+			return false
+		}
+		if filter.ModifyAllRecords.Text != "" && filter.ModifyAllRecords.ToBool() != o.ModifyAllRecords.ToBool() {
+			return false
+		}
+		return true
+	}
+	objects := p.GetObjectPermissions(flagFilter)
+	for _, o := range objects {
+		perms := ""
+		if o.AllowCreate.ToBool() {
+			perms += "c"
+		}
+		if o.ViewAllRecords.ToBool() {
+			perms += "R"
+		} else if o.AllowRead.ToBool() {
+			perms += "r"
+		}
+		if o.ModifyAllRecords.ToBool() {
+			perms += "U"
+		} else if o.AllowEdit.ToBool() {
+			perms += "u"
+		}
+		if o.AllowDelete.ToBool() {
+			perms += "d"
+		}
+
+		fmt.Printf("%s: %s\n", o.Object.Text, perms)
+	}
 }
