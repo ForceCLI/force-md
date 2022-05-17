@@ -21,7 +21,7 @@ func init() {
 
 var ListCmd = &cobra.Command{
 	Use:   "list [flags] [filename]...",
-	Short: "List workflow rules",
+	Short: "List matching rules",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {

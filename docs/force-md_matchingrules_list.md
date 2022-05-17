@@ -1,10 +1,10 @@
 ## force-md matchingrules list
 
-List workflow rules
+List matching rules
 
 ### Synopsis
 
-List workflow rules
+List matching rules
 
 ```
 force-md matchingrules list [flags] [filename]...

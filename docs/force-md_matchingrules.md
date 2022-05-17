@@ -16,5 +16,5 @@ Manage Matching Rules
 
 * [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
 * [force-md matchingrules delete](force-md_matchingrules_delete.md)	 - Delete rule
-* [force-md matchingrules list](force-md_matchingrules_list.md)	 - List workflow rules
+* [force-md matchingrules list](force-md_matchingrules_list.md)	 - List matching rules
 
