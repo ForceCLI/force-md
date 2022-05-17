@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -101,6 +102,16 @@ func mergePermissions(file string, apply profile.Profile) {
 		if err != nil && err != profile.TabExistsError {
 			log.Warn(fmt.Sprintf("adding tab %s failed for %s: %s", t.Tab, file, err.Error()))
 			return
+		}
+	}
+	for _, l := range apply.LayoutAssignments {
+		bits := strings.SplitN(l.Layout, "-", 2)
+		objectName := bits[0]
+		layoutName := bits[1]
+		if l.RecordType != nil {
+			p.SetObjectLayoutForRecordType(objectName, layoutName, l.RecordType.Text)
+		} else {
+			p.SetObjectLayout(objectName, layoutName)
 		}
 	}
 	for _, u := range apply.UserPermissions {

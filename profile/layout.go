@@ -20,6 +20,9 @@ func (p *Profile) GetLayouts(objectName string) LayoutAssignmentList {
 func (p *Profile) SetObjectLayout(objectName, layoutName string) {
 	layoutPrefix := objectName + "-"
 	for i, f := range p.LayoutAssignments {
+		if f.RecordType != nil {
+			continue
+		}
 		if strings.HasPrefix(f.Layout, layoutPrefix) {
 			p.LayoutAssignments[i].Layout = layoutPrefix + layoutName
 			return
