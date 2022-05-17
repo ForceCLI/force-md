@@ -13,6 +13,13 @@ type FieldPermissions struct {
 	Readable BooleanText `xml:"readable"`
 }
 
+type CustomPermissions struct {
+	Enabled BooleanText    `xml:"enabled"`
+	Name    PermissionName `xml:"name"`
+}
+
+type CustomPermissionsList []CustomPermissions
+
 type FieldPermissionsList []FieldPermissions
 
 type ObjectPermissionsList []ObjectPermissions
@@ -92,6 +99,10 @@ type FieldName struct {
 	Text string `xml:",chardata"`
 }
 
+type PermissionName struct {
+	Text string `xml:",chardata"`
+}
+
 type ObjectName struct {
 	Text string `xml:",chardata"`
 }
@@ -115,8 +126,10 @@ type Profile struct {
 	Custom                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	FieldPermissions FieldPermissionsList `xml:"fieldPermissions"`
-	FlowAccesses     []struct {
+	CustomPermissions CustomPermissionsList `xml:"customPermissions"`
+	Description       *string               `xml:"description"`
+	FieldPermissions  FieldPermissionsList  `xml:"fieldPermissions"`
+	FlowAccesses      []struct {
 		Enabled struct {
 			Text string `xml:",chardata"`
 		} `xml:"enabled"`
