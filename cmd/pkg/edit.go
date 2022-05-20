@@ -26,7 +26,7 @@ func init() {
 	DeleteCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
 	DeleteCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
 
-	NewCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API versin")
+	NewCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API version")
 
 	AddCmd.MarkFlagRequired("type")
 	AddCmd.MarkFlagRequired("name")
