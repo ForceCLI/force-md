@@ -21,3 +21,24 @@ func (p *PermissionSet) AddCustomPermission(permission string) error {
 	p.CustomPermissions.Tidy()
 	return nil
 }
+
+func (p *PermissionSet) DeleteCustomPermission(permissionName string) error {
+	found := false
+	newPerms := p.CustomPermissions[:0]
+	for _, f := range p.CustomPermissions {
+		if f.Name == permissionName {
+			found = true
+		} else {
+			newPerms = append(newPerms, f)
+		}
+	}
+	if !found {
+		return errors.New("permission not found")
+	}
+	p.CustomPermissions = newPerms
+	return nil
+}
+
+func (p *PermissionSet) GetCustomPermissions() CustomPermissionList {
+	return p.CustomPermissions
+}

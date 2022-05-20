@@ -14,7 +14,7 @@ force-md package new [filename]...
 
 ```
   -h, --help             help for new
-  -v, --version string   API versin (default "51.0")
+  -v, --version string   API version (default "51.0")
 ```
 
 ### SEE ALSO

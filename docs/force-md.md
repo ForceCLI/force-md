@@ -19,6 +19,7 @@ force-md
 ### SEE ALSO
 
 * [force-md completion](force-md_completion.md)	 - Generate completion script
+* [force-md custompermission](force-md_custompermission.md)	 - Manage Custom Permissions
 * [force-md matchingrules](force-md_matchingrules.md)	 - Manage Matching Rules
 * [force-md objects](force-md_objects.md)	 - Manage Custom and Standard Objects
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml
