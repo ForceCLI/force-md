@@ -114,10 +114,13 @@ func (p *Profile) DeleteObjectRecordTypeLayoutAssignments(objectName, recordType
 }
 
 func (p *Profile) DeleteObjectTabVisibility(objectName string) {
-	tabPrefix := objectName + "-"
+	tabName := "standard-" + objectName
+	if strings.HasSuffix(objectName, "__c") {
+		tabName = objectName
+	}
 	newTabs := p.TabVisibilities[:0]
 	for _, f := range p.TabVisibilities {
-		if !strings.HasPrefix(f.Tab, tabPrefix) {
+		if strings.ToLower(f.Tab) != strings.ToLower(tabName) {
 			newTabs = append(newTabs, f)
 		}
 	}
