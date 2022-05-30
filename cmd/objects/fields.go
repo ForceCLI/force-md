@@ -25,6 +25,7 @@ var (
 	fieldName    string
 	fieldType    string
 	references   string
+	fieldsDir    string
 )
 
 func init() {
@@ -66,11 +67,15 @@ func init() {
 	showFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	showFieldCmd.MarkFlagRequired("field")
 
+	writeFieldsCmd.Flags().StringVarP(&fieldsDir, "directory", "d", "", "directory where fields should be output")
+	writeFieldsCmd.MarkFlagRequired("directory")
+
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(addFieldCmd)
 	FieldCmd.AddCommand(editFieldCmd)
 	FieldCmd.AddCommand(showFieldCmd)
 	FieldCmd.AddCommand(deleteFieldCmd)
+	FieldCmd.AddCommand(writeFieldsCmd)
 }
 
 var FieldCmd = &cobra.Command{
@@ -134,6 +139,19 @@ var showFieldCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			showField(file, fieldName)
+		}
+	},
+}
+
+var writeFieldsCmd = &cobra.Command{
+	Use:                   "write -d directory [filename]...",
+	Short:                 "Split object fields into separate files",
+	Long:                  "Split object fields into separate metadata files to match sfdx's source format",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			writeFields(file, fieldsDir)
 		}
 	},
 }
@@ -274,6 +292,26 @@ func deleteField(file string, fieldName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func writeFields(file string, fieldsDir string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	fields := o.GetFields()
+	for _, f := range fields {
+		customField := objects.CustomField{
+			Field: f,
+			Xmlns: o.Xmlns,
+		}
+		err = internal.WriteToFile(customField, fieldsDir+"/"+f.FullName+".field-meta.xml")
+		if err != nil {
+			log.Warn("write failed: " + err.Error())
+			return
+		}
 	}
 }
 

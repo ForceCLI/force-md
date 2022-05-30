@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"bytes"
 	"encoding/xml"
 	"fmt"
 	"os"
@@ -21,9 +22,14 @@ func WriteToFile(t interface{}, fileName string) error {
 	if err != nil {
 		return errors.Wrap(err, "serializing metadata")
 	}
+	b = htmlEntities(b)
 	if _, err = f.Write(b); err != nil {
 		return errors.Wrap(err, "writing xml")
 	}
 	fmt.Fprintln(f, "")
 	return nil
+}
+
+func htmlEntities(b []byte) []byte {
+	return bytes.ReplaceAll(b, []byte("&39;"), []byte("&apos;"))
 }

@@ -13,9 +13,16 @@ type TextLiteral struct {
 
 type FieldList []Field
 
+type CustomField struct {
+	XMLName xml.Name `xml:"CustomField"`
+	Xmlns   string   `xml:"xmlns,attr"`
+	Field
+}
+
 type Field struct {
-	FullName      string `xml:"fullName"`
-	CaseSensitive *struct {
+	FullName       string       `xml:"fullName"`
+	BusinessStatus *TextLiteral `xml:"businessStatus"`
+	CaseSensitive  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
 	DefaultValue     *TextLiteral `xml:"defaultValue"`
@@ -42,7 +49,8 @@ type Field struct {
 		Active struct {
 			Text string `xml:",chardata"`
 		} `xml:"active"`
-		ErrorMessage *struct {
+		BooleanFilter *TextLiteral `xml:"booleanFilter"`
+		ErrorMessage  *struct {
 			Text string `xml:",innerxml"`
 		} `xml:"errorMessage"`
 		FilterItems []struct {
@@ -59,18 +67,20 @@ type Field struct {
 				Text string `xml:",chardata"`
 			} `xml:"valueField"`
 		} `xml:"filterItems"`
-		IsOptional struct {
+		InfoMessage *TextLiteral `xml:"infoMessage"`
+		IsOptional  struct {
 			Text string `xml:",chardata"`
 		} `xml:"isOptional"`
 	} `xml:"lookupFilter"`
-	Precision         *IntegerText `xml:"precision"`
-	Length            *IntegerText `xml:"length"`
-	ReferenceTo       *TextLiteral `xml:"referenceTo"`
-	RelationshipLabel *TextLiteral `xml:"relationshipLabel"`
-	RelationshipName  *TextLiteral `xml:"relationshipName"`
-	Required          *BooleanText `xml:"required"`
-	Scale             *IntegerText `xml:"scale"`
-	TrackFeedHistory  *struct {
+	Precision              *IntegerText `xml:"precision"`
+	Length                 *IntegerText `xml:"length"`
+	ReferenceTo            *TextLiteral `xml:"referenceTo"`
+	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
+	RelationshipName       *TextLiteral `xml:"relationshipName"`
+	Required               *BooleanText `xml:"required"`
+	Scale                  *IntegerText `xml:"scale"`
+	SecurityClassification *TextLiteral `xml:"securityClassification"`
+	TrackFeedHistory       *struct {
 		Text string `xml:",chardata"`
 	} `xml:"trackFeedHistory"`
 	SummarizedField *struct {
