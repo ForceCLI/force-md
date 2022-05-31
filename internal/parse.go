@@ -24,7 +24,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	dec.Strict = true
 
 	if err := dec.Decode(i); err != nil {
-		return errors.Wrap(err, "parsing xml")
+		return errors.Wrap(err, "parsing xml in "+path)
 	}
 	return nil
 }
