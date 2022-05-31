@@ -212,16 +212,10 @@ type RecordType struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	PicklistValues []struct {
-		Picklist struct {
-			Text string `xml:",chardata"`
-		} `xml:"picklist"`
-		Values []struct {
-			FullName struct {
-				Text string `xml:",chardata"`
-			} `xml:"fullName"`
-			Default struct {
-				Text string `xml:",chardata"`
-			} `xml:"default"`
+		Picklist string `xml:"picklist"`
+		Values   []struct {
+			FullName string      `xml:"fullName"`
+			Default  BooleanText `xml:"default"`
 		} `xml:"values"`
 	} `xml:"picklistValues"`
 }
