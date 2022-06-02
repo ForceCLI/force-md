@@ -16,11 +16,6 @@ import (
 )
 
 var (
-	externalId   bool
-	requiredOnly bool
-	withHistory  bool
-	withTrending bool
-	unique       bool
 	formulaField bool
 	fieldName    string
 	fieldType    string
@@ -29,11 +24,17 @@ var (
 )
 
 func init() {
-	listFieldsCmd.Flags().BoolVarP(&requiredOnly, "required", "r", false, "required fields only")
-	listFieldsCmd.Flags().BoolVarP(&withHistory, "history", "k", false, "with history tracking")
-	listFieldsCmd.Flags().BoolVarP(&withTrending, "trending", "d", false, "with trending tracking")
-	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "u", false, "formula fields only")
-	listFieldsCmd.Flags().BoolVarP(&externalId, "external-id", "x", false, "external id fields only")
+	listFieldsCmd.Flags().BoolP("required", "r", false, "required fields")
+	listFieldsCmd.Flags().BoolP("no-required", "R", false, "not required fields")
+	listFieldsCmd.Flags().BoolP("history-tracking", "k", false, "with history tracking")
+	listFieldsCmd.Flags().BoolP("no-history-tracking", "K", false, "without history tracking")
+	listFieldsCmd.Flags().BoolP("trending", "d", false, "with trending tracking")
+	listFieldsCmd.Flags().BoolP("no-trending", "D", false, "without trending tracking")
+	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "m", false, "formula fields only")
+	listFieldsCmd.Flags().BoolP("external-id", "x", false, "external id fields only")
+	listFieldsCmd.Flags().BoolP("no-external-id", "X", false, "non-external id fields only")
+	listFieldsCmd.Flags().BoolP("unique", "u", false, "unique fields only")
+	listFieldsCmd.Flags().BoolP("no-unique", "U", false, "non-unique fields only")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
 	listFieldsCmd.Flags().StringVarP(&references, "references", "L", "", "references object")
 
@@ -89,8 +90,9 @@ var listFieldsCmd = &cobra.Command{
 	Short: "List object fields",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		filterAttributes := setFields(cmd)
 		for _, file := range args {
-			listFields(file)
+			listFields(file, filterAttributes)
 		}
 	},
 }
@@ -113,7 +115,7 @@ var editFieldCmd = &cobra.Command{
 	Short: "Edit object fields",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fieldUpdates := fieldUpdates(cmd)
+		fieldUpdates := setFields(cmd)
 		for _, file := range args {
 			updateField(file, fieldUpdates)
 		}
@@ -161,7 +163,7 @@ var alwaysRequired map[string]bool = map[string]bool{
 	"OwnerId": true,
 }
 
-func listFields(file string) {
+func listFields(file string, attributes objects.Field) {
 	o, err := objects.Open(file)
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
@@ -169,32 +171,45 @@ func listFields(file string) {
 	}
 	objectName := strings.TrimSuffix(path.Base(file), ".object")
 	var filters []objects.FieldFilter
-	if requiredOnly {
-		filters = append(filters, func(f objects.Field) bool {
-			isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
-			isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
-			return isRequired || isMasterDetail
-		})
+	requiredFilter := func(f objects.Field) bool {
+		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
+		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
+		return isRequired || isMasterDetail
 	}
-	if withHistory {
-		filters = append(filters, func(f objects.Field) bool {
-			return f.TrackHistory.ToBool()
-		})
+	if attributes.Required.IsTrue() {
+		filters = append(filters, requiredFilter)
 	}
-	if withTrending {
-		filters = append(filters, func(f objects.Field) bool {
-			return f.TrackTrending.Text == "true"
-		})
+	if attributes.Required.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
+	}
+	if attributes.TrackHistory.IsTrue() {
+		fmt.Println("filtering for track history on")
+		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
+	}
+	if attributes.TrackHistory.IsFalse() {
+		fmt.Println("filtering for track history off")
+		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
+	}
+	if attributes.TrackTrending.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.TrackTrending.ToBool() })
+	}
+	if attributes.TrackTrending.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.TrackTrending.ToBool() })
 	}
 	if formulaField {
-		filters = append(filters, func(f objects.Field) bool {
-			return f.Formula != nil
-		})
+		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
 	}
-	if externalId {
-		filters = append(filters, func(f objects.Field) bool {
-			return f.ExternalId.ToBool()
-		})
+	if attributes.ExternalId.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.ExternalId.ToBool() })
+	}
+	if attributes.ExternalId.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.ExternalId.ToBool() })
+	}
+	if attributes.Unique.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.Unique.ToBool() })
+	}
+	if attributes.Unique.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
 	}
 	if fieldType != "" {
 		filters = append(filters, func(f objects.Field) bool {
@@ -315,12 +330,13 @@ func writeFields(file string, fieldsDir string) {
 	}
 }
 
-func fieldUpdates(cmd *cobra.Command) objects.Field {
+func setFields(cmd *cobra.Command) objects.Field {
 	field := objects.Field{}
 	field.Label = textValue(cmd, "label")
 	field.Unique = booleanTextValue(cmd, "unique")
 	field.ExternalId = booleanTextValue(cmd, "external-id")
 	field.TrackHistory = booleanTextValue(cmd, "history-tracking")
+	field.TrackTrending = booleanTextValue(cmd, "trending")
 	field.Required = booleanTextValue(cmd, "required")
 	field.Description = textValue(cmd, "description")
 	field.Type = textValue(cmd, "type")
