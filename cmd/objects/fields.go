@@ -183,11 +183,9 @@ func listFields(file string, attributes objects.Field) {
 		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
 	}
 	if attributes.TrackHistory.IsTrue() {
-		fmt.Println("filtering for track history on")
 		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackHistory.IsFalse() {
-		fmt.Println("filtering for track history off")
 		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackTrending.IsTrue() {
