@@ -91,7 +91,7 @@ func mergePermissions(file string, grant permissionset.PermissionSet) {
 		}
 	}
 	for _, v := range grant.PageAccesses {
-		err = p.AddPageAccess(v.ApexPage)
+		err = p.AddVisualforcePageAccess(v.ApexPage)
 		if err != nil && err != permissionset.VisualforcePageExistsError {
 			log.Warn(fmt.Sprintf("adding visualforce page %s failed for %s: %s", v.ApexPage, file, err.Error()))
 			return
