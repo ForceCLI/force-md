@@ -24,4 +24,5 @@ Manage Permission Sets
 * [force-md permissionset tab](force-md_permissionset_tab.md)	 - Manage tab visibility
 * [force-md permissionset tidy](force-md_permissionset_tidy.md)	 - Tidy Permission Set metadata
 * [force-md permissionset user-permissions](force-md_permissionset_user-permissions.md)	 - Manage user permissions
+* [force-md permissionset visualforce](force-md_permissionset_visualforce.md)	 - Manage visualforce page visibility
 
