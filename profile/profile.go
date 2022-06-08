@@ -34,6 +34,8 @@ type LayoutAssignmentList []LayoutAssignment
 
 type LoginFlowsList []LoginFlow
 
+type LoginIpRangeList []LoginIpRange
+
 type PageAccessList []PageAccess
 
 type RecordTypeVisibilityList []RecordTypeVisibility
@@ -74,6 +76,11 @@ type LoginFlow struct {
 	FriendlyName        string      `xml:"friendlyName"`
 	UILoginFlowType     string      `xml:"uiLoginFlowType"`
 	UseLightningRuntime BooleanText `xml:"useLightningRuntime"`
+}
+
+type LoginIpRange struct {
+	EndAddress   string `xml:"endAddress"`
+	StartAddress string `xml:"startAddress"`
 }
 
 type ApplicationVisibility struct {
@@ -139,6 +146,7 @@ type Profile struct {
 	} `xml:"flowAccesses"`
 	LayoutAssignments      LayoutAssignmentList     `xml:"layoutAssignments"`
 	LoginFlows             LoginFlowsList           `xml:"loginFlows"`
+	LoginIPRanges          LoginIpRangeList         `xml:"loginIpRanges"`
 	ObjectPermissions      ObjectPermissionsList    `xml:"objectPermissions"`
 	PageAccesses           PageAccessList           `xml:"pageAccesses"`
 	RecordTypeVisibilities RecordTypeVisibilityList `xml:"recordTypeVisibilities"`
