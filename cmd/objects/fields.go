@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"path"
-	"strconv"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -330,57 +329,20 @@ func writeFields(file string, fieldsDir string) {
 
 func setFields(cmd *cobra.Command) objects.Field {
 	field := objects.Field{}
-	field.Label = textValue(cmd, "label")
-	field.Unique = booleanTextValue(cmd, "unique")
-	field.ExternalId = booleanTextValue(cmd, "external-id")
-	field.TrackHistory = booleanTextValue(cmd, "history-tracking")
-	field.TrackTrending = booleanTextValue(cmd, "trending")
-	field.Required = booleanTextValue(cmd, "required")
-	field.Description = textValue(cmd, "description")
-	field.Type = textValue(cmd, "type")
-	field.InlineHelpText = textValue(cmd, "inline-help")
-	field.ReferenceTo = textValue(cmd, "references")
-	field.RelationshipName = textValue(cmd, "relationship-name")
-	field.DefaultValue = textValue(cmd, "default")
-	field.Precision = integerValue(cmd, "precision")
-	field.Scale = integerValue(cmd, "scale")
-	field.Length = integerValue(cmd, "length")
+	field.Label = TextValue(cmd, "label")
+	field.Unique = BooleanTextValue(cmd, "unique")
+	field.ExternalId = BooleanTextValue(cmd, "external-id")
+	field.TrackHistory = BooleanTextValue(cmd, "history-tracking")
+	field.TrackTrending = BooleanTextValue(cmd, "trending")
+	field.Required = BooleanTextValue(cmd, "required")
+	field.Description = TextValue(cmd, "description")
+	field.Type = TextValue(cmd, "type")
+	field.InlineHelpText = TextValue(cmd, "inline-help")
+	field.ReferenceTo = TextValue(cmd, "references")
+	field.RelationshipName = TextValue(cmd, "relationship-name")
+	field.DefaultValue = TextValue(cmd, "default")
+	field.Precision = IntegerValue(cmd, "precision")
+	field.Scale = IntegerValue(cmd, "scale")
+	field.Length = IntegerValue(cmd, "length")
 	return field
-}
-
-func textValue(cmd *cobra.Command, flag string) (t *objects.TextLiteral) {
-	if cmd.Flags().Changed(flag) {
-		val, _ := cmd.Flags().GetString(flag)
-		t = &objects.TextLiteral{
-			Text: val,
-		}
-	}
-	return t
-}
-
-func integerValue(cmd *cobra.Command, flag string) (t *IntegerText) {
-	if cmd.Flags().Changed(flag) {
-		val, _ := cmd.Flags().GetInt(flag)
-		t = &IntegerText{
-			Text: strconv.Itoa(val),
-		}
-	}
-	return t
-}
-
-func booleanTextValue(cmd *cobra.Command, flag string) (t *BooleanText) {
-	if cmd.Flags().Changed(flag) {
-		val, _ := cmd.Flags().GetBool(flag)
-		t = &BooleanText{
-			Text: strconv.FormatBool(val),
-		}
-	}
-	antiFlag := "no-" + flag
-	if cmd.Flags().Changed(antiFlag) {
-		val, _ := cmd.Flags().GetBool(antiFlag)
-		t = &BooleanText{
-			Text: strconv.FormatBool(!val),
-		}
-	}
-	return t
 }

@@ -4,6 +4,10 @@ import (
 	"strings"
 )
 
+type TextLiteral struct {
+	Text string `xml:",innerxml"`
+}
+
 var TrueText = BooleanText{
 	Text: "true",
 }

@@ -8,73 +8,41 @@ import (
 )
 
 type Recipient struct {
-	Field struct {
-		Text string `xml:",chardata"`
-	} `xml:"field"`
-	Type struct {
-		Text string `xml:",chardata"`
-	} `xml:"type"`
+	Field     *TextLiteral `xml:"field"`
 	Recipient struct {
 		Text string `xml:",chardata"`
 	} `xml:"recipient"`
+	Type struct {
+		Text string `xml:",chardata"`
+	} `xml:"type"`
 }
 
 type Alert struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Protected struct {
-		Text string `xml:",chardata"`
-	} `xml:"protected"`
-	Recipients []Recipient `xml:"recipients"`
-	SenderType struct {
-		Text string `xml:",chardata"`
-	} `xml:"senderType"`
-	Template struct {
-		Text string `xml:",chardata"`
-	} `xml:"template"`
+	FullName string `xml:"fullName"`
 	CcEmails []struct {
 		Text string `xml:",chardata"`
 	} `xml:"ccEmails"`
+	Description   *TextLiteral `xml:"description"`
+	Protected     *BooleanText `xml:"protected"`
+	Recipients    []Recipient  `xml:"recipients"`
+	SenderAddress *TextLiteral `xml:"senderAddress"`
+	SenderType    *TextLiteral `xml:"senderType"`
+	Template      *TextLiteral `xml:"template"`
 }
 
 type FieldUpdate struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
-	Field struct {
-		Text string `xml:",chardata"`
-	} `xml:"field"`
-	LookupValue struct {
-		Text string `xml:",chardata"`
-	} `xml:"lookupValue"`
-	LookupValueType struct {
-		Text string `xml:",chardata"`
-	} `xml:"lookupValueType"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
-	NotifyAssignee struct {
-		Text string `xml:",chardata"`
-	} `xml:"notifyAssignee"`
-	Operation struct {
-		Text string `xml:",chardata"`
-	} `xml:"operation"`
-	Protected struct {
-		Text string `xml:",chardata"`
-	} `xml:"protected"`
-	Formula struct {
-		Text string `xml:",chardata"`
-	} `xml:"formula"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	LiteralValue struct {
-		Text string `xml:",chardata"`
-	} `xml:"literalValue"`
+	FullName           TextLiteral  `xml:"fullName"`
+	Description        *TextLiteral `xml:"description"`
+	Field              TextLiteral  `xml:"field"`
+	Formula            *TextLiteral `xml:"formula"`
+	LiteralValue       *TextLiteral `xml:"literalValue"`
+	LookupValue        *TextLiteral `xml:"lookupValue"`
+	LookupValueType    *TextLiteral `xml:"lookupValueType"`
+	Name               TextLiteral  `xml:"name"`
+	NotifyAssignee     *BooleanText `xml:"notifyAssignee"`
+	Operation          *TextLiteral `xml:"operation"`
+	Protected          *BooleanText `xml:"protected"`
+	ReevaluateOnChange *BooleanText `xml:"reevaluateOnChange"`
 }
 
 type Rule struct {
@@ -89,7 +57,8 @@ type Rule struct {
 			Text string `xml:",chardata"`
 		} `xml:"type"`
 	} `xml:"actions"`
-	Active        BooleanText `xml:"active"`
+	Active        BooleanText  `xml:"active"`
+	BooleanFilter *TextLiteral `xml:"booleanFilter"`
 	CriteriaItems []struct {
 		Field struct {
 			Text string `xml:",chardata"`
@@ -97,23 +66,12 @@ type Rule struct {
 		Operation struct {
 			Text string `xml:",chardata"`
 		} `xml:"operation"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
+		Value *TextLiteral `xml:"value"`
 	} `xml:"criteriaItems"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	TriggerType struct {
-		Text string `xml:",chardata"`
-	} `xml:"triggerType"`
-	Formula struct {
-		Text string `xml:",chardata"`
-	} `xml:"formula"`
-	BooleanFilter struct {
-		Text string `xml:",chardata"`
-	} `xml:"booleanFilter"`
-	WorkflowTimeTriggers struct {
+	Description          *TextLiteral `xml:"description"`
+	Formula              *TextLiteral `xml:"formula"`
+	TriggerType          *TextLiteral `xml:"triggerType"`
+	WorkflowTimeTriggers *struct {
 		Actions struct {
 			Name struct {
 				Text string `xml:",chardata"`
@@ -137,9 +95,9 @@ type Rule struct {
 type Workflow struct {
 	XMLName      xml.Name      `xml:"Workflow"`
 	Xmlns        string        `xml:"xmlns,attr"`
+	Alerts       []Alert       `xml:"alerts"`
 	FieldUpdates []FieldUpdate `xml:"fieldUpdates"`
 	Rules        []Rule        `xml:"rules"`
-	Alerts       []Alert       `xml:"alerts"`
 }
 
 func (p *Workflow) MetaCheck() {}
