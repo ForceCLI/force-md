@@ -7,10 +7,6 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
-type TextLiteral struct {
-	Text string `xml:",innerxml"`
-}
-
 type FieldList []Field
 
 type CustomField struct {
