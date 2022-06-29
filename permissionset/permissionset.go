@@ -95,19 +95,19 @@ type ApplicationVisibilityList []ApplicationVisibility
 type PermissionSet struct {
 	XMLName                 xml.Name                  `xml:"PermissionSet"`
 	Xmlns                   string                    `xml:"xmlns,attr"`
+	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
 	ClassAccesses           ApexClassList             `xml:"classAccesses"`
+	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
 	Description             *Description              `xml:"description"`
 	FieldPermissions        FieldPermissionsList      `xml:"fieldPermissions"`
 	HasActivationRequired   BooleanText               `xml:"hasActivationRequired"`
 	Label                   string                    `xml:"label"`
+	License                 *License                  `xml:"license"`
 	ObjectPermissions       ObjectPermissionsList     `xml:"objectPermissions"`
 	PageAccesses            PageAccessList            `xml:"pageAccesses"`
-	License                 *License                  `xml:"license"`
-	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
-	UserPermissions         UserPermissionList        `xml:"userPermissions"`
-	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
 	RecordTypeVisibilities  RecordTypeList            `xml:"recordTypeVisibilities"`
 	TabSettings             TabSettingsList           `xml:"tabSettings"`
+	UserPermissions         UserPermissionList        `xml:"userPermissions"`
 }
 
 func (p *PermissionSet) MetaCheck() {}
