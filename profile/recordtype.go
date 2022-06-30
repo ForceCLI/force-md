@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
@@ -51,6 +52,11 @@ func (p *Profile) CloneRecordType(src, dest string) error {
 }
 
 func (p *Profile) DeleteRecordType(recordtype string) error {
+	bits := strings.SplitN(recordtype, ".", 2)
+	if len(bits) != 2 {
+		return errors.New("record type should be ObjectName.RecordTypeName")
+	}
+	objectName := bits[0]
 	found := false
 	newPerms := p.RecordTypeVisibilities[:0]
 	for _, f := range p.RecordTypeVisibilities {
@@ -64,6 +70,7 @@ func (p *Profile) DeleteRecordType(recordtype string) error {
 		return errors.New("record type not found")
 	}
 	p.RecordTypeVisibilities = newPerms
+	p.DeleteObjectRecordTypeLayoutAssignments(objectName, recordtype)
 	return nil
 }
 
