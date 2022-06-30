@@ -102,6 +102,17 @@ func (p *Profile) DeleteObjectLayoutAssignments(objectName string) {
 	p.LayoutAssignments = newLayouts
 }
 
+func (p *Profile) DeleteObjectRecordTypeLayoutAssignments(objectName, recordType string) {
+	layoutPrefix := objectName + "-"
+	newLayouts := p.LayoutAssignments[:0]
+	for _, f := range p.LayoutAssignments {
+		if f.RecordType == nil || !strings.HasPrefix(f.Layout, layoutPrefix) || strings.ToLower(recordType) != strings.ToLower(f.RecordType.Text) {
+			newLayouts = append(newLayouts, f)
+		}
+	}
+	p.LayoutAssignments = newLayouts
+}
+
 func (p *Profile) DeleteObjectTabVisibility(objectName string) {
 	tabPrefix := objectName + "-"
 	newTabs := p.TabVisibilities[:0]
