@@ -44,6 +44,19 @@ func init() {
 	showObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	showObjectCmd.MarkFlagRequired("object")
 
+	listObjectsCmd.Flags().BoolP("create", "c", false, "has create")
+	listObjectsCmd.Flags().BoolP("delete", "d", false, "has delete")
+	listObjectsCmd.Flags().BoolP("edit", "e", false, "has edit")
+	listObjectsCmd.Flags().BoolP("read", "r", false, "has read")
+	listObjectsCmd.Flags().BoolP("modify-all", "m", false, "has modify all")
+	listObjectsCmd.Flags().BoolP("view-all", "v", false, "has view all")
+	listObjectsCmd.Flags().BoolP("no-create", "C", false, "does not have create")
+	listObjectsCmd.Flags().BoolP("no-delete", "D", false, "does not have delete")
+	listObjectsCmd.Flags().BoolP("no-edit", "E", false, "does not have edit")
+	listObjectsCmd.Flags().BoolP("no-read", "R", false, "does not have read")
+	listObjectsCmd.Flags().BoolP("no-modify-all", "M", false, "does not have modify all")
+	listObjectsCmd.Flags().BoolP("no-view-all", "V", false, "does not have view all")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
 	ObjectPermissionsCmd.AddCommand(showObjectCmd)
@@ -110,8 +123,9 @@ var listObjectsCmd = &cobra.Command{
 	Args:                  cobra.MinimumNArgs(1),
 	DisableFlagsInUseLine: true,
 	Run: func(cmd *cobra.Command, args []string) {
+		perms := objectPermissionsFromFlags(cmd)
 		for _, file := range args {
-			listObjectPermissions(file)
+			listObjectPermissions(file, perms)
 		}
 	},
 }
@@ -134,6 +148,17 @@ func textValue(cmd *cobra.Command, flag string) (t BooleanText) {
 }
 
 func objectPermissionsToUpdate(cmd *cobra.Command) permissionset.ObjectPermissions {
+	perms := permissionset.ObjectPermissions{}
+	perms.AllowCreate = textValue(cmd, "create")
+	perms.AllowDelete = textValue(cmd, "delete")
+	perms.AllowEdit = textValue(cmd, "edit")
+	perms.AllowRead = textValue(cmd, "read")
+	perms.ModifyAllRecords = textValue(cmd, "modify-all")
+	perms.ViewAllRecords = textValue(cmd, "view-all")
+	return perms
+}
+
+func objectPermissionsFromFlags(cmd *cobra.Command) permissionset.ObjectPermissions {
 	perms := permissionset.ObjectPermissions{}
 	perms.AllowCreate = textValue(cmd, "create")
 	perms.AllowDelete = textValue(cmd, "delete")
@@ -194,19 +219,54 @@ func deleteObjectPermissions(file string, objectName string) {
 	}
 }
 
-func listObjectPermissions(file string) {
+func listObjectPermissions(file string, filter permissionset.ObjectPermissions) {
 	p, err := permissionset.Open(file)
 	if err != nil {
 		log.Warn("parsing permission set failed: " + err.Error())
 		return
 	}
-	objects := p.GetObjectPermissions()
-	if len(objects) == 0 {
-		log.Warn(fmt.Sprintf("no object permissions found in %s", file))
-		return
+	flagFilter := func(o permissionset.ObjectPermissions) bool {
+		if filter.AllowCreate.Text != "" && filter.AllowCreate.ToBool() != o.AllowCreate.ToBool() {
+			return false
+		}
+		if filter.AllowRead.Text != "" && filter.AllowRead.ToBool() != o.AllowRead.ToBool() {
+			return false
+		}
+		if filter.AllowEdit.Text != "" && filter.AllowEdit.ToBool() != o.AllowEdit.ToBool() {
+			return false
+		}
+		if filter.AllowDelete.Text != "" && filter.AllowDelete.ToBool() != o.AllowDelete.ToBool() {
+			return false
+		}
+		if filter.ViewAllRecords.Text != "" && filter.ViewAllRecords.ToBool() != o.ViewAllRecords.ToBool() {
+			return false
+		}
+		if filter.ModifyAllRecords.Text != "" && filter.ModifyAllRecords.ToBool() != o.ModifyAllRecords.ToBool() {
+			return false
+		}
+		return true
 	}
+	objects := p.GetObjectPermissions(flagFilter)
 	for _, o := range objects {
-		fmt.Println(o.Object.Text)
+		perms := ""
+		if o.AllowCreate.ToBool() {
+			perms += "c"
+		}
+		if o.ViewAllRecords.ToBool() {
+			perms += "R"
+		} else if o.AllowRead.ToBool() {
+			perms += "r"
+		}
+		if o.ModifyAllRecords.ToBool() {
+			perms += "U"
+		} else if o.AllowEdit.ToBool() {
+			perms += "u"
+		}
+		if o.AllowDelete.ToBool() {
+			perms += "d"
+		}
+
+		fmt.Printf("%s: %s\n", o.Object.Text, perms)
 	}
 }
 

@@ -13,7 +13,19 @@ force-md permissionset object-permissions list [filename]...
 ### Options
 
 ```
-  -h, --help   help for list
+  -c, --create          has create
+  -d, --delete          has delete
+  -e, --edit            has edit
+  -h, --help            help for list
+  -m, --modify-all      has modify all
+  -C, --no-create       does not have create
+  -D, --no-delete       does not have delete
+  -E, --no-edit         does not have edit
+  -M, --no-modify-all   does not have modify all
+  -R, --no-read         does not have read
+  -V, --no-view-all     does not have view all
+  -r, --read            has read
+  -v, --view-all        has view all
 ```
 
 ### SEE ALSO
