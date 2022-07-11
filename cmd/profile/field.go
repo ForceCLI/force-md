@@ -24,6 +24,8 @@ func init() {
 	editFieldCmd.MarkFlagRequired("field")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	addFieldCmd.Flags().BoolP("edit", "e", false, "allow edit")
+	addFieldCmd.Flags().BoolP("read", "r", false, "allow read")
 	addFieldCmd.MarkFlagRequired("field")
 
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -77,8 +79,10 @@ var addFieldCmd = &cobra.Command{
 	Long:  "Add field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		perms := fieldPermissionsToUpdate(cmd)
 		for _, file := range args {
 			addFieldPermissions(file)
+			updateFieldPermissions(file, perms)
 		}
 	},
 }
