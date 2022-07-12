@@ -98,6 +98,7 @@ func editLayout(file string, object, layout string, recordType string) {
 	}
 	if recordType != "" {
 		recordType = strings.TrimPrefix(recordType, object+".")
+		layout = strings.TrimPrefix(layout, object+"-")
 		p.SetObjectLayoutForRecordType(object, layout, recordType)
 	} else {
 		p.SetObjectLayout(object, layout)
