@@ -73,5 +73,18 @@ func (p *CustomObject) DeleteField(fieldName string) error {
 		return errors.New("field not found")
 	}
 	p.Fields = newFields
+	p.DeleteFieldPicklistValues(fieldName)
 	return nil
+}
+
+func (p *CustomObject) DeleteFieldPicklistValues(fieldName string) {
+	for i, f := range p.RecordTypes {
+		newPicklistValues := f.PicklistValues[:0]
+		for _, p := range f.PicklistValues {
+			if p.Picklist != fieldName {
+				newPicklistValues = append(newPicklistValues, p)
+			}
+		}
+		p.RecordTypes[i].PicklistValues = newPicklistValues
+	}
 }
