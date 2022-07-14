@@ -13,7 +13,9 @@ force-md objects recordtype picklist table [flags] [filename]...
 ### Options
 
 ```
-  -h, --help   help for table
+  -f, --field string        field name
+  -h, --help                help for table
+  -r, --recordtype string   record type
 ```
 
 ### SEE ALSO

@@ -14,10 +14,16 @@ import (
 	"github.com/octoberswimmer/force-md/objects"
 )
 
+var (
+	recordType string
+)
+
 func init() {
 	RecordTypeCmd.AddCommand(listRecordTypesCmd)
 	RecordTypeCmd.AddCommand(recordtypePicklistCmd)
 
+	recordtypePicklistTableCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	recordtypePicklistTableCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
 	recordtypePicklistCmd.AddCommand(recordtypePicklistTableCmd)
 }
 
@@ -81,10 +87,16 @@ func tableRecordTypePicklistOptions(file string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Record Type", "Field", "Value", "Default"})
 	table.SetAutoMergeCells(true)
-	table.SetAutoMergeCellsByColumnIndex([]int{1})
+	table.SetAutoMergeCellsByColumnIndex([]int{0, 1})
 	table.SetRowLine(true)
 	for _, r := range recordTypes {
+		if recordType != "" && strings.ToLower(r.FullName) != strings.ToLower(recordType) {
+			continue
+		}
 		for _, p := range r.PicklistValues {
+			if fieldName != "" && strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
+				continue
+			}
 			for _, v := range p.Values {
 				if s, err := url.QueryUnescape(v.FullName); err == nil {
 					table.Append([]string{r.FullName, objectName + "." + p.Picklist, s, v.Default.Text})
