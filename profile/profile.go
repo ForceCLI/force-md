@@ -144,8 +144,11 @@ type Profile struct {
 			Text string `xml:",chardata"`
 		} `xml:"flow"`
 	} `xml:"flowAccesses"`
-	LayoutAssignments      LayoutAssignmentList     `xml:"layoutAssignments"`
-	LoginFlows             LoginFlowsList           `xml:"loginFlows"`
+	LayoutAssignments LayoutAssignmentList `xml:"layoutAssignments"`
+	LoginFlows        LoginFlowsList       `xml:"loginFlows"`
+	LoginHours        *struct {
+		Text string `xml:",chardata"`
+	} `xml:"loginHours"`
 	LoginIPRanges          LoginIpRangeList         `xml:"loginIpRanges"`
 	ObjectPermissions      ObjectPermissionsList    `xml:"objectPermissions"`
 	PageAccesses           PageAccessList           `xml:"pageAccesses"`

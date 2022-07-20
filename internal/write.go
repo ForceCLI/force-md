@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/pkg/errors"
 )
@@ -22,6 +23,7 @@ func WriteToFile(t interface{}, fileName string) error {
 	if err != nil {
 		return errors.Wrap(err, "serializing metadata")
 	}
+	b = selfClosing(b)
 	b = htmlEntities(b)
 	if _, err = f.Write(b); err != nil {
 		return errors.Wrap(err, "writing xml")
@@ -32,4 +34,10 @@ func WriteToFile(t interface{}, fileName string) error {
 
 func htmlEntities(b []byte) []byte {
 	return bytes.ReplaceAll(b, []byte("&39;"), []byte("&apos;"))
+}
+
+// Make empty tags self-closing
+func selfClosing(b []byte) []byte {
+	emptyTag := regexp.MustCompile(`(?:</?(\w+)>){2}`)
+	return emptyTag.ReplaceAll(b, []byte(`<$1/>`))
 }
