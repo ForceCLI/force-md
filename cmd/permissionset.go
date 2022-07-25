@@ -16,6 +16,7 @@ func init() {
 	permissionSetCmd.AddCommand(permissionset.ObjectPermissionsCmd)
 	permissionSetCmd.AddCommand(permissionset.UserPermissionsCmd)
 	permissionSetCmd.AddCommand(permissionset.CustomPermissionsCmd)
+	permissionSetCmd.AddCommand(permissionset.ApplicationCmd)
 	permissionSetCmd.AddCommand(permissionset.MergeCmd)
 	RootCmd.AddCommand(permissionSetCmd)
 }
