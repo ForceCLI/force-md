@@ -15,11 +15,13 @@ import (
 )
 
 var (
-	formulaField bool
-	fieldName    string
-	fieldType    string
-	references   string
-	fieldsDir    string
+	formulaField   bool
+	filteredLookup bool
+	fieldName      string
+	fieldType      string
+	references     string
+	fieldsDir      string
+	label          string
 )
 
 func init() {
@@ -30,11 +32,13 @@ func init() {
 	listFieldsCmd.Flags().BoolP("trending", "d", false, "with trending tracking")
 	listFieldsCmd.Flags().BoolP("no-trending", "D", false, "without trending tracking")
 	listFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "m", false, "formula fields only")
+	listFieldsCmd.Flags().BoolVarP(&filteredLookup, "filtered-lookup", "f", false, "filtered lookup fields only")
 	listFieldsCmd.Flags().BoolP("external-id", "x", false, "external id fields only")
 	listFieldsCmd.Flags().BoolP("no-external-id", "X", false, "non-external id fields only")
 	listFieldsCmd.Flags().BoolP("unique", "u", false, "unique fields only")
 	listFieldsCmd.Flags().BoolP("no-unique", "U", false, "non-unique fields only")
 	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
+	listFieldsCmd.Flags().StringVarP(&label, "label", "l", "", "label")
 	listFieldsCmd.Flags().StringVarP(&references, "references", "L", "", "references object")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
@@ -196,6 +200,9 @@ func listFields(file string, attributes objects.Field) {
 	if formulaField {
 		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
 	}
+	if filteredLookup {
+		filters = append(filters, func(f objects.Field) bool { return f.LookupFilter != nil })
+	}
 	if attributes.ExternalId.IsTrue() {
 		filters = append(filters, func(f objects.Field) bool { return f.ExternalId.ToBool() })
 	}
@@ -218,6 +225,12 @@ func listFields(file string, attributes objects.Field) {
 		filters = append(filters, func(f objects.Field) bool {
 			r := strings.ToLower(references)
 			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
+		})
+	}
+	if label != "" {
+		filters = append(filters, func(f objects.Field) bool {
+			l := strings.ToLower(label)
+			return f.Label != nil && strings.ToLower(f.Label.Text) == l
 		})
 	}
 	fields := o.GetFields(filters...)
