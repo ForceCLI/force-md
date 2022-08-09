@@ -11,6 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/octoberswimmer/force-md/internal"
 	"github.com/octoberswimmer/force-md/objects"
 )
 
@@ -19,6 +20,9 @@ var (
 )
 
 func init() {
+	deleteRecordTypeCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
+
+	RecordTypeCmd.AddCommand(deleteRecordTypeCmd)
 	RecordTypeCmd.AddCommand(listRecordTypesCmd)
 	RecordTypeCmd.AddCommand(recordtypePicklistCmd)
 
@@ -62,6 +66,17 @@ var listRecordTypesCmd = &cobra.Command{
 	},
 }
 
+var deleteRecordTypeCmd = &cobra.Command{
+	Use:   "delete [flags] [filename]...",
+	Short: "Delete object record type",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			deleteRecordType(file)
+		}
+	},
+}
+
 func listRecordType(file string) {
 	o, err := objects.Open(file)
 	if err != nil {
@@ -72,6 +87,25 @@ func listRecordType(file string) {
 	recordTypes := o.GetRecordTypes()
 	for _, f := range recordTypes {
 		fmt.Printf("%s.%s\n", objectName, f.FullName)
+	}
+}
+
+func deleteRecordType(file string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	err = o.DeleteRecordType(strings.TrimPrefix(recordType, objectName+"."))
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }
 
