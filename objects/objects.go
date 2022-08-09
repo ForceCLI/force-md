@@ -201,6 +201,9 @@ type RecordType struct {
 	Active   struct {
 		Text string `xml:",chardata"`
 	} `xml:"active"`
+	CompactLayoutAssignment *struct {
+		Text string `xml:",chardata"`
+	} `xml:"compactLayoutAssignment"`
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
