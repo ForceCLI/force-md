@@ -74,6 +74,7 @@ func (p *CustomObject) DeleteField(fieldName string) error {
 	}
 	p.Fields = newFields
 	p.DeleteFieldPicklistValues(fieldName)
+	p.DeleteFieldFromCompactLayouts(fieldName)
 	return nil
 }
 
@@ -86,5 +87,17 @@ func (p *CustomObject) DeleteFieldPicklistValues(fieldName string) {
 			}
 		}
 		p.RecordTypes[i].PicklistValues = newPicklistValues
+	}
+}
+
+func (p *CustomObject) DeleteFieldFromCompactLayouts(fieldName string) {
+	for i, f := range p.CompactLayouts {
+		newFields := f.Fields[:0]
+		for _, p := range f.Fields {
+			if strings.ToLower(p.Text) != strings.ToLower(fieldName) {
+				newFields = append(newFields, p)
+			}
+		}
+		p.CompactLayouts[i].Fields = newFields
 	}
 }

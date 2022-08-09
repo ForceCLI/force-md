@@ -351,12 +351,12 @@ type CustomObject struct {
 		} `xml:"language"`
 	} `xml:"listViews"`
 	NameField *struct {
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
 		DisplayFormat *struct {
 			Text string `xml:",chardata"`
 		} `xml:"displayFormat"`
+		Label struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
 		TrackHistory *struct {
 			Text string `xml:",chardata"`
 		} `xml:"trackHistory"`
