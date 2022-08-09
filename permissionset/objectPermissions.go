@@ -89,7 +89,7 @@ func (p *PermissionSet) DeleteObjectFieldPermissions(objectName string) {
 func (p *PermissionSet) DeleteObjectTabVisibility(objectName string) {
 	newTabs := p.TabSettings[:0]
 	for _, f := range p.TabSettings {
-		if f.Tab == objectName {
+		if f.Tab != objectName {
 			newTabs = append(newTabs, f)
 		}
 	}
