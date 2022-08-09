@@ -14,9 +14,11 @@ force-md objects fields list [flags] [filename]...
 
 ```
   -x, --external-id           external id fields only
+  -f, --filtered-lookup       filtered lookup fields only
   -m, --formula               formula fields only
   -h, --help                  help for list
   -k, --history-tracking      with history tracking
+  -l, --label string          label
   -X, --no-external-id        non-external id fields only
   -K, --no-history-tracking   without history tracking
   -R, --no-required           not required fields

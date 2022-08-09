@@ -7,13 +7,14 @@ Delete page layout assignment
 Delete page layout assignment for object from profiles
 
 ```
-force-md profile layout delete -o SObject [filename]...
+force-md profile layout delete -o SObject [filename]... [flags]
 ```
 
 ### Options
 
 ```
   -h, --help            help for delete
+  -l, --layout string   layout name
   -o, --object string   object name
 ```
 

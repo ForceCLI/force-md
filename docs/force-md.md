@@ -27,5 +27,6 @@ force-md
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules
+* [force-md standardvalueset](force-md_standardvalueset.md)	 - Manage Standard Value Sets
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow
 
