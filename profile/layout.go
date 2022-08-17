@@ -38,6 +38,7 @@ func (p *Profile) SetObjectLayout(objectName, layoutName string) {
 
 func (p *Profile) SetObjectLayoutForRecordType(objectName, layoutName, recordType string) {
 	layoutPrefix := objectName + "-"
+	recordType = strings.TrimPrefix(recordType, objectName+".")
 	fullRecordTypeName := objectName + "." + recordType
 	for i, f := range p.LayoutAssignments {
 		if strings.HasPrefix(f.Layout, layoutPrefix) && f.RecordType != nil && f.RecordType.Text == fullRecordTypeName {
