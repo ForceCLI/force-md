@@ -11,6 +11,8 @@ import (
 
 var FieldExistsError = errors.New("field already exists")
 
+type FieldFilter func(FieldPermissions) bool
+
 func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
@@ -57,8 +59,18 @@ func (p *Profile) AddFieldPermissions(fieldName string) error {
 	return nil
 }
 
-func (p *Profile) GetFieldPermissions() FieldPermissionsList {
-	return p.FieldPermissions
+func (p *Profile) GetFieldPermissions(filters ...FieldFilter) FieldPermissionsList {
+	var fieldPermissions FieldPermissionsList
+FIELDS:
+	for _, f := range p.FieldPermissions {
+		for _, filter := range filters {
+			if !filter(f) {
+				continue FIELDS
+			}
+		}
+		fieldPermissions = append(fieldPermissions, f)
+	}
+	return fieldPermissions
 }
 
 func defaultFieldPermissions(fieldName string) FieldPermissions {

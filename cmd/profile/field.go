@@ -2,8 +2,11 @@ package profile
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -36,11 +39,14 @@ func init() {
 	cloneCmd.MarkFlagRequired("source")
 	cloneCmd.MarkFlagRequired("field")
 
+	tableFieldsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
 	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
 	FieldPermissionsCmd.AddCommand(listFieldsCmd)
 	FieldPermissionsCmd.AddCommand(cloneCmd)
+	FieldPermissionsCmd.AddCommand(tableFieldsCmd)
 }
 
 var FieldPermissionsCmd = &cobra.Command{
@@ -108,6 +114,15 @@ var listFieldsCmd = &cobra.Command{
 		for _, file := range args {
 			listFields(file)
 		}
+	},
+}
+
+var tableFieldsCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Field Permissions in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		tableFieldPermissions(args)
 	},
 }
 
@@ -210,5 +225,39 @@ func listFields(file string) {
 			permsString = strings.Join(perms, "-")
 		}
 		fmt.Printf("%s: %s\n", a.Field.Text, permsString)
+	}
+}
+
+func tableFieldPermissions(files []string) {
+	var filters []profile.FieldFilter
+	if fieldName != "" {
+		filters = append(filters, func(f profile.FieldPermissions) bool {
+			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
+		})
+	}
+	type perm struct {
+		fields  profile.FieldPermissionsList
+		profile string
+	}
+	var perms []perm
+	for _, file := range files {
+		p, err := profile.Open(file)
+		if err != nil {
+			log.Warn("parsing profile failed: " + err.Error())
+			return
+		}
+		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		perms = append(perms, perm{fields: p.GetFieldPermissions(filters...), profile: profileName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Field", "Readable", "Editable"})
+	table.SetRowLine(true)
+	for _, perm := range perms {
+		for _, f := range perm.fields {
+			table.Append([]string{perm.profile, f.Field.Text, f.Readable.Text, f.Editable.Text})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
 	}
 }
