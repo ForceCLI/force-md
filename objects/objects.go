@@ -25,6 +25,7 @@ type Field struct {
 	DeleteConstraint *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deleteConstraint"`
+	Deprecated    *TextLiteral `xml:"deprecated"`
 	Description   *TextLiteral `xml:"description"`
 	DisplayFormat *struct {
 		Text string `xml:",chardata"`
@@ -70,6 +71,8 @@ type Field struct {
 	} `xml:"lookupFilter"`
 	Precision              *IntegerText `xml:"precision"`
 	Length                 *IntegerText `xml:"length"`
+	MaskChar               *TextLiteral `xml:"maskChar"`
+	MaskType               *TextLiteral `xml:"maskType"`
 	ReferenceTo            *TextLiteral `xml:"referenceTo"`
 	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
 	RelationshipName       *TextLiteral `xml:"relationshipName"`
@@ -261,6 +264,9 @@ type CustomObject struct {
 	DeploymentStatus *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deploymentStatus"`
+	Deprecated *struct {
+		Text string `xml:",chardata"`
+	} `xml:"deprecated"`
 	Description *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"description"`
@@ -332,7 +338,7 @@ type CustomObject struct {
 		Queue *struct {
 			Text string `xml:",chardata"`
 		} `xml:"queue"`
-		SharedTo struct {
+		SharedTo *struct {
 			Group []struct {
 				Text string `xml:",chardata"`
 			} `xml:"group"`
@@ -494,9 +500,6 @@ type CustomObject struct {
 	StartsWith *struct {
 		Text string `xml:",chardata"`
 	} `xml:"startsWith"`
-	Deprecated *struct {
-		Text string `xml:",chardata"`
-	} `xml:"deprecated"`
 }
 
 func (p *CustomObject) MetaCheck() {}
