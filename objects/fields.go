@@ -1,10 +1,13 @@
 package objects
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
+
+	. "github.com/octoberswimmer/force-md/general"
 )
 
 type FieldFilter func(Field) bool
@@ -88,6 +91,35 @@ func (p *CustomObject) DeleteFieldPicklistValues(fieldName string) {
 		}
 		p.RecordTypes[i].PicklistValues = newPicklistValues
 	}
+}
+
+func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string, picklistValue string) error {
+	fmt.Println("trying to add", picklistValue, "to", fieldName, "for record type", recordType)
+	found := false
+	for i, f := range o.RecordTypes {
+		if strings.ToLower(f.FullName) != strings.ToLower(recordType) {
+			continue
+		}
+		for j, p := range f.PicklistValues {
+			if strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
+				continue
+			}
+			for _, v := range p.Values {
+				if strings.ToLower(v.FullName) == strings.ToLower(picklistValue) {
+					return errors.New("value already exists")
+				}
+			}
+			found = true
+			o.RecordTypes[i].PicklistValues[j].Values = append(o.RecordTypes[i].PicklistValues[j].Values, ValueSetOption{
+				FullName: picklistValue,
+				Default:  FalseText,
+			})
+		}
+	}
+	if !found {
+		return errors.New("field not found")
+	}
+	return nil
 }
 
 func (p *CustomObject) DeleteFieldFromCompactLayouts(fieldName string) {

@@ -199,6 +199,11 @@ type FieldSet struct {
 	} `xml:"label"`
 }
 
+type ValueSetOption struct {
+	FullName string      `xml:"fullName"`
+	Default  BooleanText `xml:"default"`
+}
+
 type RecordType struct {
 	FullName string `xml:"fullName"`
 	Active   struct {
@@ -214,11 +219,8 @@ type RecordType struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	PicklistValues []struct {
-		Picklist string `xml:"picklist"`
-		Values   []struct {
-			FullName string      `xml:"fullName"`
-			Default  BooleanText `xml:"default"`
-		} `xml:"values"`
+		Picklist string           `xml:"picklist"`
+		Values   []ValueSetOption `xml:"values"`
 	} `xml:"picklistValues"`
 }
 type CustomObject struct {
@@ -384,6 +386,9 @@ type CustomObject struct {
 		CustomTabListAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"customTabListAdditionalFields"`
+		ExcludedStandardButtons []struct {
+			Text string `xml:",chardata"`
+		} `xml:"excludedStandardButtons"`
 		ListViewButtons []struct {
 			Text string `xml:",chardata"`
 		} `xml:"listViewButtons"`
@@ -399,9 +404,6 @@ type CustomObject struct {
 		SearchResultsAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"searchResultsAdditionalFields"`
-		ExcludedStandardButtons []struct {
-			Text string `xml:",chardata"`
-		} `xml:"excludedStandardButtons"`
 	} `xml:"searchLayouts"`
 	SharingModel struct {
 		Text string `xml:",chardata"`
