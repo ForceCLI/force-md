@@ -16,19 +16,30 @@ import (
 )
 
 var (
-	recordType string
+	recordTypeName string
+	picklistValue  string
 )
 
 func init() {
-	deleteRecordTypeCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
+	deleteRecordTypeCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
 
 	RecordTypeCmd.AddCommand(deleteRecordTypeCmd)
 	RecordTypeCmd.AddCommand(listRecordTypesCmd)
 	RecordTypeCmd.AddCommand(recordtypePicklistCmd)
 
 	recordtypePicklistTableCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
-	recordtypePicklistTableCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
+	recordtypePicklistTableCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
+
+	recordtypePicklistAddCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	recordtypePicklistAddCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
+	recordtypePicklistAddCmd.Flags().StringVarP(&picklistValue, "value", "v", "", "picklist value")
+
+	recordtypePicklistAddCmd.MarkFlagRequired("field")
+	recordtypePicklistAddCmd.MarkFlagRequired("recordtype")
+	recordtypePicklistAddCmd.MarkFlagRequired("value")
+
 	recordtypePicklistCmd.AddCommand(recordtypePicklistTableCmd)
+	recordtypePicklistCmd.AddCommand(recordtypePicklistAddCmd)
 }
 
 var RecordTypeCmd = &cobra.Command{
@@ -50,6 +61,17 @@ var recordtypePicklistTableCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			tableRecordTypePicklistOptions(file)
+		}
+	},
+}
+
+var recordtypePicklistAddCmd = &cobra.Command{
+	Use:   "add [flags] [filename]...",
+	Short: "Assign picklist value to record type",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			assignPicklistValueToRecordType(file)
 		}
 	},
 }
@@ -97,7 +119,29 @@ func deleteRecordType(file string) {
 		return
 	}
 	objectName := strings.TrimSuffix(path.Base(file), ".object")
-	err = o.DeleteRecordType(strings.TrimPrefix(recordType, objectName+"."))
+	err = o.DeleteRecordType(strings.TrimPrefix(recordTypeName, objectName+"."))
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func assignPicklistValueToRecordType(file string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	field := strings.TrimPrefix(fieldName, objectName+".")
+	recordType := strings.TrimPrefix(recordTypeName, objectName+".")
+
+	err = o.AddFieldPicklistValue(field, recordType, picklistValue)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
@@ -124,7 +168,7 @@ func tableRecordTypePicklistOptions(file string) {
 	table.SetAutoMergeCellsByColumnIndex([]int{0, 1})
 	table.SetRowLine(true)
 	for _, r := range recordTypes {
-		if recordType != "" && strings.ToLower(r.FullName) != strings.ToLower(recordType) {
+		if recordTypeName != "" && strings.ToLower(r.FullName) != strings.ToLower(recordTypeName) {
 			continue
 		}
 		for _, p := range r.PicklistValues {
