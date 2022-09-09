@@ -4,12 +4,20 @@ import (
 	"fmt"
 	"os"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/spf13/cobra"
 )
 
 var (
 	version = "0.7"
+	silent  bool
 )
+
+func init() {
+	cobra.OnInitialize(globalConfig)
+	RootCmd.PersistentFlags().BoolVarP(&silent, "silent", "", false, "show errors only")
+}
 
 var RootCmd = &cobra.Command{
 	Use:   "force-md",
@@ -19,6 +27,12 @@ var RootCmd = &cobra.Command{
 		os.Exit(1)
 	},
 	DisableFlagsInUseLine: true,
+}
+
+func globalConfig() {
+	if silent {
+		log.SetLevel(log.ErrorLevel)
+	}
 }
 
 func Execute() {
