@@ -33,7 +33,9 @@ func WriteToFile(t interface{}, fileName string) error {
 }
 
 func htmlEntities(b []byte) []byte {
-	return bytes.ReplaceAll(b, []byte("&39;"), []byte("&apos;"))
+	b = bytes.ReplaceAll(b, []byte("&#39;"), []byte("&apos;"))
+	b = bytes.ReplaceAll(b, []byte("&#34;"), []byte("&quot;"))
+	return b
 }
 
 // Make empty tags self-closing
