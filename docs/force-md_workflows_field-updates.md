@@ -12,6 +12,12 @@ Manage workflow field updates
   -h, --help   help for field-updates
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow

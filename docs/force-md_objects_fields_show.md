@@ -17,6 +17,12 @@ force-md objects fields show -f Field [filename]...
   -h, --help           help for show
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects fields](force-md_objects_fields.md)	 - Manage object field metadata

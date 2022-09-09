@@ -12,6 +12,12 @@ Manage apex class visibility
   -h, --help   help for apex
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets

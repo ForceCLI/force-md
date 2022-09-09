@@ -12,6 +12,12 @@ Manage user permissions
   -h, --help   help for user-permissions
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

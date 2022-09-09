@@ -17,6 +17,12 @@ force-md objects fieldset delete -s FieldSet [filename]...
   -h, --help              help for delete
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects fieldset](force-md_objects_fieldset.md)	 - Manage object field set metadata

@@ -18,6 +18,12 @@ force-md permissionset field-permissions clone -s SObject.Field -f SObject.Field
   -s, --source string   source field name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset field-permissions](force-md_permissionset_field-permissions.md)	 - Manage field permissions

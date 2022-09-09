@@ -12,6 +12,12 @@ Manage report type sections
   -h, --help   help for sections
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types

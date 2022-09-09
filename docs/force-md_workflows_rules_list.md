@@ -17,6 +17,12 @@ force-md workflows rules list [flags] [filename]...
   -h, --help     help for list
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows rules](force-md_workflows_rules.md)	 - Manage workflow rules

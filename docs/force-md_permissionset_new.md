@@ -18,6 +18,12 @@ force-md permissionset new [flags] [filename]...
   -l, --label string         label
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets

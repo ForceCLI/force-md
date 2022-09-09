@@ -12,6 +12,12 @@ Manage record type visibility
   -h, --help   help for recordtype
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

@@ -12,6 +12,12 @@ Manage visualforce page visibility
   -h, --help   help for visualforce
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

@@ -18,6 +18,12 @@ force-md permissionset visualforce clone -s Page -f Page [filename]...
   -s, --source string   source page name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset visualforce](force-md_permissionset_visualforce.md)	 - Manage visualforce page visibility

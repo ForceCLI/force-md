@@ -17,6 +17,12 @@ force-md objects fields delete -f Field [flags] [filename]...
   -h, --help           help for delete
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects fields](force-md_objects_fields.md)	 - Manage object field metadata

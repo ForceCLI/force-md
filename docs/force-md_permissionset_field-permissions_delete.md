@@ -17,6 +17,12 @@ force-md permissionset field-permissions delete -f SObject.Field [flags] [filena
   -h, --help           help for delete
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset field-permissions](force-md_permissionset_field-permissions.md)	 - Manage field permissions

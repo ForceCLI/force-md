@@ -17,6 +17,12 @@ force-md sharingrules owner delete -r RuleName [filename]...
   -r, --rule string   rule name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md sharingrules owner](force-md_sharingrules_owner.md)	 - Manage owner-based sharing rules

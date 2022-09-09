@@ -12,6 +12,12 @@ Manage object record type metadata
   -h, --help   help for recordtype
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects](force-md_objects.md)	 - Manage Custom and Standard Objects

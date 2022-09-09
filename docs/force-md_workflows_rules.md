@@ -12,6 +12,12 @@ Manage workflow rules
   -h, --help   help for rules
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow

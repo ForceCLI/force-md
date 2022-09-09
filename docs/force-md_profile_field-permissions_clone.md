@@ -18,6 +18,12 @@ force-md profile field-permissions clone -s SObject.Field -f SObject.Field [flag
   -s, --source string   source field name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile field-permissions](force-md_profile_field-permissions.md)	 - Manage field permissions

@@ -17,6 +17,12 @@ force-md objects fields write -d directory [filename]...
   -h, --help               help for write
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects fields](force-md_objects_fields.md)	 - Manage object field metadata

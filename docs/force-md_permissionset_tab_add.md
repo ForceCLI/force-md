@@ -17,6 +17,12 @@ force-md permissionset tab add -t TabName [flags] [filename]...
   -t, --tab string   tab name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset tab](force-md_permissionset_tab.md)	 - Manage tab visibility

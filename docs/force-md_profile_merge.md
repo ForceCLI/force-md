@@ -17,6 +17,12 @@ force-md profile merge -s path/to/Source.profile [filename]...
   -s, --source string   source profile
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

@@ -17,6 +17,12 @@ force-md permissionset custom-permissions delete -p Permission [flags] [filename
   -p, --permission string   custom permission name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset custom-permissions](force-md_permissionset_custom-permissions.md)	 - Manage custom permissions

@@ -16,6 +16,12 @@ force-md permissionset visualforce list [filename]...
   -h, --help   help for list
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset visualforce](force-md_permissionset_visualforce.md)	 - Manage visualforce page visibility

@@ -17,6 +17,12 @@ force-md profile recordtype delete -r SObject.RecordType [filename]...
   -r, --recordtype string   record type name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile recordtype](force-md_profile_recordtype.md)	 - Manage record type visibility

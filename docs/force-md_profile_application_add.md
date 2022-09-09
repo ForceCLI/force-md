@@ -18,6 +18,12 @@ force-md profile application add -a ApplicationName [flags] [filename]...
   -h, --help                 help for add
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile application](force-md_profile_application.md)	 - Manage application visibility

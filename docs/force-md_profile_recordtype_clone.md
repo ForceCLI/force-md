@@ -18,6 +18,12 @@ force-md profile recordtype clone -s SObject.RecordType -r SObject.RecordType [f
   -s, --source string       source record type name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile recordtype](force-md_profile_recordtype.md)	 - Manage record type visibility

@@ -29,6 +29,12 @@ force-md profile object-permissions edit -o SObject [flags] [filename]...
   -h, --help            help for edit
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile object-permissions](force-md_profile_object-permissions.md)	 - Update object permissions

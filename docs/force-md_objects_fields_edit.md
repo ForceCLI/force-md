@@ -35,6 +35,12 @@ force-md objects fields edit -f Field [flags] [filename]...
   -u, --unique                     unique
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects fields](force-md_objects_fields.md)	 - Manage object field metadata

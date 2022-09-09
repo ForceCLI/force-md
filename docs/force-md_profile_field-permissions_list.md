@@ -16,6 +16,12 @@ force-md profile field-permissions list [filename]...
   -h, --help   help for list
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile field-permissions](force-md_profile_field-permissions.md)	 - Manage field permissions

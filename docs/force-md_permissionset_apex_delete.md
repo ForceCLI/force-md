@@ -17,6 +17,12 @@ force-md permissionset apex delete -c ClassName [filename]...
   -h, --help           help for delete
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset apex](force-md_permissionset_apex.md)	 - Manage apex class visibility

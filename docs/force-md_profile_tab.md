@@ -12,6 +12,12 @@ Manage tab visibility
   -h, --help   help for tab
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

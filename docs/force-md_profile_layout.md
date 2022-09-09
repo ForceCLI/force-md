@@ -12,6 +12,12 @@ Manage page layouts
   -h, --help   help for layout
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles

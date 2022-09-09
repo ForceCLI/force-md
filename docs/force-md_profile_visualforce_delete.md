@@ -17,6 +17,12 @@ force-md profile visualforce delete -p PageName [flags] [filename]...
   -p, --page string   visualforce page name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile visualforce](force-md_profile_visualforce.md)	 - Manage visualforce page visibility

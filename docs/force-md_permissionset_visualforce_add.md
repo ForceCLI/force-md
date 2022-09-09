@@ -17,6 +17,12 @@ force-md permissionset visualforce add -p PageName [filename]...
   -p, --page string   visualforce page name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset visualforce](force-md_permissionset_visualforce.md)	 - Manage visualforce page visibility

@@ -18,6 +18,12 @@ force-md profile tab edit -t TabName [flags] [filename]...
   -v, --visibility visibility   tab visibility; can be 'DefaultOn', 'DefaultOff', or 'Hidden' (default defaulton)
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile tab](force-md_profile_tab.md)	 - Manage tab visibility

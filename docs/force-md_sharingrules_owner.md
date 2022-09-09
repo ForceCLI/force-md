@@ -12,6 +12,12 @@ Manage owner-based sharing rules
   -h, --help   help for owner
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules

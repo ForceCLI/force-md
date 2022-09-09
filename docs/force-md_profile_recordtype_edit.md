@@ -21,6 +21,12 @@ force-md profile recordtype edit -r SObject.RecordType [flags] [filename]...
   -h, --help                help for edit
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile recordtype](force-md_profile_recordtype.md)	 - Manage record type visibility

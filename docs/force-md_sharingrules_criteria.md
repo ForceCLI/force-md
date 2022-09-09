@@ -12,6 +12,12 @@ Manage criteria-based sharing rules
   -h, --help   help for criteria
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules

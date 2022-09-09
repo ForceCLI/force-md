@@ -17,6 +17,12 @@ force-md permissionset application delete -a ApplicationName [flags] [filename].
   -h, --help                 help for delete
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset application](force-md_permissionset_application.md)	 - Manage application visibility

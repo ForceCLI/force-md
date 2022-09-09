@@ -12,6 +12,12 @@ Update object permissions
   -h, --help   help for object-permissions
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets

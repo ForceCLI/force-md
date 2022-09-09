@@ -18,6 +18,12 @@ force-md workflows alerts edit -a AlertName [flags] [filename]...
   -s, --sender string   sender address
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows alerts](force-md_workflows_alerts.md)	 - Manage workflow alerts

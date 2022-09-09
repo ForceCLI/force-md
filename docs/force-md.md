@@ -13,7 +13,8 @@ force-md
 ### Options
 
 ```
-  -h, --help   help for force-md
+  -h, --help     help for force-md
+      --silent   show errors only
 ```
 
 ### SEE ALSO

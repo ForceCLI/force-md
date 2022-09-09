@@ -17,6 +17,12 @@ force-md permissionset object-permissions show -f Object [filename]...
   -o, --object string   object name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset object-permissions](force-md_permissionset_object-permissions.md)	 - Update object permissions

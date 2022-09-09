@@ -17,6 +17,12 @@ force-md permissionset apex add -c ClassName [flags] [filename]...
   -h, --help           help for add
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset apex](force-md_permissionset_apex.md)	 - Manage apex class visibility

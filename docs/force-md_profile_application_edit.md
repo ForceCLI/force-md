@@ -21,6 +21,12 @@ force-md profile application edit -a ApplicationName [flags] [filename]...
   -v, --visible              is visible
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile application](force-md_profile_application.md)	 - Manage application visibility

@@ -16,6 +16,12 @@ force-md profile visualforce list [filename]...
   -h, --help   help for list
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile visualforce](force-md_profile_visualforce.md)	 - Manage visualforce page visibility

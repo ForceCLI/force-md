@@ -17,6 +17,12 @@ force-md profile object-permissions add -o SObject [flags] [filename]...
   -o, --object string   object name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile object-permissions](force-md_profile_object-permissions.md)	 - Update object permissions

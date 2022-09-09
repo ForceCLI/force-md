@@ -19,6 +19,12 @@ force-md profile layout edit -o SObject -l Layout [filename]...
   -r, --recordtype string   record type
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile layout](force-md_profile_layout.md)	 - Manage page layouts

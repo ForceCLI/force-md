@@ -19,6 +19,12 @@ force-md reporttype fields add -s Section -t Table -f Field [filename]...
   -t, --table string     table name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md reporttype fields](force-md_reporttype_fields.md)	 - Manage report type fields

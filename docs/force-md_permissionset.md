@@ -12,6 +12,12 @@ Manage Permission Sets
   -h, --help   help for permissionset
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md](force-md.md)	 - force-md manipulate Salesforce metadata

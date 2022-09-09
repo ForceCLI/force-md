@@ -18,6 +18,12 @@ force-md package delete -t Type -n Name [filename]...
   -t, --type string   metadata type
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml

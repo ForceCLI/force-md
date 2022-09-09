@@ -19,6 +19,12 @@ force-md workflows alerts list [flags] [filename]...
   -t, --sendertype sendertype   sender type; can be 'CurrentUser', 'DefaultWorkflowUser', or 'OrgWideEmailAddress' (default none)
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows alerts](force-md_workflows_alerts.md)	 - Manage workflow alerts

@@ -17,6 +17,12 @@ force-md sharingrules criteria delete -r RuleName [filename]...
   -r, --rule string   rule name
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md sharingrules criteria](force-md_sharingrules_criteria.md)	 - Manage criteria-based sharing rules

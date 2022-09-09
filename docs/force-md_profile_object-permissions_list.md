@@ -28,6 +28,12 @@ force-md profile object-permissions list [flags] [filename]...
   -v, --view-all        has view all
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md profile object-permissions](force-md_profile_object-permissions.md)	 - Update object permissions

@@ -17,6 +17,12 @@ force-md permissionset application show -a ApplicationName [filename]... [flags]
   -h, --help                 help for show
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md permissionset application](force-md_permissionset_application.md)	 - Manage application visibility

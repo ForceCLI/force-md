@@ -18,6 +18,12 @@ force-md objects recordtype picklist table [flags] [filename]...
   -r, --recordtype string   record type
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md objects recordtype picklist](force-md_objects_recordtype_picklist.md)	 - Manage record type picklist options

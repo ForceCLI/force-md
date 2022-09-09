@@ -12,6 +12,12 @@ Manage workflow alerts
   -h, --help   help for alerts
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow

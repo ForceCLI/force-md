@@ -12,6 +12,12 @@ Manage report type fields
   -h, --help   help for fields
 ```
 
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
 ### SEE ALSO
 
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
