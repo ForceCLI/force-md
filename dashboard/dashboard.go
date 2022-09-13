@@ -108,7 +108,7 @@ type Dashboard struct {
 				Footer *struct {
 					Text string `xml:",chardata"`
 				} `xml:"footer"`
-				GroupingColumn *struct {
+				GroupingColumn []struct {
 					Text string `xml:",chardata"`
 				} `xml:"groupingColumn"`
 				GaugeMax *struct {
@@ -118,7 +118,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"gaugeMin"`
 				GroupingSortProperties struct {
-					GroupingSorts *struct {
+					GroupingSorts []struct {
 						GroupingLevel struct {
 							Text string `xml:",chardata"`
 						} `xml:"groupingLevel"`
