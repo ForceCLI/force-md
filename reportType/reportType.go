@@ -9,11 +9,11 @@ import (
 
 type Field struct {
 	CheckedByDefault    BooleanText `xml:"checkedByDefault"`
-	Field               string      `xml:"field"`
-	Table               string      `xml:"table"`
 	DisplayNameOverride *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayNameOverride"`
+	Field string `xml:"field"`
+	Table string `xml:"table"`
 }
 
 type Section struct {
@@ -38,8 +38,8 @@ type ReportType struct {
 	Description struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	Join struct {
-		Join struct {
+	Join *struct {
+		Join *struct {
 			OuterJoin struct {
 				Text string `xml:",chardata"`
 			} `xml:"outerJoin"`
