@@ -11,6 +11,7 @@ func init() {
 	objectsCmd.AddCommand(objects.FieldSetCmd)
 	objectsCmd.AddCommand(objects.RecordTypeCmd)
 	objectsCmd.AddCommand(objects.TidyCmd)
+	objectsCmd.AddCommand(objects.ValidationRuleCmd)
 	RootCmd.AddCommand(objectsCmd)
 }
 

@@ -10,7 +10,7 @@ func (p *CustomObject) Tidy() {
 	})
 	p.Fields.Tidy()
 	sort.Slice(p.ValidationRules, func(i, j int) bool {
-		return p.ValidationRules[i].FullName.Text < p.ValidationRules[j].FullName.Text
+		return p.ValidationRules[i].FullName < p.ValidationRules[j].FullName
 	})
 	sort.Slice(p.ListViews, func(i, j int) bool {
 		return p.ListViews[i].FullName.Text < p.ListViews[j].FullName.Text

@@ -15,6 +15,30 @@ type CustomField struct {
 	Field
 }
 
+type ValidationRule struct {
+	XMLName xml.Name `xml:"CustomField"`
+	Xmlns   string   `xml:"xmlns,attr"`
+	Rule
+}
+
+type Rule struct {
+	FullName string `xml:"fullName"`
+	Active   struct {
+		Text string `xml:",chardata"`
+	} `xml:"active"`
+	Description *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"description"`
+	ErrorConditionFormula struct {
+		Text string `xml:",innerxml"`
+	} `xml:"errorConditionFormula"`
+	ErrorDisplayField *struct {
+		Text string `xml:",chardata"`
+	} `xml:"errorDisplayField"`
+	ErrorMessage struct {
+		Text string `xml:",innerxml"`
+	} `xml:"errorMessage"`
+}
 type Field struct {
 	FullName       string       `xml:"fullName"`
 	BusinessStatus *TextLiteral `xml:"businessStatus"`
@@ -408,27 +432,8 @@ type CustomObject struct {
 	SharingModel struct {
 		Text string `xml:",chardata"`
 	} `xml:"sharingModel"`
-	ValidationRules []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Active struct {
-			Text string `xml:",chardata"`
-		} `xml:"active"`
-		Description *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"description"`
-		ErrorConditionFormula struct {
-			Text string `xml:",innerxml"`
-		} `xml:"errorConditionFormula"`
-		ErrorDisplayField *struct {
-			Text string `xml:",chardata"`
-		} `xml:"errorDisplayField"`
-		ErrorMessage struct {
-			Text string `xml:",innerxml"`
-		} `xml:"errorMessage"`
-	} `xml:"validationRules"`
-	Visibility *struct {
+	ValidationRules []Rule `xml:"validationRules"`
+	Visibility      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibility"`
 	WebLinks []struct {
