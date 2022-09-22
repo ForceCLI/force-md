@@ -25,4 +25,5 @@ Manage Custom and Standard Objects
 * [force-md objects fieldset](force-md_objects_fieldset.md)	 - Manage object field set metadata
 * [force-md objects recordtype](force-md_objects_recordtype.md)	 - Manage object record type metadata
 * [force-md objects tidy](force-md_objects_tidy.md)	 - Tidy object metadata
+* [force-md objects validationrule](force-md_objects_validationrule.md)	 - Manage validation rule metadata
 
