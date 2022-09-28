@@ -17,7 +17,7 @@ func (p *Profile) Tidy() {
 		return p.TabVisibilities[i].Tab < p.TabVisibilities[j].Tab
 	})
 	sort.Slice(p.FlowAccesses, func(i, j int) bool {
-		return p.FlowAccesses[i].Flow.Text < p.FlowAccesses[j].Flow.Text
+		return p.FlowAccesses[i].Flow < p.FlowAccesses[j].Flow
 	})
 	p.UserPermissions.Tidy()
 }
