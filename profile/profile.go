@@ -22,6 +22,8 @@ type CustomPermissionsList []CustomPermissions
 
 type FieldPermissionsList []FieldPermissions
 
+type FlowAccessList []FlowAccess
+
 type ObjectPermissionsList []ObjectPermissions
 
 type ApplicationVisibilityList []ApplicationVisibility
@@ -68,6 +70,11 @@ type UserPermission struct {
 type LayoutAssignment struct {
 	Layout     string      `xml:"layout"`
 	RecordType *RecordType `xml:"recordType"`
+}
+
+type FlowAccess struct {
+	Enabled BooleanText `xml:"enabled"`
+	Flow    string      `xml:"flow"`
 }
 
 type LoginFlow struct {
@@ -136,16 +143,9 @@ type Profile struct {
 	CustomPermissions CustomPermissionsList `xml:"customPermissions"`
 	Description       *string               `xml:"description"`
 	FieldPermissions  FieldPermissionsList  `xml:"fieldPermissions"`
-	FlowAccesses      []struct {
-		Enabled struct {
-			Text string `xml:",chardata"`
-		} `xml:"enabled"`
-		Flow struct {
-			Text string `xml:",chardata"`
-		} `xml:"flow"`
-	} `xml:"flowAccesses"`
-	LayoutAssignments LayoutAssignmentList `xml:"layoutAssignments"`
-	LoginFlows        LoginFlowsList       `xml:"loginFlows"`
+	FlowAccesses      FlowAccessList        `xml:"flowAccesses"`
+	LayoutAssignments LayoutAssignmentList  `xml:"layoutAssignments"`
+	LoginFlows        LoginFlowsList        `xml:"loginFlows"`
 	LoginHours        *struct {
 		Text string `xml:",chardata"`
 	} `xml:"loginHours"`

@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"strings"
+
 	"github.com/pkg/errors"
 )
 
@@ -8,7 +10,7 @@ func (p *Profile) DeleteFlowAccess(flowName string) error {
 	found := false
 	newFlows := p.FlowAccesses[:0]
 	for _, f := range p.FlowAccesses {
-		if f.Flow.Text == flowName {
+		if strings.ToLower(f.Flow) == strings.ToLower(flowName) {
 			found = true
 		} else {
 			newFlows = append(newFlows, f)
