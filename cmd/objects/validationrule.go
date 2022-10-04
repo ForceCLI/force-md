@@ -26,6 +26,7 @@ func init() {
 
 	ValidationRuleCmd.AddCommand(deleteRuleCmd)
 	ValidationRuleCmd.AddCommand(writeRulesCmd)
+	ValidationRuleCmd.AddCommand(listRulesCmd)
 }
 
 var ValidationRuleCmd = &cobra.Command{
@@ -41,6 +42,17 @@ var deleteRuleCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteRule(file, ruleName)
+		}
+	},
+}
+
+var listRulesCmd = &cobra.Command{
+	Use:   "list [filename]...",
+	Short: "List validation rules",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listRules(file)
 		}
 	},
 }
@@ -75,6 +87,19 @@ func deleteRule(file string, ruleName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listRules(file string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	rules := o.GetValidationRules()
+	for _, r := range rules {
+		fmt.Printf("%s.%s\n", objectName, r.FullName)
 	}
 }
 
