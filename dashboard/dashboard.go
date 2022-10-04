@@ -157,9 +157,7 @@ type Dashboard struct {
 				MaxValuesDisplayed *struct {
 					Text string `xml:",chardata"`
 				} `xml:"maxValuesDisplayed"`
-				Report struct {
-					Text string `xml:",chardata"`
-				} `xml:"report"`
+				Report         string `xml:"report"`
 				ShowPercentage *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showPercentage"`
@@ -305,9 +303,7 @@ type Dashboard struct {
 			MetricLabel *struct {
 				Text string `xml:",chardata"`
 			} `xml:"metricLabel"`
-			Report struct {
-				Text string `xml:",chardata"`
-			} `xml:"report"`
+			Report         string `xml:"report"`
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`
@@ -431,9 +427,7 @@ type Dashboard struct {
 			MetricLabel *struct {
 				Text string `xml:",chardata"`
 			} `xml:"metricLabel"`
-			Report struct {
-				Text string `xml:",chardata"`
-			} `xml:"report"`
+			Report         string `xml:"report"`
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`
@@ -546,9 +540,7 @@ type Dashboard struct {
 			MetricLabel *struct {
 				Text string `xml:",chardata"`
 			} `xml:"metricLabel"`
-			Report struct {
-				Text string `xml:",chardata"`
-			} `xml:"report"`
+			Report         string `xml:"report"`
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`

@@ -7,6 +7,7 @@ import (
 
 func init() {
 	dashboardCmd.AddCommand(dashboard.EditCmd)
+	dashboardCmd.AddCommand(dashboard.ReportsCmd)
 	RootCmd.AddCommand(dashboardCmd)
 }
 

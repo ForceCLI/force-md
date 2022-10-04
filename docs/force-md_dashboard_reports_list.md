@@ -1,15 +1,19 @@
-## force-md dashboard
+## force-md dashboard reports list
 
-Manage Dashboards
+List reports used by dashboard
 
 ### Synopsis
 
-Manage Dashboards
+List reports used by dashboard
+
+```
+force-md dashboard reports list [filename]...
+```
 
 ### Options
 
 ```
-  -h, --help   help for dashboard
+  -h, --help   help for list
 ```
 
 ### Options inherited from parent commands
@@ -20,7 +24,5 @@ Manage Dashboards
 
 ### SEE ALSO
 
-* [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
-* [force-md dashboard edit](force-md_dashboard_edit.md)	 - Edit dashboard
 * [force-md dashboard reports](force-md_dashboard_reports.md)	 - Manage reports used by dashboard
 
