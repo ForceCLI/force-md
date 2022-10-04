@@ -18,6 +18,13 @@ type CustomPermissions struct {
 	Name    PermissionName `xml:"name"`
 }
 
+type CustomMetadataTypeAccess struct {
+	Enabled BooleanText        `xml:"enabled"`
+	Name    CustomMetadataName `xml:"name"`
+}
+
+type CustomMetadataTypeAccessList []CustomMetadataTypeAccess
+
 type CustomPermissionsList []CustomPermissions
 
 type FieldPermissionsList []FieldPermissions
@@ -117,6 +124,10 @@ type PermissionName struct {
 	Text string `xml:",chardata"`
 }
 
+type CustomMetadataName struct {
+	Text string `xml:",chardata"`
+}
+
 type ObjectName struct {
 	Text string `xml:",chardata"`
 }
@@ -140,13 +151,14 @@ type Profile struct {
 	Custom                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	CustomPermissions CustomPermissionsList `xml:"customPermissions"`
-	Description       *string               `xml:"description"`
-	FieldPermissions  FieldPermissionsList  `xml:"fieldPermissions"`
-	FlowAccesses      FlowAccessList        `xml:"flowAccesses"`
-	LayoutAssignments LayoutAssignmentList  `xml:"layoutAssignments"`
-	LoginFlows        LoginFlowsList        `xml:"loginFlows"`
-	LoginHours        *struct {
+	CustomMetadataTypeAccesses CustomMetadataTypeAccessList `xml:"customMetadataTypeAccesses"`
+	CustomPermissions          CustomPermissionsList        `xml:"customPermissions"`
+	Description                *string                      `xml:"description"`
+	FieldPermissions           FieldPermissionsList         `xml:"fieldPermissions"`
+	FlowAccesses               FlowAccessList               `xml:"flowAccesses"`
+	LayoutAssignments          LayoutAssignmentList         `xml:"layoutAssignments"`
+	LoginFlows                 LoginFlowsList               `xml:"loginFlows"`
+	LoginHours                 *struct {
 		Text string `xml:",chardata"`
 	} `xml:"loginHours"`
 	LoginIPRanges          LoginIpRangeList         `xml:"loginIpRanges"`
