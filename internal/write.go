@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+var ConvertNumericXMLEntities = true
+
 const declaration = `<?xml version="1.0" encoding="UTF-8"?>`
 
 func WriteToFile(t interface{}, fileName string) error {
@@ -24,7 +26,9 @@ func WriteToFile(t interface{}, fileName string) error {
 		return errors.Wrap(err, "serializing metadata")
 	}
 	b = selfClosing(b)
-	b = htmlEntities(b)
+	if ConvertNumericXMLEntities {
+		b = htmlEntities(b)
+	}
 	if _, err = f.Write(b); err != nil {
 		return errors.Wrap(err, "writing xml")
 	}
