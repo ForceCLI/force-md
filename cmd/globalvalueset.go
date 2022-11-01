@@ -8,6 +8,7 @@ import (
 func init() {
 	globalValueSetCmd.AddCommand(globalvalueset.EditCmd)
 	globalValueSetCmd.AddCommand(globalvalueset.TidyCmd)
+	globalValueSetCmd.AddCommand(globalvalueset.ListCmd)
 	RootCmd.AddCommand(globalValueSetCmd)
 }
 

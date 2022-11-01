@@ -8,15 +8,19 @@ import (
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type ValueFilter func(CustomValue) bool
+
+type CustomValue struct {
+	FullName string       `xml:"fullName"`
+	Default  BooleanText  `xml:"default"`
+	Label    string       `xml:"label"`
+	IsActive *BooleanText `xml:"isActive"`
+}
+
 type GlobalValueSet struct {
-	XMLName     xml.Name `xml:"GlobalValueSet"`
-	Xmlns       string   `xml:"xmlns,attr"`
-	CustomValue []struct {
-		FullName string       `xml:"fullName"`
-		Default  BooleanText  `xml:"default"`
-		Label    string       `xml:"label"`
-		IsActive *BooleanText `xml:"isActive"`
-	} `xml:"customValue"`
+	XMLName     xml.Name      `xml:"GlobalValueSet"`
+	Xmlns       string        `xml:"xmlns,attr"`
+	CustomValue []CustomValue `xml:"customValue"`
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
