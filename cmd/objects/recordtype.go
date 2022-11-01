@@ -162,6 +162,9 @@ func tableRecordTypePicklistOptions(file string) {
 	objectName := strings.TrimSuffix(path.Base(file), ".object")
 	recordTypes := o.GetRecordTypes()
 
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
+	recordTypeName = strings.TrimPrefix(recordTypeName, objectName+".")
+
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Record Type", "Field", "Value", "Default"})
 	table.SetAutoMergeCells(true)

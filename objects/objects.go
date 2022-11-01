@@ -228,6 +228,15 @@ type ValueSetOption struct {
 	Default  BooleanText `xml:"default"`
 }
 
+type ValueSetOptionList []ValueSetOption
+
+type Picklist struct {
+	Picklist string             `xml:"picklist"`
+	Values   ValueSetOptionList `xml:"values"`
+}
+
+type PicklistList []Picklist
+
 type RecordType struct {
 	FullName string `xml:"fullName"`
 	Active   struct {
@@ -242,10 +251,7 @@ type RecordType struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
-	PicklistValues []struct {
-		Picklist string           `xml:"picklist"`
-		Values   []ValueSetOption `xml:"values"`
-	} `xml:"picklistValues"`
+	PicklistValues PicklistList `xml:"picklistValues"`
 }
 type CustomObject struct {
 	XMLName         xml.Name `xml:"CustomObject"`
