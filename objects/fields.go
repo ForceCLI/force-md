@@ -98,6 +98,7 @@ func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string
 		if strings.ToLower(f.FullName) != strings.ToLower(recordType) {
 			continue
 		}
+		option := ValueSetOption{FullName: picklistValue, Default: FalseText}
 		for j, p := range f.PicklistValues {
 			if strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
 				continue
@@ -108,14 +109,20 @@ func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string
 				}
 			}
 			found = true
-			o.RecordTypes[i].PicklistValues[j].Values = append(o.RecordTypes[i].PicklistValues[j].Values, ValueSetOption{
-				FullName: picklistValue,
-				Default:  FalseText,
-			})
+			o.RecordTypes[i].PicklistValues[j].Values = append(o.RecordTypes[i].PicklistValues[j].Values, option)
+			o.RecordTypes[i].PicklistValues[j].Values.Tidy()
 		}
+		if !found {
+			o.RecordTypes[i].PicklistValues = append(o.RecordTypes[i].PicklistValues, Picklist{
+				Picklist: fieldName,
+				Values:   []ValueSetOption{option},
+			})
+			found = true
+		}
+		o.RecordTypes[i].PicklistValues.Tidy()
 	}
 	if !found {
-		return errors.New("field not found")
+		return errors.New("record type not found")
 	}
 	return nil
 }
