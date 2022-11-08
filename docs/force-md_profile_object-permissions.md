@@ -26,4 +26,5 @@ Update object permissions
 * [force-md profile object-permissions edit](force-md_profile_object-permissions_edit.md)	 - Update object permissions
 * [force-md profile object-permissions list](force-md_profile_object-permissions_list.md)	 - List object permissions
 * [force-md profile object-permissions show](force-md_profile_object-permissions_show.md)	 - Show object permissions
+* [force-md profile object-permissions table](force-md_profile_object-permissions_table.md)	 - List Object Permissions in a table
 

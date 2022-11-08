@@ -3,9 +3,12 @@ package profile
 import (
 	"encoding/xml"
 	"fmt"
+	"os"
+	"path"
 	"strconv"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -57,11 +60,26 @@ func init() {
 	listObjectCmd.Flags().BoolP("no-modify-all", "M", false, "does not have modify all")
 	listObjectCmd.Flags().BoolP("no-view-all", "V", false, "does not have view all")
 
+	tableObjectCmd.Flags().BoolP("create", "c", false, "has create")
+	tableObjectCmd.Flags().BoolP("delete", "d", false, "has delete")
+	tableObjectCmd.Flags().BoolP("edit", "e", false, "has edit")
+	tableObjectCmd.Flags().BoolP("read", "r", false, "has read")
+	tableObjectCmd.Flags().BoolP("modify-all", "m", false, "has modify all")
+	tableObjectCmd.Flags().BoolP("view-all", "v", false, "has view all")
+	tableObjectCmd.Flags().BoolP("no-create", "C", false, "does not have create")
+	tableObjectCmd.Flags().BoolP("no-delete", "D", false, "does not have delete")
+	tableObjectCmd.Flags().BoolP("no-edit", "E", false, "does not have edit")
+	tableObjectCmd.Flags().BoolP("no-read", "R", false, "does not have read")
+	tableObjectCmd.Flags().BoolP("no-modify-all", "M", false, "does not have modify all")
+	tableObjectCmd.Flags().BoolP("no-view-all", "V", false, "does not have view all")
+	tableObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
 	ObjectPermissionsCmd.AddCommand(showObjectCmd)
 	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
 	ObjectPermissionsCmd.AddCommand(listObjectCmd)
+	ObjectPermissionsCmd.AddCommand(tableObjectCmd)
 }
 
 var ObjectPermissionsCmd = &cobra.Command{
@@ -125,6 +143,16 @@ var listObjectCmd = &cobra.Command{
 		for _, file := range args {
 			listObjectPermissions(file, perms)
 		}
+	},
+}
+
+var tableObjectCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Object Permissions in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		perms := objectPermissionsFromFlags(cmd)
+		tableObjectPermissions(args, perms)
 	},
 }
 
@@ -275,5 +303,68 @@ func listObjectPermissions(file string, filter profile.ObjectPermissions) {
 		}
 
 		fmt.Printf("%s: %s\n", o.Object.Text, perms)
+	}
+}
+
+func tableObjectPermissions(files []string, filter profile.ObjectPermissions) {
+	var filters []profile.ObjectFilter
+	if objectName != "" {
+		filters = append(filters, func(f profile.ObjectPermissions) bool {
+			return strings.ToLower(f.Object.Text) == strings.ToLower(objectName)
+		})
+	}
+	flagFilter := func(o profile.ObjectPermissions) bool {
+		if filter.AllowCreate.Text != "" && filter.AllowCreate.ToBool() != o.AllowCreate.ToBool() {
+			return false
+		}
+		if filter.AllowRead.Text != "" && filter.AllowRead.ToBool() != o.AllowRead.ToBool() {
+			return false
+		}
+		if filter.AllowEdit.Text != "" && filter.AllowEdit.ToBool() != o.AllowEdit.ToBool() {
+			return false
+		}
+		if filter.AllowDelete.Text != "" && filter.AllowDelete.ToBool() != o.AllowDelete.ToBool() {
+			return false
+		}
+		if filter.ViewAllRecords.Text != "" && filter.ViewAllRecords.ToBool() != o.ViewAllRecords.ToBool() {
+			return false
+		}
+		if filter.ModifyAllRecords.Text != "" && filter.ModifyAllRecords.ToBool() != o.ModifyAllRecords.ToBool() {
+			return false
+		}
+		return true
+	}
+	filters = append(filters, flagFilter)
+	type perm struct {
+		objects profile.ObjectPermissionsList
+		profile string
+	}
+	var perms []perm
+	for _, file := range files {
+		p, err := profile.Open(file)
+		if err != nil {
+			log.Warn("parsing profile failed: " + err.Error())
+			return
+		}
+		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		perms = append(perms, perm{objects: p.GetObjectPermissions(filters...), profile: profileName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Object", "Read", "Create", "Edit", "Delete", "View All", "Modify All"})
+	table.SetRowLine(true)
+	for _, perm := range perms {
+		for _, o := range perm.objects {
+			table.Append([]string{perm.profile, o.Object.Text,
+				o.AllowRead.Text,
+				o.AllowCreate.Text,
+				o.AllowEdit.Text,
+				o.AllowDelete.Text,
+				o.ViewAllRecords.Text,
+				o.ModifyAllRecords.Text,
+			})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
 	}
 }
