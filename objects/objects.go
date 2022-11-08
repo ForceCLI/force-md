@@ -253,29 +253,20 @@ type RecordType struct {
 	} `xml:"label"`
 	PicklistValues PicklistList `xml:"picklistValues"`
 }
+
+type ActionOverride struct {
+	ActionName           string       `xml:"actionName"`
+	Comment              *string      `xml:"comment"`
+	Content              *string      `xml:"content"`
+	FormFactor           *string      `xml:"formFactor"`
+	SkipRecordTypeSelect *BooleanText `xml:"skipRecordTypeSelect"`
+	Type                 string       `xml:"type"`
+}
+
 type CustomObject struct {
-	XMLName         xml.Name `xml:"CustomObject"`
-	Xmlns           string   `xml:"xmlns,attr"`
-	ActionOverrides []struct {
-		ActionName struct {
-			Text string `xml:",chardata"`
-		} `xml:"actionName"`
-		Comment *struct {
-			Text string `xml:",chardata"`
-		} `xml:"comment"`
-		Content *struct {
-			Text string `xml:",chardata"`
-		} `xml:"content"`
-		FormFactor *struct {
-			Text string `xml:",chardata"`
-		} `xml:"formFactor"`
-		SkipRecordTypeSelect *struct {
-			Text string `xml:",chardata"`
-		} `xml:"skipRecordTypeSelect"`
-		Type struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
-	} `xml:"actionOverrides"`
+	XMLName              xml.Name         `xml:"CustomObject"`
+	Xmlns                string           `xml:"xmlns,attr"`
+	ActionOverrides      []ActionOverride `xml:"actionOverrides"`
 	AllowInChatterGroups *struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowInChatterGroups"`

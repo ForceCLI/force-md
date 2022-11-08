@@ -19,6 +19,7 @@ force-md
 
 ### SEE ALSO
 
+* [force-md application](force-md_application.md)	 - Manage Applications
 * [force-md completion](force-md_completion.md)	 - Generate completion script
 * [force-md custompermission](force-md_custompermission.md)	 - Manage Custom Permissions
 * [force-md dashboard](force-md_dashboard.md)	 - Manage Dashboards
