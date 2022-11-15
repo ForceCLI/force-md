@@ -26,6 +26,7 @@ func init() {
 
 	deleteLayoutCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	deleteLayoutCmd.Flags().StringVarP(&layoutName, "layout", "l", "", "layout name")
+	deleteLayoutCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
 	deleteLayoutCmd.MarkFlagRequired("object")
 
 	LayoutCmd.AddCommand(showLayoutCmd)
@@ -118,9 +119,17 @@ func deleteLayout(file string) {
 	}
 	var filters []profile.LayoutFilter
 	if layoutName != "" {
-		layout := strings.ToLower(objectName + "-" + layoutName)
+		layoutName = strings.TrimPrefix(layoutName, objectName+"-")
+		fullLayoutName := strings.ToLower(objectName + "-" + layoutName)
 		filters = append(filters, func(l profile.LayoutAssignment) bool {
-			return strings.ToLower(l.Layout) == layout
+			return strings.ToLower(l.Layout) == fullLayoutName
+		})
+	}
+	if recordType != "" {
+		recordType = strings.TrimPrefix(recordType, objectName+".")
+		fullRecordTypeName := strings.ToLower(objectName + "." + recordType)
+		filters = append(filters, func(l profile.LayoutAssignment) bool {
+			return l.RecordType != nil && strings.ToLower(l.RecordType.Text) == fullRecordTypeName
 		})
 	}
 	err = p.DeleteObjectLayout(objectName, filters...)
