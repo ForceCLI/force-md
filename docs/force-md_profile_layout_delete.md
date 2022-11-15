@@ -13,9 +13,10 @@ force-md profile layout delete -o SObject [filename]... [flags]
 ### Options
 
 ```
-  -h, --help            help for delete
-  -l, --layout string   layout name
-  -o, --object string   object name
+  -h, --help                help for delete
+  -l, --layout string       layout name
+  -o, --object string       object name
+  -r, --recordtype string   record type
 ```
 
 ### Options inherited from parent commands
