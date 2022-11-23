@@ -3,6 +3,7 @@ package sharingrules
 import (
 	"encoding/xml"
 
+	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
 )
 
@@ -43,6 +44,9 @@ type CriteriaRule struct {
 			Text string `xml:",chardata"`
 		} `xml:"roleAndSubordinates"`
 	} `xml:"sharedTo"`
+	BooleanFilter *struct {
+		Text string `xml:",chardata"`
+	} `xml:"booleanFilter"`
 	CriteriaItems []struct {
 		Field struct {
 			Text string `xml:",chardata"`
@@ -54,9 +58,7 @@ type CriteriaRule struct {
 			Text string `xml:",chardata"`
 		} `xml:"value"`
 	} `xml:"criteriaItems"`
-	BooleanFilter *struct {
-		Text string `xml:",chardata"`
-	} `xml:"booleanFilter"`
+	IncludeRecordsOwnedByAll *BooleanText `xml:"includeRecordsOwnedByAll"`
 }
 
 type OwnerRule struct {
