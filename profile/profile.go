@@ -104,12 +104,10 @@ type ApplicationVisibility struct {
 }
 
 type RecordTypeVisibility struct {
-	Default struct {
-		Text string `xml:",chardata"`
-	} `xml:"default"`
-	PersonAccountDefault *PersonAccountDefault `xml:"personAccountDefault"`
-	RecordType           string                `xml:"recordType"`
-	Visible              BooleanText           `xml:"visible"`
+	Default              BooleanText  `xml:"default"`
+	PersonAccountDefault *BooleanText `xml:"personAccountDefault"`
+	RecordType           string       `xml:"recordType"`
+	Visible              BooleanText  `xml:"visible"`
 }
 
 type RecordType struct {
@@ -129,10 +127,6 @@ type CustomMetadataName struct {
 }
 
 type ObjectName struct {
-	Text string `xml:",chardata"`
-}
-
-type PersonAccountDefault struct {
 	Text string `xml:",chardata"`
 }
 
