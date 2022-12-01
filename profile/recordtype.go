@@ -10,6 +10,8 @@ import (
 	. "github.com/octoberswimmer/force-md/general"
 )
 
+type RecordTypeFilter func(RecordTypeVisibility) bool
+
 var RecordTypeExistsError = errors.New("record type already exists")
 
 func (p *Profile) AddRecordType(recordType string) error {
@@ -91,6 +93,16 @@ func (p *Profile) SetRecordTypeVisibility(fieldName string, updates RecordTypeVi
 	return nil
 }
 
-func (p *Profile) GetRecordTypeVisibility() RecordTypeVisibilityList {
-	return p.RecordTypeVisibilities
+func (p *Profile) GetRecordTypeVisibility(filters ...RecordTypeFilter) RecordTypeVisibilityList {
+	var recordTypeVisibilities []RecordTypeVisibility
+RECORDTYPES:
+	for _, r := range p.RecordTypeVisibilities {
+		for _, filter := range filters {
+			if !filter(r) {
+				continue RECORDTYPES
+			}
+		}
+		recordTypeVisibilities = append(recordTypeVisibilities, r)
+	}
+	return recordTypeVisibilities
 }
