@@ -20,6 +20,7 @@ func init() {
 	profileCmd.AddCommand(profile.RecordTypeCmd)
 	profileCmd.AddCommand(profile.NewCmd)
 	profileCmd.AddCommand(profile.MergeCmd)
+	profileCmd.AddCommand(profile.LoginFlowCmd)
 	RootCmd.AddCommand(profileCmd)
 }
 

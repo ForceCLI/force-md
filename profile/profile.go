@@ -151,7 +151,7 @@ type Profile struct {
 	FieldPermissions           FieldPermissionsList         `xml:"fieldPermissions"`
 	FlowAccesses               FlowAccessList               `xml:"flowAccesses"`
 	LayoutAssignments          LayoutAssignmentList         `xml:"layoutAssignments"`
-	LoginFlows                 LoginFlowsList               `xml:"loginFlows"`
+	LoginFlows                 *LoginFlow                   `xml:"loginFlows"`
 	LoginHours                 *struct {
 		Text string `xml:",chardata"`
 	} `xml:"loginHours"`
