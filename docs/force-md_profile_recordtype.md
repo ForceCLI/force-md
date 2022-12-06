@@ -26,4 +26,5 @@ Manage record type visibility
 * [force-md profile recordtype delete](force-md_profile_recordtype_delete.md)	 - Delete record type
 * [force-md profile recordtype edit](force-md_profile_recordtype_edit.md)	 - Update record types
 * [force-md profile recordtype list](force-md_profile_recordtype_list.md)	 - List record types
+* [force-md profile recordtype table](force-md_profile_recordtype_table.md)	 - List Record Types in a table
 
