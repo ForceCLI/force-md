@@ -1,11 +1,19 @@
 package general
 
 import (
+	"html"
 	"strings"
 )
 
 type TextLiteral struct {
 	Text string `xml:",innerxml"`
+}
+
+func (t *TextLiteral) String() string {
+	if t == nil {
+		return ""
+	}
+	return html.UnescapeString(t.Text)
 }
 
 var TrueText = BooleanText{
