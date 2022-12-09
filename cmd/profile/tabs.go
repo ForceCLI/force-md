@@ -2,7 +2,11 @@ package profile
 
 import (
 	"fmt"
+	"os"
+	"path"
+	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
@@ -41,10 +45,13 @@ func init() {
 	editTabCmd.MarkFlagRequired("tab")
 	editTabCmd.MarkFlagRequired("visibility")
 
+	tableTabsCmd.Flags().StringVarP(&tabName, "tab", "t", "", "tab name")
+
 	TabCmd.AddCommand(addTabCmd)
 	TabCmd.AddCommand(deleteTabCmd)
 	TabCmd.AddCommand(editTabCmd)
 	TabCmd.AddCommand(listTabsCmd)
+	TabCmd.AddCommand(tableTabsCmd)
 }
 
 var TabCmd = &cobra.Command{
@@ -85,6 +92,15 @@ var listTabsCmd = &cobra.Command{
 		for _, file := range args {
 			listTabVisibility(file)
 		}
+	},
+}
+
+var tableTabsCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Tabs in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		tableTabPermissions(args)
 	},
 }
 
@@ -168,5 +184,41 @@ func updateTabVisibility(file string, v TabVisibility) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func tableTabPermissions(files []string) {
+	var filters []profile.TabFilter
+	if tabName != "" {
+		filters = append(filters, func(f profile.TabVisibility) bool {
+			return strings.ToLower(f.Tab) == strings.ToLower(tabName)
+		})
+	}
+	type perm struct {
+		tabs    profile.TabVisibilityList
+		profile string
+	}
+	var perms []perm
+	for _, file := range files {
+		p, err := profile.Open(file)
+		if err != nil {
+			log.Warn("parsing profile failed: " + err.Error())
+			return
+		}
+		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		perms = append(perms, perm{tabs: p.GetTabs(filters...), profile: profileName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Tab", "Visibility"})
+	table.SetRowLine(true)
+	for _, perm := range perms {
+		for _, t := range perm.tabs {
+			table.Append([]string{perm.profile, t.Tab,
+				t.Visibility,
+			})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
 	}
 }
