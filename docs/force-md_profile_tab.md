@@ -25,4 +25,5 @@ Manage tab visibility
 * [force-md profile tab delete](force-md_profile_tab_delete.md)	 - Delete tab visibility
 * [force-md profile tab edit](force-md_profile_tab_edit.md)	 - Edit tab visibility
 * [force-md profile tab list](force-md_profile_tab_list.md)	 - List tab visibility
+* [force-md profile tab table](force-md_profile_tab_table.md)	 - List Tabs in a table
 

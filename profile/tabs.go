@@ -9,6 +9,8 @@ import (
 
 var TabExistsError = errors.New("tab already exists")
 
+type TabFilter func(TabVisibility) bool
+
 func (p *Profile) DeleteTabVisibility(tabName string) error {
 	found := false
 	newTabs := p.TabVisibilities[:0]
@@ -56,6 +58,16 @@ func (p *Profile) SetTabVisibility(tabName string, visibility string) error {
 	return nil
 }
 
-func (p *Profile) GetTabs() TabVisibilityList {
-	return p.TabVisibilities
+func (p *Profile) GetTabs(filters ...TabFilter) TabVisibilityList {
+	var tabVisibilities []TabVisibility
+TABS:
+	for _, t := range p.TabVisibilities {
+		for _, filter := range filters {
+			if !filter(t) {
+				continue TABS
+			}
+		}
+		tabVisibilities = append(tabVisibilities, t)
+	}
+	return tabVisibilities
 }
