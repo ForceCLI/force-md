@@ -13,8 +13,9 @@ force-md profile field-permissions table [flags] [filename]...
 ### Options
 
 ```
-  -f, --field string   field name
-  -h, --help           help for table
+  -f, --field string    field name
+  -h, --help            help for table
+  -o, --object string   object
 ```
 
 ### Options inherited from parent commands
