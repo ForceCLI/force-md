@@ -40,6 +40,7 @@ func init() {
 	cloneCmd.MarkFlagRequired("field")
 
 	tableFieldsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	tableFieldsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object")
 
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
@@ -233,6 +234,11 @@ func tableFieldPermissions(files []string) {
 	if fieldName != "" {
 		filters = append(filters, func(f profile.FieldPermissions) bool {
 			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
+		})
+	}
+	if objectName != "" {
+		filters = append(filters, func(f profile.FieldPermissions) bool {
+			return strings.HasPrefix(strings.ToLower(f.Field.Text), strings.ToLower(objectName+"."))
 		})
 	}
 	type perm struct {
