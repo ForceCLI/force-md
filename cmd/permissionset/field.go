@@ -2,8 +2,11 @@ package permissionset
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -36,11 +39,15 @@ func init() {
 	editFieldCmd.Flags().SortFlags = false
 	editFieldCmd.MarkFlagRequired("field")
 
+	tableFieldsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	tableFieldsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object")
+
 	FieldPermissionsCmd.AddCommand(cloneCmd)
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
 	FieldPermissionsCmd.AddCommand(listFieldsCmd)
 	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
+	FieldPermissionsCmd.AddCommand(tableFieldsCmd)
 }
 
 var FieldPermissionsCmd = &cobra.Command{
@@ -129,6 +136,15 @@ var listFieldsCmd = &cobra.Command{
 	},
 }
 
+var tableFieldsCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Field Permissions in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		tableFieldPermissions(args)
+	},
+}
+
 func addFieldPermissions(file string) {
 	p, err := permissionset.Open(file)
 	if err != nil {
@@ -210,5 +226,44 @@ func listFields(file string) {
 			permsString = strings.Join(perms, "-")
 		}
 		fmt.Printf("%s: %s\n", a.Field.Text, permsString)
+	}
+}
+
+func tableFieldPermissions(files []string) {
+	var filters []permissionset.FieldFilter
+	if fieldName != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
+		})
+	}
+	if objectName != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return strings.HasPrefix(strings.ToLower(f.Field.Text), strings.ToLower(objectName+"."))
+		})
+	}
+	type perm struct {
+		fields        permissionset.FieldPermissionsList
+		permissionset string
+	}
+	var perms []perm
+	for _, file := range files {
+		p, err := permissionset.Open(file)
+		if err != nil {
+			log.Warn("parsing permissionset failed: " + err.Error())
+			return
+		}
+		permissionSetName := strings.TrimSuffix(path.Base(file), ".profile")
+		perms = append(perms, perm{fields: p.GetFieldPermissions(filters...), permissionset: permissionSetName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Field", "Readable", "Editable"})
+	table.SetRowLine(true)
+	for _, perm := range perms {
+		for _, f := range perm.fields {
+			table.Append([]string{perm.permissionset, f.Field.Text, f.Readable.Text, f.Editable.Text})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
 	}
 }
