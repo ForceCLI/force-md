@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	version = "0.7"
+	version = "dev"
 	silent  bool
 )
 

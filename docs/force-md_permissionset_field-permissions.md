@@ -26,4 +26,5 @@ Manage field permissions
 * [force-md permissionset field-permissions delete](force-md_permissionset_field-permissions_delete.md)	 - Delete field permissions
 * [force-md permissionset field-permissions edit](force-md_permissionset_field-permissions_edit.md)	 - Update field permissions
 * [force-md permissionset field-permissions list](force-md_permissionset_field-permissions_list.md)	 - List fields
+* [force-md permissionset field-permissions table](force-md_permissionset_field-permissions_table.md)	 - List Field Permissions in a table
 
