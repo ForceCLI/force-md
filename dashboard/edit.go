@@ -9,3 +9,9 @@ func (o *Dashboard) UpdateRunningUser(user string) {
 		Text: user,
 	}
 }
+
+func (o *Dashboard) UpdateDashboardType(dashboardType string) {
+	o.DashboardType = &TextLiteral{
+		Text: dashboardType,
+	}
+}
