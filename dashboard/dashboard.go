@@ -207,11 +207,9 @@ type Dashboard struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"dashboardFilters"`
-	DashboardType struct {
-		Text string `xml:",chardata"`
-	} `xml:"dashboardType"`
-	Description  *TextLiteral `xml:"description"`
-	IsGridLayout struct {
+	DashboardType *TextLiteral `xml:"dashboardType"`
+	Description   *TextLiteral `xml:"description"`
+	IsGridLayout  struct {
 		Text string `xml:",chardata"`
 	} `xml:"isGridLayout"`
 	LeftSection *struct {

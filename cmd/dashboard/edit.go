@@ -5,16 +5,36 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/thediveo/enumflag"
 
 	"github.com/octoberswimmer/force-md/dashboard"
 	"github.com/octoberswimmer/force-md/internal"
 )
 
+type DashboardType enumflag.Flag
+
 var (
-	runningUser string
+	runningUser   string
+	dashboardType DashboardType
 )
 
+const (
+	NoneDashboardType DashboardType = iota
+	SpecifiedUser
+	LoggedInUser
+	MyTeamUser
+)
+
+var DashboardTypeIds = map[DashboardType][]string{
+	NoneDashboardType: {"None"},
+	SpecifiedUser:     {"SpecifiedUser"},
+	LoggedInUser:      {"LoggedInUser"},
+	MyTeamUser:        {"MyTeamUser"},
+}
+
 func init() {
+	EditCmd.Flags().VarP(enumflag.New(&dashboardType, "dashboard-type", DashboardTypeIds, enumflag.EnumCaseInsensitive),
+		"dashboard-type", "t", "dashboard-type; can be 'SpecifiedUser', 'LoggedInUser', or 'MyTeamUser'")
 	EditCmd.Flags().StringVarP(&runningUser, "running-user", "r", "", "user dashboard runs as")
 }
 
@@ -38,6 +58,10 @@ func updateDashboard(file string) {
 	}
 	if runningUser != "" {
 		a.UpdateRunningUser(runningUser)
+	}
+	switch dashboardType {
+	case LoggedInUser, SpecifiedUser, MyTeamUser:
+		a.UpdateDashboardType(DashboardTypeIds[dashboardType][0])
 	}
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
