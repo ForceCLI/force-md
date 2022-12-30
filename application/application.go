@@ -20,9 +20,32 @@ type ProfileActionOverride struct {
 type ProfileActionOverrideList []ProfileActionOverride
 
 type CustomApplication struct {
-	XMLName xml.Name `xml:"CustomApplication"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	Brand   *struct {
+	XMLName         xml.Name `xml:"CustomApplication"`
+	Xmlns           string   `xml:"xmlns,attr"`
+	ActionOverrides []struct {
+		ActionName struct {
+			Text string `xml:",chardata"`
+		} `xml:"actionName"`
+		Comment *struct {
+			Text string `xml:",chardata"`
+		} `xml:"comment"`
+		Content struct {
+			Text string `xml:",chardata"`
+		} `xml:"content"`
+		FormFactor struct {
+			Text string `xml:",chardata"`
+		} `xml:"formFactor"`
+		SkipRecordTypeSelect struct {
+			Text string `xml:",chardata"`
+		} `xml:"skipRecordTypeSelect"`
+		Type struct {
+			Text string `xml:",chardata"`
+		} `xml:"type"`
+		PageOrSobjectType struct {
+			Text string `xml:",chardata"`
+		} `xml:"pageOrSobjectType"`
+	} `xml:"actionOverrides"`
+	Brand *struct {
 		HeaderColor struct {
 			Text string `xml:",chardata"`
 		} `xml:"headerColor"`
@@ -42,29 +65,6 @@ type CustomApplication struct {
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	ActionOverrides []struct {
-		ActionName struct {
-			Text string `xml:",chardata"`
-		} `xml:"actionName"`
-		Comment struct {
-			Text string `xml:",chardata"`
-		} `xml:"comment"`
-		Content struct {
-			Text string `xml:",chardata"`
-		} `xml:"content"`
-		FormFactor struct {
-			Text string `xml:",chardata"`
-		} `xml:"formFactor"`
-		SkipRecordTypeSelect struct {
-			Text string `xml:",chardata"`
-		} `xml:"skipRecordTypeSelect"`
-		Type struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
-		PageOrSobjectType struct {
-			Text string `xml:",chardata"`
-		} `xml:"pageOrSobjectType"`
-	} `xml:"actionOverrides"`
 	FormFactors []struct {
 		Text string `xml:",chardata"`
 	} `xml:"formFactors"`
