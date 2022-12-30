@@ -47,7 +47,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"chartAxisRange"`
 				ChartSummary *struct {
-					AxisBinding struct {
+					AxisBinding *struct {
 						Text string `xml:",chardata"`
 					} `xml:"axisBinding"`
 					Column struct {
