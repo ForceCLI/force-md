@@ -39,6 +39,13 @@ func init() {
 	editObjectCmd.MarkFlagRequired("object")
 
 	addObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	addObjectCmd.Flags().BoolP("create", "c", false, "allow create")
+	addObjectCmd.Flags().BoolP("delete", "d", false, "allow delete")
+	addObjectCmd.Flags().BoolP("edit", "e", false, "allow edit")
+	addObjectCmd.Flags().BoolP("read", "r", false, "allow read")
+	addObjectCmd.Flags().BoolP("modify-all", "m", false, "allow modify all")
+	addObjectCmd.Flags().BoolP("view-all", "v", false, "allow view all")
+	addObjectCmd.Flags().SortFlags = false
 	addObjectCmd.MarkFlagRequired("object")
 
 	deleteObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
@@ -104,8 +111,10 @@ var addObjectCmd = &cobra.Command{
 	Short: "Add object permissions",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		perms := objectPermissionsFromFlags(cmd)
 		for _, file := range args {
 			addObjectPermissions(file)
+			updateObjectPermissions(file, perms)
 		}
 	},
 }

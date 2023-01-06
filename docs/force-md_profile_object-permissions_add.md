@@ -13,8 +13,14 @@ force-md profile object-permissions add -o SObject [flags] [filename]...
 ### Options
 
 ```
-  -h, --help            help for add
   -o, --object string   object name
+  -c, --create          allow create
+  -d, --delete          allow delete
+  -e, --edit            allow edit
+  -r, --read            allow read
+  -m, --modify-all      allow modify all
+  -v, --view-all        allow view all
+  -h, --help            help for add
 ```
 
 ### Options inherited from parent commands
