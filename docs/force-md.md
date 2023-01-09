@@ -21,6 +21,7 @@ force-md
 
 * [force-md application](force-md_application.md)	 - Manage Applications
 * [force-md completion](force-md_completion.md)	 - Generate completion script
+* [force-md custommetadata](force-md_custommetadata.md)	 - Manage Custom Metadata
 * [force-md custompermission](force-md_custompermission.md)	 - Manage Custom Permissions
 * [force-md dashboard](force-md_dashboard.md)	 - Manage Dashboards
 * [force-md globalvalueset](force-md_globalvalueset.md)	 - Manage Global Value Sets
