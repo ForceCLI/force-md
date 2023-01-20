@@ -3,6 +3,7 @@ package objects
 import (
 	"encoding/xml"
 	"fmt"
+	"html"
 	"os"
 	"path"
 	"strconv"
@@ -418,7 +419,7 @@ func showField(file string, fieldName string) {
 	}
 	if formulaField {
 		if fields[0].Formula != nil {
-			fmt.Println(fields[0].Formula.Text)
+			fmt.Println(html.UnescapeString(fields[0].Formula.Text))
 		}
 		return
 	}
