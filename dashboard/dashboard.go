@@ -47,6 +47,9 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"chartAxisRange"`
 				ChartSummary *struct {
+					Aggregate *struct {
+						Text string `xml:",chardata"`
+					} `xml:"aggregate"`
 					AxisBinding *struct {
 						Text string `xml:",chardata"`
 					} `xml:"axisBinding"`
@@ -157,10 +160,16 @@ type Dashboard struct {
 				MaxValuesDisplayed *struct {
 					Text string `xml:",chardata"`
 				} `xml:"maxValuesDisplayed"`
+				MetricLabel *struct {
+					Text string `xml:",chardata"`
+				} `xml:"metricLabel"`
 				Report         string `xml:"report"`
 				ShowPercentage *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showPercentage"`
+				ShowPicturesOnCharts *struct {
+					Text string `xml:",chardata"`
+				} `xml:"showPicturesOnCharts"`
 				ShowRange *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showRange"`
