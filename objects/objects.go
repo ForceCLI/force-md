@@ -191,6 +191,70 @@ type Field struct {
 	} `xml:"visibleLines"`
 }
 
+type WebLink struct {
+	FullName     string `xml:"fullName"`
+	Availability struct {
+		Text string `xml:",chardata"`
+	} `xml:"availability"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	DisplayType struct {
+		Text string `xml:",chardata"`
+	} `xml:"displayType"`
+	EncodingKey *struct {
+		Text string `xml:",chardata"`
+	} `xml:"encodingKey"`
+	HasMenubar *struct {
+		Text string `xml:",chardata"`
+	} `xml:"hasMenubar"`
+	HasScrollbars *struct {
+		Text string `xml:",chardata"`
+	} `xml:"hasScrollbars"`
+	HasToolbar *struct {
+		Text string `xml:",chardata"`
+	} `xml:"hasToolbar"`
+	Height *struct {
+		Text string `xml:",chardata"`
+	} `xml:"height"`
+	IsResizable *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isResizable"`
+	LinkType struct {
+		Text string `xml:",chardata"`
+	} `xml:"linkType"`
+	MasterLabel struct {
+		Text string `xml:",chardata"`
+	} `xml:"masterLabel"`
+	OpenType struct {
+		Text string `xml:",chardata"`
+	} `xml:"openType"`
+	Page *struct {
+		Text string `xml:",chardata"`
+	} `xml:"page"`
+	Position *struct {
+		Text string `xml:",chardata"`
+	} `xml:"position"`
+	Protected struct {
+		Text string `xml:",chardata"`
+	} `xml:"protected"`
+	ShowsLocation *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showsLocation"`
+	ShowsStatus *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showsStatus"`
+	URL *struct {
+		Text string `xml:",innerxml"`
+	} `xml:"url"`
+	Width *struct {
+		Text string `xml:",chardata"`
+	} `xml:"width"`
+	RequireRowSelection *struct {
+		Text string `xml:",chardata"`
+	} `xml:"requireRowSelection"`
+}
+
 type FieldSet struct {
 	FullName        string `xml:"fullName"`
 	AvailableFields []struct {
@@ -433,71 +497,7 @@ type CustomObject struct {
 	Visibility      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibility"`
-	WebLinks []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Availability struct {
-			Text string `xml:",chardata"`
-		} `xml:"availability"`
-		Description *struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		DisplayType struct {
-			Text string `xml:",chardata"`
-		} `xml:"displayType"`
-		EncodingKey *struct {
-			Text string `xml:",chardata"`
-		} `xml:"encodingKey"`
-		HasMenubar *struct {
-			Text string `xml:",chardata"`
-		} `xml:"hasMenubar"`
-		HasScrollbars *struct {
-			Text string `xml:",chardata"`
-		} `xml:"hasScrollbars"`
-		HasToolbar *struct {
-			Text string `xml:",chardata"`
-		} `xml:"hasToolbar"`
-		Height *struct {
-			Text string `xml:",chardata"`
-		} `xml:"height"`
-		IsResizable *struct {
-			Text string `xml:",chardata"`
-		} `xml:"isResizable"`
-		LinkType struct {
-			Text string `xml:",chardata"`
-		} `xml:"linkType"`
-		MasterLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"masterLabel"`
-		OpenType struct {
-			Text string `xml:",chardata"`
-		} `xml:"openType"`
-		Page *struct {
-			Text string `xml:",chardata"`
-		} `xml:"page"`
-		Position *struct {
-			Text string `xml:",chardata"`
-		} `xml:"position"`
-		Protected struct {
-			Text string `xml:",chardata"`
-		} `xml:"protected"`
-		ShowsLocation *struct {
-			Text string `xml:",chardata"`
-		} `xml:"showsLocation"`
-		ShowsStatus *struct {
-			Text string `xml:",chardata"`
-		} `xml:"showsStatus"`
-		URL *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"url"`
-		Width *struct {
-			Text string `xml:",chardata"`
-		} `xml:"width"`
-		RequireRowSelection *struct {
-			Text string `xml:",chardata"`
-		} `xml:"requireRowSelection"`
-	} `xml:"webLinks"`
+	WebLinks           []WebLink `xml:"webLinks"`
 	CustomSettingsType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customSettingsType"`

@@ -13,6 +13,7 @@ func init() {
 	objectsCmd.AddCommand(objects.TidyCmd)
 	objectsCmd.AddCommand(objects.ValidationRuleCmd)
 	objectsCmd.AddCommand(objects.ActionCmd)
+	objectsCmd.AddCommand(objects.WebLinkCmd)
 	RootCmd.AddCommand(objectsCmd)
 }
 
