@@ -3,6 +3,7 @@ package objects
 import (
 	"encoding/xml"
 	"fmt"
+	"html"
 	"os"
 	"path"
 	"strconv"
@@ -88,6 +89,7 @@ func init() {
 	deleteFieldCmd.MarkFlagRequired("field")
 
 	showFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	showFieldCmd.Flags().BoolVarP(&formulaField, "formula", "m", false, "show formula only")
 	showFieldCmd.MarkFlagRequired("field")
 
 	writeFieldsCmd.Flags().StringVarP(&fieldsDir, "directory", "d", "", "directory where fields should be output")
@@ -413,6 +415,12 @@ func showField(file string, fieldName string) {
 	})
 	if len(fields) == 0 {
 		log.Warn(fmt.Sprintf("field not found in %s", file))
+		return
+	}
+	if formulaField {
+		if fields[0].Formula != nil {
+			fmt.Println(html.UnescapeString(fields[0].Formula.Text))
+		}
 		return
 	}
 	b, err := xml.MarshalIndent(fields[0], "", "    ")

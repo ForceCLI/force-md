@@ -14,6 +14,7 @@ force-md objects fields show -f Field [filename]...
 
 ```
   -f, --field string   field name
+  -m, --formula        show formula only
   -h, --help           help for show
 ```
 
