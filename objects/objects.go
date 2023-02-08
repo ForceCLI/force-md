@@ -493,6 +493,10 @@ type CustomObject struct {
 	SharingModel struct {
 		Text string `xml:",chardata"`
 	} `xml:"sharingModel"`
+	SharingReasons []struct {
+		FullName string `xml:"fullName"`
+		Label    string `xml:"label"`
+	} `xml:"sharingReasons"`
 	ValidationRules []Rule `xml:"validationRules"`
 	Visibility      *struct {
 		Text string `xml:",chardata"`
