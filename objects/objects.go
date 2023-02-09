@@ -57,16 +57,22 @@ type Field struct {
 	DisplayLocationInDecimal *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayLocationInDecimal"`
-	ExternalId *BooleanText `xml:"externalId"`
-	Formula    *struct {
+	ExternalId         *BooleanText `xml:"externalId"`
+	FieldManageability *struct {
+		Text string `xml:",chardata"`
+	} `xml:"fieldManageability"`
+	Formula *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"formula"`
 	FormulaTreatBlanksAs *struct {
 		Text string `xml:",chardata"`
 	} `xml:"formulaTreatBlanksAs"`
-	InlineHelpText *TextLiteral `xml:"inlineHelpText"`
-	Label          *TextLiteral `xml:"label"`
-	LookupFilter   *struct {
+	InlineHelpText      *TextLiteral `xml:"inlineHelpText"`
+	IsFilteringDisabled *BooleanText `xml:"isFilteringDisabled"`
+	IsNameField         *BooleanText `xml:"isNameField"`
+	IsSortingDisabled   *BooleanText `xml:"isSortingDisabled"`
+	Label               *TextLiteral `xml:"label"`
+	LookupFilter        *struct {
 		Active struct {
 			Text string `xml:",chardata"`
 		} `xml:"active"`
@@ -132,9 +138,6 @@ type Field struct {
 	ReparentableMasterDetail *struct {
 		Text string `xml:",chardata"`
 	} `xml:"reparentableMasterDetail"`
-	FieldManageability *struct {
-		Text string `xml:",chardata"`
-	} `xml:"fieldManageability"`
 	MetadataRelationshipControllingField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"metadataRelationshipControllingField"`
@@ -238,6 +241,9 @@ type WebLink struct {
 	Protected struct {
 		Text string `xml:",chardata"`
 	} `xml:"protected"`
+	RequireRowSelection *struct {
+		Text string `xml:",chardata"`
+	} `xml:"requireRowSelection"`
 	ShowsLocation *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showsLocation"`
@@ -250,9 +256,6 @@ type WebLink struct {
 	Width *struct {
 		Text string `xml:",chardata"`
 	} `xml:"width"`
-	RequireRowSelection *struct {
-		Text string `xml:",chardata"`
-	} `xml:"requireRowSelection"`
 }
 
 type FieldSet struct {
@@ -306,6 +309,9 @@ type RecordType struct {
 	Active   struct {
 		Text string `xml:",chardata"`
 	} `xml:"active"`
+	BusinessProcess *struct {
+		Text string `xml:",chardata"`
+	} `xml:"businessProcess"`
 	CompactLayoutAssignment *struct {
 		Text string `xml:",chardata"`
 	} `xml:"compactLayoutAssignment"`
@@ -334,7 +340,26 @@ type CustomObject struct {
 	AllowInChatterGroups *struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowInChatterGroups"`
-	CompactLayoutAssignment struct {
+	BusinessProcesses []struct {
+		FullName struct {
+			Text string `xml:",chardata"`
+		} `xml:"fullName"`
+		Description *struct {
+			Text string `xml:",chardata"`
+		} `xml:"description"`
+		IsActive struct {
+			Text string `xml:",chardata"`
+		} `xml:"isActive"`
+		Values []struct {
+			FullName struct {
+				Text string `xml:",chardata"`
+			} `xml:"fullName"`
+			Default struct {
+				Text string `xml:",chardata"`
+			} `xml:"default"`
+		} `xml:"values"`
+	} `xml:"businessProcesses"`
+	CompactLayoutAssignment *struct {
 		Text string `xml:",chardata"`
 	} `xml:"compactLayoutAssignment"`
 	CompactLayouts []struct {
@@ -348,6 +373,9 @@ type CustomObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 	} `xml:"compactLayouts"`
+	CustomSettingsType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"customSettingsType"`
 	DeploymentStatus *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deploymentStatus"`
@@ -366,10 +394,10 @@ type CustomObject struct {
 	EnableEnhancedLookup *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableEnhancedLookup"`
-	EnableFeeds struct {
+	EnableFeeds *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableFeeds"`
-	EnableHistory struct {
+	EnableHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableHistory"`
 	EnableLicensing *struct {
@@ -387,6 +415,9 @@ type CustomObject struct {
 	EnableStreamingApi *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableStreamingApi"`
+	EventType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"eventType"`
 	ExternalSharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"externalSharingModel"`
@@ -460,6 +491,17 @@ type CustomObject struct {
 	PluralLabel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"pluralLabel"`
+	ProfileSearchLayouts *struct {
+		Fields []struct {
+			Text string `xml:",chardata"`
+		} `xml:"fields"`
+		ProfileName struct {
+			Text string `xml:",chardata"`
+		} `xml:"profileName"`
+	} `xml:"profileSearchLayouts"`
+	PublishBehavior *struct {
+		Text string `xml:",chardata"`
+	} `xml:"publishBehavior"`
 	RecordTypeTrackFeedHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordTypeTrackFeedHistory"`
@@ -467,7 +509,7 @@ type CustomObject struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordTypeTrackHistory"`
 	RecordTypes   []RecordType `xml:"recordTypes"`
-	SearchLayouts struct {
+	SearchLayouts *struct {
 		CustomTabListAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"customTabListAdditionalFields"`
@@ -480,6 +522,9 @@ type CustomObject struct {
 		LookupDialogsAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"lookupDialogsAdditionalFields"`
+		LookupFilterFields []struct {
+			Text string `xml:",chardata"`
+		} `xml:"lookupFilterFields"`
 		LookupPhoneDialogsAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"lookupPhoneDialogsAdditionalFields"`
@@ -489,25 +534,25 @@ type CustomObject struct {
 		SearchResultsAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"searchResultsAdditionalFields"`
+		SearchResultsCustomButtons []struct {
+			Text string `xml:",chardata"`
+		} `xml:"searchResultsCustomButtons"`
 	} `xml:"searchLayouts"`
-	SharingModel struct {
+	SharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sharingModel"`
 	SharingReasons []struct {
 		FullName string `xml:"fullName"`
 		Label    string `xml:"label"`
 	} `xml:"sharingReasons"`
+	StartsWith *struct {
+		Text string `xml:",chardata"`
+	} `xml:"startsWith"`
 	ValidationRules []Rule `xml:"validationRules"`
 	Visibility      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibility"`
-	WebLinks           []WebLink `xml:"webLinks"`
-	CustomSettingsType *struct {
-		Text string `xml:",chardata"`
-	} `xml:"customSettingsType"`
-	StartsWith *struct {
-		Text string `xml:",chardata"`
-	} `xml:"startsWith"`
+	WebLinks []WebLink `xml:"webLinks"`
 }
 
 func (p *CustomObject) MetaCheck() {}
