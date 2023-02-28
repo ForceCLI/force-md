@@ -105,6 +105,9 @@ func add(file string, metadataType string, member string) {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
+	if err := general.Tidy(p, file); err != nil {
+		log.Warn("tidying failed: " + err.Error())
+	}
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
