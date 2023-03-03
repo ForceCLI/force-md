@@ -2,10 +2,6 @@
 
 List values
 
-### Synopsis
-
-List values
-
 ```
 force-md standardvalueset list [flags] [filename]...
 ```

@@ -2,10 +2,6 @@
 
 List object fields in a table
 
-### Synopsis
-
-List object fields in a table
-
 ```
 force-md objects fields table [flags] [filename]...
 ```

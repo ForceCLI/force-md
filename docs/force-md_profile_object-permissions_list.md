@@ -2,10 +2,6 @@
 
 List object permissions
 
-### Synopsis
-
-List object permissions
-
 ```
 force-md profile object-permissions list [flags] [filename]...
 ```

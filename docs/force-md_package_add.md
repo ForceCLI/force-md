@@ -2,10 +2,6 @@
 
 Add metadata item to package.xml
 
-### Synopsis
-
-Add metadata item to package.xml
-
 ```
 force-md package add -t Type -n Name [filename]...
 ```

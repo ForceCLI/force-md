@@ -2,10 +2,6 @@
 
 List object fields
 
-### Synopsis
-
-List object fields
-
 ```
 force-md objects fields list [flags] [filename]...
 ```

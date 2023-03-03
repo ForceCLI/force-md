@@ -2,10 +2,6 @@
 
 Manage object record type metadata
 
-### Synopsis
-
-Manage object record type metadata
-
 ### Options
 
 ```

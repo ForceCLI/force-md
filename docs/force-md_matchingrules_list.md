@@ -2,10 +2,6 @@
 
 List matching rules
 
-### Synopsis
-
-List matching rules
-
 ```
 force-md matchingrules list [flags] [filename]...
 ```

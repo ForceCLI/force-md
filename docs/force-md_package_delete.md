@@ -2,10 +2,6 @@
 
 Remove metadata item from package.xml
 
-### Synopsis
-
-Remove metadata item from package.xml
-
 ```
 force-md package delete -t Type -n Name [filename]...
 ```

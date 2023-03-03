@@ -2,10 +2,6 @@
 
 Manage tabs
 
-### Synopsis
-
-Manage tabs
-
 ### Options
 
 ```

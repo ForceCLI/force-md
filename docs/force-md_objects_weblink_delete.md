@@ -2,10 +2,6 @@
 
 Delete object web link
 
-### Synopsis
-
-Delete object web link
-
 ```
 force-md objects weblink delete -s WebLink [filename]...
 ```

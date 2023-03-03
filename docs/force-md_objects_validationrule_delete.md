@@ -2,10 +2,6 @@
 
 Delete object validation rule
 
-### Synopsis
-
-Delete object validation rule
-
 ```
 force-md objects validationrule delete -r ValidationRule [flags] [filename]...
 ```

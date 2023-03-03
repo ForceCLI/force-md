@@ -2,10 +2,6 @@
 
 Display record type picklist options
 
-### Synopsis
-
-Display record type picklist options
-
 ```
 force-md objects recordtype picklist table [flags] [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Manage object field set metadata
 
-### Synopsis
-
-Manage object field set metadata
-
 ### Options
 
 ```

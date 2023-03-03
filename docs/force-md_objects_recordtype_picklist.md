@@ -2,10 +2,6 @@
 
 Manage record type picklist options
 
-### Synopsis
-
-Manage record type picklist options
-
 ### Options
 
 ```

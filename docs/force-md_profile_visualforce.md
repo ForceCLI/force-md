@@ -2,10 +2,6 @@
 
 Manage visualforce page visibility
 
-### Synopsis
-
-Manage visualforce page visibility
-
 ### Options
 
 ```

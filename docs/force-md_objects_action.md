@@ -2,10 +2,6 @@
 
 Manage Action Overrides 
 
-### Synopsis
-
-Manage Action Overrides 
-
 ### Options
 
 ```

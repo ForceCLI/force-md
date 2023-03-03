@@ -2,10 +2,6 @@
 
 list items in package.xml
 
-### Synopsis
-
-list items in package.xml
-
 ```
 force-md package list [filename]...
 ```

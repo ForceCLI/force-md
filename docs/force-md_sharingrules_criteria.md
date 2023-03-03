@@ -2,10 +2,6 @@
 
 Manage criteria-based sharing rules
 
-### Synopsis
-
-Manage criteria-based sharing rules
-
 ### Options
 
 ```

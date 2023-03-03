@@ -2,10 +2,6 @@
 
 Manage apex class visibility
 
-### Synopsis
-
-Manage apex class visibility
-
 ### Options
 
 ```

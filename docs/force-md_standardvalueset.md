@@ -2,10 +2,6 @@
 
 Manage Standard Value Sets
 
-### Synopsis
-
-Manage Standard Value Sets
-
 ### Options
 
 ```

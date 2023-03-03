@@ -2,10 +2,6 @@
 
 Manage page layouts
 
-### Synopsis
-
-Manage page layouts
-
 ### Options
 
 ```

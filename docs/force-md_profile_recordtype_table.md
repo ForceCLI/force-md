@@ -2,10 +2,6 @@
 
 List Record Types in a table
 
-### Synopsis
-
-List Record Types in a table
-
 ```
 force-md profile recordtype table [flags] [filename]...
 ```

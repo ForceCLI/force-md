@@ -2,10 +2,6 @@
 
 List workflow alerts
 
-### Synopsis
-
-List workflow alerts
-
 ```
 force-md workflows alerts list [flags] [filename]...
 ```

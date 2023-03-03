@@ -2,10 +2,6 @@
 
 Manage application visibility
 
-### Synopsis
-
-Manage application visibility
-
 ### Options
 
 ```

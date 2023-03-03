@@ -2,10 +2,6 @@
 
 Add tab visibility
 
-### Synopsis
-
-Add tab visibility
-
 ```
 force-md profile tab add -t TabName [flags] [filename]...
 ```

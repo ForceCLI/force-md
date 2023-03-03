@@ -2,10 +2,6 @@
 
 List report type fields
 
-### Synopsis
-
-List report type fields
-
 ```
 force-md reporttype fields list [filename]...
 ```

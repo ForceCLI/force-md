@@ -19,7 +19,14 @@ func init() {
 	deleteClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "apex classname")
 	deleteClassCmd.MarkFlagRequired("class")
 
+	editClassCmd.Flags().StringP("class", "c", "", "class name")
+	editClassCmd.Flags().BoolP("enable", "e", false, "enable class")
+	editClassCmd.Flags().BoolP("disable", "E", false, "disable class")
+	editClassCmd.MarkFlagsMutuallyExclusive("enable", "disable")
+	editClassCmd.MarkFlagRequired("class")
+
 	ApexCmd.AddCommand(addClassCmd)
+	ApexCmd.AddCommand(editClassCmd)
 	ApexCmd.AddCommand(deleteClassCmd)
 	ApexCmd.AddCommand(listClassesCmd)
 }
@@ -38,6 +45,24 @@ var addClassCmd = &cobra.Command{
 		className, _ := cmd.Flags().GetString("class")
 		for _, file := range args {
 			addClass(file, className)
+		}
+	},
+}
+
+var editClassCmd = &cobra.Command{
+	Use:   "edit -c class [flags] [filename]...",
+	Short: "Update class permissions",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		enabled, _ := cmd.Flags().GetBool("enable")
+		disabled, _ := cmd.Flags().GetBool("disable")
+		class, _ := cmd.Flags().GetString("class")
+		for _, file := range args {
+			if enabled {
+				updateApexClassVisibility(file, class, enabled)
+			} else if disabled {
+				updateApexClassVisibility(file, class, enabled)
+			}
 		}
 	},
 }
@@ -87,6 +112,28 @@ func deleteApexClassVisibility(file string, apexClassName string) {
 		return
 	}
 	err = p.DeleteApexClassAccess(apexClassName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func updateApexClassVisibility(file string, apexClassName string, enable bool) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	if enable {
+		err = p.EnableApexClassAccess(apexClassName)
+	} else {
+		err = p.DisableApexClassAccess(apexClassName)
+	}
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

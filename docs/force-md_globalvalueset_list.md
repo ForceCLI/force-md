@@ -2,10 +2,6 @@
 
 List global value set values
 
-### Synopsis
-
-List global value set values
-
 ```
 force-md globalvalueset list [filename]... [flags]
 ```

@@ -2,10 +2,6 @@
 
 Manage tab visibility
 
-### Synopsis
-
-Manage tab visibility
-
 ### Options
 
 ```

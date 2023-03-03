@@ -2,10 +2,6 @@
 
 List permission sets
 
-### Synopsis
-
-List permission sets
-
 ```
 force-md permissionsetgroup permissionset list [filename]...
 ```

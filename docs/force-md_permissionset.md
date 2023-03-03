@@ -2,10 +2,6 @@
 
 Manage Permission Sets
 
-### Synopsis
-
-Manage Permission Sets
-
 ### Options
 
 ```

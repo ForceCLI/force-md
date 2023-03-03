@@ -2,10 +2,6 @@
 
 Manage Profile Action Overrides 
 
-### Synopsis
-
-Manage Profile Action Overrides 
-
 ### Options
 
 ```

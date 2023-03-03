@@ -2,10 +2,6 @@
 
 Delete object record type
 
-### Synopsis
-
-Delete object record type
-
 ```
 force-md objects recordtype delete [flags] [filename]...
 ```

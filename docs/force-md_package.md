@@ -2,10 +2,6 @@
 
 Manage package.xml or destructiveChanges[Pre|Post].xml
 
-### Synopsis
-
-Manage package.xml or destructiveChanges[Pre|Post].xml
-
 ### Options
 
 ```

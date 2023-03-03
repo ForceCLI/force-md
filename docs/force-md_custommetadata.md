@@ -2,10 +2,6 @@
 
 Manage Custom Metadata
 
-### Synopsis
-
-Manage Custom Metadata
-
 ### Options
 
 ```

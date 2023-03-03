@@ -2,10 +2,6 @@
 
 Manage workflow alerts
 
-### Synopsis
-
-Manage workflow alerts
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 Show object field
 
-### Synopsis
-
-Show object field
-
 ```
 force-md objects fields show -f Field [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Manage Global Value Sets
 
-### Synopsis
-
-Manage Global Value Sets
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 List Profile Action Overrides in a table
 
-### Synopsis
-
-List Profile Action Overrides in a table
-
 ```
 force-md application action table [flags] [filename]...
 ```

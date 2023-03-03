@@ -2,10 +2,6 @@
 
 Create new custom permission
 
-### Synopsis
-
-Create new custom permission
-
 ```
 force-md custompermission new -l <label> [filename]...
 ```

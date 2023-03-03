@@ -2,10 +2,6 @@
 
 List object field sets
 
-### Synopsis
-
-List object field sets
-
 ```
 force-md objects fieldset list [filename]...
 ```

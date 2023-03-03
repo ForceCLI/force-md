@@ -2,10 +2,6 @@
 
 Manage Applications
 
-### Synopsis
-
-Manage Applications
-
 ### Options
 
 ```

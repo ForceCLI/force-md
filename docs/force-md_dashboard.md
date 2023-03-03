@@ -2,10 +2,6 @@
 
 Manage Dashboards
 
-### Synopsis
-
-Manage Dashboards
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 List report type sections
 
-### Synopsis
-
-List report type sections
-
 ```
 force-md reporttype sections list [filename]...
 ```

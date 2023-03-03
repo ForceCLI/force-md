@@ -2,10 +2,6 @@
 
 Add field to report type
 
-### Synopsis
-
-Add field to report type
-
 ```
 force-md reporttype fields add -s Section -t Table -f Field [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Manage record type visibility
 
-### Synopsis
-
-Manage record type visibility
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 Add Apex Class to Permission Set
 
-### Synopsis
-
-Add Apex Class to Permission Set
-
 ```
 force-md permissionset apex add -c ClassName [flags] [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Manage reports used by dashboard
 
-### Synopsis
-
-Manage reports used by dashboard
-
 ### Options
 
 ```

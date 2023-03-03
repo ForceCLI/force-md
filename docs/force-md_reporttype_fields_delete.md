@@ -2,10 +2,6 @@
 
 Delete field from report type
 
-### Synopsis
-
-Delete field from report type
-
 ```
 force-md reporttype fields delete -f Field [filename]...
 ```

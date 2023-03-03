@@ -2,10 +2,6 @@
 
 List user permissions enabled
 
-### Synopsis
-
-List user permissions enabled
-
 ```
 force-md permissionset user-permissions list [flags] [filename]...
 ```

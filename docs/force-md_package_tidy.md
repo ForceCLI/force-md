@@ -2,10 +2,6 @@
 
 Tidy package.xml
 
-### Synopsis
-
-Tidy package.xml
-
 ```
 force-md package tidy [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Assign picklist value to record type
 
-### Synopsis
-
-Assign picklist value to record type
-
 ```
 force-md objects recordtype picklist add [flags] [filename]...
 ```

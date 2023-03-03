@@ -2,10 +2,6 @@
 
 Show page layout assignment
 
-### Synopsis
-
-Show page layout assignment
-
 ```
 force-md profile layout show -o SObject [filename]...
 ```

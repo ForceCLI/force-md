@@ -2,10 +2,6 @@
 
 Delete object field
 
-### Synopsis
-
-Delete object field
-
 ```
 force-md objects fields delete -f Field [flags] [filename]...
 ```

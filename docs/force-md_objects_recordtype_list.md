@@ -2,10 +2,6 @@
 
 List object record types
 
-### Synopsis
-
-List object record types
-
 ```
 force-md objects recordtype list [filename]...
 ```

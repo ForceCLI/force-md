@@ -2,10 +2,6 @@
 
 Manage Permission Set Groups
 
-### Synopsis
-
-Manage Permission Set Groups
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 Create new package.xml file
 
-### Synopsis
-
-Create new package.xml file
-
 ```
 force-md package new [filename]...
 ```

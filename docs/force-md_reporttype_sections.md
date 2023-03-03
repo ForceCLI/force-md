@@ -2,10 +2,6 @@
 
 Manage report type sections
 
-### Synopsis
-
-Manage report type sections
-
 ### Options
 
 ```

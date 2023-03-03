@@ -2,10 +2,6 @@
 
 Tidy object metadata
 
-### Synopsis
-
-Tidy object metadata
-
 ```
 force-md objects tidy [flags] [filename]...
 ```

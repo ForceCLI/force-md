@@ -2,10 +2,6 @@
 
 List applications assigned
 
-### Synopsis
-
-List applications assigned
-
 ```
 force-md profile application list [flags] [filename]...
 ```

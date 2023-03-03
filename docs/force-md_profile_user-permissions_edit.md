@@ -2,10 +2,6 @@
 
 Edit user permissions
 
-### Synopsis
-
-Edit user permissions
-
 ```
 force-md profile user-permissions edit [flags] [filename]...
 ```

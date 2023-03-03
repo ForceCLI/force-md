@@ -2,10 +2,6 @@
 
 Manage owner-based sharing rules
 
-### Synopsis
-
-Manage owner-based sharing rules
-
 ### Options
 
 ```

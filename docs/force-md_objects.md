@@ -2,10 +2,6 @@
 
 Manage Custom and Standard Objects
 
-### Synopsis
-
-Manage Custom and Standard Objects
-
 ### Options
 
 ```

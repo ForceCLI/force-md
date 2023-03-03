@@ -2,10 +2,6 @@
 
 List workflow field updates
 
-### Synopsis
-
-List workflow field updates
-
 ```
 force-md workflows field-updates list [flags] [filename]...
 ```

@@ -2,10 +2,6 @@
 
 Create new permission set
 
-### Synopsis
-
-Create new permission set
-
 ```
 force-md permissionset new [flags] [filename]...
 ```

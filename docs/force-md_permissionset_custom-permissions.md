@@ -2,10 +2,6 @@
 
 Manage custom permissions
 
-### Synopsis
-
-Manage custom permissions
-
 ### Options
 
 ```

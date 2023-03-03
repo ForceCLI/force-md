@@ -2,10 +2,6 @@
 
 Tidy profile metadata
 
-### Synopsis
-
-Tidy profile metadata
-
 ```
 force-md profile tidy [flags] [filename]...
 ```

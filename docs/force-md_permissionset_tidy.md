@@ -2,10 +2,6 @@
 
 Tidy Permission Set metadata
 
-### Synopsis
-
-Tidy Permission Set metadata
-
 ```
 force-md permissionset tidy [flags] [filename]...
 ```

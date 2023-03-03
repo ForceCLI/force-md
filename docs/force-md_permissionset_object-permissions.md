@@ -2,10 +2,6 @@
 
 Update object permissions
 
-### Synopsis
-
-Update object permissions
-
 ### Options
 
 ```

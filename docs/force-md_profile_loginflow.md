@@ -2,10 +2,6 @@
 
 Manage login flow
 
-### Synopsis
-
-Manage login flow
-
 ### Options
 
 ```

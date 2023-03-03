@@ -2,10 +2,6 @@
 
 Add Permission Set to Permission Set
 
-### Synopsis
-
-Add Permission Set to Permission Set
-
 ```
 force-md permissionsetgroup permissionset add -p PermissionSetName [flags] [filename]...
 ```

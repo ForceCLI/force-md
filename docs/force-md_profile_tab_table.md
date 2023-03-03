@@ -2,10 +2,6 @@
 
 List Tabs in a table
 
-### Synopsis
-
-List Tabs in a table
-
 ```
 force-md profile tab table [flags] [filename]...
 ```

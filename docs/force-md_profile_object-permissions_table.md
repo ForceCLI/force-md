@@ -2,10 +2,6 @@
 
 List Object Permissions in a table
 
-### Synopsis
-
-List Object Permissions in a table
-
 ```
 force-md profile object-permissions table [flags] [filename]...
 ```

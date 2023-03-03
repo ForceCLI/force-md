@@ -2,10 +2,6 @@
 
 List fields
 
-### Synopsis
-
-List fields
-
 ```
 force-md permissionset field-permissions list [filename]...
 ```

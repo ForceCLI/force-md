@@ -2,10 +2,6 @@
 
 Create new profile
 
-### Synopsis
-
-Create new profile
-
 ```
 force-md profile new [flags] [filename]...
 ```

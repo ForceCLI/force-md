@@ -2,10 +2,6 @@
 
 List custom metadata in a table
 
-### Synopsis
-
-List custom metadata in a table
-
 ```
 force-md custommetadata table [flags] [filename]...
 ```

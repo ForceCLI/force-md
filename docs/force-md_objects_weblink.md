@@ -2,10 +2,6 @@
 
 Manage object web link metadata
 
-### Synopsis
-
-Manage object web link metadata
-
 ### Options
 
 ```

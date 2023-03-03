@@ -2,10 +2,6 @@
 
 Tidy custom application
 
-### Synopsis
-
-Tidy custom application
-
 ```
 force-md application tidy [filename]...
 ```

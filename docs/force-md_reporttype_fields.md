@@ -2,10 +2,6 @@
 
 Manage report type fields
 
-### Synopsis
-
-Manage report type fields
-
 ### Options
 
 ```

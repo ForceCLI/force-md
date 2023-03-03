@@ -2,10 +2,6 @@
 
 List apex classes
 
-### Synopsis
-
-List apex classes
-
 ```
 force-md permissionset apex list [filename]...
 ```

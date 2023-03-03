@@ -2,10 +2,6 @@
 
 Edit permission set
 
-### Synopsis
-
-Edit permission set
-
 ```
 force-md permissionset edit [flags] [filename]...
 ```

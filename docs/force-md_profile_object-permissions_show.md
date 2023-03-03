@@ -2,10 +2,6 @@
 
 Show object permissions
 
-### Synopsis
-
-Show object permissions
-
 ```
 force-md profile object-permissions show -f Object [filename]...
 ```

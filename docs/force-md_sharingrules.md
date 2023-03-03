@@ -2,10 +2,6 @@
 
 Manage Sharing Rules
 
-### Synopsis
-
-Manage Sharing Rules
-
 ### Options
 
 ```

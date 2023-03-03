@@ -2,10 +2,6 @@
 
 Manage Custom Permissions
 
-### Synopsis
-
-Manage Custom Permissions
-
 ### Options
 
 ```

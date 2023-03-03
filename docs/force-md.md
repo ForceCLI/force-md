@@ -2,10 +2,6 @@
 
 force-md manipulate Salesforce metadata
 
-### Synopsis
-
-force-md manipulate Salesforce metadata
-
 ```
 force-md
 ```

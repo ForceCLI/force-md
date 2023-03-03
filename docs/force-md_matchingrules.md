@@ -2,10 +2,6 @@
 
 Manage Matching Rules
 
-### Synopsis
-
-Manage Matching Rules
-
 ### Options
 
 ```

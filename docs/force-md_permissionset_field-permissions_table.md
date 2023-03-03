@@ -2,10 +2,6 @@
 
 List Field Permissions in a table
 
-### Synopsis
-
-List Field Permissions in a table
-
 ```
 force-md permissionset field-permissions table [flags] [filename]...
 ```

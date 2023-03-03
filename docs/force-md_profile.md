@@ -2,10 +2,6 @@
 
 Manage Profiles
 
-### Synopsis
-
-Manage Profiles
-
 ### Options
 
 ```

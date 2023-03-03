@@ -2,10 +2,6 @@
 
 Tidy global value set
 
-### Synopsis
-
-Tidy global value set
-
 ```
 force-md globalvalueset tidy [flags] [filename]...
 ```

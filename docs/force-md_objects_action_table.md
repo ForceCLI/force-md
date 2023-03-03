@@ -2,10 +2,6 @@
 
 List Action Overrides in a table
 
-### Synopsis
-
-List Action Overrides in a table
-
 ```
 force-md objects action table [flags] [filename]...
 ```

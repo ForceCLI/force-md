@@ -2,10 +2,6 @@
 
 List custom permissions enabled
 
-### Synopsis
-
-List custom permissions enabled
-
 ```
 force-md permissionset custom-permissions list [flags] [filename]...
 ```

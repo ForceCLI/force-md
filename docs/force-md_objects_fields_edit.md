@@ -2,10 +2,6 @@
 
 Edit object fields
 
-### Synopsis
-
-Edit object fields
-
 ```
 force-md objects fields edit -f Field [flags] [filename]...
 ```

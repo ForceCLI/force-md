@@ -2,10 +2,6 @@
 
 Manage user permissions
 
-### Synopsis
-
-Manage user permissions
-
 ### Options
 
 ```

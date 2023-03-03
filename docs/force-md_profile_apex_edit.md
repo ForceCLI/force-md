@@ -1,16 +1,18 @@
-## force-md profile apex add
+## force-md profile apex edit
 
-Add Apex Class to Profile
+Update class permissions
 
 ```
-force-md profile apex add -c ClassName [flags] [filename]...
+force-md profile apex edit -c class [flags] [filename]...
 ```
 
 ### Options
 
 ```
   -c, --class string   class name
-  -h, --help           help for add
+  -E, --disable        disable class
+  -e, --enable         enable class
+  -h, --help           help for edit
 ```
 
 ### Options inherited from parent commands

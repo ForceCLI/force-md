@@ -2,10 +2,6 @@
 
 Update object permissions
 
-### Synopsis
-
-Update object permissions
-
 ```
 force-md permissionset object-permissions edit -o SObject [flags] [filename]...
 ```

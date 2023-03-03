@@ -2,10 +2,6 @@
 
 List validation rules
 
-### Synopsis
-
-List validation rules
-
 ```
 force-md objects validationrule list [filename]... [flags]
 ```

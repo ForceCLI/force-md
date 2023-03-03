@@ -2,10 +2,6 @@
 
 List record types
 
-### Synopsis
-
-List record types
-
 ```
 force-md permissionset recordtype list [filename]...
 ```

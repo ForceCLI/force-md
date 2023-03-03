@@ -2,10 +2,6 @@
 
 List tabs
 
-### Synopsis
-
-List tabs
-
 ```
 force-md application tab list [filename]...
 ```

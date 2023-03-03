@@ -2,10 +2,6 @@
 
 Manage flow visibility
 
-### Synopsis
-
-Manage flow visibility
-
 ### Options
 
 ```

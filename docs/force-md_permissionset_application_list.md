@@ -2,10 +2,6 @@
 
 List applications assigned
 
-### Synopsis
-
-List applications assigned
-
 ```
 force-md permissionset application list [flags] [filename]...
 ```

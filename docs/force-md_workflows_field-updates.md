@@ -2,10 +2,6 @@
 
 Manage workflow field updates
 
-### Synopsis
-
-Manage workflow field updates
-
 ### Options
 
 ```

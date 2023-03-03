@@ -39,6 +39,34 @@ func (p *Profile) DeleteApexClassAccess(apexClassName string) error {
 	return nil
 }
 
+func (p *Profile) EnableApexClassAccess(apexClassName string) error {
+	found := false
+	for i, f := range p.ClassAccesses {
+		if f.ApexClass == apexClassName {
+			found = true
+			p.ClassAccesses[i].Enabled = TrueText
+		}
+	}
+	if !found {
+		return errors.New("class not found")
+	}
+	return nil
+}
+
+func (p *Profile) DisableApexClassAccess(apexClassName string) error {
+	found := false
+	for i, f := range p.ClassAccesses {
+		if f.ApexClass == apexClassName {
+			found = true
+			p.ClassAccesses[i].Enabled = FalseText
+		}
+	}
+	if !found {
+		return errors.New("class not found")
+	}
+	return nil
+}
+
 func (p *Profile) GetApexClasses() ApexClassList {
 	return p.ClassAccesses
 }

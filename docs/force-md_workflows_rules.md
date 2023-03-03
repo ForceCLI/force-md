@@ -2,10 +2,6 @@
 
 Manage workflow rules
 
-### Synopsis
-
-Manage workflow rules
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 List workflow rules
 
-### Synopsis
-
-List workflow rules
-
 ```
 force-md sharingrules owner list [flags] [filename]...
 ```

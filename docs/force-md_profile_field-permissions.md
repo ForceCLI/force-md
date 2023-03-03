@@ -2,10 +2,6 @@
 
 Manage field permissions
 
-### Synopsis
-
-Manage field permissions
-
 ### Options
 
 ```

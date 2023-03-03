@@ -2,10 +2,6 @@
 
 List object web links
 
-### Synopsis
-
-List object web links
-
 ```
 force-md objects weblink list [filename]...
 ```

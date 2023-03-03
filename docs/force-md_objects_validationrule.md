@@ -2,10 +2,6 @@
 
 Manage validation rule metadata
 
-### Synopsis
-
-Manage validation rule metadata
-
 ### Options
 
 ```

@@ -2,10 +2,6 @@
 
 List reports used by dashboard
 
-### Synopsis
-
-List reports used by dashboard
-
 ```
 force-md dashboard reports list [filename]...
 ```

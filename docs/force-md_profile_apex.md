@@ -2,10 +2,6 @@
 
 Manage apex class visibility
 
-### Synopsis
-
-Manage apex class visibility
-
 ### Options
 
 ```
@@ -23,5 +19,6 @@ Manage apex class visibility
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
 * [force-md profile apex add](force-md_profile_apex_add.md)	 - Add Apex Class to Profile
 * [force-md profile apex delete](force-md_profile_apex_delete.md)	 - Delete apex class visibility
+* [force-md profile apex edit](force-md_profile_apex_edit.md)	 - Update class permissions
 * [force-md profile apex list](force-md_profile_apex_list.md)	 - List apex classes
 

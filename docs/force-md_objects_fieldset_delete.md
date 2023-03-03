@@ -2,10 +2,6 @@
 
 Delete object field set
 
-### Synopsis
-
-Delete object field set
-
 ```
 force-md objects fieldset delete -s FieldSet [filename]...
 ```
