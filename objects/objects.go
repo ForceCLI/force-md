@@ -373,6 +373,9 @@ type CustomObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 	} `xml:"compactLayouts"`
+	CustomHelpPage *struct {
+		Text string `xml:",chardata"`
+	} `xml:"customHelpPage"`
 	CustomSettingsType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customSettingsType"`
