@@ -40,9 +40,10 @@ type Rule struct {
 	} `xml:"errorMessage"`
 }
 type Field struct {
-	FullName       string       `xml:"fullName"`
-	BusinessStatus *TextLiteral `xml:"businessStatus"`
-	CaseSensitive  *struct {
+	FullName          string       `xml:"fullName"`
+	BusinessStatus    *TextLiteral `xml:"businessStatus"`
+	BusinessOwnerUser *TextLiteral `xml:"businessOwnerUser"`
+	CaseSensitive     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
 	DefaultValue     *TextLiteral `xml:"defaultValue"`
