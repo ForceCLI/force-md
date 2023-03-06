@@ -8,6 +8,7 @@ func (p *PermissionSet) Tidy() {
 	p.ApplicationVisibilities.Tidy()
 	p.ClassAccesses.Tidy()
 	p.CustomPermissions.Tidy()
+	p.CustomMetadataTypeAccesses.Tidy()
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
 	p.PageAccesses.Tidy()
@@ -53,6 +54,18 @@ func (rt RecordTypeList) Tidy() {
 }
 
 func (cp CustomPermissionList) Tidy() {
+	sort.Slice(cp, func(i, j int) bool {
+		return cp[i].Name < cp[j].Name
+	})
+}
+
+func (cp CustomMetadataTypeList) Tidy() {
+	sort.Slice(cp, func(i, j int) bool {
+		return cp[i].Name < cp[j].Name
+	})
+}
+
+func (cp CustomSettingList) Tidy() {
 	sort.Slice(cp, func(i, j int) bool {
 		return cp[i].Name < cp[j].Name
 	})
