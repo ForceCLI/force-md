@@ -22,30 +22,6 @@ func (p *Profile) Tidy() {
 	p.UserPermissions.Tidy()
 }
 
-func (op ObjectPermissionsList) Tidy() {
-	sort.Slice(op, func(i, j int) bool {
-		return op[i].Object.Text < op[j].Object.Text
-	})
-}
-
-func (ca ApexClassList) Tidy() {
-	sort.Slice(ca, func(i, j int) bool {
-		return ca[i].ApexClass < ca[j].ApexClass
-	})
-}
-
-func (cp CustomPermissionsList) Tidy() {
-	sort.Slice(cp, func(i, j int) bool {
-		return cp[i].Name.Text < cp[j].Name.Text
-	})
-}
-
-func (fp FieldPermissionsList) Tidy() {
-	sort.Slice(fp, func(i, j int) bool {
-		return fp[i].Field.Text < fp[j].Field.Text
-	})
-}
-
 func (av ApplicationVisibilityList) Tidy() {
 	sort.Slice(av, func(i, j int) bool {
 		return av[i].Application < av[j].Application
@@ -64,18 +40,6 @@ func (la LayoutAssignmentList) Tidy() {
 		}
 
 		return left < right
-	})
-}
-
-func (up UserPermissionList) Tidy() {
-	sort.Slice(up, func(i, j int) bool {
-		return up[i].Name < up[j].Name
-	})
-}
-
-func (pa PageAccessList) Tidy() {
-	sort.Slice(pa, func(i, j int) bool {
-		return pa[i].ApexPage < pa[j].ApexPage
 	})
 }
 

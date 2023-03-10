@@ -48,3 +48,13 @@ func (p *PermissionSet) DeleteRecordType(recordtype string) error {
 	p.RecordTypeVisibilities = newPerms
 	return nil
 }
+
+func (p *PermissionSet) GetVisibleRecordTypes() []string {
+	var recordTypes []string
+	for _, r := range p.RecordTypeVisibilities {
+		if r.Visible.ToBool() {
+			recordTypes = append(recordTypes, r.RecordType)
+		}
+	}
+	return recordTypes
+}

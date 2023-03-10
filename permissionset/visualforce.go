@@ -45,6 +45,16 @@ func (p *PermissionSet) GetVisualforcePageVisibility() PageAccessList {
 	return p.PageAccesses
 }
 
+func (p *PermissionSet) GetEnabledPageAccesses() []string {
+	var pages []string
+	for _, v := range p.PageAccesses {
+		if v.Enabled.ToBool() {
+			pages = append(pages, v.ApexPage)
+		}
+	}
+	return pages
+}
+
 func (p *PermissionSet) CloneVisualforcePageAccess(src, dest string) error {
 	for _, f := range p.PageAccesses {
 		if f.ApexPage == dest {

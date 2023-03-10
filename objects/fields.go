@@ -3,7 +3,7 @@ package objects
 import (
 	"strings"
 
-	"github.com/imdario/mergo"
+	"github.com/cwarden/mergo"
 	"github.com/pkg/errors"
 
 	. "github.com/octoberswimmer/force-md/general"

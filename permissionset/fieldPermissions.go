@@ -81,3 +81,25 @@ func defaultFieldPermissions(fieldName string) FieldPermissions {
 	}
 	return fp
 }
+
+func (p *PermissionSet) GetGrantedFieldPermissions() []FieldPermissions {
+	var fieldPermissions FieldPermissionsList
+	for _, f := range p.FieldPermissions {
+		permissionsGranted := false
+		fieldPermsGranted := FieldPermissions{
+			Field: f.Field,
+		}
+		if f.Readable.ToBool() {
+			fieldPermsGranted.Readable = TrueText
+			permissionsGranted = true
+		}
+		if f.Editable.ToBool() {
+			fieldPermsGranted.Editable = TrueText
+			permissionsGranted = true
+		}
+		if permissionsGranted {
+			fieldPermissions = append(fieldPermissions, fieldPermsGranted)
+		}
+	}
+	return fieldPermissions
+}

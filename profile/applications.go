@@ -66,7 +66,16 @@ APPS:
 		applications = append(applications, v)
 	}
 	return applications
+}
 
+func (p *Profile) GetVisibleApplications() []string {
+	var applications []string
+	for _, v := range p.ApplicationVisibilities {
+		if v.Visible.ToBool() {
+			applications = append(applications, v.Application)
+		}
+	}
+	return applications
 }
 
 func (p *Profile) SetApplicationVisibility(applicationName string, updates ApplicationVisibility) error {

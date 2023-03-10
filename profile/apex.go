@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 
 	. "github.com/octoberswimmer/force-md/general"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
 
 var ClassExistsError = errors.New("apex class already exists")
@@ -14,7 +15,7 @@ func (p *Profile) AddClass(className string) error {
 			return ClassExistsError
 		}
 	}
-	p.ClassAccesses = append(p.ClassAccesses, ApexClass{
+	p.ClassAccesses = append(p.ClassAccesses, permissionset.ApexClass{
 		ApexClass: className,
 		Enabled:   TrueText,
 	})
@@ -67,6 +68,16 @@ func (p *Profile) DisableApexClassAccess(apexClassName string) error {
 	return nil
 }
 
-func (p *Profile) GetApexClasses() ApexClassList {
+func (p *Profile) GetApexClasses() permissionset.ApexClassList {
 	return p.ClassAccesses
+}
+
+func (p *Profile) GetEnabledClasses() []string {
+	var classes []string
+	for _, v := range p.ClassAccesses {
+		if v.Enabled.ToBool() {
+			classes = append(classes, v.ApexClass)
+		}
+	}
+	return classes
 }

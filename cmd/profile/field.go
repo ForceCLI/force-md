@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/octoberswimmer/force-md/internal"
+	"github.com/octoberswimmer/force-md/permissionset"
 	"github.com/octoberswimmer/force-md/profile"
 )
 
@@ -127,8 +128,8 @@ var tableFieldsCmd = &cobra.Command{
 	},
 }
 
-func fieldPermissionsToUpdate(cmd *cobra.Command) profile.FieldPermissions {
-	perms := profile.FieldPermissions{}
+func fieldPermissionsToUpdate(cmd *cobra.Command) permissionset.FieldPermissions {
+	perms := permissionset.FieldPermissions{}
 	perms.Editable = textValue(cmd, "edit")
 	perms.Readable = textValue(cmd, "read")
 	return perms
@@ -188,7 +189,7 @@ func deleteFieldPermissions(file string, fieldName string) {
 	}
 }
 
-func updateFieldPermissions(file string, perms profile.FieldPermissions) {
+func updateFieldPermissions(file string, perms permissionset.FieldPermissions) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
@@ -232,17 +233,17 @@ func listFields(file string) {
 func tableFieldPermissions(files []string) {
 	var filters []profile.FieldFilter
 	if fieldName != "" {
-		filters = append(filters, func(f profile.FieldPermissions) bool {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
 			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
 		})
 	}
 	if objectName != "" {
-		filters = append(filters, func(f profile.FieldPermissions) bool {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
 			return strings.HasPrefix(strings.ToLower(f.Field.Text), strings.ToLower(objectName+"."))
 		})
 	}
 	type perm struct {
-		fields  profile.FieldPermissionsList
+		fields  permissionset.FieldPermissionsList
 		profile string
 	}
 	var perms []perm
