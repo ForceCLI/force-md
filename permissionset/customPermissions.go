@@ -42,3 +42,13 @@ func (p *PermissionSet) DeleteCustomPermission(permissionName string) error {
 func (p *PermissionSet) GetCustomPermissions() CustomPermissionList {
 	return p.CustomPermissions
 }
+
+func (p *PermissionSet) GetEnabledCustomPermissions() []string {
+	var permissions []string
+	for _, v := range p.CustomPermissions {
+		if v.Enabled.ToBool() {
+			permissions = append(permissions, v.Name)
+		}
+	}
+	return permissions
+}

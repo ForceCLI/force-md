@@ -5,39 +5,12 @@ import (
 
 	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
-
-type FieldPermissions struct {
-	Editable BooleanText `xml:"editable"`
-	Field    FieldName   `xml:"field"`
-	Readable BooleanText `xml:"readable"`
-}
-
-type CustomPermissions struct {
-	Enabled BooleanText    `xml:"enabled"`
-	Name    PermissionName `xml:"name"`
-}
-
-type CustomMetadataTypeAccess struct {
-	Enabled BooleanText        `xml:"enabled"`
-	Name    CustomMetadataName `xml:"name"`
-}
-
-type CustomMetadataTypeAccessList []CustomMetadataTypeAccess
-
-type CustomPermissionsList []CustomPermissions
-
-type FieldPermissionsList []FieldPermissions
-
-type FlowAccessList []FlowAccess
-
-type ObjectPermissionsList []ObjectPermissions
 
 type ApplicationVisibilityList []ApplicationVisibility
 
 type TabVisibilityList []TabVisibility
-
-type UserPermissionList []UserPermission
 
 type LayoutAssignmentList []LayoutAssignment
 
@@ -45,43 +18,14 @@ type LoginFlowsList []LoginFlow
 
 type LoginIpRangeList []LoginIpRange
 
-type PageAccessList []PageAccess
-
-type RecordTypeVisibilityList []RecordTypeVisibility
-
-type ObjectPermissions struct {
-	AllowCreate      BooleanText `xml:"allowCreate"`
-	AllowDelete      BooleanText `xml:"allowDelete"`
-	AllowEdit        BooleanText `xml:"allowEdit"`
-	AllowRead        BooleanText `xml:"allowRead"`
-	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
-	Object           ObjectName  `xml:"object"`
-	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
-}
-
 type TabVisibility struct {
 	Tab        string `xml:"tab"`
 	Visibility string `xml:"visibility"`
 }
 
-type PageAccess struct {
-	ApexPage string      `xml:"apexPage"`
-	Enabled  BooleanText `xml:"enabled"`
-}
-
-type UserPermission struct {
-	Enabled BooleanText `xml:"enabled"`
-	Name    string      `xml:"name"`
-}
-
 type LayoutAssignment struct {
 	Layout     string      `xml:"layout"`
 	RecordType *RecordType `xml:"recordType"`
-}
-
-type FlowAccess struct {
-	Enabled BooleanText `xml:"enabled"`
-	Flow    string      `xml:"flow"`
 }
 
 type LoginFlow struct {
@@ -106,9 +50,10 @@ type ApplicationVisibility struct {
 type RecordTypeVisibility struct {
 	Default              BooleanText  `xml:"default"`
 	PersonAccountDefault *BooleanText `xml:"personAccountDefault"`
-	RecordType           string       `xml:"recordType"`
-	Visible              BooleanText  `xml:"visible"`
+	permissionset.RecordTypeVisibility
 }
+
+type RecordTypeVisibilityList []RecordTypeVisibility
 
 type RecordType struct {
 	Text string `xml:",chardata"`
@@ -122,46 +67,35 @@ type PermissionName struct {
 	Text string `xml:",chardata"`
 }
 
-type CustomMetadataName struct {
-	Text string `xml:",chardata"`
-}
-
 type ObjectName struct {
 	Text string `xml:",chardata"`
 }
 
-type ApexClass struct {
-	ApexClass string      `xml:"apexClass"`
-	Enabled   BooleanText `xml:"enabled"`
-}
-
-type ApexClassList []ApexClass
-
 type Profile struct {
-	XMLName                 xml.Name                  `xml:"Profile"`
-	Xmlns                   string                    `xml:"xmlns,attr"`
-	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
-	ClassAccesses           ApexClassList             `xml:"classAccesses"`
+	XMLName                 xml.Name                    `xml:"Profile"`
+	Xmlns                   string                      `xml:"xmlns,attr"`
+	ApplicationVisibilities ApplicationVisibilityList   `xml:"applicationVisibilities"`
+	ClassAccesses           permissionset.ApexClassList `xml:"classAccesses"`
 	Custom                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	CustomMetadataTypeAccesses CustomMetadataTypeAccessList `xml:"customMetadataTypeAccesses"`
-	CustomPermissions          CustomPermissionsList        `xml:"customPermissions"`
-	Description                *string                      `xml:"description"`
-	FieldPermissions           FieldPermissionsList         `xml:"fieldPermissions"`
-	FlowAccesses               FlowAccessList               `xml:"flowAccesses"`
-	LayoutAssignments          LayoutAssignmentList         `xml:"layoutAssignments"`
-	LoginFlows                 *LoginFlow                   `xml:"loginFlows"`
+	CustomMetadataTypeAccesses permissionset.CustomMetadataTypeAccessList `xml:"customMetadataTypeAccesses"`
+	CustomPermissions          permissionset.CustomPermissionList         `xml:"customPermissions"`
+	Description                *string                                    `xml:"description"`
+	FieldPermissions           permissionset.FieldPermissionsList         `xml:"fieldPermissions"`
+	FlowAccesses               permissionset.FlowAccessList               `xml:"flowAccesses"`
+	LayoutAssignments          LayoutAssignmentList                       `xml:"layoutAssignments"`
+	LoginFlows                 *LoginFlow                                 `xml:"loginFlows"`
 	LoginHours                 *struct {
 		Text string `xml:",chardata"`
 	} `xml:"loginHours"`
-	LoginIPRanges          LoginIpRangeList         `xml:"loginIpRanges"`
-	ObjectPermissions      ObjectPermissionsList    `xml:"objectPermissions"`
-	PageAccesses           PageAccessList           `xml:"pageAccesses"`
-	RecordTypeVisibilities RecordTypeVisibilityList `xml:"recordTypeVisibilities"`
-	TabVisibilities        TabVisibilityList        `xml:"tabVisibilities"`
-	UserLicense            string                   `xml:"userLicense"`
-	UserPermissions        UserPermissionList       `xml:"userPermissions"`
+	LoginIPRanges          LoginIpRangeList                    `xml:"loginIpRanges"`
+	ObjectPermissions      permissionset.ObjectPermissionsList `xml:"objectPermissions"`
+	PageAccesses           permissionset.PageAccessList        `xml:"pageAccesses"`
+	RecordTypeVisibilities RecordTypeVisibilityList            `xml:"recordTypeVisibilities"`
+	TabVisibilities        TabVisibilityList                   `xml:"tabVisibilities"`
+	UserLicense            string                              `xml:"userLicense"`
+	UserPermissions        permissionset.UserPermissionList    `xml:"userPermissions"`
 }
 
 func NewBooleanText(val string) BooleanText {

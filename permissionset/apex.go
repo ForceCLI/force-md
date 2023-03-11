@@ -42,3 +42,13 @@ func (p *PermissionSet) DeleteApexClassAccess(apexClassName string) error {
 func (p *PermissionSet) GetApexClasses() ApexClassList {
 	return p.ClassAccesses
 }
+
+func (p *PermissionSet) GetEnabledClasses() []string {
+	var classes []string
+	for _, v := range p.ClassAccesses {
+		if v.Enabled.ToBool() {
+			classes = append(classes, v.ApexClass)
+		}
+	}
+	return classes
+}

@@ -8,13 +8,14 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	. "github.com/octoberswimmer/force-md/general"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
 
-type ObjectFilter func(ObjectPermissions) bool
+type ObjectFilter func(permissionset.ObjectPermissions) bool
 
 var ObjectExistsError = errors.New("object already exists")
 
-func (p *Profile) SetObjectPermissions(objectName string, updates ObjectPermissions) error {
+func (p *Profile) SetObjectPermissions(objectName string, updates permissionset.ObjectPermissions) error {
 	found := false
 	for i, f := range p.ObjectPermissions {
 		if f.Object.Text == objectName {
@@ -31,13 +32,13 @@ func (p *Profile) SetObjectPermissions(objectName string, updates ObjectPermissi
 	return nil
 }
 
-func defaultObjectPermissions(objectName string) ObjectPermissions {
+func defaultObjectPermissions(objectName string) permissionset.ObjectPermissions {
 	var falseBooleanText = BooleanText{
 		Text: "false",
 	}
 
-	op := ObjectPermissions{
-		Object:           ObjectName{objectName},
+	op := permissionset.ObjectPermissions{
+		Object:           permissionset.ObjectName{objectName},
 		AllowCreate:      falseBooleanText,
 		AllowDelete:      falseBooleanText,
 		AllowEdit:        falseBooleanText,
@@ -127,8 +128,8 @@ func (p *Profile) DeleteObjectTabVisibility(objectName string) {
 	p.TabVisibilities = newTabs
 }
 
-func (p *Profile) GetObjectPermissions(filters ...ObjectFilter) []ObjectPermissions {
-	var objectPermissions []ObjectPermissions
+func (p *Profile) GetObjectPermissions(filters ...ObjectFilter) []permissionset.ObjectPermissions {
+	var objectPermissions []permissionset.ObjectPermissions
 OBJECTS:
 	for _, o := range p.ObjectPermissions {
 		for _, filter := range filters {
@@ -137,6 +138,44 @@ OBJECTS:
 			}
 		}
 		objectPermissions = append(objectPermissions, o)
+	}
+	return objectPermissions
+}
+
+func (p *Profile) GetGrantedObjectPermissions() []permissionset.ObjectPermissions {
+	var objectPermissions []permissionset.ObjectPermissions
+	for _, o := range p.ObjectPermissions {
+		permissionsGranted := false
+		objectPermsGranted := permissionset.ObjectPermissions{
+			Object: o.Object,
+		}
+		if o.AllowCreate.ToBool() {
+			objectPermsGranted.AllowCreate = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowRead.ToBool() {
+			objectPermsGranted.AllowRead = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowEdit.ToBool() {
+			objectPermsGranted.AllowEdit = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowDelete.ToBool() {
+			objectPermsGranted.AllowDelete = TrueText
+			permissionsGranted = true
+		}
+		if o.ViewAllRecords.ToBool() {
+			objectPermsGranted.ViewAllRecords = TrueText
+			permissionsGranted = true
+		}
+		if o.ModifyAllRecords.ToBool() {
+			objectPermsGranted.ModifyAllRecords = TrueText
+			permissionsGranted = true
+		}
+		if permissionsGranted {
+			objectPermissions = append(objectPermissions, objectPermsGranted)
+		}
 	}
 	return objectPermissions
 }

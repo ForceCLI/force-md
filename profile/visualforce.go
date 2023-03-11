@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 
 	. "github.com/octoberswimmer/force-md/general"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
 
 var VisualforcePageExistsError = errors.New("visualforce page already exists")
@@ -17,7 +18,7 @@ func (p *Profile) AddVisualforcePageAccess(pageName string) error {
 		}
 	}
 
-	p.PageAccesses = append(p.PageAccesses, PageAccess{ApexPage: pageName, Enabled: TrueText})
+	p.PageAccesses = append(p.PageAccesses, permissionset.PageAccess{ApexPage: pageName, Enabled: TrueText})
 	p.PageAccesses.Tidy()
 	return nil
 }
@@ -39,8 +40,18 @@ func (p *Profile) DeleteVisualforcePageAccess(pageName string) error {
 	return nil
 }
 
-func (p *Profile) GetVisualforcePageVisibility() PageAccessList {
+func (p *Profile) GetVisualforcePageVisibility() permissionset.PageAccessList {
 	return p.PageAccesses
+}
+
+func (p *Profile) GetEnabledPageAccesses() []string {
+	var pages []string
+	for _, v := range p.PageAccesses {
+		if v.Enabled.ToBool() {
+			pages = append(pages, v.ApexPage)
+		}
+	}
+	return pages
 }
 
 func (p *Profile) CloneVisualforcePageAccess(src, dest string) error {
@@ -53,7 +64,7 @@ func (p *Profile) CloneVisualforcePageAccess(src, dest string) error {
 	for _, f := range p.PageAccesses {
 		if f.ApexPage == src {
 			found = true
-			clone := PageAccess{}
+			clone := permissionset.PageAccess{}
 			clone.Enabled.Text = f.Enabled.Text
 			clone.ApexPage = dest
 			p.PageAccesses = append(p.PageAccesses, clone)

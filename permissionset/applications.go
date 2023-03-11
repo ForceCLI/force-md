@@ -60,6 +60,16 @@ APPS:
 	return applications
 }
 
+func (p *PermissionSet) GetVisibleApplications() []string {
+	var applications []string
+	for _, v := range p.ApplicationVisibilities {
+		if v.Visible.ToBool() {
+			applications = append(applications, v.Application)
+		}
+	}
+	return applications
+}
+
 func (p *PermissionSet) SetApplicationVisibility(applicationName string, updates ApplicationVisibility) error {
 	found := false
 	for i, f := range p.ApplicationVisibilities {

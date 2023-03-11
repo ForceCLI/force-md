@@ -14,6 +14,7 @@ import (
 
 	. "github.com/octoberswimmer/force-md/general"
 	"github.com/octoberswimmer/force-md/internal"
+	"github.com/octoberswimmer/force-md/permissionset"
 	"github.com/octoberswimmer/force-md/profile"
 )
 
@@ -182,8 +183,8 @@ func textValue(cmd *cobra.Command, flag string) (t BooleanText) {
 	return t
 }
 
-func objectPermissionsFromFlags(cmd *cobra.Command) profile.ObjectPermissions {
-	perms := profile.ObjectPermissions{}
+func objectPermissionsFromFlags(cmd *cobra.Command) permissionset.ObjectPermissions {
+	perms := permissionset.ObjectPermissions{}
 	perms.AllowCreate = textValue(cmd, "create")
 	perms.AllowDelete = textValue(cmd, "delete")
 	perms.AllowEdit = textValue(cmd, "edit")
@@ -193,7 +194,7 @@ func objectPermissionsFromFlags(cmd *cobra.Command) profile.ObjectPermissions {
 	return perms
 }
 
-func updateObjectPermissions(file string, perms profile.ObjectPermissions) {
+func updateObjectPermissions(file string, perms permissionset.ObjectPermissions) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
@@ -249,7 +250,7 @@ func showObjectPermissions(file string, objectName string) {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	objects := p.GetObjectPermissions(func(o profile.ObjectPermissions) bool {
+	objects := p.GetObjectPermissions(func(o permissionset.ObjectPermissions) bool {
 		return strings.ToLower(o.Object.Text) == strings.ToLower(objectName)
 	})
 	if len(objects) == 0 {
@@ -264,13 +265,13 @@ func showObjectPermissions(file string, objectName string) {
 	fmt.Println(string(b))
 }
 
-func listObjectPermissions(file string, filter profile.ObjectPermissions) {
+func listObjectPermissions(file string, filter permissionset.ObjectPermissions) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	flagFilter := func(o profile.ObjectPermissions) bool {
+	flagFilter := func(o permissionset.ObjectPermissions) bool {
 		if filter.AllowCreate.Text != "" && filter.AllowCreate.ToBool() != o.AllowCreate.ToBool() {
 			return false
 		}
@@ -315,14 +316,14 @@ func listObjectPermissions(file string, filter profile.ObjectPermissions) {
 	}
 }
 
-func tableObjectPermissions(files []string, filter profile.ObjectPermissions) {
+func tableObjectPermissions(files []string, filter permissionset.ObjectPermissions) {
 	var filters []profile.ObjectFilter
 	if objectName != "" {
-		filters = append(filters, func(f profile.ObjectPermissions) bool {
+		filters = append(filters, func(f permissionset.ObjectPermissions) bool {
 			return strings.ToLower(f.Object.Text) == strings.ToLower(objectName)
 		})
 	}
-	flagFilter := func(o profile.ObjectPermissions) bool {
+	flagFilter := func(o permissionset.ObjectPermissions) bool {
 		if filter.AllowCreate.Text != "" && filter.AllowCreate.ToBool() != o.AllowCreate.ToBool() {
 			return false
 		}
@@ -345,7 +346,7 @@ func tableObjectPermissions(files []string, filter profile.ObjectPermissions) {
 	}
 	filters = append(filters, flagFilter)
 	type perm struct {
-		objects profile.ObjectPermissionsList
+		objects permissionset.ObjectPermissionsList
 		profile string
 	}
 	var perms []perm

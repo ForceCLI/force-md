@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	. "github.com/octoberswimmer/force-md/general"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
 
 type RecordTypeFilter func(RecordTypeVisibility) bool
@@ -21,9 +22,11 @@ func (p *Profile) AddRecordType(recordType string) error {
 		}
 	}
 	p.RecordTypeVisibilities = append(p.RecordTypeVisibilities, RecordTypeVisibility{
-		RecordType: recordType,
-		Default:    FalseText,
-		Visible:    TrueText,
+		RecordTypeVisibility: permissionset.RecordTypeVisibility{
+			RecordType: recordType,
+			Visible:    TrueText,
+		},
+		Default: FalseText,
 	})
 	p.RecordTypeVisibilities.Tidy()
 	return nil
@@ -105,4 +108,14 @@ RECORDTYPES:
 		recordTypeVisibilities = append(recordTypeVisibilities, r)
 	}
 	return recordTypeVisibilities
+}
+
+func (p *Profile) GetVisibleRecordTypes() []string {
+	var recordTypes []string
+	for _, r := range p.RecordTypeVisibilities {
+		if r.Visible.ToBool() {
+			recordTypes = append(recordTypes, r.RecordType)
+		}
+	}
+	return recordTypes
 }

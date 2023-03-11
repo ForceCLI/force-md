@@ -78,6 +78,17 @@ type CustomPermission struct {
 
 type CustomPermissionList []CustomPermission
 
+type CustomMetadataName struct {
+	Text string `xml:",chardata"`
+}
+
+type CustomMetadataTypeAccess struct {
+	Enabled BooleanText        `xml:"enabled"`
+	Name    CustomMetadataName `xml:"name"`
+}
+
+type CustomMetadataTypeAccessList []CustomMetadataTypeAccess
+
 type PageAccess struct {
 	ApexPage string      `xml:"apexPage"`
 	Enabled  BooleanText `xml:"enabled"`
@@ -92,6 +103,20 @@ type ApplicationVisibility struct {
 
 type ApplicationVisibilityList []ApplicationVisibility
 
+type FlowAccess struct {
+	Enabled BooleanText `xml:"enabled"`
+	Flow    string      `xml:"flow"`
+}
+
+type FlowAccessList []FlowAccess
+
+type RecordTypeVisibility struct {
+	RecordType string      `xml:"recordType"`
+	Visible    BooleanText `xml:"visible"`
+}
+
+type RecordTypeVisibilityList []RecordTypeVisibility
+
 type PermissionSet struct {
 	XMLName                 xml.Name                  `xml:"PermissionSet"`
 	Xmlns                   string                    `xml:"xmlns,attr"`
@@ -100,6 +125,7 @@ type PermissionSet struct {
 	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
 	Description             *Description              `xml:"description"`
 	FieldPermissions        FieldPermissionsList      `xml:"fieldPermissions"`
+	FlowAccesses            FlowAccessList            `xml:"flowAccesses"`
 	HasActivationRequired   BooleanText               `xml:"hasActivationRequired"`
 	Label                   string                    `xml:"label"`
 	License                 *License                  `xml:"license"`

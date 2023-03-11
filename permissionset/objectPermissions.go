@@ -109,3 +109,41 @@ OBJECTS:
 	}
 	return objectPermissions
 }
+
+func (p *PermissionSet) GetGrantedObjectPermissions() []ObjectPermissions {
+	var objectPermissions []ObjectPermissions
+	for _, o := range p.ObjectPermissions {
+		permissionsGranted := false
+		objectPermsGranted := ObjectPermissions{
+			Object: o.Object,
+		}
+		if o.AllowCreate.ToBool() {
+			objectPermsGranted.AllowCreate = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowRead.ToBool() {
+			objectPermsGranted.AllowRead = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowEdit.ToBool() {
+			objectPermsGranted.AllowEdit = TrueText
+			permissionsGranted = true
+		}
+		if o.AllowDelete.ToBool() {
+			objectPermsGranted.AllowDelete = TrueText
+			permissionsGranted = true
+		}
+		if o.ViewAllRecords.ToBool() {
+			objectPermsGranted.ViewAllRecords = TrueText
+			permissionsGranted = true
+		}
+		if o.ModifyAllRecords.ToBool() {
+			objectPermsGranted.ModifyAllRecords = TrueText
+			permissionsGranted = true
+		}
+		if permissionsGranted {
+			objectPermissions = append(objectPermissions, objectPermsGranted)
+		}
+	}
+	return objectPermissions
+}

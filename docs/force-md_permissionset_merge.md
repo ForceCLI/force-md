@@ -4,7 +4,7 @@ Merge permissions
 
 ### Synopsis
 
-Apply permissions granted in source permission set
+Apply permissions granted in source permission set or profile
 
 ```
 force-md permissionset merge -s path/to/Source.permissionset [filename]...
@@ -14,7 +14,7 @@ force-md permissionset merge -s path/to/Source.permissionset [filename]...
 
 ```
   -h, --help            help for merge
-  -s, --source string   source permission set
+  -s, --source string   source permission set or profile
 ```
 
 ### Options inherited from parent commands

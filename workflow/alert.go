@@ -3,7 +3,7 @@ package workflow
 import (
 	"strings"
 
-	"github.com/imdario/mergo"
+	"github.com/cwarden/mergo"
 	"github.com/pkg/errors"
 )
 

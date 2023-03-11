@@ -7,13 +7,14 @@ import (
 	"github.com/pkg/errors"
 
 	. "github.com/octoberswimmer/force-md/general"
+	"github.com/octoberswimmer/force-md/permissionset"
 )
 
 var FieldExistsError = errors.New("field already exists")
 
-type FieldFilter func(FieldPermissions) bool
+type FieldFilter func(permissionset.FieldPermissions) bool
 
-func (p *Profile) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
+func (p *Profile) SetFieldPermissions(fieldName string, updates permissionset.FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
 		if f.Field.Text == fieldName {
@@ -59,8 +60,8 @@ func (p *Profile) AddFieldPermissions(fieldName string) error {
 	return nil
 }
 
-func (p *Profile) GetFieldPermissions(filters ...FieldFilter) FieldPermissionsList {
-	var fieldPermissions FieldPermissionsList
+func (p *Profile) GetFieldPermissions(filters ...FieldFilter) permissionset.FieldPermissionsList {
+	var fieldPermissions permissionset.FieldPermissionsList
 FIELDS:
 	for _, f := range p.FieldPermissions {
 		for _, filter := range filters {
@@ -73,13 +74,13 @@ FIELDS:
 	return fieldPermissions
 }
 
-func defaultFieldPermissions(fieldName string) FieldPermissions {
+func defaultFieldPermissions(fieldName string) permissionset.FieldPermissions {
 	var falseBooleanText = BooleanText{
 		Text: "false",
 	}
 
-	fp := FieldPermissions{
-		Field:    FieldName{fieldName},
+	fp := permissionset.FieldPermissions{
+		Field:    permissionset.FieldName{fieldName},
 		Editable: falseBooleanText,
 		Readable: falseBooleanText,
 	}
@@ -96,7 +97,7 @@ func (p *Profile) CloneFieldPermissions(src, dest string) error {
 	for _, f := range p.FieldPermissions {
 		if f.Field.Text == src {
 			found = true
-			clone := FieldPermissions{}
+			clone := permissionset.FieldPermissions{}
 			clone.Editable.Text = f.Editable.Text
 			clone.Readable.Text = f.Readable.Text
 			clone.Field.Text = dest
@@ -108,4 +109,26 @@ func (p *Profile) CloneFieldPermissions(src, dest string) error {
 	}
 	p.FieldPermissions.Tidy()
 	return nil
+}
+
+func (p *Profile) GetGrantedFieldPermissions() []permissionset.FieldPermissions {
+	var fieldPermissions permissionset.FieldPermissionsList
+	for _, f := range p.FieldPermissions {
+		permissionsGranted := false
+		fieldPermsGranted := permissionset.FieldPermissions{
+			Field: f.Field,
+		}
+		if f.Readable.ToBool() {
+			fieldPermsGranted.Readable = TrueText
+			permissionsGranted = true
+		}
+		if f.Editable.ToBool() {
+			fieldPermsGranted.Editable = TrueText
+			permissionsGranted = true
+		}
+		if permissionsGranted {
+			fieldPermissions = append(fieldPermissions, fieldPermsGranted)
+		}
+	}
+	return fieldPermissions
 }

@@ -42,3 +42,13 @@ func (p *PermissionSet) DeleteUserPermission(permissionName string) error {
 func (p *PermissionSet) GetUserPermissions() UserPermissionList {
 	return p.UserPermissions
 }
+
+func (p *PermissionSet) GetEnabledUserPermissions() []string {
+	var permissions []string
+	for _, u := range p.UserPermissions {
+		if u.Enabled.ToBool() {
+			permissions = append(permissions, u.Name)
+		}
+	}
+	return permissions
+}
