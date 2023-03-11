@@ -22,4 +22,5 @@ Update object permissions
 * [force-md permissionset object-permissions edit](force-md_permissionset_object-permissions_edit.md)	 - Update object permissions
 * [force-md permissionset object-permissions list](force-md_permissionset_object-permissions_list.md)	 - List objects
 * [force-md permissionset object-permissions show](force-md_permissionset_object-permissions_show.md)	 - Show object permissions
+* [force-md permissionset object-permissions table](force-md_permissionset_object-permissions_table.md)	 - List Object Permissions in a table
 
