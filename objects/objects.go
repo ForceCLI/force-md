@@ -107,6 +107,7 @@ type Field struct {
 	ReferenceTo            *TextLiteral `xml:"referenceTo"`
 	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
 	RelationshipName       *TextLiteral `xml:"relationshipName"`
+	RestrictedAdminField   *TextLiteral `xml:"restrictedAdminField"`
 	Required               *BooleanText `xml:"required"`
 	Scale                  *IntegerText `xml:"scale"`
 	SecurityClassification *TextLiteral `xml:"securityClassification"`
@@ -485,6 +486,9 @@ type CustomObject struct {
 		Label struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
+		TrackFeedHistory *struct {
+			Text string `xml:",chardata"`
+		} `xml:"trackFeedHistory"`
 		TrackHistory *struct {
 			Text string `xml:",chardata"`
 		} `xml:"trackHistory"`
