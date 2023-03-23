@@ -232,6 +232,9 @@ func listFields(file string) {
 
 func tableFieldPermissions(files []string) {
 	var filters []profile.FieldFilter
+	if !strings.ContainsRune(fieldName, '.') && objectName != "" {
+		fieldName = objectName + "." + fieldName
+	}
 	if fieldName != "" {
 		filters = append(filters, func(f permissionset.FieldPermissions) bool {
 			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
