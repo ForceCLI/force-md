@@ -8,7 +8,7 @@ import (
 )
 
 type Description struct {
-	Text string `xml:",chardata"`
+	Text string `xml:",innerxml"`
 }
 
 type License struct {
@@ -78,16 +78,19 @@ type CustomPermission struct {
 
 type CustomPermissionList []CustomPermission
 
-type CustomMetadataName struct {
-	Text string `xml:",chardata"`
+type CustomMetadataType struct {
+	Enabled BooleanText `xml:"enabled"`
+	Name    string      `xml:"name"`
 }
 
-type CustomMetadataTypeAccess struct {
-	Enabled BooleanText        `xml:"enabled"`
-	Name    CustomMetadataName `xml:"name"`
+type CustomMetadataTypeList []CustomMetadataType
+
+type CustomSetting struct {
+	Enabled BooleanText `xml:"enabled"`
+	Name    string      `xml:"name"`
 }
 
-type CustomMetadataTypeAccessList []CustomMetadataTypeAccess
+type CustomSettingList []CustomSetting
 
 type PageAccess struct {
 	ApexPage string      `xml:"apexPage"`
@@ -118,22 +121,24 @@ type RecordTypeVisibility struct {
 type RecordTypeVisibilityList []RecordTypeVisibility
 
 type PermissionSet struct {
-	XMLName                 xml.Name                  `xml:"PermissionSet"`
-	Xmlns                   string                    `xml:"xmlns,attr"`
-	ApplicationVisibilities ApplicationVisibilityList `xml:"applicationVisibilities"`
-	ClassAccesses           ApexClassList             `xml:"classAccesses"`
-	CustomPermissions       CustomPermissionList      `xml:"customPermissions"`
-	Description             *Description              `xml:"description"`
-	FieldPermissions        FieldPermissionsList      `xml:"fieldPermissions"`
-	FlowAccesses            FlowAccessList            `xml:"flowAccesses"`
-	HasActivationRequired   BooleanText               `xml:"hasActivationRequired"`
-	Label                   string                    `xml:"label"`
-	License                 *License                  `xml:"license"`
-	ObjectPermissions       ObjectPermissionsList     `xml:"objectPermissions"`
-	PageAccesses            PageAccessList            `xml:"pageAccesses"`
-	RecordTypeVisibilities  RecordTypeList            `xml:"recordTypeVisibilities"`
-	TabSettings             TabSettingsList           `xml:"tabSettings"`
-	UserPermissions         UserPermissionList        `xml:"userPermissions"`
+	XMLName                    xml.Name                  `xml:"PermissionSet"`
+	Xmlns                      string                    `xml:"xmlns,attr"`
+	ApplicationVisibilities    ApplicationVisibilityList `xml:"applicationVisibilities"`
+	ClassAccesses              ApexClassList             `xml:"classAccesses"`
+	CustomMetadataTypeAccesses CustomMetadataTypeList    `xml:"customMetadataTypeAccesses"`
+	CustomPermissions          CustomPermissionList      `xml:"customPermissions"`
+	CustomSettingAccesses      CustomSettingList         `xml:"customSettingAccesses"`
+	Description                *Description              `xml:"description"`
+	FieldPermissions           FieldPermissionsList      `xml:"fieldPermissions"`
+	FlowAccesses               FlowAccessList            `xml:"flowAccesses"`
+	HasActivationRequired      BooleanText               `xml:"hasActivationRequired"`
+	Label                      string                    `xml:"label"`
+	License                    *License                  `xml:"license"`
+	ObjectPermissions          ObjectPermissionsList     `xml:"objectPermissions"`
+	PageAccesses               PageAccessList            `xml:"pageAccesses"`
+	RecordTypeVisibilities     RecordTypeList            `xml:"recordTypeVisibilities"`
+	TabSettings                TabSettingsList           `xml:"tabSettings"`
+	UserPermissions            UserPermissionList        `xml:"userPermissions"`
 }
 
 func (p *PermissionSet) MetaCheck() {}

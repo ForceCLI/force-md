@@ -19,6 +19,7 @@ Manage Permission Sets
 * [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
 * [force-md permissionset apex](force-md_permissionset_apex.md)	 - Manage apex class visibility
 * [force-md permissionset application](force-md_permissionset_application.md)	 - Manage application visibility
+* [force-md permissionset custom-metadata](force-md_permissionset_custom-metadata.md)	 - Manage custom metadata types
 * [force-md permissionset custom-permissions](force-md_permissionset_custom-permissions.md)	 - Manage custom permissions
 * [force-md permissionset edit](force-md_permissionset_edit.md)	 - Edit permission set
 * [force-md permissionset field-permissions](force-md_permissionset_field-permissions.md)	 - Manage field permissions
