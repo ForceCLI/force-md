@@ -232,7 +232,7 @@ func listFields(file string) {
 
 func tableFieldPermissions(files []string) {
 	var filters []profile.FieldFilter
-	if !strings.ContainsRune(fieldName, '.') && objectName != "" {
+	if fieldName != "" && !strings.ContainsRune(fieldName, '.') && objectName != "" {
 		fieldName = objectName + "." + fieldName
 	}
 	if fieldName != "" {
