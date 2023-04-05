@@ -29,11 +29,13 @@ type LayoutAssignment struct {
 }
 
 type LoginFlow struct {
-	Flow                string      `xml:"flow"`
+	Flow                *string     `xml:"flow"`
 	FlowType            string      `xml:"flowType"`
 	FriendlyName        string      `xml:"friendlyName"`
 	UILoginFlowType     string      `xml:"uiLoginFlowType"`
 	UseLightningRuntime BooleanText `xml:"useLightningRuntime"`
+	VFFlowPage          *string     `xml:"vfFlowPage"`
+	VFFlowPageTitle     *string     `xml:"vfFlowPageTitle"`
 }
 
 type LoginIpRange struct {
@@ -81,6 +83,7 @@ type Profile struct {
 	} `xml:"custom"`
 	CustomMetadataTypeAccesses permissionset.CustomMetadataTypeList `xml:"customMetadataTypeAccesses"`
 	CustomPermissions          permissionset.CustomPermissionList   `xml:"customPermissions"`
+	CustomSettingAccesses      permissionset.CustomSettingList      `xml:"customSettingAccesses"`
 	Description                *string                              `xml:"description"`
 	FieldPermissions           permissionset.FieldPermissionsList   `xml:"fieldPermissions"`
 	FlowAccesses               permissionset.FlowAccessList         `xml:"flowAccesses"`
