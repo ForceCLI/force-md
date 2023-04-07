@@ -71,7 +71,7 @@ func mergePermissions(file string, apply profile.Profile) {
 		}
 	}
 	for _, f := range apply.FieldPermissions {
-		fieldName := f.Field.Text
+		fieldName := f.Field
 		err = p.AddFieldPermissions(fieldName)
 		if err != nil && err != profile.FieldExistsError {
 			log.Warn(fmt.Sprintf("adding field %s permissions failed for %s: %s", fieldName, file, err.Error()))

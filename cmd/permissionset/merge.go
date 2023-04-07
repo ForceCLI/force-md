@@ -78,7 +78,7 @@ func mergePermissions(file string, granter permissionGranter.PermissionGranter) 
 		}
 	}
 	for _, f := range granter.GetGrantedFieldPermissions() {
-		fieldName := f.Field.Text
+		fieldName := f.Field
 		err = p.AddFieldPermissions(fieldName)
 		if err != nil && err != permissionset.FieldExistsError {
 			log.Warn(fmt.Sprintf("adding field %s permissions failed for %s: %s", fieldName, file, err.Error()))

@@ -10,15 +10,15 @@ import (
 func (p *PermissionSet) CloneFieldPermissions(src, dest string) error {
 	found := false
 	for _, f := range p.FieldPermissions {
-		if strings.ToLower(dest) == strings.ToLower(f.Field.Text) {
+		if strings.ToLower(dest) == strings.ToLower(f.Field) {
 			return errors.New("field already exists")
 		}
-		if f.Field.Text == src {
+		if strings.ToLower(f.Field) == strings.ToLower(src) {
 			found = true
 			clone := FieldPermissions{}
 			clone.Editable.Text = f.Editable.Text
 			clone.Readable.Text = f.Readable.Text
-			clone.Field.Text = dest
+			clone.Field = dest
 			p.FieldPermissions = append(p.FieldPermissions, clone)
 		}
 	}
@@ -26,7 +26,7 @@ func (p *PermissionSet) CloneFieldPermissions(src, dest string) error {
 		return errors.New("source field not found")
 	}
 	sort.Slice(p.FieldPermissions, func(i, j int) bool {
-		return p.FieldPermissions[i].Field.Text < p.FieldPermissions[j].Field.Text
+		return p.FieldPermissions[i].Field < p.FieldPermissions[j].Field
 	})
 	return nil
 }

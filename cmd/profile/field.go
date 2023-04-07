@@ -226,7 +226,7 @@ func listFields(file string) {
 		if len(perms) > 0 {
 			permsString = strings.Join(perms, "-")
 		}
-		fmt.Printf("%s: %s\n", a.Field.Text, permsString)
+		fmt.Printf("%s: %s\n", a.Field, permsString)
 	}
 }
 
@@ -237,12 +237,12 @@ func tableFieldPermissions(files []string) {
 	}
 	if fieldName != "" {
 		filters = append(filters, func(f permissionset.FieldPermissions) bool {
-			return strings.ToLower(f.Field.Text) == strings.ToLower(fieldName)
+			return strings.ToLower(f.Field) == strings.ToLower(fieldName)
 		})
 	}
 	if objectName != "" {
 		filters = append(filters, func(f permissionset.FieldPermissions) bool {
-			return strings.HasPrefix(strings.ToLower(f.Field.Text), strings.ToLower(objectName+"."))
+			return strings.HasPrefix(strings.ToLower(f.Field), strings.ToLower(objectName+"."))
 		})
 	}
 	type perm struct {
@@ -264,7 +264,7 @@ func tableFieldPermissions(files []string) {
 	table.SetRowLine(true)
 	for _, perm := range perms {
 		for _, f := range perm.fields {
-			table.Append([]string{perm.profile, f.Field.Text, f.Readable.Text, f.Editable.Text})
+			table.Append([]string{perm.profile, f.Field, f.Readable.Text, f.Editable.Text})
 		}
 	}
 	if table.NumLines() > 0 {
