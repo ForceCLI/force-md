@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/cmd/workflow"
+	"github.com/ForceCLI/force-md/cmd/workflow"
 )
 
 func init() {

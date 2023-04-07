@@ -3,7 +3,7 @@ package dashboard
 import (
 	"fmt"
 
-	"github.com/octoberswimmer/force-md/dashboard"
+	"github.com/ForceCLI/force-md/dashboard"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

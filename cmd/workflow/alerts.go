@@ -9,9 +9,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
 
-	. "github.com/octoberswimmer/force-md/general"
-	"github.com/octoberswimmer/force-md/internal"
-	"github.com/octoberswimmer/force-md/workflow"
+	. "github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/workflow"
 )
 
 var (

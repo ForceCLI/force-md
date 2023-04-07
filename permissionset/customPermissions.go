@@ -3,7 +3,7 @@ package permissionset
 import (
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 var CustomPermissionExistsError = errors.New("custom permission already exists")

@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 type ObjectFilter func(ObjectPermissions) bool

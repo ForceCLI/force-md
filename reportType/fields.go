@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 func (o *ReportType) GetFields() []Field {

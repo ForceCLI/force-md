@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"sort"
 
-	"github.com/octoberswimmer/force-md/internal"
+	"github.com/ForceCLI/force-md/internal"
 )
 
 type MetadataItems struct {

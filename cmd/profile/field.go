@@ -10,9 +10,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/internal"
-	"github.com/octoberswimmer/force-md/permissionset"
-	"github.com/octoberswimmer/force-md/profile"
+	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/permissionset"
+	"github.com/ForceCLI/force-md/profile"
 )
 
 var sourceField string

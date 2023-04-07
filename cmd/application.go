@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/cmd/application"
+	"github.com/ForceCLI/force-md/cmd/application"
 )
 
 func init() {

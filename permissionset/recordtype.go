@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 var RecordTypeExistsError = errors.New("record type already exists")

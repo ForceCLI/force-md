@@ -3,8 +3,8 @@ package sharingrules
 import (
 	"encoding/xml"
 
-	. "github.com/octoberswimmer/force-md/general"
-	"github.com/octoberswimmer/force-md/internal"
+	. "github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/internal"
 )
 
 type CriteriaRule struct {

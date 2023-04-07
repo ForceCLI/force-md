@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/octoberswimmer/force-md/permissionset"
-	"github.com/octoberswimmer/force-md/profile"
+	"github.com/ForceCLI/force-md/permissionset"
+	"github.com/ForceCLI/force-md/profile"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html/charset"
 )

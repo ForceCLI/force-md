@@ -7,7 +7,7 @@ import (
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 var ApplicationExistsError = errors.New("application already exists")

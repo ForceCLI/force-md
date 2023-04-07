@@ -1,4 +1,4 @@
-module github.com/octoberswimmer/force-md
+module github.com/ForceCLI/force-md
 
 go 1.20
 

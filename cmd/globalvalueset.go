@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/octoberswimmer/force-md/cmd/globalvalueset"
+	"github.com/ForceCLI/force-md/cmd/globalvalueset"
 	"github.com/spf13/cobra"
 )
 

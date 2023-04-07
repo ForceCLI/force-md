@@ -8,8 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/internal"
-	"github.com/octoberswimmer/force-md/objects"
+	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects"
 )
 
 var (

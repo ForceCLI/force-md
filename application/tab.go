@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 var TabExistsError = errors.New("tab already exists")
