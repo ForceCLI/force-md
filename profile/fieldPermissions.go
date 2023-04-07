@@ -2,6 +2,7 @@ package profile
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
@@ -17,7 +18,7 @@ type FieldFilter func(permissionset.FieldPermissions) bool
 func (p *Profile) SetFieldPermissions(fieldName string, updates permissionset.FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			found = true
 			if err := mergo.Merge(&updates, f); err != nil {
 				return errors.Wrap(err, "merging permissions")
@@ -35,7 +36,7 @@ func (p *Profile) DeleteFieldPermissions(fieldName string) error {
 	found := false
 	newPerms := p.FieldPermissions[:0]
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			found = true
 		} else {
 			newPerms = append(newPerms, f)
@@ -50,7 +51,7 @@ func (p *Profile) DeleteFieldPermissions(fieldName string) error {
 
 func (p *Profile) AddFieldPermissions(fieldName string) error {
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			return FieldExistsError
 		}
 	}
@@ -75,32 +76,28 @@ FIELDS:
 }
 
 func defaultFieldPermissions(fieldName string) permissionset.FieldPermissions {
-	var falseBooleanText = BooleanText{
-		Text: "false",
-	}
-
 	fp := permissionset.FieldPermissions{
-		Field:    permissionset.FieldName{fieldName},
-		Editable: falseBooleanText,
-		Readable: falseBooleanText,
+		Field:    fieldName,
+		Editable: FalseText,
+		Readable: FalseText,
 	}
 	return fp
 }
 
 func (p *Profile) CloneFieldPermissions(src, dest string) error {
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == dest {
+		if strings.ToLower(f.Field) == strings.ToLower(dest) {
 			return fmt.Errorf("%s field already exists", dest)
 		}
 	}
 	found := false
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == src {
+		if strings.ToLower(f.Field) == strings.ToLower(src) {
 			found = true
 			clone := permissionset.FieldPermissions{}
 			clone.Editable.Text = f.Editable.Text
 			clone.Readable.Text = f.Readable.Text
-			clone.Field.Text = dest
+			clone.Field = dest
 			p.FieldPermissions = append(p.FieldPermissions, clone)
 		}
 	}

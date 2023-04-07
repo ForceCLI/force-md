@@ -2,6 +2,7 @@ package permissionset
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/imdario/mergo"
 	"github.com/pkg/errors"
@@ -16,7 +17,7 @@ type FieldFilter func(FieldPermissions) bool
 func (p *PermissionSet) SetFieldPermissions(fieldName string, updates FieldPermissions) error {
 	found := false
 	for i, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			found = true
 			if err := mergo.Merge(&updates, f); err != nil {
 				return errors.Wrap(err, "merging permissions")
@@ -34,7 +35,7 @@ func (p *PermissionSet) DeleteFieldPermissions(fieldName string) error {
 	found := false
 	newPerms := p.FieldPermissions[:0]
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			found = true
 		} else {
 			newPerms = append(newPerms, f)
@@ -49,7 +50,7 @@ func (p *PermissionSet) DeleteFieldPermissions(fieldName string) error {
 
 func (p *PermissionSet) AddFieldPermissions(fieldName string) error {
 	for _, f := range p.FieldPermissions {
-		if f.Field.Text == fieldName {
+		if strings.ToLower(f.Field) == strings.ToLower(fieldName) {
 			return FieldExistsError
 		}
 	}
@@ -75,7 +76,7 @@ FIELDS:
 
 func defaultFieldPermissions(fieldName string) FieldPermissions {
 	fp := FieldPermissions{
-		Field:    FieldName{fieldName},
+		Field:    fieldName,
 		Editable: FalseText,
 		Readable: FalseText,
 	}

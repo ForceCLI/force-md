@@ -77,9 +77,9 @@ func (p *PermissionSet) DeleteObjectPermissions(objectName string) {
 
 func (p *PermissionSet) DeleteObjectFieldPermissions(objectName string) {
 	newFieldPerms := p.FieldPermissions[:0]
-	fieldPrefix := objectName + "."
+	fieldPrefix := strings.ToLower(objectName + ".")
 	for _, f := range p.FieldPermissions {
-		if !strings.HasPrefix(f.Field.Text, fieldPrefix) {
+		if !strings.HasPrefix(strings.ToLower(f.Field), fieldPrefix) {
 			newFieldPerms = append(newFieldPerms, f)
 		}
 	}

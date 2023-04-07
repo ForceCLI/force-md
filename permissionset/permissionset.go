@@ -15,10 +15,6 @@ type License struct {
 	Text string `xml:",chardata"`
 }
 
-type FieldName struct {
-	Text string `xml:",chardata"`
-}
-
 type ApexClass struct {
 	ApexClass string      `xml:"apexClass"`
 	Enabled   BooleanText `xml:"enabled"`
@@ -40,7 +36,7 @@ type ObjectPermissionsList []ObjectPermissions
 
 type FieldPermissions struct {
 	Editable BooleanText `xml:"editable"`
-	Field    FieldName   `xml:"field"`
+	Field    string      `xml:"field"`
 	Readable BooleanText `xml:"readable"`
 }
 

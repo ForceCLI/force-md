@@ -73,7 +73,7 @@ func (cp CustomSettingList) Tidy() {
 
 func (fp FieldPermissionsList) Tidy() {
 	sort.Slice(fp, func(i, j int) bool {
-		return fp[i].Field.Text < fp[j].Field.Text
+		return fp[i].Field < fp[j].Field
 	})
 }
 
