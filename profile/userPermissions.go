@@ -5,8 +5,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
-	"github.com/octoberswimmer/force-md/permissionset"
+	. "github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/permissionset"
 )
 
 var UserPermissionExistsError = errors.New("user permissions already exists")

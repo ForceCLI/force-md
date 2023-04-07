@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 var VisualforcePageExistsError = errors.New("visualforce page already exists")

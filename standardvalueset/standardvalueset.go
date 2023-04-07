@@ -3,7 +3,7 @@ package standardvalueset
 import (
 	"encoding/xml"
 
-	"github.com/octoberswimmer/force-md/internal"
+	"github.com/ForceCLI/force-md/internal"
 )
 
 type StandardValue struct {

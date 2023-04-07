@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/workflow"
+	"github.com/ForceCLI/force-md/workflow"
 )
 
 func init() {

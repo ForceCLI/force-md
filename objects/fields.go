@@ -6,7 +6,7 @@ import (
 	"github.com/cwarden/mergo"
 	"github.com/pkg/errors"
 
-	. "github.com/octoberswimmer/force-md/general"
+	. "github.com/ForceCLI/force-md/general"
 )
 
 type FieldFilter func(Field) bool

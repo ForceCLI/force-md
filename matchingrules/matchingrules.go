@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/octoberswimmer/force-md/internal"
+	"github.com/ForceCLI/force-md/internal"
 )
 
 type MatchingRules struct {

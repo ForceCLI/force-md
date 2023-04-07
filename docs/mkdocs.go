@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmd "github.com/octoberswimmer/force-md/cmd"
+	cmd "github.com/ForceCLI/force-md/cmd"
 
 	"github.com/spf13/cobra/doc"
 )

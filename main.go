@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/octoberswimmer/force-md/cmd"
+	"github.com/ForceCLI/force-md/cmd"
 )
 
 func main() {

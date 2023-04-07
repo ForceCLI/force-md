@@ -1,5 +1,5 @@
 VERSION=$(shell git describe --abbrev=0 --always)
-LDFLAGS = -ldflags "-X github.com/octoberswimmer/force-md/cmd.version=${VERSION}"
+LDFLAGS = -ldflags "-X github.com/ForceCLI/force-md/cmd.version=${VERSION}"
 EXECUTABLE=force-md
 WINDOWS=$(EXECUTABLE)_windows_amd64.exe
 LINUX=$(EXECUTABLE)_linux_amd64

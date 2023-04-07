@@ -4,8 +4,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/octoberswimmer/force-md/general"
-	"github.com/octoberswimmer/force-md/permissionset"
+	"github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/permissionset"
 )
 
 var TidyCmd = &cobra.Command{

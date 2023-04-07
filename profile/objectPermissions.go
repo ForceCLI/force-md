@@ -7,8 +7,8 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	. "github.com/octoberswimmer/force-md/general"
-	"github.com/octoberswimmer/force-md/permissionset"
+	. "github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/permissionset"
 )
 
 type ObjectFilter func(permissionset.ObjectPermissions) bool

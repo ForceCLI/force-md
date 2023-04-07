@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
 
-	"github.com/octoberswimmer/force-md/objects"
+	"github.com/ForceCLI/force-md/objects"
 )
 
 var actionType Type
