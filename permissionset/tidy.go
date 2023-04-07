@@ -19,7 +19,7 @@ func (p *PermissionSet) Tidy() {
 
 func (op ObjectPermissionsList) Tidy() {
 	sort.Slice(op, func(i, j int) bool {
-		return op[i].Object.Text < op[j].Object.Text
+		return op[i].Object < op[j].Object
 	})
 }
 

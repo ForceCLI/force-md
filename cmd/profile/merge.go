@@ -58,7 +58,7 @@ func mergePermissions(file string, apply profile.Profile) {
 		}
 	}
 	for _, o := range apply.ObjectPermissions {
-		objectName := o.Object.Text
+		objectName := o.Object
 		err = p.AddObjectPermissions(objectName)
 		if err != nil && err != profile.ObjectExistsError {
 			log.Warn(fmt.Sprintf("adding object %s permissions failed for %s: %s", objectName, file, err.Error()))
