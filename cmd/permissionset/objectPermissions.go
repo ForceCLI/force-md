@@ -293,7 +293,7 @@ func listObjectPermissions(file string, filter permissionset.ObjectPermissions) 
 			perms += "d"
 		}
 
-		fmt.Printf("%s: %s\n", o.Object.Text, perms)
+		fmt.Printf("%s: %s\n", o.Object, perms)
 	}
 }
 
@@ -304,7 +304,7 @@ func showObjectPermissions(file string, objectName string) {
 		return
 	}
 	objects := p.GetObjectPermissions(func(o permissionset.ObjectPermissions) bool {
-		return strings.ToLower(o.Object.Text) == strings.ToLower(objectName)
+		return strings.ToLower(o.Object) == strings.ToLower(objectName)
 	})
 	if len(objects) == 0 {
 		log.Warn(fmt.Sprintf("object not found in %s", file))
@@ -322,7 +322,7 @@ func tableObjectPermissions(files []string, filter permissionset.ObjectPermissio
 	var filters []permissionset.ObjectFilter
 	if objectName != "" {
 		filters = append(filters, func(f permissionset.ObjectPermissions) bool {
-			return strings.ToLower(f.Object.Text) == strings.ToLower(objectName)
+			return strings.ToLower(f.Object) == strings.ToLower(objectName)
 		})
 	}
 	flagFilter := func(o permissionset.ObjectPermissions) bool {
@@ -365,7 +365,7 @@ func tableObjectPermissions(files []string, filter permissionset.ObjectPermissio
 	table.SetRowLine(true)
 	for _, perm := range perms {
 		for _, o := range perm.objects {
-			table.Append([]string{perm.permissionSet, o.Object.Text,
+			table.Append([]string{perm.permissionSet, o.Object,
 				o.AllowRead.Text,
 				o.AllowCreate.Text,
 				o.AllowEdit.Text,

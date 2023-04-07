@@ -65,7 +65,7 @@ func mergePermissions(file string, granter permissionGranter.PermissionGranter) 
 		}
 	}
 	for _, o := range granter.GetGrantedObjectPermissions() {
-		objectName := o.Object.Text
+		objectName := o.Object
 		err = p.AddObjectPermissions(objectName)
 		if err != nil && err != permissionset.ObjectExistsError {
 			log.Warn(fmt.Sprintf("adding object %s permissions failed for %s: %s", objectName, file, err.Error()))

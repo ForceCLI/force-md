@@ -15,10 +15,6 @@ type License struct {
 	Text string `xml:",chardata"`
 }
 
-type ObjectName struct {
-	Text string `xml:",chardata"`
-}
-
 type FieldName struct {
 	Text string `xml:",chardata"`
 }
@@ -36,7 +32,7 @@ type ObjectPermissions struct {
 	AllowEdit        BooleanText `xml:"allowEdit"`
 	AllowRead        BooleanText `xml:"allowRead"`
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
-	Object           ObjectName  `xml:"object"`
+	Object           string      `xml:"object"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
 }
 

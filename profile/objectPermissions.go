@@ -18,7 +18,7 @@ var ObjectExistsError = errors.New("object already exists")
 func (p *Profile) SetObjectPermissions(objectName string, updates permissionset.ObjectPermissions) error {
 	found := false
 	for i, f := range p.ObjectPermissions {
-		if f.Object.Text == objectName {
+		if strings.ToLower(f.Object) == strings.ToLower(objectName) {
 			found = true
 			if err := mergo.Merge(&updates, f); err != nil {
 				return errors.Wrap(err, "merging permissions")
@@ -33,25 +33,21 @@ func (p *Profile) SetObjectPermissions(objectName string, updates permissionset.
 }
 
 func defaultObjectPermissions(objectName string) permissionset.ObjectPermissions {
-	var falseBooleanText = BooleanText{
-		Text: "false",
-	}
-
 	op := permissionset.ObjectPermissions{
-		Object:           permissionset.ObjectName{objectName},
-		AllowCreate:      falseBooleanText,
-		AllowDelete:      falseBooleanText,
-		AllowEdit:        falseBooleanText,
-		AllowRead:        falseBooleanText,
-		ModifyAllRecords: falseBooleanText,
-		ViewAllRecords:   falseBooleanText,
+		Object:           objectName,
+		AllowCreate:      FalseText,
+		AllowDelete:      FalseText,
+		AllowEdit:        FalseText,
+		AllowRead:        FalseText,
+		ModifyAllRecords: FalseText,
+		ViewAllRecords:   FalseText,
 	}
 	return op
 }
 
 func (p *Profile) AddObjectPermissions(objectName string) error {
 	for _, f := range p.ObjectPermissions {
-		if f.Object.Text == objectName {
+		if strings.ToLower(f.Object) == strings.ToLower(objectName) {
 			return ObjectExistsError
 		}
 	}
@@ -65,7 +61,7 @@ func (p *Profile) DeleteObjectPermissions(objectName string) {
 	found := false
 	newObjectPerms := p.ObjectPermissions[:0]
 	for _, f := range p.ObjectPermissions {
-		if f.Object.Text == objectName {
+		if strings.ToLower(f.Object) == strings.ToLower(objectName) {
 			found = true
 		} else {
 			newObjectPerms = append(newObjectPerms, f)
