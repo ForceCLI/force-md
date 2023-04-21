@@ -39,6 +39,7 @@ type LoginFlow struct {
 }
 
 type LoginIpRange struct {
+	Description  string `xml:"description,omitempty"`
 	EndAddress   string `xml:"endAddress"`
 	StartAddress string `xml:"startAddress"`
 }
