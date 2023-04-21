@@ -121,6 +121,13 @@ func mergePermissions(file string, apply profile.Profile) {
 			return
 		}
 	}
+	for _, u := range apply.LoginIPRanges {
+		err = p.AddLoginIPRange(u.StartAddress, u.EndAddress, u.Description)
+		if err != nil && err != profile.DuplicateIPRangeError {
+			log.Warn(fmt.Sprintf("adding ip range %s failed for %s -> %s: %s", u.StartAddress, u.EndAddress, file, err.Error()))
+			return
+		}
+	}
 	err = internal.WriteToFile(p, file)
 	if err != nil {
 		log.Warn("update failed: " + err.Error())

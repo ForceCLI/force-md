@@ -48,3 +48,9 @@ func (rt RecordTypeVisibilityList) Tidy() {
 		return rt[i].RecordType < rt[j].RecordType
 	})
 }
+
+func (ips LoginIpRangeList) Tidy() {
+	sort.Slice(ips, func(i, j int) bool {
+		return ips[i].Description < ips[j].Description
+	})
+}
