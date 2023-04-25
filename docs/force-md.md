@@ -21,6 +21,7 @@ force-md
 * [force-md custompermission](force-md_custompermission.md)	 - Manage Custom Permissions
 * [force-md dashboard](force-md_dashboard.md)	 - Manage Dashboards
 * [force-md globalvalueset](force-md_globalvalueset.md)	 - Manage Global Value Sets
+* [force-md labels](force-md_labels.md)	 - Manage Custom Labels
 * [force-md matchingrules](force-md_matchingrules.md)	 - Manage Matching Rules
 * [force-md objects](force-md_objects.md)	 - Manage Custom and Standard Objects
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml

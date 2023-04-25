@@ -1,0 +1,21 @@
+## force-md labels
+
+Manage Custom Labels
+
+### Options
+
+```
+  -h, --help   help for labels
+```
+
+### Options inherited from parent commands
+
+```
+      --silent   show errors only
+```
+
+### SEE ALSO
+
+* [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
+* [force-md labels table](force-md_labels_table.md)	 - List custom labels in a table
+
