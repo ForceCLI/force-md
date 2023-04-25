@@ -17,6 +17,7 @@ func init() {
 	deleteFlowCmd.MarkFlagRequired("flow")
 
 	FlowCmd.AddCommand(deleteFlowCmd)
+	FlowCmd.AddCommand(listFlowCmd)
 }
 
 var FlowCmd = &cobra.Command{
@@ -36,6 +37,19 @@ var deleteFlowCmd = &cobra.Command{
 	},
 }
 
+var listFlowCmd = &cobra.Command{
+	Use:                   "list [filename]...",
+	Short:                 "List flows",
+	Long:                  "List flows in profiles",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listFlowVisibility(file)
+		}
+	},
+}
+
 func deleteFlowVisibility(file string, flowName string) {
 	p, err := profile.Open(file)
 	if err != nil {
@@ -51,5 +65,17 @@ func deleteFlowVisibility(file string, flowName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listFlowVisibility(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	tabs := p.GetFlows()
+	for _, t := range tabs {
+		fmt.Printf("%s: %v\n", t.Flow, t.Enabled.ToBool())
 	}
 }

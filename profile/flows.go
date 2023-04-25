@@ -3,8 +3,11 @@ package profile
 import (
 	"strings"
 
+	"github.com/ForceCLI/force-md/permissionset"
 	"github.com/pkg/errors"
 )
+
+type FlowFilter func(permissionset.FlowAccess) bool
 
 func (p *Profile) DeleteFlowAccess(flowName string) error {
 	found := false
@@ -21,4 +24,18 @@ func (p *Profile) DeleteFlowAccess(flowName string) error {
 	}
 	p.FlowAccesses = newFlows
 	return nil
+}
+
+func (p *Profile) GetFlows(filters ...FlowFilter) permissionset.FlowAccessList {
+	var flowAccesses permissionset.FlowAccessList
+FLOWS:
+	for _, t := range p.FlowAccesses {
+		for _, filter := range filters {
+			if !filter(t) {
+				continue FLOWS
+			}
+		}
+		flowAccesses = append(flowAccesses, t)
+	}
+	return flowAccesses
 }
