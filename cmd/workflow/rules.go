@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/workflow"
 )
 
@@ -16,8 +17,12 @@ var (
 )
 
 func init() {
+	deleteRuleCmd.Flags().StringP("rule", "r", "", "rule name")
+	deleteRuleCmd.MarkFlagRequired("alert")
+
 	listRulesCmd.Flags().BoolVarP(&active, "active", "a", false, "active")
 	RulesCmd.AddCommand(listRulesCmd)
+	RulesCmd.AddCommand(deleteRuleCmd)
 }
 
 var RulesCmd = &cobra.Command{
@@ -32,6 +37,20 @@ var listRulesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			listRules(file)
+		}
+	},
+}
+
+var deleteRuleCmd = &cobra.Command{
+	Use:                   "delete -a RuleName [filename]...",
+	Short:                 "Delete workflow alert",
+	Long:                  "Delete workflow alert",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		ruleName, _ := cmd.Flags().GetString("rule")
+		for _, file := range args {
+			deleteRule(file, ruleName)
 		}
 	},
 }
@@ -55,6 +74,26 @@ func listRules(file string) {
 		if r.Active.ToBool() {
 			active = "active"
 		}
-		fmt.Printf("%s.%s: %s\n", objectName, r.FullName.Text, active)
+		fmt.Printf("%s.%s: %s\n", objectName, r.FullName, active)
+	}
+}
+
+func deleteRule(file string, ruleName string) {
+	a, err := workflow.Open(file)
+	if err != nil {
+		log.Warn("parsing workflow failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	ruleName = strings.ToLower(strings.TrimPrefix(ruleName, objectName+"."))
+	err = a.DeleteRule(ruleName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(a, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }

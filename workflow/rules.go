@@ -1,5 +1,11 @@
 package workflow
 
+import (
+	"strings"
+
+	"github.com/pkg/errors"
+)
+
 type RuleFilter func(Rule) bool
 type AlertFilter func(Alert) bool
 
@@ -33,4 +39,21 @@ ALERTS:
 
 func (w *Workflow) GetFieldUpdates() []FieldUpdate {
 	return w.FieldUpdates
+}
+
+func (o *Workflow) DeleteRule(ruleName string) error {
+	found := false
+	newRules := o.Rules[:0]
+	for _, a := range o.Rules {
+		if strings.ToLower(a.FullName) == strings.ToLower(ruleName) {
+			found = true
+		} else {
+			newRules = append(newRules, a)
+		}
+	}
+	if !found {
+		return errors.New("rule not found")
+	}
+	o.Rules = newRules
+	return nil
 }

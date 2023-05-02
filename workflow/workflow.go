@@ -9,10 +9,8 @@ import (
 
 type Recipient struct {
 	Field     *TextLiteral `xml:"field"`
-	Recipient struct {
-		Text string `xml:",chardata"`
-	} `xml:"recipient"`
-	Type struct {
+	Recipient *TextLiteral `xml:"recipient"`
+	Type      struct {
 		Text string `xml:",chardata"`
 	} `xml:"type"`
 }
@@ -46,10 +44,8 @@ type FieldUpdate struct {
 }
 
 type Rule struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
-	Actions []struct {
+	FullName string `xml:"fullName"`
+	Actions  []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
