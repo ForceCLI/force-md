@@ -17,7 +17,6 @@ import (
 var (
 	recipient  string
 	group      string
-	alertName  string
 	senderType SenderType
 )
 
@@ -43,12 +42,16 @@ func init() {
 	listAlertsCmd.Flags().VarP(enumflag.New(&senderType, "sendertype", SenderTypeIds, enumflag.EnumCaseInsensitive),
 		"sendertype", "t", "sender type; can be 'CurrentUser', 'DefaultWorkflowUser', or 'OrgWideEmailAddress'")
 
-	editAlertCmd.Flags().StringVarP(&alertName, "alert", "a", "", "alert name")
+	editAlertCmd.Flags().StringP("alert", "a", "", "alert name")
 	editAlertCmd.Flags().StringP("sender", "s", "", "sender address")
 	editAlertCmd.MarkFlagRequired("alert")
 
+	deleteAlertCmd.Flags().StringP("alert", "a", "", "alert name")
+	deleteAlertCmd.MarkFlagRequired("alert")
+
 	AlertsCmd.AddCommand(listAlertsCmd)
 	AlertsCmd.AddCommand(editAlertCmd)
+	AlertsCmd.AddCommand(deleteAlertCmd)
 }
 
 var AlertsCmd = &cobra.Command{
@@ -74,8 +77,23 @@ var editAlertCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		alertUpdates := setFields(cmd)
+		alertName, _ := cmd.Flags().GetString("alert")
 		for _, file := range args {
-			updateAlert(file, alertUpdates)
+			updateAlert(file, alertName, alertUpdates)
+		}
+	},
+}
+
+var deleteAlertCmd = &cobra.Command{
+	Use:                   "delete -a AlertName [filename]...",
+	Short:                 "Delete workflow alert",
+	Long:                  "Delete workflow alert",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		alertName, _ := cmd.Flags().GetString("alert")
+		for _, file := range args {
+			deleteAlert(file, alertName)
 		}
 	},
 }
@@ -132,7 +150,7 @@ func setFields(cmd *cobra.Command) workflow.Alert {
 	return alert
 }
 
-func updateAlert(file string, alertUpdates workflow.Alert) {
+func updateAlert(file string, alertName string, alertUpdates workflow.Alert) {
 	a, err := workflow.Open(file)
 	if err != nil {
 		log.Warn("parsing workflow failed: " + err.Error())
@@ -141,6 +159,26 @@ func updateAlert(file string, alertUpdates workflow.Alert) {
 	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
 	alertName = strings.ToLower(strings.TrimPrefix(alertName, objectName+"."))
 	err = a.UpdateAlert(alertName, alertUpdates)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(a, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func deleteAlert(file string, alertName string) {
+	a, err := workflow.Open(file)
+	if err != nil {
+		log.Warn("parsing workflow failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	alertName = strings.ToLower(strings.TrimPrefix(alertName, objectName+"."))
+	err = a.DeleteAlert(alertName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

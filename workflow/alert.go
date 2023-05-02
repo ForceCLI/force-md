@@ -23,3 +23,20 @@ func (o *Workflow) UpdateAlert(alertName string, updates Alert) error {
 	}
 	return nil
 }
+
+func (o *Workflow) DeleteAlert(alertName string) error {
+	found := false
+	newAlerts := o.Alerts[:0]
+	for _, a := range o.Alerts {
+		if strings.ToLower(a.FullName) == strings.ToLower(alertName) {
+			found = true
+		} else {
+			newAlerts = append(newAlerts, a)
+		}
+	}
+	if !found {
+		return errors.New("alert not found")
+	}
+	o.Alerts = newAlerts
+	return nil
+}
