@@ -7,13 +7,16 @@ import (
 
 type LayoutFilter func(LayoutAssignment) bool
 
-func (p *Profile) GetLayouts(objectName string) LayoutAssignmentList {
-	layoutPrefix := objectName + "-"
+func (p *Profile) GetLayouts(filters ...LayoutFilter) LayoutAssignmentList {
 	var layouts LayoutAssignmentList
+LAYOUTS:
 	for _, layout := range p.LayoutAssignments {
-		if strings.HasPrefix(layout.Layout, layoutPrefix) {
-			layouts = append(layouts, layout)
+		for _, filter := range filters {
+			if !filter(layout) {
+				continue LAYOUTS
+			}
 		}
+		layouts = append(layouts, layout)
 
 	}
 	return layouts

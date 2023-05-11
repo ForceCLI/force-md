@@ -20,4 +20,5 @@ Manage page layouts
 * [force-md profile layout delete](force-md_profile_layout_delete.md)	 - Delete page layout assignment
 * [force-md profile layout edit](force-md_profile_layout_edit.md)	 - Show page layout assignment
 * [force-md profile layout show](force-md_profile_layout_show.md)	 - Show page layout assignment
+* [force-md profile layout table](force-md_profile_layout_table.md)	 - List Page Layouts in a table
 

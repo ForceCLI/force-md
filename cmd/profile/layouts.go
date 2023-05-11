@@ -2,8 +2,11 @@ package profile
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -29,9 +32,14 @@ func init() {
 	deleteLayoutCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
 	deleteLayoutCmd.MarkFlagRequired("object")
 
+	tableLayoutsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
+	tableLayoutsCmd.Flags().StringVarP(&layoutName, "layout", "l", "", "layout name")
+	tableLayoutsCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type")
+
 	LayoutCmd.AddCommand(showLayoutCmd)
 	LayoutCmd.AddCommand(editLayoutCmd)
 	LayoutCmd.AddCommand(deleteLayoutCmd)
+	LayoutCmd.AddCommand(tableLayoutsCmd)
 }
 
 var LayoutCmd = &cobra.Command{
@@ -75,13 +83,29 @@ var deleteLayoutCmd = &cobra.Command{
 	},
 }
 
+var tableLayoutsCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Page Layouts in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		tableLayouts(args)
+	},
+}
+
 func showLayout(file string) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	layouts := p.GetLayouts(objectName)
+	objectFilter := func(f profile.LayoutAssignment) bool {
+		pieces := strings.Split(f.Layout, "-")
+		if len(pieces) != 2 {
+			return false
+		}
+		return strings.ToLower(pieces[0]) == strings.ToLower(objectName)
+	}
+	layouts := p.GetLayouts(objectFilter)
 	for _, l := range layouts {
 		if l.RecordType != nil {
 			fmt.Printf("%s (%s)\n", l.Layout, l.RecordType.Text)
@@ -141,5 +165,77 @@ func deleteLayout(file string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func tableLayouts(files []string) {
+	var filters []profile.LayoutFilter
+	if objectName != "" {
+		filters = append(filters, func(f profile.LayoutAssignment) bool {
+			pieces := strings.Split(f.Layout, "-")
+			if len(pieces) != 2 {
+				return false
+			}
+			return strings.ToLower(pieces[0]) == strings.ToLower(objectName)
+		})
+	}
+	if recordType != "" {
+		fullRecordTypeName := strings.ToLower(recordType)
+		if objectName != "" {
+			recordType = strings.TrimPrefix(strings.ToLower(recordType), strings.ToLower(objectName)+".")
+			fullRecordTypeName = objectName + "." + recordType
+		}
+		filters = append(filters, func(f profile.LayoutAssignment) bool {
+			if f.RecordType == nil {
+				return false
+			}
+			return strings.ToLower(f.RecordType.Text) == fullRecordTypeName
+		})
+	}
+	if layoutName != "" {
+		fullLayoutName := strings.ToLower(layoutName)
+		if objectName != "" {
+			layoutName = strings.TrimPrefix(strings.ToLower(layoutName), strings.ToLower(objectName)+"-")
+			fullLayoutName = strings.ToLower(objectName) + "-" + layoutName
+		}
+		filters = append(filters, func(f profile.LayoutAssignment) bool {
+			return strings.ToLower(f.Layout) == fullLayoutName
+		})
+	}
+	type profileLayouts struct {
+		layouts profile.LayoutAssignmentList
+		profile string
+	}
+	var layouts []profileLayouts
+	for _, file := range files {
+		p, err := profile.Open(file)
+		if err != nil {
+			log.Warn("parsing profile failed: " + err.Error())
+			return
+		}
+		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		layouts = append(layouts, profileLayouts{layouts: p.GetLayouts(filters...), profile: profileName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Object", "RecordType", "Layout"})
+	table.SetRowLine(true)
+	for _, vis := range layouts {
+		for _, o := range vis.layouts {
+			pieces := strings.Split(o.Layout, "-")
+			if len(pieces) != 2 {
+				log.Warn("Unexpected Layout: " + o.Layout)
+				continue
+			}
+			obj := pieces[0]
+			layout := pieces[1]
+			rt := ""
+			if o.RecordType != nil {
+				rt = o.RecordType.Text
+			}
+			table.Append([]string{vis.profile, obj, rt, layout})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
 	}
 }
