@@ -22,7 +22,7 @@ var (
 	formulaField   bool
 	filteredLookup bool
 	fieldName      string
-	fieldType      string
+	fieldTypes     []string
 	references     string
 	fieldsDir      string
 	label          string
@@ -41,7 +41,7 @@ func init() {
 	listFieldsCmd.Flags().BoolP("no-external-id", "X", false, "non-external id fields only")
 	listFieldsCmd.Flags().BoolP("unique", "u", false, "unique fields only")
 	listFieldsCmd.Flags().BoolP("no-unique", "U", false, "non-unique fields only")
-	listFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
+	listFieldsCmd.Flags().StringSliceVarP(&fieldTypes, "type", "t", []string{}, "field type")
 	listFieldsCmd.Flags().StringVarP(&label, "label", "l", "", "label")
 	listFieldsCmd.Flags().StringVarP(&references, "references", "L", "", "references object")
 
@@ -57,9 +57,24 @@ func init() {
 	tableFieldsCmd.Flags().BoolP("no-external-id", "X", false, "non-external id fields only")
 	tableFieldsCmd.Flags().BoolP("unique", "u", false, "unique fields only")
 	tableFieldsCmd.Flags().BoolP("no-unique", "U", false, "non-unique fields only")
-	tableFieldsCmd.Flags().StringVarP(&fieldType, "type", "t", "", "field type")
+	tableFieldsCmd.Flags().StringSliceVarP(&fieldTypes, "type", "t", []string{}, "field type")
 	tableFieldsCmd.Flags().StringVarP(&label, "label", "l", "", "label")
 	tableFieldsCmd.Flags().StringVarP(&references, "references", "L", "", "references object")
+
+	graphFieldsCmd.Flags().BoolP("required", "r", false, "required fields")
+	graphFieldsCmd.Flags().BoolP("no-required", "R", false, "not required fields")
+	graphFieldsCmd.Flags().BoolP("history-tracking", "k", false, "with history tracking")
+	graphFieldsCmd.Flags().BoolP("no-history-tracking", "K", false, "without history tracking")
+	graphFieldsCmd.Flags().BoolP("trending", "d", false, "with trending tracking")
+	graphFieldsCmd.Flags().BoolP("no-trending", "D", false, "without trending tracking")
+	graphFieldsCmd.Flags().BoolVarP(&formulaField, "formula", "m", false, "formula fields only")
+	graphFieldsCmd.Flags().BoolVarP(&filteredLookup, "filtered-lookup", "f", false, "filtered lookup fields only")
+	graphFieldsCmd.Flags().BoolP("unique", "u", false, "unique fields only")
+	graphFieldsCmd.Flags().BoolP("no-unique", "U", false, "non-unique fields only")
+	graphFieldsCmd.Flags().StringSliceVarP(&fieldTypes, "type", "t", []string{}, "field type")
+	graphFieldsCmd.Flags().StringVarP(&label, "label", "l", "", "label")
+	graphFieldsCmd.Flags().StringVarP(&references, "references", "L", "", "references object")
+	graphFieldsCmd.Flags().BoolP("object-only", "o", false, "show relationships between objects (default fields)")
 
 	addFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	addFieldCmd.MarkFlagRequired("field")
@@ -98,6 +113,7 @@ func init() {
 
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(tableFieldsCmd)
+	FieldCmd.AddCommand(graphFieldsCmd)
 	FieldCmd.AddCommand(addFieldCmd)
 	FieldCmd.AddCommand(editFieldCmd)
 	FieldCmd.AddCommand(showFieldCmd)
@@ -132,6 +148,27 @@ var tableFieldsCmd = &cobra.Command{
 		tableFields(args, filterAttributes)
 	},
 }
+
+var graphFieldsCmd = &cobra.Command{
+	Use:   "graph [flags] [filename]...",
+	Short: "List relationship between fields and other objects",
+	Long: `List relationship between fields and objects for graph analysis using
+digraph (https://github.com/golang/tools/blob/gopls/v0.4.4/cmd/digraph/digraph.go)`,
+	Example: `
+ $ force-md objects fields graph src/objects/* | digraph transpose
+
+ $ force-md objects fields graph --object-only src/objects/* | digraph degree
+`,
+	Args: cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		objectsOnly, _ := cmd.Flags().GetBool("object-only")
+		filterAttributes := setFields(cmd)
+		for _, file := range args {
+			graphFields(file, filterAttributes, objectsOnly)
+		}
+	},
+}
+
 var addFieldCmd = &cobra.Command{
 	Use:                   "add -f Field [filename]...",
 	Short:                 "Add field",
@@ -247,10 +284,15 @@ func listFields(file string, attributes objects.Field) {
 	if attributes.Unique.IsFalse() {
 		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
 	}
-	if fieldType != "" {
+	if len(fieldTypes) != 0 {
 		filters = append(filters, func(f objects.Field) bool {
-			t := strings.ToLower(fieldType)
-			return f.Type != nil && strings.ToLower(f.Type.Text) == t
+			for _, t := range fieldTypes {
+				t = strings.ToLower(t)
+				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+					return true
+				}
+			}
+			return false
 		})
 	}
 	if references != "" {
@@ -268,6 +310,85 @@ func listFields(file string, attributes objects.Field) {
 	fields := o.GetFields(filters...)
 	for _, f := range fields {
 		fmt.Printf("%s.%s\n", objectName, f.FullName)
+	}
+}
+
+func graphFields(file string, attributes objects.Field, objectsOnly bool) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	var filters []objects.FieldFilter
+	requiredFilter := func(f objects.Field) bool {
+		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
+		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
+		return isRequired || isMasterDetail
+	}
+	if attributes.Required.IsTrue() {
+		filters = append(filters, requiredFilter)
+	}
+	if attributes.Required.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
+	}
+	if attributes.TrackHistory.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
+	}
+	if attributes.TrackHistory.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
+	}
+	if attributes.TrackTrending.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.TrackTrending.ToBool() })
+	}
+	if attributes.TrackTrending.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.TrackTrending.ToBool() })
+	}
+	if formulaField {
+		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
+	}
+	if filteredLookup {
+		filters = append(filters, func(f objects.Field) bool { return f.LookupFilter != nil })
+	}
+	if attributes.Unique.IsTrue() {
+		filters = append(filters, func(f objects.Field) bool { return f.Unique.ToBool() })
+	}
+	if attributes.Unique.IsFalse() {
+		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
+	}
+	if len(fieldTypes) != 0 {
+		filters = append(filters, func(f objects.Field) bool {
+			for _, t := range fieldTypes {
+				t = strings.ToLower(t)
+				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+					return true
+				}
+			}
+			return false
+		})
+	}
+	if references != "" {
+		filters = append(filters, func(f objects.Field) bool {
+			r := strings.ToLower(references)
+			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
+		})
+	}
+	if label != "" {
+		filters = append(filters, func(f objects.Field) bool {
+			l := strings.ToLower(label)
+			return f.Label != nil && strings.ToLower(f.Label.Text) == l
+		})
+	}
+	fields := o.GetFields(filters...)
+	for _, f := range fields {
+		if f.ReferenceTo == nil {
+			continue
+		}
+		if objectsOnly {
+			fmt.Printf("%s %s\n", objectName, f.ReferenceTo.Text)
+		} else {
+			fmt.Printf("%s.%s %s.Id\n", objectName, f.FullName, f.ReferenceTo.Text)
+		}
 	}
 }
 
@@ -314,10 +435,15 @@ func tableFields(files []string, attributes objects.Field) {
 	if attributes.Unique.IsFalse() {
 		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
 	}
-	if fieldType != "" {
+	if len(fieldTypes) != 0 {
 		filters = append(filters, func(f objects.Field) bool {
-			t := strings.ToLower(fieldType)
-			return f.Type != nil && strings.ToLower(f.Type.Text) == t
+			for _, t := range fieldTypes {
+				t = strings.ToLower(t)
+				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+					return true
+				}
+			}
+			return false
 		})
 	}
 	if references != "" {

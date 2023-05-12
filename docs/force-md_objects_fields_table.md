@@ -23,7 +23,7 @@ force-md objects fields table [flags] [filename]...
   -L, --references string     references object
   -r, --required              required fields
   -d, --trending              with trending tracking
-  -t, --type string           field type
+  -t, --type strings          field type
   -u, --unique                unique fields only
 ```
 

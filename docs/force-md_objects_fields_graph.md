@@ -1,25 +1,39 @@
-## force-md objects fields list
+## force-md objects fields graph
 
-List object fields
+List relationship between fields and other objects
+
+### Synopsis
+
+List relationship between fields and objects for graph analysis using
+digraph (https://github.com/golang/tools/blob/gopls/v0.4.4/cmd/digraph/digraph.go)
 
 ```
-force-md objects fields list [flags] [filename]...
+force-md objects fields graph [flags] [filename]...
+```
+
+### Examples
+
+```
+
+ $ force-md objects fields graph src/objects/* | digraph transpose
+
+ $ force-md objects fields graph --object-only src/objects/* | digraph degree
+
 ```
 
 ### Options
 
 ```
-  -x, --external-id           external id fields only
   -f, --filtered-lookup       filtered lookup fields only
   -m, --formula               formula fields only
-  -h, --help                  help for list
+  -h, --help                  help for graph
   -k, --history-tracking      with history tracking
   -l, --label string          label
-  -X, --no-external-id        non-external id fields only
   -K, --no-history-tracking   without history tracking
   -R, --no-required           not required fields
   -D, --no-trending           without trending tracking
   -U, --no-unique             non-unique fields only
+  -o, --object-only           show relationships between objects (default fields)
   -L, --references string     references object
   -r, --required              required fields
   -d, --trending              with trending tracking
