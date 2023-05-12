@@ -99,7 +99,7 @@ func showLayout(file string) {
 		return
 	}
 	objectFilter := func(f profile.LayoutAssignment) bool {
-		pieces := strings.Split(f.Layout, "-")
+		pieces := strings.SplitN(f.Layout, "-", 2)
 		if len(pieces) != 2 {
 			return false
 		}
@@ -172,7 +172,7 @@ func tableLayouts(files []string) {
 	var filters []profile.LayoutFilter
 	if objectName != "" {
 		filters = append(filters, func(f profile.LayoutAssignment) bool {
-			pieces := strings.Split(f.Layout, "-")
+			pieces := strings.SplitN(f.Layout, "-", 2)
 			if len(pieces) != 2 {
 				return false
 			}
@@ -221,7 +221,7 @@ func tableLayouts(files []string) {
 	table.SetRowLine(true)
 	for _, vis := range layouts {
 		for _, o := range vis.layouts {
-			pieces := strings.Split(o.Layout, "-")
+			pieces := strings.SplitN(o.Layout, "-", 2)
 			if len(pieces) != 2 {
 				log.Warn("Unexpected Layout: " + o.Layout)
 				continue
