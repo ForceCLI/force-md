@@ -499,7 +499,7 @@ type CustomObject struct {
 	PluralLabel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"pluralLabel"`
-	ProfileSearchLayouts *struct {
+	ProfileSearchLayouts []struct {
 		Fields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"fields"`
