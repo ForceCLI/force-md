@@ -23,9 +23,13 @@ var (
 func init() {
 	deleteRecordTypeCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
 
+	writeRecordTypesCmd.Flags().StringP("directory", "d", "", "directory where record types should be output")
+	writeRecordTypesCmd.MarkFlagRequired("directory")
+
 	RecordTypeCmd.AddCommand(deleteRecordTypeCmd)
 	RecordTypeCmd.AddCommand(listRecordTypesCmd)
 	RecordTypeCmd.AddCommand(recordtypePicklistCmd)
+	RecordTypeCmd.AddCommand(writeRecordTypesCmd)
 
 	recordtypePicklistTableCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	recordtypePicklistTableCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
@@ -95,6 +99,20 @@ var deleteRecordTypeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteRecordType(file)
+		}
+	},
+}
+
+var writeRecordTypesCmd = &cobra.Command{
+	Use:                   "write -d directory [filename]...",
+	Short:                 "Split object record types into separate files",
+	Long:                  "Split object record types into separate metadata files to match sfdx's source format",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		dir, _ := cmd.Flags().GetString("directory")
+		for _, file := range args {
+			writeRecordTypes(file, dir)
 		}
 	},
 }
@@ -189,5 +207,25 @@ func tableRecordTypePicklistOptions(file string) {
 	}
 	if table.NumLines() > 0 {
 		table.Render()
+	}
+}
+
+func writeRecordTypes(file string, recordTypesDir string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	recordTypes := o.GetRecordTypes()
+	for _, f := range recordTypes {
+		recordType := objects.RecordTypeMetadata{
+			RecordType: f,
+			Xmlns:      o.Xmlns,
+		}
+		err = internal.WriteToFile(recordType, recordTypesDir+"/"+f.FullName+".recordType-meta.xml")
+		if err != nil {
+			log.Warn("write failed: " + err.Error())
+			return
+		}
 	}
 }

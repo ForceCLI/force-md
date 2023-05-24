@@ -15,6 +15,12 @@ type CustomField struct {
 	Field
 }
 
+type RecordTypeMetadata struct {
+	XMLName xml.Name `xml:"RecordType"`
+	Xmlns   string   `xml:"xmlns,attr"`
+	RecordType
+}
+
 type ValidationRule struct {
 	XMLName xml.Name `xml:"CustomField"`
 	Xmlns   string   `xml:"xmlns,attr"`
