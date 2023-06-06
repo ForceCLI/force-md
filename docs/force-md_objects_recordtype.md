@@ -20,4 +20,5 @@ Manage object record type metadata
 * [force-md objects recordtype delete](force-md_objects_recordtype_delete.md)	 - Delete object record type
 * [force-md objects recordtype list](force-md_objects_recordtype_list.md)	 - List object record types
 * [force-md objects recordtype picklist](force-md_objects_recordtype_picklist.md)	 - Manage record type picklist options
+* [force-md objects recordtype write](force-md_objects_recordtype_write.md)	 - Split object record types into separate files
 

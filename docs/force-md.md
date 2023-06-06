@@ -28,6 +28,7 @@ force-md
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets
 * [force-md permissionsetgroup](force-md_permissionsetgroup.md)	 - Manage Permission Set Groups
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
+* [force-md reportfolder](force-md_reportfolder.md)	 - Manage Report Folders
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules
 * [force-md standardvalueset](force-md_standardvalueset.md)	 - Manage Standard Value Sets
