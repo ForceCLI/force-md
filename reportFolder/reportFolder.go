@@ -15,8 +15,8 @@ type FolderShare struct {
 type ReportFolder struct {
 	XMLName      xml.Name      `xml:"ReportFolder"`
 	Xmlns        string        `xml:"xmlns,attr"`
-	Name         string        `xml:"name"`
 	FolderShares []FolderShare `xml:"folderShares"`
+	Name         string        `xml:"name"`
 }
 
 func (p *ReportFolder) MetaCheck() {}
