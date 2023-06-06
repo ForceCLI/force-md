@@ -54,7 +54,7 @@ func init() {
 	deleteShareCmd.Flags().VarP(enumflag.New(&shareType, "type", ShareTypeIds, enumflag.EnumCaseInsensitive),
 		"type", "t", "type; can be 'User', 'Role', 'RoleAndSubordinates', 'Organization', or 'Group'")
 	deleteShareCmd.Flags().VarP(enumflag.New(&accessLevel, "access", AccessLevelIds, enumflag.EnumCaseInsensitive),
-		"access", "l", "access level; can be 'View', 'Manage', or 'EditAllContents'")
+		"access", "a", "access level; can be 'View', 'Manage', or 'EditAllContents'")
 
 	listSharesCmd.Flags().VarP(enumflag.New(&shareType, "type", ShareTypeIds, enumflag.EnumCaseInsensitive),
 		"type", "t", "type; can be 'User', 'Role', 'RoleAndSubordinates', 'Organization', or 'Group'")
