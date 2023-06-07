@@ -8,6 +8,7 @@ import (
 
 func init() {
 	customMetadataCmd.AddCommand(custommetadata.TableCmd)
+	customMetadataCmd.AddCommand(custommetadata.ListCmd)
 	RootCmd.AddCommand(customMetadataCmd)
 }
 
