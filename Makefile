@@ -33,7 +33,13 @@ $(basename $(WINDOWS)).zip: $(WINDOWS)
 	zip $@ $<
 	7za rn $@ $< $(EXECUTABLE)
 
-dist: $(addsuffix .zip,$(basename $(ALL)))
+dist: test $(addsuffix .zip,$(basename $(ALL)))
+
+test:
+	test -z "$(go fmt)"
+	go vet
+	go test ./...
+	go test -race ./...
 
 docs:
 	go run docs/mkdocs.go
