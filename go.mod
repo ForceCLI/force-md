@@ -6,6 +6,7 @@ require (
 	github.com/antonmedv/expr v1.12.5
 	github.com/cwarden/mergo v0.3.12-0.20210528180603-9b708ca2c584
 	github.com/imdario/mergo v0.3.16
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.3
@@ -16,7 +17,6 @@ require (
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

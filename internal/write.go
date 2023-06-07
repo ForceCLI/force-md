@@ -25,7 +25,7 @@ func WriteToFile(t interface{}, fileName string) error {
 	if err != nil {
 		return errors.Wrap(err, "serializing metadata")
 	}
-	b = selfClosing(b)
+	b = SelfClosing(b)
 	if ConvertNumericXMLEntities {
 		b = htmlEntities(b)
 	}
@@ -43,7 +43,7 @@ func htmlEntities(b []byte) []byte {
 }
 
 // Make empty tags self-closing
-func selfClosing(b []byte) []byte {
-	emptyTag := regexp.MustCompile(`(?:</?(\w+)>){2}`)
-	return emptyTag.ReplaceAll(b, []byte(`<$1/>`))
+func SelfClosing(b []byte) []byte {
+	emptyTag := regexp.MustCompile(`<(\w+)(\s*[^>]*)>\s*</[^>]+>`)
+	return emptyTag.ReplaceAll(b, []byte(`<$1$2/>`))
 }

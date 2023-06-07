@@ -3,27 +3,29 @@ package custommetadata
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
+type TypedValue struct {
+	Text string `xml:",chardata"`
+	Type string `xml:"xsi:type,attr,omitempty"`
+	Nil  string `xml:"xsi:nil,attr,omitempty"`
+}
+
 type Value struct {
-	Field string `xml:"field"`
-	Value struct {
-		Text string `xml:",chardata"`
-		Type string `xml:"type,attr"`
-	} `xml:"value"`
+	Field string     `xml:"field"`
+	Value TypedValue `xml:"value"`
 }
 
 type CustomMetadata struct {
-	XMLName   xml.Name `xml:"CustomMetadata"`
-	Xmlns     string   `xml:"xmlns,attr"`
-	Xsi       string   `xml:"xsi,attr"`
-	Xsd       string   `xml:"xsd,attr"`
-	Label     string   `xml:"label"`
-	Protected struct {
-		Text string `xml:",chardata"`
-	} `xml:"protected"`
-	Values []Value `xml:"values"`
+	XMLName   xml.Name    `xml:"CustomMetadata"`
+	Xmlns     string      `xml:"xmlns,attr"`
+	Xsi       string      `xml:"xmlns:xsi,attr"`
+	Xsd       string      `xml:"xmlns:xsd,attr"`
+	Label     string      `xml:"label"`
+	Protected BooleanText `xml:"protected"`
+	Values    []Value     `xml:"values"`
 }
 
 func (p *CustomMetadata) MetaCheck() {}
