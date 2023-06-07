@@ -1,16 +1,16 @@
-## force-md custommetadata table
+## force-md custommetadata list
 
-List custom metadata in a table
+List custom metadata
 
 ```
-force-md custommetadata table [flags] [filename]...
+force-md custommetadata list [flags] [filename]...
 ```
 
 ### Examples
 
 ```
 
-$ force-md custommetadata table -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
+$ force-md custommetadata list -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
 
 ```
 
@@ -18,7 +18,7 @@ $ force-md custommetadata table -f 'record.dlrs__CalculationMode__c != "Realtime
 
 ```
   -f, --filter string   expr boolean expression to filter records (default "true")
-  -h, --help            help for table
+  -h, --help            help for list
 ```
 
 ### Options inherited from parent commands
