@@ -28,7 +28,8 @@ force-md permissionset object-permissions edit -o SObject [flags] [filename]...
 ### Options inherited from parent commands
 
 ```
-      --silent   show errors only
+      --convert-xml-entities   convert numeric xml entities to character entities (default true)
+      --silent                 show errors only
 ```
 
 ### SEE ALSO

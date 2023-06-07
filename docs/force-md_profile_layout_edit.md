@@ -18,7 +18,8 @@ force-md profile layout edit -o SObject -l Layout [filename]...
 ### Options inherited from parent commands
 
 ```
-      --silent   show errors only
+      --convert-xml-entities   convert numeric xml entities to character entities (default true)
+      --silent                 show errors only
 ```
 
 ### SEE ALSO

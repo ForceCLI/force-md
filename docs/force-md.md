@@ -9,8 +9,9 @@ force-md
 ### Options
 
 ```
-  -h, --help     help for force-md
-      --silent   show errors only
+      --convert-xml-entities   convert numeric xml entities to character entities (default true)
+  -h, --help                   help for force-md
+      --silent                 show errors only
 ```
 
 ### SEE ALSO
