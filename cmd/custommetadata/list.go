@@ -21,7 +21,7 @@ func init() {
 
 var ListCmd = &cobra.Command{
 	Use:   "list [flags] [filename]...",
-	Short: "List custom metadata in a table",
+	Short: "List custom metadata",
 	Args:  cobra.MinimumNArgs(1),
 	Example: `
 $ force-md custommetadata list -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
