@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/antonmedv/expr"
+	"github.com/antonmedv/expr/vm"
 	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -24,7 +25,7 @@ var ListCmd = &cobra.Command{
 	Short: "List custom metadata",
 	Args:  cobra.MinimumNArgs(1),
 	Example: `
-$ force-md custommetadata list -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
+$ force-md custommetadata list -f 'dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		filter, _ := cmd.Flags().GetString("filter")
@@ -37,7 +38,7 @@ var TableCmd = &cobra.Command{
 	Short: "List custom metadata in a table",
 	Args:  cobra.MinimumNArgs(1),
 	Example: `
-$ force-md custommetadata table -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
+$ force-md custommetadata table -f 'dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		filter, _ := cmd.Flags().GetString("filter")
@@ -46,13 +47,7 @@ $ force-md custommetadata table -f 'record.dlrs__CalculationMode__c != "Realtime
 }
 
 func tableCustomMetadata(files []string, filter string) {
-	env := map[string]interface{}{
-		"record": make(map[string]string),
-	}
-	program, err := expr.Compile(filter, expr.Env(env))
-	if err != nil {
-		log.Fatalln("Invalid expression:", err)
-	}
+	var program *vm.Program
 	var fieldNames []string
 	allFields := make(map[string]bool)
 	type record struct {
@@ -66,7 +61,6 @@ func tableCustomMetadata(files []string, filter string) {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		// file := strings.TrimSuffix(path.Base(file), ".md")
 		fields := make(map[string]string)
 		for _, v := range m.Values {
 			if _, ok := allFields[v.Field]; !ok {
@@ -75,10 +69,13 @@ func tableCustomMetadata(files []string, filter string) {
 			}
 			fields[v.Field] = v.Value.Text
 		}
-		env := map[string]interface{}{
-			"record": fields,
+		if program == nil {
+			program, err = expr.Compile(filter, expr.Env(fields))
+			if err != nil {
+				log.Fatalln("Invalid expression:", err)
+			}
 		}
-		out, err := expr.Run(program, env)
+		out, err := expr.Run(program, fields)
 		if err != nil {
 			panic(err)
 		}
@@ -105,38 +102,24 @@ func tableCustomMetadata(files []string, filter string) {
 }
 
 func listCustomMetadata(files []string, filter string) {
-	env := map[string]interface{}{
-		"record": make(map[string]string),
-	}
-	program, err := expr.Compile(filter, expr.Env(env))
-	if err != nil {
-		log.Fatalln("Invalid expression:", err)
-	}
-	var fieldNames []string
-	allFields := make(map[string]bool)
-	type record struct {
-		label  string
-		fields map[string]string
-	}
+	var program *vm.Program
 	for _, file := range files {
 		m, err := custommetadata.Open(file)
 		if err != nil {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		// file := strings.TrimSuffix(path.Base(file), ".md")
 		fields := make(map[string]string)
 		for _, v := range m.Values {
-			if _, ok := allFields[v.Field]; !ok {
-				fieldNames = append(fieldNames, v.Field)
-				allFields[v.Field] = true
-			}
 			fields[v.Field] = v.Value.Text
 		}
-		env := map[string]interface{}{
-			"record": fields,
+		if program == nil {
+			program, err = expr.Compile(filter, expr.Env(fields))
+			if err != nil {
+				log.Fatalln("Invalid expression:", err)
+			}
 		}
-		out, err := expr.Run(program, env)
+		out, err := expr.Run(program, fields)
 		if err != nil {
 			panic(err)
 		}
