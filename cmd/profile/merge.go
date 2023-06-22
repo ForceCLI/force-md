@@ -49,6 +49,11 @@ func mergePermissions(file string, apply profile.Profile) {
 			log.Warn(fmt.Sprintf("adding application %s permissions failed for %s: %s", a.Application, file, err.Error()))
 			return
 		}
+		err = p.SetApplicationVisibility(a.Application, a)
+		if err != nil {
+			log.Warn(fmt.Sprintf("setting application %s permissions failed for %s: %s", a.Application, file, err.Error()))
+			return
+		}
 	}
 	for _, c := range apply.ClassAccesses {
 		err = p.AddClass(c.ApexClass)
@@ -96,11 +101,21 @@ func mergePermissions(file string, apply profile.Profile) {
 			log.Warn(fmt.Sprintf("adding record type %s failed for %s: %s", r.RecordType, file, err.Error()))
 			return
 		}
+		err = p.SetRecordTypeVisibility(r.RecordType, r)
+		if err != nil {
+			log.Warn(fmt.Sprintf("adding record type %s failed for %s: %s", r.RecordType, file, err.Error()))
+			return
+		}
 	}
 	for _, t := range apply.TabVisibilities {
 		err = p.AddTab(t.Tab)
 		if err != nil && err != profile.TabExistsError {
 			log.Warn(fmt.Sprintf("adding tab %s failed for %s: %s", t.Tab, file, err.Error()))
+			return
+		}
+		err = p.SetTabVisibility(t.Tab, t.Visibility)
+		if err != nil {
+			log.Warn(fmt.Sprintf("setting tab %s visibility failed for %s: %s", t.Tab, file, err.Error()))
 			return
 		}
 	}
