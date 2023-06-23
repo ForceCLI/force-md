@@ -23,4 +23,5 @@ Manage application visibility
 * [force-md profile application edit](force-md_profile_application_edit.md)	 - Update application visibility
 * [force-md profile application list](force-md_profile_application_list.md)	 - List applications assigned
 * [force-md profile application show](force-md_profile_application_show.md)	 - Show application visibility
+* [force-md profile application table](force-md_profile_application_table.md)	 - List Applications in a table
 

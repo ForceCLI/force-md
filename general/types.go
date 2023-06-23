@@ -2,6 +2,7 @@ package general
 
 import (
 	"html"
+	"strconv"
 	"strings"
 )
 
@@ -42,4 +43,8 @@ func (b *BooleanText) IsTrue() bool {
 
 func (b *BooleanText) IsFalse() bool {
 	return b != nil && strings.ToLower(b.Text) == "false"
+}
+
+func (b *BooleanText) String() string {
+	return strconv.FormatBool(b.ToBool())
 }

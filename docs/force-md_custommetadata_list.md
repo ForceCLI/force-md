@@ -10,7 +10,7 @@ force-md custommetadata list [flags] [filename]...
 
 ```
 
-$ force-md custommetadata list -f 'record.dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
+$ force-md custommetadata list -f 'dlrs__CalculationMode__c != "Realtime"' src/customMetadata/dlrs__LookupRollupSummary2.*
 
 ```
 

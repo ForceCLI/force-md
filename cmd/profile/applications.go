@@ -3,8 +3,11 @@ package profile
 import (
 	"encoding/xml"
 	"fmt"
+	"os"
+	"path"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -38,11 +41,18 @@ func init() {
 	editApplicationCmd.Flags().BoolP("no-visible", "V", false, "is not visible")
 	editApplicationCmd.MarkFlagRequired("application")
 
+	tableApplicationsCmd.Flags().StringVarP(&applicationName, "application", "a", "", "application name")
+	tableApplicationsCmd.Flags().BoolP("default", "d", false, "is default application")
+	tableApplicationsCmd.Flags().BoolP("visible", "v", false, "is visible")
+	tableApplicationsCmd.Flags().BoolP("no-default", "D", false, "is not default")
+	tableApplicationsCmd.Flags().BoolP("no-visible", "V", false, "is not visible")
+
 	ApplicationCmd.AddCommand(addApplicationCmd)
 	ApplicationCmd.AddCommand(deleteApplicationCmd)
 	ApplicationCmd.AddCommand(editApplicationCmd)
 	ApplicationCmd.AddCommand(listApplicationsCmd)
 	ApplicationCmd.AddCommand(showApplicationCmd)
+	ApplicationCmd.AddCommand(tableApplicationsCmd)
 }
 
 var ApplicationCmd = &cobra.Command{
@@ -80,7 +90,7 @@ var editApplicationCmd = &cobra.Command{
 	Long:  "Update application visibility in profiles",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		perms := applicationVisibilityToUpdate(cmd)
+		perms := applicationVisibiltyFromFlags(cmd)
 		for _, file := range args {
 			updateApplicationVisibility(file, perms)
 		}
@@ -107,6 +117,16 @@ var listApplicationsCmd = &cobra.Command{
 		for _, file := range args {
 			listApplications(file)
 		}
+	},
+}
+
+var tableApplicationsCmd = &cobra.Command{
+	Use:   "table [flags] [filename]...",
+	Short: "List Applications in a table",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		perms := applicationVisibiltyFromFlags(cmd)
+		tableApplications(args, perms)
 	},
 }
 
@@ -195,6 +215,53 @@ func showApplicationVisibility(file string, application string) {
 	fmt.Println(string(b))
 }
 
+func tableApplications(files []string, toApply profile.ApplicationVisibility) {
+	var filters []profile.ApplicationFilter
+	if applicationName != "" {
+		filters = append(filters, func(f profile.ApplicationVisibility) bool {
+			return strings.ToLower(f.Application) == strings.ToLower(applicationName)
+		})
+	}
+	if toApply.Visible.Text != "" {
+		filters = append(filters, func(f profile.ApplicationVisibility) bool {
+			return toApply.Visible.ToBool() == f.Visible.ToBool()
+		})
+	}
+	if toApply.Default.Text != "" {
+		filters = append(filters, func(f profile.ApplicationVisibility) bool {
+			return toApply.Default.ToBool() == f.Default.ToBool()
+		})
+	}
+	type perm struct {
+		apps    profile.ApplicationVisibilityList
+		profile string
+	}
+	var perms []perm
+	for _, file := range files {
+		p, err := profile.Open(file)
+		if err != nil {
+			log.Warn("parsing profile failed: " + err.Error())
+			return
+		}
+		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		perms = append(perms, perm{apps: p.GetApplications(filters...), profile: profileName})
+	}
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Profile", "Application", "Visible", "Default"})
+	table.SetRowLine(true)
+	for _, perm := range perms {
+		for _, t := range perm.apps {
+			table.Append([]string{perm.profile, t.Application,
+				t.Visible.String(),
+				t.Default.String(),
+			})
+		}
+	}
+	if table.NumLines() > 0 {
+		table.Render()
+	}
+}
+
 func updateApplicationVisibility(file string, perms profile.ApplicationVisibility) {
 	p, err := profile.Open(file)
 	if err != nil {
@@ -213,7 +280,7 @@ func updateApplicationVisibility(file string, perms profile.ApplicationVisibilit
 	}
 }
 
-func applicationVisibilityToUpdate(cmd *cobra.Command) profile.ApplicationVisibility {
+func applicationVisibiltyFromFlags(cmd *cobra.Command) profile.ApplicationVisibility {
 	perms := profile.ApplicationVisibility{}
 	perms.Default = textValue(cmd, "default")
 	perms.Visible = textValue(cmd, "visible")
