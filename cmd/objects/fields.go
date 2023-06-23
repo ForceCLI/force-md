@@ -241,7 +241,7 @@ func listFields(file string, attributes objects.Field) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	var filters []objects.FieldFilter
 	requiredFilter := func(f objects.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
@@ -319,7 +319,7 @@ func graphFields(file string, attributes objects.Field, objectsOnly bool) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	var filters []objects.FieldFilter
 	requiredFilter := func(f objects.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
@@ -469,7 +469,7 @@ func tableFields(files []string, attributes objects.Field) {
 			log.Warn("parsing object failed: " + err.Error())
 			return
 		}
-		objectName := strings.TrimSuffix(path.Base(file), ".object")
+		objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 		fields = append(fields, field{object: objectName, fields: o.GetFields(filters...)})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
@@ -515,7 +515,7 @@ func updateField(file string, fieldUpdates objects.Field) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldName = strings.ToLower(strings.TrimPrefix(fieldName, objectName+"."))
 	err = o.UpdateField(fieldName, fieldUpdates)
 	if err != nil {
@@ -535,7 +535,7 @@ func showField(file string, fieldName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldName = strings.ToLower(strings.TrimPrefix(fieldName, objectName+"."))
 	fields := o.GetFields(func(f objects.Field) bool {
 		return strings.ToLower(f.FullName) == fieldName
@@ -564,7 +564,7 @@ func deleteField(file string, fieldName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldName = strings.TrimPrefix(fieldName, objectName+".")
 	err = o.DeleteField(fieldName)
 	if err != nil {

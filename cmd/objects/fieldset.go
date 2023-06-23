@@ -60,7 +60,7 @@ func listFieldSets(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldSets := o.GetFieldSets()
 	for _, f := range fieldSets {
 		fmt.Printf("%s.%s\n", objectName, f.FullName)
@@ -73,7 +73,7 @@ func deleteFieldSet(file string, fieldSetName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldSetName = strings.TrimPrefix(fieldSetName, objectName+".")
 	err = o.DeleteFieldSet(fieldSetName)
 	if err != nil {

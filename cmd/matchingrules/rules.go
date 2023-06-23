@@ -36,7 +36,7 @@ func listRules(file string) {
 		log.Warn("parsing matching rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".matchingRule")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".matchingRule")
 	rules := w.GetMatchingRules()
 	for _, r := range rules {
 		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
@@ -62,7 +62,7 @@ func deleteRule(file string, ruleName string) {
 		log.Warn("parsing matching rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".matchingRule")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".matchingRule")
 	ruleName = strings.TrimPrefix(ruleName, objectName+".")
 	err = p.DeleteRule(ruleName)
 	if err != nil {

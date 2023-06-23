@@ -213,7 +213,7 @@ func tableLayouts(files []string) {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		profileName := internal.TrimSuffixToEnd(path.Base(file), ".profile")
 		layouts = append(layouts, profileLayouts{layouts: p.GetLayouts(filters...), profile: profileName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)

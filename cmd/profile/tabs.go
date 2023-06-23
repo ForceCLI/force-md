@@ -205,7 +205,7 @@ func tableTabPermissions(files []string) {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		profileName := internal.TrimSuffixToEnd(path.Base(file), ".profile")
 		perms = append(perms, perm{tabs: p.GetTabs(filters...), profile: profileName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)

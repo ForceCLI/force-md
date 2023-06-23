@@ -3,11 +3,11 @@ package standardvalueset
 import (
 	"fmt"
 	"path"
-	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/standardvalueset"
 )
 
@@ -28,7 +28,7 @@ func listValues(file string) {
 		log.Warn("parsing value set failed: " + err.Error())
 		return
 	}
-	valueSet := strings.TrimSuffix(path.Base(file), ".standardValueSet")
+	valueSet := internal.TrimSuffixToEnd(path.Base(file), ".standardValueSet")
 	rules := w.GetValues()
 	for _, r := range rules {
 		fmt.Printf("%s: %s\n", valueSet, r.FullName.Text)

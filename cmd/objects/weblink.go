@@ -60,7 +60,7 @@ func listWebLinks(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	webLinks := o.GetWebLinks()
 	for _, f := range webLinks {
 		fmt.Printf("%s.%s\n", objectName, f.FullName)
@@ -73,7 +73,7 @@ func deleteWebLink(file string, webLinkName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	webLinkName = strings.TrimPrefix(webLinkName, objectName+".")
 	err = o.DeleteWebLink(webLinkName)
 	if err != nil {

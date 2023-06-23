@@ -65,7 +65,7 @@ func listCriteriaRules(file string) {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".sharingRules")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	rules := w.GetCriteriaRules()
 	for _, r := range rules {
 		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
@@ -78,7 +78,7 @@ func listOwnerRules(file string) {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".sharingRules")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	rules := w.GetOwnerRules()
 	for _, r := range rules {
 		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
@@ -117,7 +117,7 @@ func deleteCriteriaRule(file string, ruleName string) {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".sharingRules")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	ruleName = strings.TrimPrefix(ruleName, objectName+".")
 	err = p.DeleteCriteriaRule(ruleName)
 	if err != nil {
@@ -137,7 +137,7 @@ func deleteOwnerRule(file string, ruleName string) {
 		log.Warn("parsing sharing rules failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".sharingRules")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	ruleName = strings.TrimPrefix(ruleName, objectName+".")
 	err = p.DeleteOwnerRule(ruleName)
 	if err != nil {
