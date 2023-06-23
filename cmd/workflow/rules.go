@@ -61,7 +61,7 @@ func listRules(file string) {
 		log.Warn("parsing workflow failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	var filters []workflow.RuleFilter
 	if active {
 		filters = append(filters, func(r workflow.Rule) bool {
@@ -84,7 +84,7 @@ func deleteRule(file string, ruleName string) {
 		log.Warn("parsing workflow failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	ruleName = strings.ToLower(strings.TrimPrefix(ruleName, objectName+"."))
 	err = a.DeleteRule(ruleName)
 	if err != nil {

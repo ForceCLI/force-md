@@ -356,7 +356,7 @@ func tableObjectPermissions(files []string, filter permissionset.ObjectPermissio
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		profileName := internal.TrimSuffixToEnd(path.Base(file), ".profile")
 		perms = append(perms, perm{objects: p.GetObjectPermissions(filters...), profile: profileName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)

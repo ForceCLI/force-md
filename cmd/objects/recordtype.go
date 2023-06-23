@@ -144,7 +144,7 @@ func listRecordType(file string, filter objects.RecordType) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	var filters []objects.RecordTypeFilter
 	filters = append(filters, func(r objects.RecordType) bool {
 		if filter.Active.Text != "" && filter.Active.ToBool() != r.Active.ToBool() {
@@ -164,7 +164,7 @@ func deleteRecordType(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	err = o.DeleteRecordType(strings.TrimPrefix(recordTypeName, objectName+"."))
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
@@ -183,7 +183,7 @@ func assignPicklistValueToRecordType(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	field := strings.TrimPrefix(fieldName, objectName+".")
 	recordType := strings.TrimPrefix(recordTypeName, objectName+".")
 
@@ -218,7 +218,7 @@ func tableRecordType(files []string, filter objects.RecordType) {
 			log.Warn("parsing object failed: " + err.Error())
 			return
 		}
-		objectName := strings.TrimSuffix(path.Base(file), ".object")
+		objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 		recordTypes := o.GetRecordTypes(filters...)
 
 		for _, r := range recordTypes {
@@ -236,7 +236,7 @@ func tableRecordTypePicklistOptions(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	recordTypes := o.GetRecordTypes()
 
 	fieldName = strings.TrimPrefix(fieldName, objectName+".")

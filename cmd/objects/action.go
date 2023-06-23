@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
 
+	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/objects"
 )
 
@@ -83,7 +84,7 @@ func tableActionOverrides(file string) {
 		log.Warn("parsing applications failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	var filters []objects.ActionOverrideFilter
 	switch actionType {
 	case Default, Flexipage, LightningComponent, Scontrol, Standard, Visualforce:

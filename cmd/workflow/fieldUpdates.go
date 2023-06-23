@@ -3,11 +3,11 @@ package workflow
 import (
 	"fmt"
 	"path"
-	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/workflow"
 )
 
@@ -37,7 +37,7 @@ func listFieldUpdates(file string) {
 		log.Warn("parsing workflow failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	fieldUpdates := w.GetFieldUpdates()
 	for _, r := range fieldUpdates {
 		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)

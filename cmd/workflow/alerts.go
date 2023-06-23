@@ -105,7 +105,7 @@ func listAlerts(file string) {
 		return
 	}
 	var filters []workflow.AlertFilter
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	if senderType != 0 {
 		filters = append(filters, func(a workflow.Alert) bool {
 			return strings.ToLower(a.SenderType.Text) == strings.ToLower(SenderTypeIds[senderType][0])
@@ -156,7 +156,7 @@ func updateAlert(file string, alertName string, alertUpdates workflow.Alert) {
 		log.Warn("parsing workflow failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	alertName = strings.ToLower(strings.TrimPrefix(alertName, objectName+"."))
 	err = a.UpdateAlert(alertName, alertUpdates)
 	if err != nil {
@@ -176,7 +176,7 @@ func deleteAlert(file string, alertName string) {
 		log.Warn("parsing workflow failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".workflow")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	alertName = strings.ToLower(strings.TrimPrefix(alertName, objectName+"."))
 	err = a.DeleteAlert(alertName)
 	if err != nil {

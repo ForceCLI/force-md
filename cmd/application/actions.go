@@ -145,7 +145,7 @@ func tableProfileActionOverrides(file string) {
 		log.Warn("parsing applications failed: " + err.Error())
 		return
 	}
-	applicationName := strings.TrimSuffix(path.Base(file), ".app")
+	applicationName := internal.TrimSuffixToEnd(path.Base(file), ".app")
 	var filters []application.ProfileActionOverrideFilter
 	switch action {
 	case Tab, View:

@@ -76,7 +76,7 @@ func deleteRule(file string, ruleName string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	ruleName = strings.TrimPrefix(ruleName, objectName+".")
 	err = o.DeleteRule(ruleName)
 	if err != nil {
@@ -96,7 +96,7 @@ func listRules(file string) {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
-	objectName := strings.TrimSuffix(path.Base(file), ".object")
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	rules := o.GetValidationRules()
 	for _, r := range rules {
 		fmt.Printf("%s.%s\n", objectName, r.FullName)
