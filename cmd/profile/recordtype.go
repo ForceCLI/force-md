@@ -21,8 +21,10 @@ func init() {
 	editRecordTypeCmd.Flags().StringVarP(&recordType, "recordtype", "r", "", "record type name")
 	editRecordTypeCmd.Flags().BoolP("visible", "v", false, "visible")
 	editRecordTypeCmd.Flags().BoolP("default", "d", false, "default")
+	editRecordTypeCmd.Flags().BoolP("person-default", "p", false, "person account default")
 	editRecordTypeCmd.Flags().BoolP("no-visible", "V", false, "not visible")
 	editRecordTypeCmd.Flags().BoolP("no-default", "D", false, "not default")
+	editRecordTypeCmd.Flags().BoolP("no-person-default", "P", false, "not person account default")
 	editRecordTypeCmd.Flags().SortFlags = false
 	editRecordTypeCmd.MarkFlagRequired("recordtype")
 
@@ -136,6 +138,10 @@ func recordTypeVisibilityToUpdate(cmd *cobra.Command) profile.RecordTypeVisibili
 	perms := profile.RecordTypeVisibility{}
 	perms.Visible = textValue(cmd, "visible")
 	perms.Default = textValue(cmd, "default")
+	p := textValue(cmd, "person-default")
+	if p.Text != "" {
+		perms.PersonAccountDefault = &p
+	}
 	return perms
 }
 
@@ -278,7 +284,7 @@ func tableRecordTypes(files []string, filter profile.RecordTypeVisibility) {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		profileName := strings.TrimSuffix(path.Base(file), ".profile")
+		profileName := internal.TrimSuffixToEnd(path.Base(file), ".profile")
 		visibilities = append(visibilities, visibility{recordTypes: p.GetRecordTypeVisibility(filters...), profile: profileName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
