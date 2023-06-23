@@ -2,8 +2,20 @@ package objects
 
 import "github.com/pkg/errors"
 
-func (o *CustomObject) GetRecordTypes() []RecordType {
-	return o.RecordTypes
+type RecordTypeFilter func(RecordType) bool
+
+func (o *CustomObject) GetRecordTypes(filters ...RecordTypeFilter) []RecordType {
+	var recordTypes []RecordType
+RECORDTYPES:
+	for _, v := range o.RecordTypes {
+		for _, filter := range filters {
+			if !filter(v) {
+				continue RECORDTYPES
+			}
+		}
+		recordTypes = append(recordTypes, v)
+	}
+	return recordTypes
 }
 
 func (o *CustomObject) DeleteRecordType(recordType string) error {

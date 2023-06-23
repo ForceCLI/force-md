@@ -1,16 +1,16 @@
-## force-md objects recordtype list
+## force-md objects recordtype table
 
-List object record types
+List object record types in a table
 
 ```
-force-md objects recordtype list [filename]...
+force-md objects recordtype table [filename]...
 ```
 
 ### Options
 
 ```
   -a, --active      is active
-  -h, --help        help for list
+  -h, --help        help for table
   -A, --no-active   is not active
 ```
 

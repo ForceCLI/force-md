@@ -313,10 +313,8 @@ type Picklist struct {
 type PicklistList []Picklist
 
 type RecordType struct {
-	FullName string `xml:"fullName"`
-	Active   struct {
-		Text string `xml:",chardata"`
-	} `xml:"active"`
+	FullName        string      `xml:"fullName"`
+	Active          BooleanText `xml:"active"`
 	BusinessProcess *struct {
 		Text string `xml:",chardata"`
 	} `xml:"businessProcess"`
