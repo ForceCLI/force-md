@@ -252,7 +252,7 @@ func tableFieldPermissions(files []string) {
 			log.Warn("parsing permissionset failed: " + err.Error())
 			return
 		}
-		permissionSetName := internal.TrimSuffixToEnd(path.Base(file), ".profile")
+		permissionSetName := internal.TrimSuffixToEnd(path.Base(file), ".permissionset")
 		perms = append(perms, perm{fields: p.GetFieldPermissions(filters...), permissionset: permissionSetName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
