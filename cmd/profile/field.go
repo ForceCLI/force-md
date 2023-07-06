@@ -42,6 +42,10 @@ func init() {
 
 	tableFieldsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	tableFieldsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object")
+	tableFieldsCmd.Flags().BoolP("edit", "e", false, "allow edit")
+	tableFieldsCmd.Flags().BoolP("read", "r", false, "allow read")
+	tableFieldsCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
+	tableFieldsCmd.Flags().BoolP("no-read", "R", false, "disallow read")
 
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
@@ -74,7 +78,7 @@ var editFieldCmd = &cobra.Command{
 	Long:  "Update field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		perms := fieldPermissionsToUpdate(cmd)
+		perms := fieldPermissionsFromFlags(cmd)
 		for _, file := range args {
 			updateFieldPermissions(file, perms)
 		}
@@ -87,7 +91,7 @@ var addFieldCmd = &cobra.Command{
 	Long:  "Add field permissions in profiles",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		perms := fieldPermissionsToUpdate(cmd)
+		perms := fieldPermissionsFromFlags(cmd)
 		for _, file := range args {
 			addFieldPermissions(file)
 			updateFieldPermissions(file, perms)
@@ -124,11 +128,12 @@ var tableFieldsCmd = &cobra.Command{
 	Short: "List Field Permissions in a table",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		tableFieldPermissions(args)
+		perms := fieldPermissionsFromFlags(cmd)
+		tableFieldPermissions(args, perms)
 	},
 }
 
-func fieldPermissionsToUpdate(cmd *cobra.Command) permissionset.FieldPermissions {
+func fieldPermissionsFromFlags(cmd *cobra.Command) permissionset.FieldPermissions {
 	perms := permissionset.FieldPermissions{}
 	perms.Editable = textValue(cmd, "edit")
 	perms.Readable = textValue(cmd, "read")
@@ -230,7 +235,7 @@ func listFields(file string) {
 	}
 }
 
-func tableFieldPermissions(files []string) {
+func tableFieldPermissions(files []string, toApply permissionset.FieldPermissions) {
 	var filters []profile.FieldFilter
 	if fieldName != "" && !strings.ContainsRune(fieldName, '.') && objectName != "" {
 		fieldName = objectName + "." + fieldName
@@ -243,6 +248,16 @@ func tableFieldPermissions(files []string) {
 	if objectName != "" {
 		filters = append(filters, func(f permissionset.FieldPermissions) bool {
 			return strings.HasPrefix(strings.ToLower(f.Field), strings.ToLower(objectName+"."))
+		})
+	}
+	if toApply.Readable.Text != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return toApply.Readable.ToBool() == f.Readable.ToBool()
+		})
+	}
+	if toApply.Editable.Text != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return toApply.Editable.ToBool() == f.Editable.ToBool()
 		})
 	}
 	type perm struct {
