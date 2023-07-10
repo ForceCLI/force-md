@@ -14,10 +14,24 @@ var ConvertNumericXMLEntities = true
 
 const declaration = `<?xml version="1.0" encoding="UTF-8"?>`
 
+func DisableIndent(e *xml.Encoder) {
+	e.Indent("", "")
+}
+
+func EnableIndent(e *xml.Encoder) {
+	e.Indent("", "    ")
+}
+
 func WriteToFile(t interface{}, fileName string) error {
-	f, err := os.Create(fileName)
-	if err != nil {
-		return errors.Wrap(err, "opening file")
+	var f *os.File
+	var err error
+	if fileName == "-" {
+		f = os.Stdout
+	} else {
+		f, err = os.Create(fileName)
+		if err != nil {
+			return errors.Wrap(err, "opening file")
+		}
 	}
 	defer f.Close()
 	fmt.Fprintln(f, declaration)
