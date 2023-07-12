@@ -65,6 +65,7 @@ func tidy(file string) {
 			if _, err = os.Stdout.Write(contents); err != nil {
 				log.Warn("failed to write contents")
 			}
+			return
 		}
 	} else {
 		p, err = profile.Open(file)
