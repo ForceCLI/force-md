@@ -47,6 +47,12 @@ func init() {
 	tableFieldsCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
 	tableFieldsCmd.Flags().BoolP("no-read", "R", false, "disallow read")
 
+	listFieldsCmd.Flags().StringVarP(&objectName, "object", "o", "", "object")
+	listFieldsCmd.Flags().BoolP("edit", "e", false, "allow edit")
+	listFieldsCmd.Flags().BoolP("read", "r", false, "allow read")
+	listFieldsCmd.Flags().BoolP("no-edit", "E", false, "disallow edit")
+	listFieldsCmd.Flags().BoolP("no-read", "R", false, "disallow read")
+
 	FieldPermissionsCmd.AddCommand(addFieldCmd)
 	FieldPermissionsCmd.AddCommand(editFieldCmd)
 	FieldPermissionsCmd.AddCommand(deleteFieldCmd)
@@ -117,8 +123,9 @@ var listFieldsCmd = &cobra.Command{
 	Args:                  cobra.MinimumNArgs(1),
 	DisableFlagsInUseLine: true,
 	Run: func(cmd *cobra.Command, args []string) {
+		perms := fieldPermissionsFromFlags(cmd)
 		for _, file := range args {
-			listFields(file)
+			listFields(file, perms)
 		}
 	},
 }
@@ -212,13 +219,37 @@ func updateFieldPermissions(file string, perms permissionset.FieldPermissions) {
 	}
 }
 
-func listFields(file string) {
+func listFields(file string, toApply permissionset.FieldPermissions) {
 	p, err := profile.Open(file)
 	if err != nil {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	fields := p.GetFieldPermissions()
+	var filters []profile.FieldFilter
+	if fieldName != "" && !strings.ContainsRune(fieldName, '.') && objectName != "" {
+		fieldName = objectName + "." + fieldName
+	}
+	if fieldName != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return strings.ToLower(f.Field) == strings.ToLower(fieldName)
+		})
+	}
+	if objectName != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return strings.HasPrefix(strings.ToLower(f.Field), strings.ToLower(objectName+"."))
+		})
+	}
+	if toApply.Readable.Text != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return toApply.Readable.ToBool() == f.Readable.ToBool()
+		})
+	}
+	if toApply.Editable.Text != "" {
+		filters = append(filters, func(f permissionset.FieldPermissions) bool {
+			return toApply.Editable.ToBool() == f.Editable.ToBool()
+		})
+	}
+	fields := p.GetFieldPermissions(filters...)
 	for _, a := range fields {
 		var perms []string
 		if a.Readable.Text == "true" {
