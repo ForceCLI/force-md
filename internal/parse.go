@@ -1,7 +1,9 @@
 package internal
 
 import (
+	"bytes"
 	"encoding/xml"
+	"io/ioutil"
 	"os"
 
 	"github.com/pkg/errors"
@@ -14,10 +16,42 @@ type MetadataPointer interface {
 	MetaCheck()
 }
 
-func ParseMetadataXml(i MetadataPointer, path string) error {
-	r, err := os.Open(path)
+func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) {
+	var f *os.File
+	var err error
+	if path == "-" {
+		f = os.Stdin
+	} else {
+		f, err = os.Open(path)
+		if err != nil {
+			return nil, errors.Wrap(err, "opening file")
+		}
+	}
+	contents, err := ioutil.ReadAll(f)
 	if err != nil {
-		return errors.Wrap(err, "opening file")
+		return nil, errors.Wrap(err, "reading file")
+	}
+	r := bytes.NewReader(contents)
+	dec := xml.NewDecoder(r)
+	dec.CharsetReader = charset.NewReaderLabel
+	dec.Strict = true
+
+	if err := dec.Decode(i); err != nil {
+		return contents, errors.Wrap(err, "decoding xml")
+	}
+	return contents, nil
+}
+
+func ParseMetadataXml(i MetadataPointer, path string) error {
+	var r *os.File
+	var err error
+	if path == "-" {
+		r = os.Stdin
+	} else {
+		r, err = os.Open(path)
+		if err != nil {
+			return errors.Wrap(err, "opening file")
+		}
 	}
 	dec := xml.NewDecoder(r)
 	dec.CharsetReader = charset.NewReaderLabel
