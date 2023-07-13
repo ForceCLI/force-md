@@ -9,7 +9,12 @@ force-md profile field-permissions list [filename]...
 ### Options
 
 ```
-  -h, --help   help for list
+  -e, --edit            allow edit
+  -h, --help            help for list
+  -E, --no-edit         disallow edit
+  -R, --no-read         disallow read
+  -o, --object string   object
+  -r, --read            allow read
 ```
 
 ### Options inherited from parent commands
