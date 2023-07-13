@@ -9,9 +9,13 @@ force-md profile field-permissions table [flags] [filename]...
 ### Options
 
 ```
+  -e, --edit            allow edit
   -f, --field string    field name
   -h, --help            help for table
+  -E, --no-edit         disallow edit
+  -R, --no-read         disallow read
   -o, --object string   object
+  -r, --read            allow read
 ```
 
 ### Options inherited from parent commands
