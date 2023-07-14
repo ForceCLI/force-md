@@ -21,7 +21,7 @@ func init() {
 	deleteRuleCmd.Flags().StringVarP(&ruleName, "rule", "r", "", "rule name")
 	deleteRuleCmd.MarkFlagRequired("rule")
 
-	writeRulesCmd.Flags().StringVarP(&fieldsDir, "directory", "d", "", "directory where rules should be output")
+	writeRulesCmd.Flags().StringVarP(&rulesDir, "directory", "d", "", "directory where rules should be output")
 	writeRulesCmd.MarkFlagRequired("directory")
 
 	ValidationRuleCmd.AddCommand(deleteRuleCmd)

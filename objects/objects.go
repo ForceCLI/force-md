@@ -22,7 +22,7 @@ type RecordTypeMetadata struct {
 }
 
 type ValidationRule struct {
-	XMLName xml.Name `xml:"CustomField"`
+	XMLName xml.Name `xml:"ValidationRule"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Rule
 }
