@@ -34,6 +34,8 @@ var TabVisibilityIds = map[TabVisibility][]string{
 
 func init() {
 	addTabCmd.Flags().StringVarP(&tabName, "tab", "t", "", "tab name")
+	addTabCmd.Flags().VarP(enumflag.New(&tabVisibility, "visibility", TabVisibilityIds, enumflag.EnumCaseInsensitive),
+		"visibility", "v", "tab visibility; can be 'DefaultOn', 'DefaultOff', or 'Hidden'")
 	addTabCmd.MarkFlagRequired("tab")
 
 	deleteTabCmd.Flags().StringVarP(&tabName, "tab", "t", "", "tab name")
@@ -66,6 +68,7 @@ var addTabCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			addTab(file)
+			updateTabVisibility(file, tabVisibility)
 		}
 	},
 }
