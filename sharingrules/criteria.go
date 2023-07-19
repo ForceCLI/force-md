@@ -8,7 +8,7 @@ func (p *SharingRules) DeleteCriteriaRule(ruleName string) error {
 	found := false
 	newPerms := p.SharingCriteriaRules[:0]
 	for _, f := range p.SharingCriteriaRules {
-		if f.FullName.Text == ruleName {
+		if f.FullName == ruleName {
 			found = true
 		} else {
 			newPerms = append(newPerms, f)

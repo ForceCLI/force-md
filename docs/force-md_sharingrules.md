@@ -20,4 +20,5 @@ Manage Sharing Rules
 * [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
 * [force-md sharingrules criteria](force-md_sharingrules_criteria.md)	 - Manage criteria-based sharing rules
 * [force-md sharingrules owner](force-md_sharingrules_owner.md)	 - Manage owner-based sharing rules
+* [force-md sharingrules tidy](force-md_sharingrules_tidy.md)	 - Tidy sharing rules
 

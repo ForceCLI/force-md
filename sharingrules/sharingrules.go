@@ -7,10 +7,10 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+type CriteriaRuleList []CriteriaRule
+
 type CriteriaRule struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
+	FullName    string `xml:"fullName"`
 	AccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"accessLevel"`
@@ -61,10 +61,10 @@ type CriteriaRule struct {
 	IncludeRecordsOwnedByAll *BooleanText `xml:"includeRecordsOwnedByAll"`
 }
 
+type OwnerRuleList []OwnerRule
+
 type OwnerRule struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
+	FullName    string `xml:"fullName"`
 	AccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"accessLevel"`
@@ -104,10 +104,10 @@ type OwnerRule struct {
 }
 
 type SharingRules struct {
-	XMLName              xml.Name       `xml:"SharingRules"`
-	Xmlns                string         `xml:"xmlns,attr"`
-	SharingCriteriaRules []CriteriaRule `xml:"sharingCriteriaRules"`
-	SharingOwnerRules    []OwnerRule    `xml:"sharingOwnerRules"`
+	XMLName              xml.Name         `xml:"SharingRules"`
+	Xmlns                string           `xml:"xmlns,attr"`
+	SharingCriteriaRules CriteriaRuleList `xml:"sharingCriteriaRules"`
+	SharingOwnerRules    OwnerRuleList    `xml:"sharingOwnerRules"`
 }
 
 func (p *SharingRules) MetaCheck() {}
