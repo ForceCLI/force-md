@@ -9,8 +9,9 @@ force-md profile tab add -t TabName [flags] [filename]...
 ### Options
 
 ```
-  -h, --help         help for add
-  -t, --tab string   tab name
+  -h, --help                    help for add
+  -t, --tab string              tab name
+  -v, --visibility visibility   tab visibility; can be 'DefaultOn', 'DefaultOff', or 'Hidden' (default defaulton)
 ```
 
 ### Options inherited from parent commands
