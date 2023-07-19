@@ -68,7 +68,7 @@ func listCriteriaRules(file string) {
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	rules := w.GetCriteriaRules()
 	for _, r := range rules {
-		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
+		fmt.Printf("%s.%s\n", objectName, r.FullName)
 	}
 }
 
@@ -81,7 +81,7 @@ func listOwnerRules(file string) {
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".sharingRules")
 	rules := w.GetOwnerRules()
 	for _, r := range rules {
-		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
+		fmt.Printf("%s.%s\n", objectName, r.FullName)
 	}
 }
 

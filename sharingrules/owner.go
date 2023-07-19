@@ -8,7 +8,7 @@ func (p *SharingRules) DeleteOwnerRule(ruleName string) error {
 	found := false
 	newPerms := p.SharingOwnerRules[:0]
 	for _, f := range p.SharingOwnerRules {
-		if f.FullName.Text == ruleName {
+		if f.FullName == ruleName {
 			found = true
 		} else {
 			newPerms = append(newPerms, f)
