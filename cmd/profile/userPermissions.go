@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/permissionset"
 	"github.com/ForceCLI/force-md/profile"
 )
 
@@ -26,6 +27,9 @@ func init() {
 	editUserPermissionCmd.Flags().BoolVarP(&enable, "enable", "e", false, "enable user permission")
 	editUserPermissionCmd.Flags().BoolVarP(&disable, "disable", "d", false, "disable user permission")
 	editUserPermissionCmd.MarkFlagRequired("permission")
+
+	listUserPermissionsCmd.Flags().BoolVarP(&enable, "enabled", "e", false, "enables user permissions")
+	listUserPermissionsCmd.Flags().BoolVarP(&disable, "disabled", "d", false, "disabled user permissions")
 
 	UserPermissionsCmd.AddCommand(addUserPermissionCmd)
 	UserPermissionsCmd.AddCommand(deleteUserPermissionCmd)
@@ -149,7 +153,18 @@ func listUserPermissions(file string) {
 		log.Warn("parsing profile failed: " + err.Error())
 		return
 	}
-	permissions := p.GetUserPermissions()
+	var filters []profile.UserPermissionFilter
+	if enable {
+		filters = append(filters, func(u permissionset.UserPermission) bool {
+			return u.Enabled.ToBool()
+		})
+	}
+	if disable {
+		filters = append(filters, func(u permissionset.UserPermission) bool {
+			return !u.Enabled.ToBool()
+		})
+	}
+	permissions := p.GetUserPermissions(filters...)
 	for _, perm := range permissions {
 		enabledText := "disabled"
 		if perm.Enabled.Text == "true" {

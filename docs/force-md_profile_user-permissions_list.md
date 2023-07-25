@@ -13,7 +13,9 @@ force-md profile user-permissions list [flags] [filename]...
 ### Options
 
 ```
-  -h, --help   help for list
+  -d, --disabled   disabled user permissions
+  -e, --enabled    enables user permissions
+  -h, --help       help for list
 ```
 
 ### Options inherited from parent commands

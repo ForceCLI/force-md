@@ -11,6 +11,8 @@ import (
 
 var UserPermissionExistsError = errors.New("user permissions already exists")
 
+type UserPermissionFilter func(permissionset.UserPermission) bool
+
 func (p *Profile) AddUserPermission(permissionName string) error {
 	for _, f := range p.UserPermissions {
 		if f.Name == permissionName {
@@ -70,8 +72,19 @@ func (p *Profile) DisableUserPermission(permissionName string) error {
 	return nil
 }
 
-func (p *Profile) GetUserPermissions() permissionset.UserPermissionList {
-	return p.UserPermissions
+func (p *Profile) GetUserPermissions(filters ...UserPermissionFilter) permissionset.UserPermissionList {
+	var permissions []permissionset.UserPermission
+
+PERMS:
+	for _, v := range p.UserPermissions {
+		for _, filter := range filters {
+			if !filter(v) {
+				continue PERMS
+			}
+		}
+		permissions = append(permissions, v)
+	}
+	return permissions
 }
 
 func (p *Profile) GetEnabledUserPermissions() []string {
