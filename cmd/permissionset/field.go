@@ -256,7 +256,7 @@ func tableFieldPermissions(files []string) {
 		perms = append(perms, perm{fields: p.GetFieldPermissions(filters...), permissionset: permissionSetName})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Profile", "Field", "Readable", "Editable"})
+	table.SetHeader([]string{"Permission Set", "Field", "Readable", "Editable"})
 	table.SetRowLine(true)
 	for _, perm := range perms {
 		for _, f := range perm.fields {

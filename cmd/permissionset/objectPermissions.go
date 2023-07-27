@@ -361,7 +361,7 @@ func tableObjectPermissions(files []string, filter permissionset.ObjectPermissio
 		perms = append(perms, perm{objects: p.GetObjectPermissions(filters...), permissionSet: p.Label})
 	}
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Profile", "Object", "Read", "Create", "Edit", "Delete", "View All", "Modify All"})
+	table.SetHeader([]string{"Permission Set", "Object", "Read", "Create", "Edit", "Delete", "View All", "Modify All"})
 	table.SetRowLine(true)
 	for _, perm := range perms {
 		for _, o := range perm.objects {
