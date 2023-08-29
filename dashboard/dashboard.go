@@ -79,7 +79,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"expandOthers"`
 				FlexComponentProperties *struct {
-					DecimalPrecision struct {
+					DecimalPrecision *struct {
 						Text string `xml:",chardata"`
 					} `xml:"decimalPrecision"`
 					FlexTableColumn []struct {
