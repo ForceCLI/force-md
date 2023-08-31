@@ -3,7 +3,7 @@ module github.com/ForceCLI/force-md
 go 1.20
 
 require (
-	github.com/antonmedv/expr v1.12.5
+	github.com/antonmedv/expr v1.15.0
 	github.com/cwarden/mergo v0.3.12-0.20210528180603-9b708ca2c584
 	github.com/imdario/mergo v0.3.16
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
