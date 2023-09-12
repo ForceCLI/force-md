@@ -260,7 +260,7 @@ func tableRecordTypes(files []string, filter profile.RecordTypeVisibility) {
 			fullRecordTypeName = objectName + "." + recordType
 		}
 		filters = append(filters, func(f profile.RecordTypeVisibility) bool {
-			return strings.ToLower(f.RecordType) == fullRecordTypeName
+			return strings.ToLower(f.RecordType) == strings.ToLower(fullRecordTypeName)
 		})
 	}
 	flagFilter := func(o profile.RecordTypeVisibility) bool {

@@ -189,7 +189,7 @@ func tableLayouts(files []string) {
 			if f.RecordType == nil {
 				return false
 			}
-			return strings.ToLower(f.RecordType.Text) == fullRecordTypeName
+			return strings.ToLower(f.RecordType.Text) == strings.ToLower(fullRecordTypeName)
 		})
 	}
 	if layoutName != "" {
@@ -199,7 +199,7 @@ func tableLayouts(files []string) {
 			fullLayoutName = strings.ToLower(objectName) + "-" + layoutName
 		}
 		filters = append(filters, func(f profile.LayoutAssignment) bool {
-			return strings.ToLower(f.Layout) == fullLayoutName
+			return strings.ToLower(f.Layout) == strings.ToLower(fullLayoutName)
 		})
 	}
 	type profileLayouts struct {
