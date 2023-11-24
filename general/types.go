@@ -4,7 +4,11 @@ import (
 	"html"
 	"strconv"
 	"strings"
+
+	"github.com/ForceCLI/force-md/internal"
 )
+
+type Metadata = internal.MetadataPointer
 
 type TextLiteral struct {
 	Text string `xml:",innerxml"`

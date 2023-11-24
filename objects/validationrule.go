@@ -2,9 +2,11 @@ package objects
 
 import (
 	"github.com/pkg/errors"
+
+	"github.com/ForceCLI/force-md/objects/validationrule"
 )
 
-func (p *CustomObject) GetValidationRules() []Rule {
+func (p *CustomObject) GetValidationRules() []validationrule.Rule {
 	return p.ValidationRules
 }
 

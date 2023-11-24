@@ -7,19 +7,19 @@ import (
 	"github.com/pkg/errors"
 
 	. "github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/objects/field"
+	rt "github.com/ForceCLI/force-md/objects/recordtype"
 )
 
-type FieldFilter func(Field) bool
-
-func defaultField(name string) Field {
-	f := Field{
+func defaultField(name string) field.Field {
+	f := field.Field{
 		FullName: name,
 	}
 	return f
 }
 
-func (o *CustomObject) GetFields(filters ...FieldFilter) []Field {
-	var fields []Field
+func (o *CustomObject) GetFields(filters ...field.FieldFilter) []field.Field {
+	var fields []field.Field
 FIELDS:
 	for _, f := range o.Fields {
 		for _, filter := range filters {
@@ -44,7 +44,7 @@ func (o *CustomObject) AddField(fieldName string) error {
 	return nil
 }
 
-func (o *CustomObject) UpdateField(fieldName string, updates Field) error {
+func (o *CustomObject) UpdateField(fieldName string, updates field.Field) error {
 	found := false
 	for i, f := range o.Fields {
 		if strings.ToLower(f.FullName) == strings.ToLower(fieldName) {
@@ -98,7 +98,7 @@ func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string
 		if strings.ToLower(f.FullName) != strings.ToLower(recordType) {
 			continue
 		}
-		option := ValueSetOption{FullName: picklistValue, Default: FalseText}
+		option := rt.ValueSetOption{FullName: picklistValue, Default: FalseText}
 		for j, p := range f.PicklistValues {
 			if strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
 				continue
@@ -113,9 +113,9 @@ func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string
 			o.RecordTypes[i].PicklistValues[j].Values.Tidy()
 		}
 		if !found {
-			o.RecordTypes[i].PicklistValues = append(o.RecordTypes[i].PicklistValues, Picklist{
+			o.RecordTypes[i].PicklistValues = append(o.RecordTypes[i].PicklistValues, rt.Picklist{
 				Picklist: fieldName,
-				Values:   []ValueSetOption{option},
+				Values:   []rt.ValueSetOption{option},
 			})
 			found = true
 		}

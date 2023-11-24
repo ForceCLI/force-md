@@ -2,9 +2,11 @@ package objects
 
 import (
 	"github.com/pkg/errors"
+
+	"github.com/ForceCLI/force-md/objects/weblink"
 )
 
-func (o *CustomObject) GetWebLinks() []WebLink {
+func (o *CustomObject) GetWebLinks() []weblink.WebLink {
 	return o.WebLinks
 }
 

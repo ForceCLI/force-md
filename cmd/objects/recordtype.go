@@ -15,6 +15,7 @@ import (
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/objects"
+	rt "github.com/ForceCLI/force-md/objects/recordtype"
 )
 
 var (
@@ -138,15 +139,15 @@ var writeRecordTypesCmd = &cobra.Command{
 	},
 }
 
-func listRecordType(file string, filter objects.RecordType) {
+func listRecordType(file string, filter rt.RecordType) {
 	o, err := objects.Open(file)
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
-	var filters []objects.RecordTypeFilter
-	filters = append(filters, func(r objects.RecordType) bool {
+	var filters []rt.RecordTypeFilter
+	filters = append(filters, func(r rt.RecordType) bool {
 		if filter.Active.Text != "" && filter.Active.ToBool() != r.Active.ToBool() {
 			return false
 		}
@@ -199,14 +200,14 @@ func assignPicklistValueToRecordType(file string) {
 	}
 }
 
-func tableRecordType(files []string, filter objects.RecordType) {
+func tableRecordType(files []string, filter rt.RecordType) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Object", "Record Type", "Active"})
 	table.SetAutoMergeCells(true)
 	table.SetAutoMergeCellsByColumnIndex([]int{0, 1})
 	table.SetRowLine(true)
-	var filters []objects.RecordTypeFilter
-	filters = append(filters, func(r objects.RecordType) bool {
+	var filters []rt.RecordTypeFilter
+	filters = append(filters, func(r rt.RecordType) bool {
 		if filter.Active.Text != "" && filter.Active.ToBool() != r.Active.ToBool() {
 			return false
 		}
@@ -277,7 +278,7 @@ func writeRecordTypes(file string, recordTypesDir string) {
 	}
 	recordTypes := o.GetRecordTypes()
 	for _, f := range recordTypes {
-		recordType := objects.RecordTypeMetadata{
+		recordType := rt.RecordTypeMetadata{
 			RecordType: f,
 			Xmlns:      o.Xmlns,
 		}
@@ -289,8 +290,8 @@ func writeRecordTypes(file string, recordTypesDir string) {
 	}
 }
 
-func recordTypeVisibilityFromFlags(cmd *cobra.Command) objects.RecordType {
-	perms := objects.RecordType{}
+func recordTypeVisibilityFromFlags(cmd *cobra.Command) rt.RecordType {
+	perms := rt.RecordType{}
 	perms.Active = textValue(cmd, "active")
 	return perms
 }

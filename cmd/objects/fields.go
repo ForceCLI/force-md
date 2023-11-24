@@ -16,6 +16,7 @@ import (
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/objects"
+	"github.com/ForceCLI/force-md/objects/field"
 )
 
 var (
@@ -235,15 +236,15 @@ var alwaysRequired map[string]bool = map[string]bool{
 	"OwnerId": true,
 }
 
-func listFields(file string, attributes objects.Field) {
+func listFields(file string, attributes field.Field) {
 	o, err := objects.Open(file)
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
-	var filters []objects.FieldFilter
-	requiredFilter := func(f objects.Field) bool {
+	var filters []field.FieldFilter
+	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
 		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 		return isRequired || isMasterDetail
@@ -252,40 +253,40 @@ func listFields(file string, attributes objects.Field) {
 		filters = append(filters, requiredFilter)
 	}
 	if attributes.Required.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
+		filters = append(filters, func(f field.Field) bool { return !requiredFilter(f) })
 	}
 	if attributes.TrackHistory.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackHistory.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackTrending.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackTrending.ToBool() })
 	}
 	if attributes.TrackTrending.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackTrending.ToBool() })
 	}
 	if formulaField {
-		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
+		filters = append(filters, func(f field.Field) bool { return f.Formula != nil })
 	}
 	if filteredLookup {
-		filters = append(filters, func(f objects.Field) bool { return f.LookupFilter != nil })
+		filters = append(filters, func(f field.Field) bool { return f.LookupFilter != nil })
 	}
 	if attributes.ExternalId.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.ExternalId.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.ExternalId.ToBool() })
 	}
 	if attributes.ExternalId.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.ExternalId.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.ExternalId.ToBool() })
 	}
 	if attributes.Unique.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.Unique.ToBool() })
 	}
 	if attributes.Unique.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.Unique.ToBool() })
 	}
 	if len(fieldTypes) != 0 {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
 				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
@@ -296,13 +297,13 @@ func listFields(file string, attributes objects.Field) {
 		})
 	}
 	if references != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
 			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
 		})
 	}
 	if label != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
 			return f.Label != nil && strings.ToLower(f.Label.Text) == l
 		})
@@ -313,15 +314,15 @@ func listFields(file string, attributes objects.Field) {
 	}
 }
 
-func graphFields(file string, attributes objects.Field, objectsOnly bool) {
+func graphFields(file string, attributes field.Field, objectsOnly bool) {
 	o, err := objects.Open(file)
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
 		return
 	}
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
-	var filters []objects.FieldFilter
-	requiredFilter := func(f objects.Field) bool {
+	var filters []field.FieldFilter
+	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
 		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 		return isRequired || isMasterDetail
@@ -330,34 +331,34 @@ func graphFields(file string, attributes objects.Field, objectsOnly bool) {
 		filters = append(filters, requiredFilter)
 	}
 	if attributes.Required.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
+		filters = append(filters, func(f field.Field) bool { return !requiredFilter(f) })
 	}
 	if attributes.TrackHistory.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackHistory.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackTrending.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackTrending.ToBool() })
 	}
 	if attributes.TrackTrending.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackTrending.ToBool() })
 	}
 	if formulaField {
-		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
+		filters = append(filters, func(f field.Field) bool { return f.Formula != nil })
 	}
 	if filteredLookup {
-		filters = append(filters, func(f objects.Field) bool { return f.LookupFilter != nil })
+		filters = append(filters, func(f field.Field) bool { return f.LookupFilter != nil })
 	}
 	if attributes.Unique.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.Unique.ToBool() })
 	}
 	if attributes.Unique.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.Unique.ToBool() })
 	}
 	if len(fieldTypes) != 0 {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
 				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
@@ -368,13 +369,13 @@ func graphFields(file string, attributes objects.Field, objectsOnly bool) {
 		})
 	}
 	if references != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
 			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
 		})
 	}
 	if label != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
 			return f.Label != nil && strings.ToLower(f.Label.Text) == l
 		})
@@ -392,9 +393,9 @@ func graphFields(file string, attributes objects.Field, objectsOnly bool) {
 	}
 }
 
-func tableFields(files []string, attributes objects.Field) {
-	var filters []objects.FieldFilter
-	requiredFilter := func(f objects.Field) bool {
+func tableFields(files []string, attributes field.Field) {
+	var filters []field.FieldFilter
+	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
 		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
 		return isRequired || isMasterDetail
@@ -403,40 +404,40 @@ func tableFields(files []string, attributes objects.Field) {
 		filters = append(filters, requiredFilter)
 	}
 	if attributes.Required.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !requiredFilter(f) })
+		filters = append(filters, func(f field.Field) bool { return !requiredFilter(f) })
 	}
 	if attributes.TrackHistory.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackHistory.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackHistory.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackHistory.ToBool() })
 	}
 	if attributes.TrackTrending.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.TrackTrending.ToBool() })
 	}
 	if attributes.TrackTrending.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.TrackTrending.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.TrackTrending.ToBool() })
 	}
 	if formulaField {
-		filters = append(filters, func(f objects.Field) bool { return f.Formula != nil })
+		filters = append(filters, func(f field.Field) bool { return f.Formula != nil })
 	}
 	if filteredLookup {
-		filters = append(filters, func(f objects.Field) bool { return f.LookupFilter != nil })
+		filters = append(filters, func(f field.Field) bool { return f.LookupFilter != nil })
 	}
 	if attributes.ExternalId.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.ExternalId.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.ExternalId.ToBool() })
 	}
 	if attributes.ExternalId.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.ExternalId.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.ExternalId.ToBool() })
 	}
 	if attributes.Unique.IsTrue() {
-		filters = append(filters, func(f objects.Field) bool { return f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return f.Unique.ToBool() })
 	}
 	if attributes.Unique.IsFalse() {
-		filters = append(filters, func(f objects.Field) bool { return !f.Unique.ToBool() })
+		filters = append(filters, func(f field.Field) bool { return !f.Unique.ToBool() })
 	}
 	if len(fieldTypes) != 0 {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
 				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
@@ -447,13 +448,13 @@ func tableFields(files []string, attributes objects.Field) {
 		})
 	}
 	if references != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
 			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
 		})
 	}
 	if label != "" {
-		filters = append(filters, func(f objects.Field) bool {
+		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
 			return f.Label != nil && strings.ToLower(f.Label.Text) == l
 		})
@@ -509,7 +510,7 @@ func addField(file string, fieldName string) {
 	}
 }
 
-func updateField(file string, fieldUpdates objects.Field) {
+func updateField(file string, fieldUpdates field.Field) {
 	o, err := objects.Open(file)
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
@@ -537,7 +538,7 @@ func showField(file string, fieldName string) {
 	}
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	fieldName = strings.ToLower(strings.TrimPrefix(fieldName, objectName+"."))
-	fields := o.GetFields(func(f objects.Field) bool {
+	fields := o.GetFields(func(f field.Field) bool {
 		return strings.ToLower(f.FullName) == fieldName
 	})
 	if len(fields) == 0 {
@@ -586,7 +587,7 @@ func writeFields(file string, fieldsDir string) {
 	}
 	fields := o.GetFields()
 	for _, f := range fields {
-		customField := objects.CustomField{
+		customField := field.CustomField{
 			Field: f,
 			Xmlns: o.Xmlns,
 		}
@@ -598,8 +599,8 @@ func writeFields(file string, fieldsDir string) {
 	}
 }
 
-func setFields(cmd *cobra.Command) objects.Field {
-	field := objects.Field{}
+func setFields(cmd *cobra.Command) field.Field {
+	field := field.Field{}
 	field.Label = TextValue(cmd, "label")
 	field.Unique = BooleanTextValue(cmd, "unique")
 	field.ExternalId = BooleanTextValue(cmd, "external-id")
