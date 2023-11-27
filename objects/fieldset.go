@@ -2,9 +2,11 @@ package objects
 
 import (
 	"github.com/pkg/errors"
+
+	"github.com/ForceCLI/force-md/objects/fieldset"
 )
 
-func (o *CustomObject) GetFieldSets() []FieldSet {
+func (o *CustomObject) GetFieldSets() []fieldset.FieldSet {
 	return o.FieldSets
 }
 

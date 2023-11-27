@@ -10,6 +10,7 @@ import (
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/objects"
+	"github.com/ForceCLI/force-md/objects/validationrule"
 )
 
 var (
@@ -111,7 +112,7 @@ func writeRules(file string, rulesDir string) {
 	}
 	rules := o.GetValidationRules()
 	for _, f := range rules {
-		rule := objects.ValidationRule{
+		rule := validationrule.ValidationRule{
 			Rule:  f,
 			Xmlns: o.Xmlns,
 		}

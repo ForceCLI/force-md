@@ -5,330 +5,20 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
+
+	"github.com/ForceCLI/force-md/objects/businessprocess"
+	"github.com/ForceCLI/force-md/objects/compactlayout"
+	"github.com/ForceCLI/force-md/objects/field"
+	"github.com/ForceCLI/force-md/objects/fieldset"
+	"github.com/ForceCLI/force-md/objects/listview"
+	"github.com/ForceCLI/force-md/objects/recordtype"
+	"github.com/ForceCLI/force-md/objects/sharingreason"
+	"github.com/ForceCLI/force-md/objects/validationrule"
+	"github.com/ForceCLI/force-md/objects/weblink"
 )
 
-type FieldList []Field
-
-type CustomField struct {
-	XMLName xml.Name `xml:"CustomField"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	Field
-}
-
-type RecordTypeMetadata struct {
-	XMLName xml.Name `xml:"RecordType"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	RecordType
-}
-
-type ValidationRule struct {
-	XMLName xml.Name `xml:"ValidationRule"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	Rule
-}
-
-type Rule struct {
-	FullName string `xml:"fullName"`
-	Active   struct {
-		Text string `xml:",chardata"`
-	} `xml:"active"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
-	ErrorConditionFormula struct {
-		Text string `xml:",innerxml"`
-	} `xml:"errorConditionFormula"`
-	ErrorDisplayField *struct {
-		Text string `xml:",chardata"`
-	} `xml:"errorDisplayField"`
-	ErrorMessage struct {
-		Text string `xml:",innerxml"`
-	} `xml:"errorMessage"`
-}
-type Field struct {
-	FullName          string       `xml:"fullName"`
-	BusinessStatus    *TextLiteral `xml:"businessStatus"`
-	BusinessOwnerUser *TextLiteral `xml:"businessOwnerUser"`
-	CaseSensitive     *struct {
-		Text string `xml:",chardata"`
-	} `xml:"caseSensitive"`
-	DefaultValue     *TextLiteral `xml:"defaultValue"`
-	DeleteConstraint *struct {
-		Text string `xml:",chardata"`
-	} `xml:"deleteConstraint"`
-	Deprecated    *TextLiteral `xml:"deprecated"`
-	Description   *TextLiteral `xml:"description"`
-	DisplayFormat *struct {
-		Text string `xml:",chardata"`
-	} `xml:"displayFormat"`
-	DisplayLocationInDecimal *struct {
-		Text string `xml:",chardata"`
-	} `xml:"displayLocationInDecimal"`
-	ExternalId         *BooleanText `xml:"externalId"`
-	FieldManageability *struct {
-		Text string `xml:",chardata"`
-	} `xml:"fieldManageability"`
-	Formula *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"formula"`
-	FormulaTreatBlanksAs *struct {
-		Text string `xml:",chardata"`
-	} `xml:"formulaTreatBlanksAs"`
-	InlineHelpText      *TextLiteral `xml:"inlineHelpText"`
-	IsFilteringDisabled *BooleanText `xml:"isFilteringDisabled"`
-	IsNameField         *BooleanText `xml:"isNameField"`
-	IsSortingDisabled   *BooleanText `xml:"isSortingDisabled"`
-	Label               *TextLiteral `xml:"label"`
-	LookupFilter        *struct {
-		Active struct {
-			Text string `xml:",chardata"`
-		} `xml:"active"`
-		BooleanFilter *TextLiteral `xml:"booleanFilter"`
-		ErrorMessage  *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"errorMessage"`
-		FilterItems []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operation struct {
-				Text string `xml:",chardata"`
-			} `xml:"operation"`
-			Value *struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-			ValueField *struct {
-				Text string `xml:",chardata"`
-			} `xml:"valueField"`
-		} `xml:"filterItems"`
-		InfoMessage *TextLiteral `xml:"infoMessage"`
-		IsOptional  struct {
-			Text string `xml:",chardata"`
-		} `xml:"isOptional"`
-	} `xml:"lookupFilter"`
-	Precision              *IntegerText `xml:"precision"`
-	Length                 *IntegerText `xml:"length"`
-	MaskChar               *TextLiteral `xml:"maskChar"`
-	MaskType               *TextLiteral `xml:"maskType"`
-	ReferenceTo            *TextLiteral `xml:"referenceTo"`
-	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
-	RelationshipName       *TextLiteral `xml:"relationshipName"`
-	RestrictedAdminField   *TextLiteral `xml:"restrictedAdminField"`
-	Required               *BooleanText `xml:"required"`
-	Scale                  *IntegerText `xml:"scale"`
-	SecurityClassification *TextLiteral `xml:"securityClassification"`
-	TrackFeedHistory       *struct {
-		Text string `xml:",chardata"`
-	} `xml:"trackFeedHistory"`
-	SummarizedField *struct {
-		Text string `xml:",chardata"`
-	} `xml:"summarizedField"`
-	SummaryFilterItems []struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Operation struct {
-			Text string `xml:",chardata"`
-		} `xml:"operation"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
-	} `xml:"summaryFilterItems"`
-	SummaryForeignKey *struct {
-		Text string `xml:",chardata"`
-	} `xml:"summaryForeignKey"`
-	SummaryOperation *struct {
-		Text string `xml:",chardata"`
-	} `xml:"summaryOperation"`
-	RelationshipOrder *struct {
-		Text string `xml:",chardata"`
-	} `xml:"relationshipOrder"`
-	ReparentableMasterDetail *struct {
-		Text string `xml:",chardata"`
-	} `xml:"reparentableMasterDetail"`
-	MetadataRelationshipControllingField *struct {
-		Text string `xml:",chardata"`
-	} `xml:"metadataRelationshipControllingField"`
-	TrackHistory            *BooleanText `xml:"trackHistory"`
-	TrackTrending           *BooleanText `xml:"trackTrending"`
-	Type                    *TextLiteral `xml:"type"`
-	Unique                  *BooleanText `xml:"unique"`
-	WriteRequiresMasterRead *struct {
-		Text string `xml:",chardata"`
-	} `xml:"writeRequiresMasterRead"`
-	ValueSet *struct {
-		ControllingField *struct {
-			Text string `xml:",chardata"`
-		} `xml:"controllingField"`
-		Restricted *struct {
-			Text string `xml:",chardata"`
-		} `xml:"restricted"`
-		ValueSetDefinition *struct {
-			Sorted struct {
-				Text string `xml:",chardata"`
-			} `xml:"sorted"`
-			Value []struct {
-				FullName struct {
-					Text string `xml:",innerxml"`
-				} `xml:"fullName"`
-				Default struct {
-					Text string `xml:",chardata"`
-				} `xml:"default"`
-				IsActive *struct {
-					Text string `xml:",chardata"`
-				} `xml:"isActive"`
-				Label struct {
-					Text string `xml:",innerxml"`
-				} `xml:"label"`
-				Color *struct {
-					Text string `xml:",chardata"`
-				} `xml:"color"`
-			} `xml:"value"`
-		} `xml:"valueSetDefinition"`
-		ValueSetName *struct {
-			Text string `xml:",chardata"`
-		} `xml:"valueSetName"`
-		ValueSettings []struct {
-			ControllingFieldValue []struct {
-				Text string `xml:",innerxml"`
-			} `xml:"controllingFieldValue"`
-			ValueName struct {
-				Text string `xml:",chardata"`
-			} `xml:"valueName"`
-		} `xml:"valueSettings"`
-	} `xml:"valueSet"`
-	VisibleLines *struct {
-		Text string `xml:",chardata"`
-	} `xml:"visibleLines"`
-}
-
-type WebLink struct {
-	FullName     string `xml:"fullName"`
-	Availability struct {
-		Text string `xml:",chardata"`
-	} `xml:"availability"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	DisplayType struct {
-		Text string `xml:",chardata"`
-	} `xml:"displayType"`
-	EncodingKey *struct {
-		Text string `xml:",chardata"`
-	} `xml:"encodingKey"`
-	HasMenubar *struct {
-		Text string `xml:",chardata"`
-	} `xml:"hasMenubar"`
-	HasScrollbars *struct {
-		Text string `xml:",chardata"`
-	} `xml:"hasScrollbars"`
-	HasToolbar *struct {
-		Text string `xml:",chardata"`
-	} `xml:"hasToolbar"`
-	Height *struct {
-		Text string `xml:",chardata"`
-	} `xml:"height"`
-	IsResizable *struct {
-		Text string `xml:",chardata"`
-	} `xml:"isResizable"`
-	LinkType struct {
-		Text string `xml:",chardata"`
-	} `xml:"linkType"`
-	MasterLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"masterLabel"`
-	OpenType struct {
-		Text string `xml:",chardata"`
-	} `xml:"openType"`
-	Page *struct {
-		Text string `xml:",chardata"`
-	} `xml:"page"`
-	Position *struct {
-		Text string `xml:",chardata"`
-	} `xml:"position"`
-	Protected struct {
-		Text string `xml:",chardata"`
-	} `xml:"protected"`
-	RequireRowSelection *struct {
-		Text string `xml:",chardata"`
-	} `xml:"requireRowSelection"`
-	ShowsLocation *struct {
-		Text string `xml:",chardata"`
-	} `xml:"showsLocation"`
-	ShowsStatus *struct {
-		Text string `xml:",chardata"`
-	} `xml:"showsStatus"`
-	URL *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"url"`
-	Width *struct {
-		Text string `xml:",chardata"`
-	} `xml:"width"`
-}
-
-type FieldSet struct {
-	FullName        string `xml:"fullName"`
-	AvailableFields []struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		IsFieldManaged struct {
-			Text string `xml:",chardata"`
-		} `xml:"isFieldManaged"`
-		IsRequired struct {
-			Text string `xml:",chardata"`
-		} `xml:"isRequired"`
-	} `xml:"availableFields"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	DisplayedFields []struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		IsFieldManaged struct {
-			Text string `xml:",chardata"`
-		} `xml:"isFieldManaged"`
-		IsRequired struct {
-			Text string `xml:",chardata"`
-		} `xml:"isRequired"`
-	} `xml:"displayedFields"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-}
-
-type ValueSetOption struct {
-	FullName string      `xml:"fullName"`
-	Default  BooleanText `xml:"default"`
-}
-
-type ValueSetOptionList []ValueSetOption
-
-type Picklist struct {
-	Picklist string             `xml:"picklist"`
-	Values   ValueSetOptionList `xml:"values"`
-}
-
-type PicklistList []Picklist
-
-type RecordType struct {
-	FullName        string      `xml:"fullName"`
-	Active          BooleanText `xml:"active"`
-	BusinessProcess *struct {
-		Text string `xml:",chardata"`
-	} `xml:"businessProcess"`
-	CompactLayoutAssignment *struct {
-		Text string `xml:",chardata"`
-	} `xml:"compactLayoutAssignment"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	PicklistValues PicklistList `xml:"picklistValues"`
-}
+type FieldList []field.Field
+type ListViewList []listview.ListView
 
 type ActionOverride struct {
 	ActionName           string       `xml:"actionName"`
@@ -346,39 +36,11 @@ type CustomObject struct {
 	AllowInChatterGroups *struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowInChatterGroups"`
-	BusinessProcesses []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Description *struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		IsActive struct {
-			Text string `xml:",chardata"`
-		} `xml:"isActive"`
-		Values []struct {
-			FullName struct {
-				Text string `xml:",chardata"`
-			} `xml:"fullName"`
-			Default struct {
-				Text string `xml:",chardata"`
-			} `xml:"default"`
-		} `xml:"values"`
-	} `xml:"businessProcesses"`
+	BusinessProcesses       []businessprocess.BusinessProcess `xml:"businessProcesses"`
 	CompactLayoutAssignment *struct {
 		Text string `xml:",chardata"`
 	} `xml:"compactLayoutAssignment"`
-	CompactLayouts []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Fields []struct {
-			Text string `xml:",chardata"`
-		} `xml:"fields"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-	} `xml:"compactLayouts"`
+	CompactLayouts []compactlayout.CompactLayout `xml:"compactLayouts"`
 	CustomHelpPage *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customHelpPage"`
@@ -430,59 +92,12 @@ type CustomObject struct {
 	ExternalSharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"externalSharingModel"`
-	FieldSets []FieldSet `xml:"fieldSets"`
-	Fields    FieldList  `xml:"fields"`
+	FieldSets []fieldset.FieldSet `xml:"fieldSets"`
+	Fields    FieldList           `xml:"fields"`
 	Label     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
-	ListViews []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		BooleanFilter *struct {
-			Text string `xml:",chardata"`
-		} `xml:"booleanFilter"`
-		Columns []struct {
-			Text string `xml:",chardata"`
-		} `xml:"columns"`
-		FilterScope struct {
-			Text string `xml:",chardata"`
-		} `xml:"filterScope"`
-		Filters []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operation struct {
-				Text string `xml:",chardata"`
-			} `xml:"operation"`
-			Value *struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-		} `xml:"filters"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		Queue *struct {
-			Text string `xml:",chardata"`
-		} `xml:"queue"`
-		SharedTo *struct {
-			Group []struct {
-				Text string `xml:",chardata"`
-			} `xml:"group"`
-			Rol []struct {
-				Text string `xml:",chardata"`
-			} `xml:"role"`
-			RoleAndSubordinates []struct {
-				Text string `xml:",chardata"`
-			} `xml:"roleAndSubordinates"`
-			AllInternalUsers *struct {
-				Text string `xml:",chardata"`
-			} `xml:"allInternalUsers"`
-		} `xml:"sharedTo"`
-		Language *struct {
-			Text string `xml:",chardata"`
-		} `xml:"language"`
-	} `xml:"listViews"`
+	ListViews ListViewList `xml:"listViews"`
 	NameField *struct {
 		DisplayFormat *struct {
 			Text string `xml:",chardata"`
@@ -520,7 +135,7 @@ type CustomObject struct {
 	RecordTypeTrackHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordTypeTrackHistory"`
-	RecordTypes   []RecordType `xml:"recordTypes"`
+	RecordTypes   []recordtype.RecordType `xml:"recordTypes"`
 	SearchLayouts *struct {
 		CustomTabListAdditionalFields []struct {
 			Text string `xml:",chardata"`
@@ -553,18 +168,15 @@ type CustomObject struct {
 	SharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sharingModel"`
-	SharingReasons []struct {
-		FullName string `xml:"fullName"`
-		Label    string `xml:"label"`
-	} `xml:"sharingReasons"`
-	StartsWith *struct {
+	SharingReasons []sharingreason.SharingReason `xml:"sharingReasons"`
+	StartsWith     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"startsWith"`
-	ValidationRules []Rule `xml:"validationRules"`
+	ValidationRules []validationrule.Rule `xml:"validationRules"`
 	Visibility      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibility"`
-	WebLinks []WebLink `xml:"webLinks"`
+	WebLinks []weblink.WebLink `xml:"webLinks"`
 }
 
 func (p *CustomObject) MetaCheck() {}

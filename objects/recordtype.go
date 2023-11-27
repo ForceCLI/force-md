@@ -1,11 +1,12 @@
 package objects
 
-import "github.com/pkg/errors"
+import (
+	recordtype "github.com/ForceCLI/force-md/objects/recordtype"
+	"github.com/pkg/errors"
+)
 
-type RecordTypeFilter func(RecordType) bool
-
-func (o *CustomObject) GetRecordTypes(filters ...RecordTypeFilter) []RecordType {
-	var recordTypes []RecordType
+func (o *CustomObject) GetRecordTypes(filters ...recordtype.RecordTypeFilter) []recordtype.RecordType {
+	var recordTypes []recordtype.RecordType
 RECORDTYPES:
 	for _, v := range o.RecordTypes {
 		for _, filter := range filters {
