@@ -17,6 +17,7 @@ import (
 
 func init() {
 	TableCmd.Flags().StringP("filter", "f", "true", "expr boolean expression to filter records")
+	TableCmd.Flags().StringArrayP("fields", "i", []string{}, "field(s) to include in table")
 	ListCmd.Flags().StringP("filter", "f", "true", "expr boolean expression to filter records")
 }
 
@@ -42,11 +43,16 @@ $ force-md custommetadata table -f 'dlrs__CalculationMode__c != "Realtime"' src/
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		filter, _ := cmd.Flags().GetString("filter")
-		tableCustomMetadata(args, filter)
+		fields, _ := cmd.Flags().GetStringArray("fields")
+		fieldMap := make(map[string]struct{})
+		for _, f := range fields {
+			fieldMap[strings.ToLower(f)] = struct{}{}
+		}
+		tableCustomMetadata(args, filter, fieldMap)
 	},
 }
 
-func tableCustomMetadata(files []string, filter string) {
+func tableCustomMetadata(files []string, filter string, wantedFields map[string]struct{}) {
 	var program *vm.Program
 	var fieldNames []string
 	allFields := make(map[string]bool)
@@ -63,6 +69,10 @@ func tableCustomMetadata(files []string, filter string) {
 		}
 		fields := make(map[string]string)
 		for _, v := range m.Values {
+			if _, w := wantedFields[strings.ToLower(v.Field)]; !w && len(wantedFields) > 0 {
+				// Skip fields not wanted in output
+				continue
+			}
 			if _, ok := allFields[v.Field]; !ok {
 				fieldNames = append(fieldNames, v.Field)
 				allFields[v.Field] = true
