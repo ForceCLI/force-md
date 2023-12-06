@@ -17,8 +17,9 @@ $ force-md custommetadata table -f 'dlrs__CalculationMode__c != "Realtime"' src/
 ### Options
 
 ```
-  -f, --filter string   expr boolean expression to filter records (default "true")
-  -h, --help            help for table
+  -i, --fields stringArray   field(s) to include in table
+  -f, --filter string        expr boolean expression to filter records (default "true")
+  -h, --help                 help for table
 ```
 
 ### Options inherited from parent commands
