@@ -54,13 +54,9 @@ $ force-md custommetadata table -f 'dlrs__CalculationMode__c != "Realtime"' src/
 
 func tableCustomMetadata(files []string, filter string, wantedFields map[string]struct{}) {
 	var program *vm.Program
-	var fieldNames []string
-	allFields := make(map[string]bool)
-	type record struct {
-		label  string
-		fields map[string]string
-	}
-	var records []record
+	fieldNames := []string{"Label"}
+	customFields := make(map[string]struct{})
+	var records []map[string]string
 	for _, file := range files {
 		m, err := custommetadata.Open(file)
 		if err != nil {
@@ -68,14 +64,15 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 			return
 		}
 		fields := make(map[string]string)
+		fields["Label"] = m.Label
 		for _, v := range m.Values {
 			if _, w := wantedFields[strings.ToLower(v.Field)]; !w && len(wantedFields) > 0 {
 				// Skip fields not wanted in output
 				continue
 			}
-			if _, ok := allFields[v.Field]; !ok {
+			if _, ok := customFields[v.Field]; !ok {
 				fieldNames = append(fieldNames, v.Field)
-				allFields[v.Field] = true
+				customFields[v.Field] = struct{}{}
 			}
 			fields[v.Field] = v.Value.Text
 		}
@@ -91,18 +88,18 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 		}
 		include, _ := out.(bool)
 		if include {
-			records = append(records, record{m.Label, fields})
+			records = append(records, fields)
 		}
 
 	}
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoFormatHeaders(false)
-	table.SetHeader(append([]string{"Label"}, fieldNames...))
+	table.SetHeader(fieldNames)
 	table.SetRowLine(true)
 	for _, r := range records {
-		row := []string{r.label}
+		row := []string{}
 		for _, f := range fieldNames {
-			row = append(row, r.fields[f])
+			row = append(row, r[f])
 		}
 		table.Append(row)
 	}
