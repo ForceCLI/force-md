@@ -8,6 +8,7 @@ import (
 )
 
 type MetadataItems struct {
+	Comment string   `xml:",comment"`
 	Members []string `xml:"members"`
 	Name    string   `xml:"name"`
 }
