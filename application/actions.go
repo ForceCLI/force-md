@@ -39,3 +39,26 @@ ACTIONS:
 	o.ProfileActionOverrides = newActions
 	return nil
 }
+
+func (o *CustomApplication) ResetActionOverrides(filters ...ProfileActionOverrideFilter) error {
+	found := false
+	newActions := o.ProfileActionOverrides[:0]
+ACTIONS:
+	for _, a := range o.ProfileActionOverrides {
+		for _, filter := range filters {
+			if !filter(a) {
+				newActions = append(newActions, a)
+				continue ACTIONS
+			}
+		}
+		a.Content = nil
+		a.Type = "default"
+		newActions = append(newActions, a)
+		found = true
+	}
+	if !found {
+		return errors.New("no actions found")
+	}
+	o.ProfileActionOverrides = newActions
+	return nil
+}
