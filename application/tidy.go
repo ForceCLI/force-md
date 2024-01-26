@@ -26,6 +26,6 @@ func (pao ProfileActionOverrideList) Tidy() {
 		if pao[i].Type != pao[j].Type {
 			return pao[i].Type < pao[j].Type
 		}
-		return pao[i].Content < pao[j].Content
+		return *pao[i].Content < *pao[j].Content
 	})
 }

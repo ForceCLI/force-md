@@ -9,7 +9,7 @@ import (
 
 type ProfileActionOverride struct {
 	ActionName        string  `xml:"actionName"`
-	Content           string  `xml:"content"`
+	Content           *string `xml:"content"`
 	FormFactor        string  `xml:"formFactor"`
 	PageOrSobjectType string  `xml:"pageOrSobjectType"`
 	RecordType        *string `xml:"recordType"`

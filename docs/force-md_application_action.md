@@ -19,5 +19,6 @@ Manage Profile Action Overrides
 
 * [force-md application](force-md_application.md)	 - Manage Applications
 * [force-md application action delete](force-md_application_action_delete.md)	 - Delete action overrides
+* [force-md application action reset](force-md_application_action_reset.md)	 - Reset action overrides
 * [force-md application action table](force-md_application_action_table.md)	 - List Profile Action Overrides in a table
 

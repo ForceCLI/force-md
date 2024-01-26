@@ -67,8 +67,15 @@ func init() {
 	deleteActionCmd.Flags().VarP(enumflag.New(&formFactor, "formfactor", FormFactorIds, enumflag.EnumCaseInsensitive),
 		"formfactor", "f", "form factor; can be 'Large' or 'Small'")
 
+	resetActionCmd.Flags().StringVarP(&profile, "profile", "p", "", "profile name")
+	resetActionCmd.Flags().StringVarP(&pageObject, "object", "o", "", "sobject or page name")
+	resetActionCmd.Flags().StringVarP(&content, "content", "c", "", "content")
+	resetActionCmd.Flags().VarP(enumflag.New(&formFactor, "formfactor", FormFactorIds, enumflag.EnumCaseInsensitive),
+		"formfactor", "f", "form factor; can be 'Large' or 'Small'")
+
 	ActionCmd.AddCommand(tableActionCmd)
 	ActionCmd.AddCommand(deleteActionCmd)
+	ActionCmd.AddCommand(resetActionCmd)
 }
 
 var ActionCmd = &cobra.Command{
@@ -99,6 +106,18 @@ var deleteActionCmd = &cobra.Command{
 	},
 }
 
+var resetActionCmd = &cobra.Command{
+	Use:   "reset [flags] [filename]...",
+	Short: "Reset action overrides",
+	Long:  "Reset action overrides to default for applications",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			resetActionOverride(file)
+		}
+	},
+}
+
 func deleteActionOverride(file string) {
 	o, err := application.Open(file)
 	if err != nil {
@@ -108,7 +127,7 @@ func deleteActionOverride(file string) {
 	var filters []application.ProfileActionOverrideFilter
 	if content != "" {
 		filters = append(filters, func(a application.ProfileActionOverride) bool {
-			return strings.ToLower(a.Content) == strings.ToLower(content)
+			return a.Content != nil && strings.ToLower(*a.Content) == strings.ToLower(content)
 		})
 	}
 	switch formFactor {
@@ -128,6 +147,46 @@ func deleteActionOverride(file string) {
 		})
 	}
 	err = o.DeleteActionOverrides(filters...)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func resetActionOverride(file string) {
+	o, err := application.Open(file)
+	if err != nil {
+		log.Warn("parsing application failed: " + err.Error())
+		return
+	}
+	var filters []application.ProfileActionOverrideFilter
+	if content != "" {
+		filters = append(filters, func(a application.ProfileActionOverride) bool {
+			return a.Content != nil && strings.ToLower(*a.Content) == strings.ToLower(content)
+		})
+	}
+	switch formFactor {
+	case Large, Small:
+		filters = append(filters, func(a application.ProfileActionOverride) bool {
+			return a.FormFactor == FormFactorIds[formFactor][0]
+		})
+	}
+	if profile != "" {
+		filters = append(filters, func(a application.ProfileActionOverride) bool {
+			return strings.ToLower(a.Profile) == strings.ToLower(profile)
+		})
+	}
+	if pageObject != "" {
+		filters = append(filters, func(a application.ProfileActionOverride) bool {
+			return strings.ToLower(a.PageOrSobjectType) == strings.ToLower(pageObject)
+		})
+	}
+	err = o.ResetActionOverrides(filters...)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
@@ -179,7 +238,7 @@ func tableProfileActionOverrides(file string) {
 	}
 	if content != "" {
 		filters = append(filters, func(a application.ProfileActionOverride) bool {
-			return strings.ToLower(a.Content) == strings.ToLower(content)
+			return a.Content != nil && strings.ToLower(*a.Content) == strings.ToLower(content)
 		})
 	}
 	actions := w.GetProfileActionOverrides(filters...)
@@ -194,7 +253,11 @@ func tableProfileActionOverrides(file string) {
 		if r.RecordType != nil {
 			recordType = *r.RecordType
 		}
-		table.Append([]string{applicationName, r.PageOrSobjectType, recordType, r.Profile, r.ActionName, r.FormFactor, r.Content})
+		content := ""
+		if r.Content != nil {
+			content = *r.Content
+		}
+		table.Append([]string{applicationName, r.PageOrSobjectType, recordType, r.Profile, r.ActionName, r.FormFactor, content})
 	}
 	if table.NumLines() > 0 {
 		table.Render()
