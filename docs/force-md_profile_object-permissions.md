@@ -19,6 +19,7 @@ Update object permissions
 
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
 * [force-md profile object-permissions add](force-md_profile_object-permissions_add.md)	 - Add object permissions
+* [force-md profile object-permissions clone](force-md_profile_object-permissions_clone.md)	 - Clone object permissions
 * [force-md profile object-permissions delete](force-md_profile_object-permissions_delete.md)	 - Delete object permissions
 * [force-md profile object-permissions edit](force-md_profile_object-permissions_edit.md)	 - Update object permissions
 * [force-md profile object-permissions list](force-md_profile_object-permissions_list.md)	 - List object permissions
