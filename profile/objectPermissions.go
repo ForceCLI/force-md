@@ -1,6 +1,7 @@
 package profile
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/imdario/mergo"
@@ -174,4 +175,32 @@ func (p *Profile) GetGrantedObjectPermissions() []permissionset.ObjectPermission
 		}
 	}
 	return objectPermissions
+}
+
+func (p *Profile) CloneObjectPermissions(src, dest string) error {
+	for _, f := range p.ObjectPermissions {
+		if strings.ToLower(f.Object) == strings.ToLower(dest) {
+			return fmt.Errorf("%s object already exists", dest)
+		}
+	}
+	found := false
+	for _, f := range p.ObjectPermissions {
+		if strings.ToLower(f.Object) == strings.ToLower(src) {
+			found = true
+			clone := permissionset.ObjectPermissions{}
+			clone.AllowCreate.Text = f.AllowCreate.Text
+			clone.AllowDelete.Text = f.AllowDelete.Text
+			clone.AllowEdit.Text = f.AllowEdit.Text
+			clone.AllowRead.Text = f.AllowRead.Text
+			clone.ModifyAllRecords.Text = f.ModifyAllRecords.Text
+			clone.ViewAllRecords.Text = f.ViewAllRecords.Text
+			clone.Object = dest
+			p.ObjectPermissions = append(p.ObjectPermissions, clone)
+		}
+	}
+	if !found {
+		return fmt.Errorf("source object %s not found", src)
+	}
+	p.ObjectPermissions.Tidy()
+	return nil
 }
