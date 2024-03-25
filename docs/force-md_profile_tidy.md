@@ -36,6 +36,7 @@ force-md profile tidy [flags] [filename]...
 ```
   -h, --help            help for tidy
   -i, --ignore-errors   ignore errors
+  -l, --list            list files that need tidying
   -w, --wide            flatten into wide format
 ```
 

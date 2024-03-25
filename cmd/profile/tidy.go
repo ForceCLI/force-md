@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -18,6 +20,7 @@ var (
 
 func init() {
 	TidyCmd.Flags().BoolVarP(&wide, "wide", "w", false, "flatten into wide format")
+	TidyCmd.Flags().BoolP("list", "l", false, "list files that need tidying")
 	TidyCmd.Flags().BoolVarP(&ignoreErrors, "ignore-errors", "i", false, "ignore errors")
 }
 
@@ -49,9 +52,32 @@ Tidy profile metadata.
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
-			tidy(file)
+			list, _ := cmd.Flags().GetBool("list")
+			if list {
+				checkIfChanged(file)
+			} else {
+				tidy(file)
+			}
 		}
 	},
+}
+
+func checkIfChanged(file string) {
+	p := &profile.Profile{}
+	contents, err := internal.ParseMetadataXmlIfPossible(p, file)
+	if err != nil {
+		log.Warn("parse failure:" + err.Error())
+		return
+	}
+	p.Tidy()
+	newContents, err := internal.Marshal(p)
+	if err != nil {
+		log.Warn("serializing failed: " + err.Error())
+		return
+	}
+	if !bytes.Equal(contents, newContents) {
+		fmt.Println(file)
+	}
 }
 
 func tidy(file string) {

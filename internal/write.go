@@ -22,6 +22,26 @@ func EnableIndent(e *xml.Encoder) {
 	e.Indent("", "    ")
 }
 
+func Marshal(t interface{}) ([]byte, error) {
+	var b bytes.Buffer
+	w := &b
+
+	fmt.Fprintln(w, declaration)
+	m, err := xml.MarshalIndent(t, "", "    ")
+	if err != nil {
+		return nil, errors.Wrap(err, "serializing metadata")
+	}
+	m = SelfClosing(m)
+	if ConvertNumericXMLEntities {
+		m = htmlEntities(m)
+	}
+	if _, err = w.Write(m); err != nil {
+		return nil, errors.Wrap(err, "writing xml")
+	}
+	fmt.Fprintln(w, "")
+	return b.Bytes(), nil
+}
+
 func WriteToFile(t interface{}, fileName string) error {
 	var f *os.File
 	var err error
@@ -34,19 +54,13 @@ func WriteToFile(t interface{}, fileName string) error {
 		}
 	}
 	defer f.Close()
-	fmt.Fprintln(f, declaration)
-	b, err := xml.MarshalIndent(t, "", "    ")
+	b, err := Marshal(t)
 	if err != nil {
-		return errors.Wrap(err, "serializing metadata")
-	}
-	b = SelfClosing(b)
-	if ConvertNumericXMLEntities {
-		b = htmlEntities(b)
+		return errors.Wrap(err, "marshalling")
 	}
 	if _, err = f.Write(b); err != nil {
 		return errors.Wrap(err, "writing xml")
 	}
-	fmt.Fprintln(f, "")
 	return nil
 }
 
