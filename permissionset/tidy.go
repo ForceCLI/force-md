@@ -1,6 +1,7 @@
 package permissionset
 
 import (
+	"fmt"
 	"sort"
 )
 
@@ -71,10 +72,25 @@ func (cp CustomSettingList) Tidy() {
 	})
 }
 
-func (fp FieldPermissionsList) Tidy() {
-	sort.Slice(fp, func(i, j int) bool {
-		return fp[i].Field < fp[j].Field
+func (fp *FieldPermissionsList) Tidy() {
+	if len(*fp) == 0 {
+		return
+	}
+	sort.Slice(*fp, func(i, j int) bool {
+		return (*fp)[i].Field < (*fp)[j].Field
 	})
+	lastUniqueIndex := 0
+	for i := 1; i < len(*fp); i++ {
+		// If the current element is not a duplicate, move it to the next position after the last unique element
+		if (*fp)[i].Field != (*fp)[lastUniqueIndex].Field {
+			lastUniqueIndex++
+			(*fp)[lastUniqueIndex] = (*fp)[i]
+		} else {
+			fmt.Println("omitting duplicate permissions for", (*fp)[i].Field)
+		}
+	}
+	// Slice the original slice to the correct length of unique elements
+	*fp = (*fp)[:lastUniqueIndex+1]
 }
 
 func (up UserPermissionList) Tidy() {
