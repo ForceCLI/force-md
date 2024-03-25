@@ -98,6 +98,13 @@ type ApplicationVisibility struct {
 
 type ApplicationVisibilityList []ApplicationVisibility
 
+type ExternalCredentialPrincipalAccess struct {
+	Enabled                     BooleanText `xml:"enabled"`
+	ExternalCredentialPrincipal string      `xml:"externalCredentialPrincipal"`
+}
+
+type ExternalCredentialPrincipalAccessList []ExternalCredentialPrincipalAccess
+
 type FlowAccess struct {
 	Enabled BooleanText `xml:"enabled"`
 	Flow    string      `xml:"flow"`
@@ -113,24 +120,25 @@ type RecordTypeVisibility struct {
 type RecordTypeVisibilityList []RecordTypeVisibility
 
 type PermissionSet struct {
-	XMLName                    xml.Name                  `xml:"PermissionSet"`
-	Xmlns                      string                    `xml:"xmlns,attr"`
-	ApplicationVisibilities    ApplicationVisibilityList `xml:"applicationVisibilities"`
-	ClassAccesses              ApexClassList             `xml:"classAccesses"`
-	CustomMetadataTypeAccesses CustomMetadataTypeList    `xml:"customMetadataTypeAccesses"`
-	CustomPermissions          CustomPermissionList      `xml:"customPermissions"`
-	CustomSettingAccesses      CustomSettingList         `xml:"customSettingAccesses"`
-	Description                *Description              `xml:"description"`
-	FieldPermissions           FieldPermissionsList      `xml:"fieldPermissions"`
-	FlowAccesses               FlowAccessList            `xml:"flowAccesses"`
-	HasActivationRequired      BooleanText               `xml:"hasActivationRequired"`
-	Label                      string                    `xml:"label"`
-	License                    *License                  `xml:"license"`
-	ObjectPermissions          ObjectPermissionsList     `xml:"objectPermissions"`
-	PageAccesses               PageAccessList            `xml:"pageAccesses"`
-	RecordTypeVisibilities     RecordTypeList            `xml:"recordTypeVisibilities"`
-	TabSettings                TabSettingsList           `xml:"tabSettings"`
-	UserPermissions            UserPermissionList        `xml:"userPermissions"`
+	XMLName                             xml.Name                              `xml:"PermissionSet"`
+	Xmlns                               string                                `xml:"xmlns,attr"`
+	ApplicationVisibilities             ApplicationVisibilityList             `xml:"applicationVisibilities"`
+	ClassAccesses                       ApexClassList                         `xml:"classAccesses"`
+	CustomMetadataTypeAccesses          CustomMetadataTypeList                `xml:"customMetadataTypeAccesses"`
+	CustomPermissions                   CustomPermissionList                  `xml:"customPermissions"`
+	CustomSettingAccesses               CustomSettingList                     `xml:"customSettingAccesses"`
+	Description                         *Description                          `xml:"description"`
+	FieldPermissions                    FieldPermissionsList                  `xml:"fieldPermissions"`
+	FlowAccesses                        FlowAccessList                        `xml:"flowAccesses"`
+	ExternalCredentialPrincipalAccesses ExternalCredentialPrincipalAccessList `xml:"externalCredentialPrincipalAccesses"`
+	HasActivationRequired               BooleanText                           `xml:"hasActivationRequired"`
+	Label                               string                                `xml:"label"`
+	License                             *License                              `xml:"license"`
+	ObjectPermissions                   ObjectPermissionsList                 `xml:"objectPermissions"`
+	PageAccesses                        PageAccessList                        `xml:"pageAccesses"`
+	RecordTypeVisibilities              RecordTypeList                        `xml:"recordTypeVisibilities"`
+	TabSettings                         TabSettingsList                       `xml:"tabSettings"`
+	UserPermissions                     UserPermissionList                    `xml:"userPermissions"`
 }
 
 func (p *PermissionSet) MetaCheck() {}

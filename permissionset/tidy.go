@@ -16,6 +16,7 @@ func (p *PermissionSet) Tidy() {
 	p.RecordTypeVisibilities.Tidy()
 	p.TabSettings.Tidy()
 	p.UserPermissions.Tidy()
+	p.ExternalCredentialPrincipalAccesses.Tidy()
 }
 
 func (op ObjectPermissionsList) Tidy() {
@@ -69,6 +70,12 @@ func (cp CustomMetadataTypeList) Tidy() {
 func (cp CustomSettingList) Tidy() {
 	sort.Slice(cp, func(i, j int) bool {
 		return cp[i].Name < cp[j].Name
+	})
+}
+
+func (ec ExternalCredentialPrincipalAccessList) Tidy() {
+	sort.Slice(ec, func(i, j int) bool {
+		return ec[i].ExternalCredentialPrincipal < ec[j].ExternalCredentialPrincipal
 	})
 }
 
