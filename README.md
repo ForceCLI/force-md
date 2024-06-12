@@ -15,6 +15,9 @@ $ source <(force-md completion bash)
 
 ## Examples
 
+Below are some basic examples.  See the [wiki](https://github.com/ForceCLI/force-md/wiki/Recipes) for higher level
+examples.
+
 ### Tidy Permission Sets
 
 Clean up metadata by sorting groups of elements in natural order.
