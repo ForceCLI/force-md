@@ -17,7 +17,8 @@ import (
 )
 
 var (
-	objectName string
+	objectName   string
+	sourceObject string
 )
 
 func init() {
@@ -42,6 +43,11 @@ func init() {
 
 	deleteObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	deleteObjectCmd.MarkFlagRequired("object")
+
+	cloneObjectCmd.Flags().StringVarP(&sourceObject, "source", "s", "", "source object name")
+	cloneObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "new object name")
+	cloneObjectCmd.MarkFlagRequired("source")
+	cloneObjectCmd.MarkFlagRequired("object")
 
 	showObjectCmd.Flags().StringVarP(&objectName, "object", "o", "", "object name")
 	showObjectCmd.MarkFlagRequired("object")
@@ -75,6 +81,7 @@ func init() {
 
 	ObjectPermissionsCmd.AddCommand(editObjectCmd)
 	ObjectPermissionsCmd.AddCommand(addObjectCmd)
+	ObjectPermissionsCmd.AddCommand(cloneObjectCmd)
 	ObjectPermissionsCmd.AddCommand(showObjectCmd)
 	ObjectPermissionsCmd.AddCommand(listObjectsCmd)
 	ObjectPermissionsCmd.AddCommand(deleteObjectCmd)
@@ -117,6 +124,18 @@ var deleteObjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteObjectPermissions(file, objectName)
+		}
+	},
+}
+
+var cloneObjectCmd = &cobra.Command{
+	Use:   "clone -s SObject -o SObject [filename]...",
+	Short: "Clone object permissions",
+	Long:  "Clone object permissions in permission sets for a new object",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			cloneObject(file)
 		}
 	},
 }
@@ -205,6 +224,24 @@ func updateObjectPermissions(file string, perms permissionset.ObjectPermissions)
 	err = p.SetObjectPermissions(objectName, perms)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func cloneObject(file string) {
+	p, err := permissionset.Open(file)
+	if err != nil {
+		log.Warn("parsing permissionset failed: " + err.Error())
+		return
+	}
+	err = p.CloneObjectPermissions(sourceObject, objectName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
 		return
 	}
 	err = internal.WriteToFile(p, file)
