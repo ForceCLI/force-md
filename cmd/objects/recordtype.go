@@ -2,6 +2,7 @@ package objects
 
 import (
 	"fmt"
+	"html"
 	"net/url"
 	"os"
 	"path"
@@ -44,6 +45,12 @@ func init() {
 	recordtypePicklistTableCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	recordtypePicklistTableCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
 
+	recordtypePicklistListCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	recordtypePicklistListCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
+
+	recordtypePicklistListCmd.MarkFlagRequired("field")
+	recordtypePicklistListCmd.MarkFlagRequired("recordtype")
+
 	recordtypePicklistAddCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	recordtypePicklistAddCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
 	recordtypePicklistAddCmd.Flags().StringVarP(&picklistValue, "value", "v", "", "picklist value")
@@ -53,6 +60,7 @@ func init() {
 	recordtypePicklistAddCmd.MarkFlagRequired("value")
 
 	recordtypePicklistCmd.AddCommand(recordtypePicklistTableCmd)
+	recordtypePicklistCmd.AddCommand(recordtypePicklistListCmd)
 	recordtypePicklistCmd.AddCommand(recordtypePicklistAddCmd)
 }
 
@@ -75,6 +83,17 @@ var recordtypePicklistTableCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			tableRecordTypePicklistOptions(file)
+		}
+	},
+}
+
+var recordtypePicklistListCmd = &cobra.Command{
+	Use:   "list [flags] [filename]...",
+	Short: "List record type picklist options",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listRecordTypePicklistOptions(file, recordTypeName)
 		}
 	},
 }
@@ -267,6 +286,37 @@ func tableRecordTypePicklistOptions(file string) {
 	}
 	if table.NumLines() > 0 {
 		table.Render()
+	}
+}
+
+func listRecordTypePicklistOptions(file string, recordTypeName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
+	recordTypes := o.GetRecordTypes()
+
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
+	recordTypeName = strings.TrimPrefix(recordTypeName, objectName+".")
+
+	for _, r := range recordTypes {
+		if recordTypeName != "" && strings.ToLower(r.FullName) != strings.ToLower(recordTypeName) {
+			continue
+		}
+		for _, p := range r.PicklistValues {
+			if fieldName != "" && strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
+				continue
+			}
+			for _, v := range p.Values {
+				if s, err := url.QueryUnescape(v.FullName); err == nil {
+					fmt.Println(html.UnescapeString(s))
+				} else {
+					panic(err.Error())
+				}
+			}
+		}
 	}
 }
 
