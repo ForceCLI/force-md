@@ -44,6 +44,26 @@ func (o *CustomObject) AddField(fieldName string) error {
 	return nil
 }
 
+func (o *CustomObject) ListPicklistOptions(fieldName string) ([]string, error) {
+	var picklistField field.Field
+	found := false
+	for _, f := range o.Fields {
+		if strings.ToLower(f.FullName) == strings.ToLower(fieldName) {
+			picklistField = f
+			found = true
+			break
+		}
+	}
+	if !found {
+		return nil, errors.New("field not found")
+	}
+	var options []string
+	for _, o := range picklistField.ValueSet.ValueSetDefinition.Value {
+		options = append(options, o.FullName.Text)
+	}
+	return options, nil
+}
+
 func (o *CustomObject) UpdateField(fieldName string, updates field.Field) error {
 	found := false
 	for i, f := range o.Fields {

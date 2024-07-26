@@ -112,6 +112,11 @@ func init() {
 	writeFieldsCmd.Flags().StringVarP(&fieldsDir, "directory", "d", "", "directory where fields should be output")
 	writeFieldsCmd.MarkFlagRequired("directory")
 
+	listPicklistOptionsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	listPicklistOptionsCmd.MarkFlagRequired("field")
+
+	fieldPicklistCmd.AddCommand(listPicklistOptionsCmd)
+
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(tableFieldsCmd)
 	FieldCmd.AddCommand(graphFieldsCmd)
@@ -120,6 +125,13 @@ func init() {
 	FieldCmd.AddCommand(showFieldCmd)
 	FieldCmd.AddCommand(deleteFieldCmd)
 	FieldCmd.AddCommand(writeFieldsCmd)
+	FieldCmd.AddCommand(fieldPicklistCmd)
+}
+
+var fieldPicklistCmd = &cobra.Command{
+	Use:                   "picklist",
+	Short:                 "Manage picklist options",
+	DisableFlagsInUseLine: true,
 }
 
 var FieldCmd = &cobra.Command{
@@ -136,6 +148,17 @@ var listFieldsCmd = &cobra.Command{
 		filterAttributes := setFields(cmd)
 		for _, file := range args {
 			listFields(file, filterAttributes)
+		}
+	},
+}
+
+var listPicklistOptionsCmd = &cobra.Command{
+	Use:   "list [flags] [filename]...",
+	Short: "List picklist options",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			listPicklistOptions(file, fieldName)
 		}
 	},
 }
@@ -507,6 +530,24 @@ func addField(file string, fieldName string) {
 	if err != nil {
 		log.Warn("update failed: " + err.Error())
 		return
+	}
+}
+
+func listPicklistOptions(file string, fieldName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
+	options, err := o.ListPicklistOptions(fieldName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("list failed for %s: %s", file, err.Error()))
+		return
+	}
+	for _, o := range options {
+		fmt.Println(html.UnescapeString(o))
 	}
 }
 
