@@ -2,9 +2,10 @@ package internal
 
 import (
 	"bytes"
-	"encoding/xml"
-	"io/ioutil"
+	"io"
 	"os"
+
+	"github.com/nbio/xml"
 
 	"github.com/pkg/errors"
 	"golang.org/x/net/html/charset"
@@ -27,7 +28,7 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 			return nil, errors.Wrap(err, "opening file")
 		}
 	}
-	contents, err := ioutil.ReadAll(f)
+	contents, err := io.ReadAll(f)
 	if err != nil {
 		return nil, errors.Wrap(err, "reading file")
 	}
