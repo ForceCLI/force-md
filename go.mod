@@ -1,6 +1,8 @@
 module github.com/ForceCLI/force-md
 
-go 1.20
+go 1.21
+
+toolchain go1.22.5
 
 require (
 	github.com/antonmedv/expr v1.15.0
@@ -14,6 +16,8 @@ require (
 	github.com/thediveo/enumflag v0.10.1
 	golang.org/x/net v0.10.0
 )
+
+require github.com/nbio/xml v0.0.0-20240718025449-4db9e55cd3bf
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
