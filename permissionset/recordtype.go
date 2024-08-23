@@ -16,7 +16,7 @@ func (p *PermissionSet) AddRecordType(recordType string) error {
 			return RecordTypeExistsError
 		}
 	}
-	p.RecordTypeVisibilities = append(p.RecordTypeVisibilities, RecordType{
+	p.RecordTypeVisibilities = append(p.RecordTypeVisibilities, RecordTypeVisibility{
 		RecordType: recordType,
 		Visible:    TrueText,
 	})
@@ -24,7 +24,7 @@ func (p *PermissionSet) AddRecordType(recordType string) error {
 	return nil
 }
 
-func (p *PermissionSet) GetRecordTypeVisibility() RecordTypeList {
+func (p *PermissionSet) GetRecordTypeVisibility() RecordTypeVisibilityList {
 	return p.RecordTypeVisibilities
 }
 

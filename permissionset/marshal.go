@@ -21,3 +21,15 @@ func (o PageAccess) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (o UserPermission) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return internal.MarshalXml(o, e, start)
 }
+
+func (o RecordTypeVisibility) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return internal.MarshalXml(o, e, start)
+}
+
+func (o TabSettings) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return internal.MarshalXml(o, e, start)
+}
+
+func (o CustomPermission) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return internal.MarshalXml(o, e, start)
+}
