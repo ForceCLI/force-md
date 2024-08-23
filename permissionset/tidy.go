@@ -49,7 +49,7 @@ func (ts TabSettingsList) Tidy() {
 	})
 }
 
-func (rt RecordTypeList) Tidy() {
+func (rt RecordTypeVisibilityList) Tidy() {
 	sort.Slice(rt, func(i, j int) bool {
 		return rt[i].RecordType < rt[j].RecordType
 	})

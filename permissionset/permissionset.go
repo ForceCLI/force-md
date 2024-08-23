@@ -56,13 +56,6 @@ type UserPermission struct {
 
 type UserPermissionList []UserPermission
 
-type RecordType struct {
-	RecordType string      `xml:"recordType"`
-	Visible    BooleanText `xml:"visible"`
-}
-
-type RecordTypeList []RecordType
-
 type CustomPermission struct {
 	Enabled BooleanText `xml:"enabled"`
 	Name    string      `xml:"name"`
@@ -136,7 +129,7 @@ type PermissionSet struct {
 	License                             *License                              `xml:"license"`
 	ObjectPermissions                   ObjectPermissionsList                 `xml:"objectPermissions"`
 	PageAccesses                        PageAccessList                        `xml:"pageAccesses"`
-	RecordTypeVisibilities              RecordTypeList                        `xml:"recordTypeVisibilities"`
+	RecordTypeVisibilities              RecordTypeVisibilityList              `xml:"recordTypeVisibilities"`
 	TabSettings                         TabSettingsList                       `xml:"tabSettings"`
 	UserPermissions                     UserPermissionList                    `xml:"userPermissions"`
 }
