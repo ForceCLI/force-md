@@ -10,6 +10,7 @@ import (
 	"github.com/ForceCLI/force-md/objects/compactlayout"
 	"github.com/ForceCLI/force-md/objects/field"
 	"github.com/ForceCLI/force-md/objects/fieldset"
+	"github.com/ForceCLI/force-md/objects/index"
 	"github.com/ForceCLI/force-md/objects/listview"
 	"github.com/ForceCLI/force-md/objects/recordtype"
 	"github.com/ForceCLI/force-md/objects/sharingreason"
@@ -18,6 +19,7 @@ import (
 )
 
 type FieldList []field.Field
+type IndexList []index.BigObjectIndex
 type ListViewList []listview.ListView
 
 type ActionOverride struct {
@@ -94,6 +96,7 @@ type CustomObject struct {
 	} `xml:"externalSharingModel"`
 	FieldSets []fieldset.FieldSet `xml:"fieldSets"`
 	Fields    FieldList           `xml:"fields"`
+	Indexes   IndexList           `xml:"indexes"`
 	Label     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`

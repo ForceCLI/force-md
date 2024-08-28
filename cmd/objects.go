@@ -8,6 +8,7 @@ import (
 
 func init() {
 	objectsCmd.AddCommand(objects.FieldCmd)
+	objectsCmd.AddCommand(objects.IndexCmd)
 	objectsCmd.AddCommand(objects.FieldSetCmd)
 	objectsCmd.AddCommand(objects.RecordTypeCmd)
 	objectsCmd.AddCommand(objects.TidyCmd)
