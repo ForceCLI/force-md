@@ -27,9 +27,9 @@ func (m *CustomMetadata) AddValue(key string, value any) {
 	case bool:
 		valueType = "xsd:boolean"
 		stringValue = strconv.FormatBool(t)
-	case float32, float64:
+	case float64:
 		valueType = "xsd:double"
-		stringValue = value.(string)
+		stringValue = strconv.FormatFloat(t, 'f', -1, 64)
 	case int:
 		valueType = "xsd:int"
 		stringValue = strconv.Itoa(t)
