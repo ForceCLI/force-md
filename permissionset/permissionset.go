@@ -40,6 +40,10 @@ type FieldPermissions struct {
 	Readable BooleanText `xml:"readable"`
 }
 
+func (fp FieldPermissions) GetName() string {
+	return fp.Field
+}
+
 type FieldPermissionsList []FieldPermissions
 
 type TabSettings struct {
