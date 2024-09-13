@@ -38,12 +38,14 @@ func (o *ReportType) AddField(sectionName, table, field string) error {
 	return fmt.Errorf("section not found: %s", sectionName)
 }
 
-func (o *ReportType) DeleteField(field string) error {
+func (o *ReportType) DeleteField(field, table string) error {
 	found := false
 	for s, section := range o.Sections {
 		newFields := section.Columns[:0]
 		for _, f := range section.Columns {
-			if strings.ToLower(f.Field) != strings.ToLower(field) {
+			fieldMatch := strings.ToLower(f.Field) == strings.ToLower(field)
+			tableMatch := table == "" || strings.ToLower(f.Table) == strings.ToLower(table)
+			if !fieldMatch || !tableMatch {
 				newFields = append(newFields, f)
 			} else {
 				found = true
