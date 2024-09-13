@@ -40,12 +40,6 @@ type ReportType struct {
 	} `xml:"description"`
 	Join *struct {
 		Join *struct {
-			OuterJoin struct {
-				Text string `xml:",chardata"`
-			} `xml:"outerJoin"`
-			Relationship struct {
-				Text string `xml:",chardata"`
-			} `xml:"relationship"`
 			Join *struct {
 				OuterJoin struct {
 					Text string `xml:",chardata"`
@@ -54,6 +48,12 @@ type ReportType struct {
 					Text string `xml:",chardata"`
 				} `xml:"relationship"`
 			} `xml:"join"`
+			OuterJoin struct {
+				Text string `xml:",chardata"`
+			} `xml:"outerJoin"`
+			Relationship struct {
+				Text string `xml:",chardata"`
+			} `xml:"relationship"`
 		} `xml:"join"`
 		OuterJoin struct {
 			Text string `xml:",chardata"`

@@ -25,6 +25,7 @@ func init() {
 	addFieldCmd.MarkFlagRequired("section")
 
 	deleteFieldCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	deleteFieldCmd.Flags().StringVarP(&tableName, "table", "t", "", "table name")
 	deleteFieldCmd.MarkFlagRequired("field")
 
 	FieldCmd.AddCommand(listFieldsCmd)
@@ -69,7 +70,7 @@ var deleteFieldCmd = &cobra.Command{
 	Args:                  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
-			deleteField(file, fieldName)
+			deleteField(file, fieldName, tableName)
 		}
 	},
 }
@@ -104,13 +105,13 @@ func addField(file string, section, tableName, fieldName string) {
 	}
 }
 
-func deleteField(file string, fieldName string) {
+func deleteField(file string, fieldName string, tableName string) {
 	o, err := reportType.Open(file)
 	if err != nil {
 		log.Warn("parsing report type failed: " + err.Error())
 		return
 	}
-	err = o.DeleteField(fieldName)
+	err = o.DeleteField(fieldName, tableName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
