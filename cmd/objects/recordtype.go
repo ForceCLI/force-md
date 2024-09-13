@@ -55,13 +55,22 @@ func init() {
 	recordtypePicklistAddCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
 	recordtypePicklistAddCmd.Flags().StringVarP(&picklistValue, "value", "v", "", "picklist value")
 
+	recordtypePicklistDeleteCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	recordtypePicklistDeleteCmd.Flags().StringVarP(&recordTypeName, "recordtype", "r", "", "record type")
+	recordtypePicklistDeleteCmd.Flags().StringVarP(&picklistValue, "value", "v", "", "picklist value")
+
 	recordtypePicklistAddCmd.MarkFlagRequired("field")
 	recordtypePicklistAddCmd.MarkFlagRequired("recordtype")
 	recordtypePicklistAddCmd.MarkFlagRequired("value")
 
+	recordtypePicklistDeleteCmd.MarkFlagRequired("field")
+	recordtypePicklistDeleteCmd.MarkFlagRequired("recordtype")
+	recordtypePicklistDeleteCmd.MarkFlagRequired("value")
+
 	recordtypePicklistCmd.AddCommand(recordtypePicklistTableCmd)
 	recordtypePicklistCmd.AddCommand(recordtypePicklistListCmd)
 	recordtypePicklistCmd.AddCommand(recordtypePicklistAddCmd)
+	recordtypePicklistCmd.AddCommand(recordtypePicklistDeleteCmd)
 }
 
 var RecordTypeCmd = &cobra.Command{
@@ -105,6 +114,17 @@ var recordtypePicklistAddCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			assignPicklistValueToRecordType(file)
+		}
+	},
+}
+
+var recordtypePicklistDeleteCmd = &cobra.Command{
+	Use:   "delete [flags] [filename]...",
+	Short: "Remove picklist value from record type",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			removePicklistValueToRecordType(file)
 		}
 	},
 }
@@ -208,6 +228,28 @@ func assignPicklistValueToRecordType(file string) {
 	recordType := strings.TrimPrefix(recordTypeName, objectName+".")
 
 	err = o.AddFieldPicklistValue(field, recordType, picklistValue)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func removePicklistValueToRecordType(file string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
+	field := strings.TrimPrefix(fieldName, objectName+".")
+	recordType := strings.TrimPrefix(recordTypeName, objectName+".")
+
+	err = o.RemoveFieldPicklistValue(field, recordType, picklistValue)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

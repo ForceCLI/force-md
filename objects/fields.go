@@ -147,6 +147,28 @@ func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string
 	return nil
 }
 
+func (o *CustomObject) RemoveFieldPicklistValue(fieldName string, recordType string, picklistValue string) error {
+	for i, f := range o.RecordTypes {
+		if strings.ToLower(f.FullName) != strings.ToLower(recordType) {
+			continue
+		}
+		for j, p := range f.PicklistValues {
+			if strings.ToLower(p.Picklist) != strings.ToLower(fieldName) {
+				continue
+			}
+			for n, v := range p.Values {
+				if strings.ToLower(v.FullName) == strings.ToLower(picklistValue) {
+					o.RecordTypes[i].PicklistValues[j].Values = append(o.RecordTypes[i].PicklistValues[j].Values[:n], o.RecordTypes[i].PicklistValues[j].Values[n+1:]...)
+					return nil
+				}
+			}
+			return errors.New("value not found")
+		}
+		return errors.New("field not found")
+	}
+	return errors.New("record type not found")
+}
+
 func (p *CustomObject) DeleteFieldFromCompactLayouts(fieldName string) {
 	for i, f := range p.CompactLayouts {
 		newFields := f.Fields[:0]
