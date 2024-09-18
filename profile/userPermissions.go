@@ -9,7 +9,7 @@ import (
 	"github.com/ForceCLI/force-md/permissionset"
 )
 
-var UserPermissionExistsError = errors.New("user permissions already exists")
+var UserPermissionExistsError = errors.New("user permission already exists")
 
 type UserPermissionFilter func(permissionset.UserPermission) bool
 
