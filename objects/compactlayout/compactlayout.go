@@ -3,10 +3,12 @@ package compactlayout
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type CompactLayoutMetadata struct {
+	Metadata
 	XMLName xml.Name `xml:"CompactLayout"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	CompactLayout
@@ -24,7 +26,9 @@ type CompactLayout struct {
 	} `xml:"label"`
 }
 
-func (p *CompactLayoutMetadata) MetaCheck() {}
+func (c *CompactLayoutMetadata) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CompactLayoutMetadata, error) {
 	p := &CompactLayoutMetadata{}

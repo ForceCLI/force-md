@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"io"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/nbio/xml"
 
@@ -11,10 +13,23 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
+type Metadata struct {
+	path string
+	name string
+}
+
+func (m Metadata) Name() string {
+	return m.name
+}
+
+func (m Metadata) Path() string {
+	return m.path
+}
+
 type MetadataPointer interface {
-	// MetaCheck should have a pointer receiver.  This ensures that functions
+	// GetMetadata should have a pointer receiver.  This ensures that functions
 	// that take a MetadataPointer receive a pointer.
-	MetaCheck()
+	SetMetadata(Metadata)
 }
 
 func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) {
@@ -40,6 +55,13 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 	if err := dec.Decode(i); err != nil {
 		return contents, errors.Wrap(err, "decoding xml")
 	}
+
+	meta := Metadata{}
+	meta.path = path
+	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
+	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
+	i.SetMetadata(meta)
+
 	return contents, nil
 }
 
@@ -61,5 +83,12 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	if err := dec.Decode(i); err != nil {
 		return errors.Wrap(err, "parsing xml in "+path)
 	}
+
+	meta := Metadata{}
+	meta.path = path
+	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
+	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
+	i.SetMetadata(meta)
+
 	return nil
 }

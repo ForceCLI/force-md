@@ -3,10 +3,12 @@ package listview
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type ListViewMetadata struct {
+	Metadata
 	XMLName xml.Name `xml:"ListView"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	ListView
@@ -61,7 +63,9 @@ type ListView struct {
 	} `xml:"language"`
 }
 
-func (p *ListViewMetadata) MetaCheck() {}
+func (c *ListViewMetadata) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*ListViewMetadata, error) {
 	p := &ListViewMetadata{}

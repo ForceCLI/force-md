@@ -8,6 +8,7 @@ import (
 )
 
 type Dashboard struct {
+	Metadata
 	XMLName            xml.Name `xml:"Dashboard"`
 	Xmlns              string   `xml:"xmlns,attr"`
 	BackgroundEndColor struct {
@@ -586,7 +587,9 @@ type Dashboard struct {
 	} `xml:"titleSize"`
 }
 
-func (p *Dashboard) MetaCheck() {}
+func (c *Dashboard) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*Dashboard, error) {
 	p := &Dashboard{}

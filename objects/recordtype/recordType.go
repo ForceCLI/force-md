@@ -10,6 +10,7 @@ import (
 type RecordTypeFilter func(RecordType) bool
 
 type RecordTypeMetadata struct {
+	Metadata
 	XMLName xml.Name `xml:"RecordType"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	RecordType
@@ -47,7 +48,9 @@ type RecordType struct {
 	PicklistValues PicklistList `xml:"picklistValues"`
 }
 
-func (p *RecordTypeMetadata) MetaCheck() {}
+func (c *RecordTypeMetadata) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*RecordTypeMetadata, error) {
 	p := &RecordTypeMetadata{}

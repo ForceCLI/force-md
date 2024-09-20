@@ -19,6 +19,7 @@ type Value struct {
 }
 
 type CustomMetadata struct {
+	Metadata
 	XMLName   xml.Name    `xml:"CustomMetadata"`
 	Xmlns     string      `xml:"xmlns,attr"`
 	Xsi       string      `xml:"xmlns:xsi,attr"`
@@ -28,7 +29,9 @@ type CustomMetadata struct {
 	Values    []Value     `xml:"values"`
 }
 
-func (p *CustomMetadata) MetaCheck() {}
+func (c *CustomMetadata) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CustomMetadata, error) {
 	p := &CustomMetadata{}
