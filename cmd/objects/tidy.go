@@ -3,6 +3,7 @@ package objects
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -34,6 +35,7 @@ Tidy object metadata.
 `,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		changes := false
 		for _, file := range args {
 			list, _ := cmd.Flags().GetBool("list")
 			fixMissing, _ := cmd.Flags().GetBool("fix-missing")
@@ -41,10 +43,14 @@ Tidy object metadata.
 				recordTypePicklistOptions: fixMissing,
 			}
 			if list {
-				checkIfChanged(file, fix)
+				needsTidying := checkIfChanged(file, fix)
+				changes = needsTidying || changes
 			} else {
 				tidy(file, fix)
 			}
+		}
+		if changes {
+			os.Exit(1)
 		}
 	},
 }
@@ -58,6 +64,10 @@ func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	}
 	picklists := o.GetFields(filter)
 	for _, field := range picklists {
+		if strings.ToLower(o.Name()) == "account" && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
+			// Person Record Types are configured in the PersonAccount object
+			continue
+		}
 		for _, recordType := range o.RecordTypes {
 			hasPicklist := false
 			for _, recordTypePicklist := range recordType.PicklistValues {
@@ -67,7 +77,7 @@ func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 				}
 			}
 			if !hasPicklist {
-				log.Warn(fmt.Sprintf("adding %s to record type %s", field.FullName, recordType.FullName))
+				log.Warn(fmt.Sprintf("%s (%s): adding %s picklist field to record type %s", o.Name(), o.Path(), field.FullName, recordType.FullName))
 				err := o.AddBlankPicklistOptionsToRecordType(field.FullName, recordType.FullName)
 				if err != nil {
 					log.Warn(err.Error())
@@ -78,7 +88,7 @@ func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	}
 }
 
-func checkIfChanged(file string, fix fixes) {
+func checkIfChanged(file string, fix fixes) (changed bool) {
 	o := &objects.CustomObject{}
 	contents, err := internal.ParseMetadataXmlIfPossible(o, file)
 	if err != nil {
@@ -96,7 +106,9 @@ func checkIfChanged(file string, fix fixes) {
 	}
 	if !bytes.Equal(contents, newContents) {
 		fmt.Println(file)
+		return true
 	}
+	return false
 }
 
 func tidy(file string, fix fixes) {
