@@ -3,10 +3,12 @@ package field
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type CustomFieldTranslation struct {
+	Metadata
 	XMLName xml.Name `xml:"CustomFieldTranslation"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Field
@@ -38,7 +40,9 @@ type Field struct {
 	} `xml:"picklistValues"`
 }
 
-func (p *CustomFieldTranslation) MetaCheck() {}
+func (c *CustomFieldTranslation) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CustomFieldTranslation, error) {
 	p := &CustomFieldTranslation{}

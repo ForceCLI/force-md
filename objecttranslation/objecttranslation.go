@@ -3,6 +3,7 @@ package objecttranslation
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/objecttranslation/field"
 )
@@ -10,6 +11,7 @@ import (
 type FieldList []field.Field
 
 type CustomObjectTranslation struct {
+	Metadata
 	XMLName     xml.Name `xml:"CustomObjectTranslation"`
 	Xmlns       string   `xml:"xmlns,attr"`
 	RecordTypes []struct {
@@ -32,7 +34,9 @@ type CustomObjectTranslation struct {
 	} `xml:"validationRules"`
 }
 
-func (p *CustomObjectTranslation) MetaCheck() {}
+func (c *CustomObjectTranslation) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CustomObjectTranslation, error) {
 	p := &CustomObjectTranslation{}

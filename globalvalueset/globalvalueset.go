@@ -18,6 +18,7 @@ type CustomValue struct {
 }
 
 type GlobalValueSet struct {
+	Metadata
 	XMLName     xml.Name      `xml:"GlobalValueSet"`
 	Xmlns       string        `xml:"xmlns,attr"`
 	CustomValue []CustomValue `xml:"customValue"`
@@ -30,7 +31,9 @@ type GlobalValueSet struct {
 	Sorted *BooleanText `xml:"sorted"`
 }
 
-func (p *GlobalValueSet) MetaCheck() {}
+func (c *GlobalValueSet) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*GlobalValueSet, error) {
 	p := &GlobalValueSet{}
