@@ -11,6 +11,7 @@ force-md reporttype fields delete -f Field [filename]...
 ```
   -f, --field string   field name
   -h, --help           help for delete
+  -t, --table string   table name
 ```
 
 ### Options inherited from parent commands

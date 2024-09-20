@@ -20,6 +20,7 @@ Manage Profiles
 * [force-md](force-md.md)	 - force-md manipulate Salesforce metadata
 * [force-md profile apex](force-md_profile_apex.md)	 - Manage apex class visibility
 * [force-md profile application](force-md_profile_application.md)	 - Manage application visibility
+* [force-md profile custom-permissions](force-md_profile_custom-permissions.md)	 - Manage custom permissions
 * [force-md profile field-permissions](force-md_profile_field-permissions.md)	 - Manage field permissions
 * [force-md profile flow](force-md_profile_flow.md)	 - Manage flow visibility
 * [force-md profile layout](force-md_profile_layout.md)	 - Manage page layouts

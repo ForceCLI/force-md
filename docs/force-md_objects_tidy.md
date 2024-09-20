@@ -2,6 +2,15 @@
 
 Tidy object metadata
 
+### Synopsis
+
+
+Tidy object metadata.
+
+	The --fix-missing flag can be used to add missing object metadata.  This includes:
+	* picklist fields missing from Record Types
+
+
 ```
 force-md objects tidy [flags] [filename]...
 ```
@@ -9,7 +18,9 @@ force-md objects tidy [flags] [filename]...
 ### Options
 
 ```
-  -h, --help   help for tidy
+      --fix-missing   fix missing configuration (record type picklist options)
+  -h, --help          help for tidy
+  -l, --list          list files that need tidying
 ```
 
 ### Options inherited from parent commands
