@@ -112,6 +112,26 @@ func (p *CustomObject) DeleteFieldPicklistValues(fieldName string) {
 	}
 }
 
+func (o *CustomObject) AddBlankPicklistOptionsToRecordType(fieldName string, recordType string) error {
+	for i, f := range o.RecordTypes {
+		if strings.ToLower(f.FullName) != strings.ToLower(recordType) {
+			continue
+		}
+		for _, p := range f.PicklistValues {
+			if strings.ToLower(p.Picklist) == strings.ToLower(fieldName) {
+				return errors.New("record type picklist options already exists")
+			}
+		}
+		o.RecordTypes[i].PicklistValues = append(o.RecordTypes[i].PicklistValues, rt.Picklist{
+			Picklist: fieldName,
+			Values:   []rt.ValueSetOption{},
+		})
+		o.RecordTypes[i].PicklistValues.Tidy()
+		return nil
+	}
+	return errors.New("record type not found")
+}
+
 func (o *CustomObject) AddFieldPicklistValue(fieldName string, recordType string, picklistValue string) error {
 	found := false
 	for i, f := range o.RecordTypes {
