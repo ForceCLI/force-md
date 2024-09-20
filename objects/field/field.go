@@ -10,6 +10,7 @@ import (
 type FieldFilter func(Field) bool
 
 type CustomField struct {
+	Metadata
 	XMLName xml.Name `xml:"CustomField"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Field
@@ -172,7 +173,9 @@ type Field struct {
 	} `xml:"visibleLines"`
 }
 
-func (p *CustomField) MetaCheck() {}
+func (c *CustomField) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CustomField, error) {
 	p := &CustomField{}

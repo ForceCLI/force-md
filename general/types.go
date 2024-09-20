@@ -8,7 +8,7 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
-type Metadata = internal.MetadataPointer
+type Metadata = internal.Metadata
 
 type TextLiteral struct {
 	Text string `xml:",innerxml"`

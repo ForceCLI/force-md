@@ -44,6 +44,7 @@ type ActionOverride struct {
 type ProfileActionOverrideList []ProfileActionOverride
 
 type CustomApplication struct {
+	Metadata
 	XMLName         xml.Name         `xml:"CustomApplication"`
 	Xmlns           string           `xml:"xmlns,attr"`
 	ActionOverrides []ActionOverride `xml:"actionOverrides"`
@@ -107,7 +108,9 @@ type CustomApplication struct {
 	} `xml:"workspaceConfig"`
 }
 
-func (p *CustomApplication) MetaCheck() {}
+func (c *CustomApplication) SetMetadata(m Metadata) {
+	c.Metadata = m
+}
 
 func Open(path string) (*CustomApplication, error) {
 	p := &CustomApplication{}
