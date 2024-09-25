@@ -139,16 +139,12 @@ type Field struct {
 				Text string `xml:",chardata"`
 			} `xml:"sorted"`
 			Value []struct {
-				FullName struct {
-					Text string `xml:",innerxml"`
-				} `xml:"fullName"`
-				Default struct {
+				FullName string `xml:"fullName"`
+				Default  struct {
 					Text string `xml:",chardata"`
 				} `xml:"default"`
-				IsActive *struct {
-					Text string `xml:",chardata"`
-				} `xml:"isActive"`
-				Label struct {
+				IsActive *BooleanText `xml:"isActive"`
+				Label    struct {
 					Text string `xml:",innerxml"`
 				} `xml:"label"`
 				Color *struct {

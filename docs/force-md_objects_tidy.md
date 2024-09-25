@@ -21,6 +21,7 @@ force-md objects tidy [flags] [filename]...
       --fix-missing   fix missing configuration (record type picklist options)
   -h, --help          help for tidy
   -l, --list          list files that need tidying
+      --warn          warn about possibly bad metadata (unassiged record type picklist options)
 ```
 
 ### Options inherited from parent commands
