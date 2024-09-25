@@ -3,6 +3,7 @@ package objects
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 
@@ -15,9 +16,12 @@ import (
 	"github.com/ForceCLI/force-md/objects/field"
 )
 
+var warn bool
+
 func init() {
 	TidyCmd.Flags().BoolP("list", "l", false, "list files that need tidying")
 	TidyCmd.Flags().Bool("fix-missing", false, "fix missing configuration (record type picklist options)")
+	TidyCmd.Flags().BoolVar(&warn, "warn", false, "warn about possibly bad metadata (unassiged record type picklist options)")
 }
 
 type fixes struct {
@@ -55,9 +59,70 @@ Tidy object metadata.
 	},
 }
 
+func checkUnassignedPicklistOptions(o *objects.CustomObject) {
+	if len(o.RecordTypes) == 0 {
+		return
+	}
+	filter := func(f field.Field) bool {
+		if f.Type != nil && (strings.ToLower(f.Type.Text) == "picklist" || strings.ToLower(f.Type.Text) == "multiselectpicklist") {
+			return true
+		}
+		return false
+	}
+	picklists := o.GetFields(filter)
+PICKLIST:
+	for _, field := range picklists {
+		if strings.ToLower(o.Name()) == "account" && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
+			// Person Record Types are configured in the PersonAccount object
+			continue
+		}
+		if field.ValueSet == nil {
+			log.Debug(fmt.Sprintf("Value set not set for %s: checking not yet supported", field.FullName))
+			continue PICKLIST
+		}
+		if field.ValueSet.ValueSetDefinition == nil && field.ValueSet.ValueSetName != nil {
+			log.Debug(fmt.Sprintf("Values defined in value set %s: checking not yet supported", field.ValueSet.ValueSetName.Text))
+			continue PICKLIST
+		}
+	VALUE:
+		for _, value := range field.ValueSet.ValueSetDefinition.Value {
+			if value.IsActive != nil && !value.IsActive.ToBool() {
+				// Inactive values shouldn't be assigned to record types
+				continue VALUE
+			}
+			foundValue := false
+			for _, recordType := range o.RecordTypes {
+				for _, recordTypePicklist := range recordType.PicklistValues {
+					if strings.ToLower(recordTypePicklist.Picklist) != strings.ToLower(field.FullName) {
+						continue
+					}
+					for _, recordTypePicklistValue := range recordTypePicklist.Values {
+						v1, err := url.PathUnescape(recordTypePicklistValue.FullName)
+						if err != nil {
+							log.Warn(fmt.Sprintf("Could not decode value %s: %s", recordTypePicklistValue.FullName, err.Error()))
+						}
+						v2, err := url.PathUnescape(value.FullName)
+						if err != nil {
+							log.Warn(fmt.Sprintf("Could not decode value %s: %s", value.FullName, err.Error()))
+						}
+						if strings.ToLower(v1) == strings.ToLower(v2) {
+							foundValue = true
+							continue VALUE
+						}
+
+					}
+				}
+			}
+			if !foundValue {
+				log.Warn(fmt.Sprintf("%s.%s (%s): value %s not assigned to any record types", o.Name(), field.FullName, o.Path(), value.FullName))
+			}
+		}
+	}
+}
+
 func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	filter := func(f field.Field) bool {
-		if f.Type != nil && strings.ToLower(f.Type.Text) == "picklist" {
+		if f.Type != nil && (strings.ToLower(f.Type.Text) == "picklist" || strings.ToLower(f.Type.Text) == "multiselectpicklist") {
 			return true
 		}
 		return false
@@ -98,6 +163,9 @@ func checkIfChanged(file string, fix fixes) (changed bool) {
 	if fix.recordTypePicklistOptions {
 		addMissingRecordTypePicklistFields(o)
 	}
+	if warn {
+		checkUnassignedPicklistOptions(o)
+	}
 	o.Tidy()
 	newContents, err := internal.Marshal(o)
 	if err != nil {
@@ -116,6 +184,9 @@ func tidy(file string, fix fixes) {
 	if err != nil {
 		log.Warn("parsing object failed: " + err.Error())
 		return
+	}
+	if warn {
+		checkUnassignedPicklistOptions(p)
 	}
 	if fix.recordTypePicklistOptions {
 		addMissingRecordTypePicklistFields(p)

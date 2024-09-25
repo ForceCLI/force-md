@@ -59,7 +59,7 @@ func (o *CustomObject) ListPicklistOptions(fieldName string) ([]string, error) {
 	}
 	var options []string
 	for _, o := range picklistField.ValueSet.ValueSetDefinition.Value {
-		options = append(options, o.FullName.Text)
+		options = append(options, o.FullName)
 	}
 	return options, nil
 }
