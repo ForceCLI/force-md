@@ -13,23 +13,23 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
-type Metadata struct {
+type MetadataInfo struct {
 	path string
 	name string
 }
 
-func (m Metadata) Name() string {
+func (m MetadataInfo) Name() string {
 	return m.name
 }
 
-func (m Metadata) Path() string {
+func (m MetadataInfo) Path() string {
 	return m.path
 }
 
 type MetadataPointer interface {
 	// GetMetadata should have a pointer receiver.  This ensures that functions
 	// that take a MetadataPointer receive a pointer.
-	SetMetadata(Metadata)
+	SetMetadata(MetadataInfo)
 }
 
 func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) {
@@ -56,7 +56,7 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 		return contents, errors.Wrap(err, "decoding xml")
 	}
 
-	meta := Metadata{}
+	meta := MetadataInfo{}
 	meta.path = path
 	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
 	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
@@ -84,7 +84,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 		return errors.Wrap(err, "parsing xml in "+path)
 	}
 
-	meta := Metadata{}
+	meta := MetadataInfo{}
 	meta.path = path
 	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
 	meta.name = strings.TrimSuffix(name, filepath.Ext(name))

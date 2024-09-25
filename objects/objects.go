@@ -32,7 +32,7 @@ type ActionOverride struct {
 }
 
 type CustomObject struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName              xml.Name         `xml:"CustomObject"`
 	Xmlns                string           `xml:"xmlns,attr"`
 	ActionOverrides      []ActionOverride `xml:"actionOverrides"`
@@ -183,8 +183,8 @@ type CustomObject struct {
 	WebLinks []weblink.WebLink `xml:"webLinks"`
 }
 
-func (c *CustomObject) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *CustomObject) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*CustomObject, error) {

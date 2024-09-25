@@ -3,14 +3,13 @@ package index
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type IndexFilter func(BigObjectIndex) bool
 
 type Index struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"Index"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	BigObjectIndex
@@ -25,8 +24,8 @@ type BigObjectIndex struct {
 	Label string `xml:"label"`
 }
 
-func (c *Index) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *Index) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*Index, error) {

@@ -3,7 +3,6 @@ package standardvalueset
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
@@ -53,7 +52,7 @@ type StandardValue struct {
 }
 
 type StandardValueSet struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"StandardValueSet"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Sorted  struct {
@@ -65,8 +64,8 @@ type StandardValueSet struct {
 	} `xml:"groupingStringEnum"`
 }
 
-func (c *StandardValueSet) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *StandardValueSet) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*StandardValueSet, error) {

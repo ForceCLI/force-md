@@ -3,12 +3,11 @@ package validationrule
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type ValidationRule struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"ValidationRule"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Rule
@@ -33,8 +32,8 @@ type Rule struct {
 	} `xml:"errorMessage"`
 }
 
-func (c *ValidationRule) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *ValidationRule) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*ValidationRule, error) {

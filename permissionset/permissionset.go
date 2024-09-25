@@ -117,7 +117,7 @@ type RecordTypeVisibility struct {
 type RecordTypeVisibilityList []RecordTypeVisibility
 
 type PermissionSet struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName                             xml.Name                              `xml:"PermissionSet"`
 	Xmlns                               string                                `xml:"xmlns,attr"`
 	ApplicationVisibilities             ApplicationVisibilityList             `xml:"applicationVisibilities"`
@@ -139,8 +139,8 @@ type PermissionSet struct {
 	UserPermissions                     UserPermissionList                    `xml:"userPermissions"`
 }
 
-func (c *PermissionSet) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *PermissionSet) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*PermissionSet, error) {

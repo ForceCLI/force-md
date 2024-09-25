@@ -3,7 +3,6 @@ package labels
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
@@ -19,14 +18,14 @@ type CustomLabel struct {
 }
 
 type CustomLabels struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name        `xml:"CustomLabels"`
 	Xmlns   string          `xml:"xmlns,attr"`
 	Labels  CustomLabelList `xml:"labels"`
 }
 
-func (c *CustomLabels) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *CustomLabels) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*CustomLabels, error) {

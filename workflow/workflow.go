@@ -89,7 +89,7 @@ type Rule struct {
 }
 
 type Workflow struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName      xml.Name      `xml:"Workflow"`
 	Xmlns        string        `xml:"xmlns,attr"`
 	Alerts       []Alert       `xml:"alerts"`
@@ -97,8 +97,8 @@ type Workflow struct {
 	Rules        []Rule        `xml:"rules"`
 }
 
-func (c *Workflow) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *Workflow) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*Workflow, error) {

@@ -3,12 +3,11 @@ package weblink
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type WebLinkMetadata struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"WebLink"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	WebLink
@@ -78,8 +77,8 @@ type WebLink struct {
 	} `xml:"width"`
 }
 
-func (c *WebLinkMetadata) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *WebLinkMetadata) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*WebLinkMetadata, error) {

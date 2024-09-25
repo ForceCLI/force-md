@@ -75,7 +75,7 @@ type ObjectName struct {
 }
 
 type Profile struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName                 xml.Name                    `xml:"Profile"`
 	Xmlns                   string                      `xml:"xmlns,attr"`
 	ApplicationVisibilities ApplicationVisibilityList   `xml:"applicationVisibilities"`
@@ -109,8 +109,8 @@ func NewBooleanText(val string) BooleanText {
 	}
 }
 
-func (c *Profile) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *Profile) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*Profile, error) {

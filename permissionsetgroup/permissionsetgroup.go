@@ -3,7 +3,6 @@ package permissionsetgroup
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
@@ -14,7 +13,7 @@ type PermissionSet struct {
 type PermissionSetList []PermissionSet
 
 type PermissionSetGroup struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName     xml.Name `xml:"PermissionSetGroup"`
 	Xmlns       string   `xml:"xmlns,attr"`
 	Description struct {
@@ -32,8 +31,8 @@ type PermissionSetGroup struct {
 	} `xml:"status"`
 }
 
-func (c *PermissionSetGroup) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *PermissionSetGroup) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*PermissionSetGroup, error) {

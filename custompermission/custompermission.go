@@ -3,20 +3,19 @@ package custompermission
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type CustomPermission struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName     xml.Name `xml:"CustomPermission"`
 	Xmlns       string   `xml:"xmlns,attr"`
 	Label       string   `xml:"label"`
 	Description *string  `xml:"description"`
 }
 
-func (c *CustomPermission) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *CustomPermission) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*CustomPermission, error) {
