@@ -3,12 +3,11 @@ package fieldset
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type FieldSetMetadata struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"FieldSet"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	FieldSet
@@ -46,8 +45,8 @@ type FieldSet struct {
 	} `xml:"label"`
 }
 
-func (c *FieldSetMetadata) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *FieldSetMetadata) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*FieldSetMetadata, error) {

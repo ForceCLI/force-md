@@ -104,15 +104,15 @@ type OwnerRule struct {
 }
 
 type SharingRules struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName              xml.Name         `xml:"SharingRules"`
 	Xmlns                string           `xml:"xmlns,attr"`
 	SharingCriteriaRules CriteriaRuleList `xml:"sharingCriteriaRules"`
 	SharingOwnerRules    OwnerRuleList    `xml:"sharingOwnerRules"`
 }
 
-func (c *SharingRules) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *SharingRules) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*SharingRules, error) {

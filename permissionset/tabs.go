@@ -1,9 +1,10 @@
 package permissionset
 
 import (
-	"github.com/pkg/errors"
 	"sort"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 var TabExistsError = errors.New("tab already exists")

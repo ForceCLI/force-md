@@ -5,12 +5,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type MatchingRules struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName       xml.Name       `xml:"MatchingRules"`
 	Xmlns         string         `xml:"xmlns,attr"`
 	MatchingRules []MatchingRule `xml:"matchingRules"`
@@ -45,8 +44,8 @@ type MatchingRule struct {
 	} `xml:"booleanFilter"`
 }
 
-func (c *MatchingRules) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *MatchingRules) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*MatchingRules, error) {

@@ -21,7 +21,7 @@ type MetadataItems struct {
 }
 
 type Package struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name        `xml:"Package"`
 	Xmlns   string          `xml:"xmlns,attr"`
 	Types   []MetadataItems `xml:"types"`
@@ -36,8 +36,8 @@ func NewPackage(version string) Package {
 	return p
 }
 
-func (c *Package) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *Package) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*Package, error) {

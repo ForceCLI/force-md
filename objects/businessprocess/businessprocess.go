@@ -3,12 +3,11 @@ package businessprocess
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type BusinessProcessMetadata struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"BusinessProcess"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	BusinessProcess
@@ -34,8 +33,8 @@ type BusinessProcess struct {
 	} `xml:"values"`
 }
 
-func (c *BusinessProcessMetadata) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *BusinessProcessMetadata) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*BusinessProcessMetadata, error) {

@@ -3,12 +3,11 @@ package sharingreason
 import (
 	"encoding/xml"
 
-	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
 type SharingReasonMetadata struct {
-	Metadata
+	internal.MetadataInfo
 	XMLName xml.Name `xml:"SharingReason"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	SharingReason
@@ -19,8 +18,8 @@ type SharingReason struct {
 	Label    string `xml:"label"`
 }
 
-func (c *SharingReasonMetadata) SetMetadata(m Metadata) {
-	c.Metadata = m
+func (c *SharingReasonMetadata) SetMetadata(m internal.MetadataInfo) {
+	c.MetadataInfo = m
 }
 
 func Open(path string) (*SharingReasonMetadata, error) {
