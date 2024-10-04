@@ -6,7 +6,7 @@ import (
 	"github.com/ForceCLI/force-md/objects/validationrule"
 )
 
-func (p *CustomObject) GetValidationRules() []validationrule.Rule {
+func (p *CustomObject) GetValidationRules() validationrule.ValidationRuleList {
 	return p.ValidationRules
 }
 

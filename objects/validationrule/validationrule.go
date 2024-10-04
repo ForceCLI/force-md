@@ -3,6 +3,7 @@ package validationrule
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 )
 
@@ -13,6 +14,8 @@ type ValidationRule struct {
 	Rule
 }
 
+type ValidationRuleList []Rule
+
 type Rule struct {
 	FullName string `xml:"fullName"`
 	Active   struct {
@@ -21,10 +24,8 @@ type Rule struct {
 	Description *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"description"`
-	ErrorConditionFormula struct {
-		Text string `xml:",innerxml"`
-	} `xml:"errorConditionFormula"`
-	ErrorDisplayField *struct {
+	ErrorConditionFormula *TextLiteral `xml:"errorConditionFormula"`
+	ErrorDisplayField     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"errorDisplayField"`
 	ErrorMessage struct {

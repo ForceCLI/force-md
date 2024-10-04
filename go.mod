@@ -1,8 +1,8 @@
 module github.com/ForceCLI/force-md
 
-go 1.21
+go 1.23.0
 
-toolchain go1.22.5
+toolchain go1.23.1
 
 require (
 	github.com/antonmedv/expr v1.15.0
@@ -17,14 +17,19 @@ require (
 	golang.org/x/net v0.10.0
 )
 
-require github.com/nbio/xml v0.0.0-20240718025449-4db9e55cd3bf
+require (
+	github.com/nbio/xml v0.0.0-20240718025449-4db9e55cd3bf
+	github.com/octoberswimmer/sformula v0.0.0-20241014120858-4c7f6304b0a8
+)
 
 require (
+	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
