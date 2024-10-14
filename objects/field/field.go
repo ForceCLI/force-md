@@ -39,9 +39,7 @@ type Field struct {
 	FieldManageability *struct {
 		Text string `xml:",chardata"`
 	} `xml:"fieldManageability"`
-	Formula *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"formula"`
+	Formula              *TextLiteral `xml:"formula"`
 	FormulaTreatBlanksAs *struct {
 		Text string `xml:",chardata"`
 	} `xml:"formulaTreatBlanksAs"`

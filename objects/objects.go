@@ -176,7 +176,7 @@ type CustomObject struct {
 	StartsWith     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"startsWith"`
-	ValidationRules []validationrule.Rule `xml:"validationRules"`
+	ValidationRules validationrule.ValidationRuleList `xml:"validationRules"`
 	Visibility      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibility"`
