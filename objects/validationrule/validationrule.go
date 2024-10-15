@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "ValidationRule"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type ValidationRule struct {
 	internal.MetadataInfo
 	XMLName xml.Name `xml:"ValidationRule"`
@@ -35,6 +41,10 @@ type Rule struct {
 
 func (c *ValidationRule) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *ValidationRule) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*ValidationRule, error) {

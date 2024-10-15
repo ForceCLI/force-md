@@ -8,6 +8,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "GlobalValueSet"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type ValueFilter func(CustomValue) bool
 
 type CustomValue struct {
@@ -38,6 +44,10 @@ func (c *GlobalValueSet) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*GlobalValueSet, error) {
 	p := &GlobalValueSet{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *GlobalValueSet) Type() internal.MetadataType {
+	return NAME
 }
 
 func (p *GlobalValueSet) Tidy() {

@@ -8,6 +8,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "Package"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type Member string
 
 func (n Member) GetName() string {
@@ -43,6 +49,10 @@ func (c *Package) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*Package, error) {
 	p := &Package{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *Package) Type() internal.MetadataType {
+	return NAME
 }
 
 func (p *Package) Tidy() {

@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "SharingRules"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type CriteriaRuleList []CriteriaRule
 
 type CriteriaRule struct {
@@ -118,6 +124,10 @@ func (c *SharingRules) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*SharingRules, error) {
 	p := &SharingRules{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *SharingRules) Type() internal.MetadataType {
+	return NAME
 }
 
 func (s *SharingRules) GetOwnerRules() []OwnerRule {
