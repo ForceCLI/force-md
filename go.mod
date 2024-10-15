@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/nbio/xml v0.0.0-20240718025449-4db9e55cd3bf
-	github.com/octoberswimmer/sformula v0.0.0-20241014120858-4c7f6304b0a8
+	github.com/octoberswimmer/sformula v0.0.0-20241015005810-357c4b6ee93f
 )
 
 require (
