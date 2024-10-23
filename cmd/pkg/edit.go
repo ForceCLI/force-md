@@ -1,7 +1,9 @@
 package pkg
 
 import (
+	"bytes"
 	"fmt"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -25,6 +27,8 @@ func init() {
 
 	DeleteCmd.Flags().StringVarP(&metadataType, "type", "t", "", "metadata type")
 	DeleteCmd.Flags().StringVarP(&name, "name", "n", "", "metadata item name")
+
+	TidyCmd.Flags().BoolP("list", "l", false, "list files that need tidying")
 
 	NewCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "API version")
 
@@ -76,8 +80,18 @@ var TidyCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Args:                  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		changes := false
 		for _, file := range args {
-			tidy(file)
+			list, _ := cmd.Flags().GetBool("list")
+			if list {
+				needsTidying := checkIfChanged(file)
+				changes = needsTidying || changes
+			} else {
+				tidy(file)
+			}
+		}
+		if changes {
+			os.Exit(1)
 		}
 	},
 }
@@ -153,6 +167,26 @@ func listMembers(file string) {
 			fmt.Printf("%s: %s\n", t.Name, m)
 		}
 	}
+}
+
+func checkIfChanged(file string) (changed bool) {
+	o := &pkg.Package{}
+	contents, err := internal.ParseMetadataXmlIfPossible(o, file)
+	if err != nil {
+		log.Warn("parse failure:" + err.Error())
+		return
+	}
+	o.Tidy()
+	newContents, err := internal.Marshal(o)
+	if err != nil {
+		log.Warn("serializing failed: " + err.Error())
+		return
+	}
+	if !bytes.Equal(contents, newContents) {
+		fmt.Println(file)
+		return true
+	}
+	return false
 }
 
 func tidy(file string) {
