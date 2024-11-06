@@ -10,6 +10,7 @@ force-md package tidy [filename]...
 
 ```
   -h, --help   help for tidy
+  -l, --list   list files that need tidying
 ```
 
 ### Options inherited from parent commands

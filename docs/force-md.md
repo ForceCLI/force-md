@@ -28,6 +28,7 @@ force-md
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets
 * [force-md permissionsetgroup](force-md_permissionsetgroup.md)	 - Manage Permission Set Groups
+* [force-md platformEventSubscriberConfig](force-md_platformEventSubscriberConfig.md)	 - Manage Platform Event Subscriber Config Metadata
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
 * [force-md reportfolder](force-md_reportfolder.md)	 - Manage Report Folders
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
