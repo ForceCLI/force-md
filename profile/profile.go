@@ -50,6 +50,10 @@ type ApplicationVisibility struct {
 	Visible     BooleanText `xml:"visible"`
 }
 
+func (av ApplicationVisibility) GetName() string {
+	return av.Application
+}
+
 type RecordTypeVisibility struct {
 	Default              BooleanText  `xml:"default"`
 	PersonAccountDefault *BooleanText `xml:"personAccountDefault"`

@@ -93,6 +93,10 @@ type ApplicationVisibility struct {
 	Visible     BooleanText `xml:"visible"`
 }
 
+func (av ApplicationVisibility) GetName() string {
+	return av.Application
+}
+
 type ApplicationVisibilityList []ApplicationVisibility
 
 type ExternalCredentialPrincipalAccess struct {
