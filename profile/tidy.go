@@ -2,6 +2,8 @@ package profile
 
 import (
 	"sort"
+
+	. "github.com/ForceCLI/force-md/general"
 )
 
 func (p *Profile) Tidy() {
@@ -22,10 +24,14 @@ func (p *Profile) Tidy() {
 	p.UserPermissions.Tidy()
 }
 
-func (av ApplicationVisibilityList) Tidy() {
-	sort.Slice(av, func(i, j int) bool {
-		return av[i].Application < av[j].Application
+func (av *ApplicationVisibilityList) Tidy() {
+	if len(*av) == 0 {
+		return
+	}
+	sort.Slice(*av, func(i, j int) bool {
+		return (*av)[i].Application < (*av)[j].Application
 	})
+	RemoveDuplicates(av)
 }
 
 func (la LayoutAssignmentList) Tidy() {
