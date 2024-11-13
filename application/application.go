@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "CustomApplication"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type ProfileActionOverride struct {
 	ActionName        string  `xml:"actionName"`
 	Content           *string `xml:"content"`
@@ -110,6 +116,10 @@ type CustomApplication struct {
 
 func (c *CustomApplication) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *CustomApplication) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*CustomApplication, error) {

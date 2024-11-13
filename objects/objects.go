@@ -18,6 +18,12 @@ import (
 	"github.com/ForceCLI/force-md/objects/weblink"
 )
 
+const NAME = "CustomObject"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type FieldList []field.Field
 type IndexList []index.BigObjectIndex
 type ListViewList []listview.ListView
@@ -185,6 +191,10 @@ type CustomObject struct {
 
 func (c *CustomObject) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *CustomObject) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*CustomObject, error) {

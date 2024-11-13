@@ -14,8 +14,9 @@ import (
 )
 
 type MetadataInfo struct {
-	path string
-	name string
+	path     string
+	name     string
+	contents []byte
 }
 
 func (m MetadataInfo) Name() string {
@@ -26,8 +27,22 @@ func (m MetadataInfo) Path() string {
 	return m.path
 }
 
+func (m MetadataInfo) Contents() []byte {
+	return m.contents
+}
+
+func (m MetadataInfo) GetMetadataInfo() MetadataInfo {
+	return m
+}
+
+type RegisterableMetadata interface {
+	MetadataPointer
+	GetMetadataInfo() MetadataInfo
+	Type() MetadataType
+}
+
 type MetadataPointer interface {
-	// GetMetadata should have a pointer receiver.  This ensures that functions
+	// SetMetadata should have a pointer receiver.  This ensures that functions
 	// that take a MetadataPointer receive a pointer.
 	SetMetadata(MetadataInfo)
 }
@@ -58,6 +73,7 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 
 	meta := MetadataInfo{}
 	meta.path = path
+	meta.contents = contents
 	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
 	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
 	i.SetMetadata(meta)
@@ -66,16 +82,21 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 }
 
 func ParseMetadataXml(i MetadataPointer, path string) error {
-	var r *os.File
+	var f *os.File
 	var err error
 	if path == "-" {
-		r = os.Stdin
+		f = os.Stdin
 	} else {
-		r, err = os.Open(path)
+		f, err = os.Open(path)
 		if err != nil {
 			return errors.Wrap(err, "opening file")
 		}
 	}
+	contents, err := io.ReadAll(f)
+	if err != nil {
+		return errors.Wrap(err, "reading file")
+	}
+	r := bytes.NewReader(contents)
 	dec := xml.NewDecoder(r)
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = true
@@ -86,6 +107,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 
 	meta := MetadataInfo{}
 	meta.path = path
+	meta.contents = contents
 	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
 	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
 	i.SetMetadata(meta)

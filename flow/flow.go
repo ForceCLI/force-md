@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "Flow"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type ElementName string
 
 type Start struct {
@@ -16,37 +22,28 @@ type Start struct {
 	LocationY struct {
 		Text string `xml:",chardata"`
 	} `xml:"locationY"`
-	Connector struct {
+	Connector *struct {
 		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"connector"`
-	FilterLogic struct {
+	DoesRequireRecordChangedToMeetCriteria *struct {
 		Text string `xml:",chardata"`
-	} `xml:"filterLogic"`
-	Filters []struct {
+	} `xml:"doesRequireRecordChangedToMeetCriteria"`
+	FilterLogic   *string      `xml:"filterLogic"`
+	FilterFormula *TextLiteral `xml:"filterFormula"`
+	Filters       []struct {
 		Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
 		Operator struct {
 			Text string `xml:",chardata"`
 		} `xml:"operator"`
-		Value struct {
-			StringValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-			BooleanValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"booleanValue"`
-			DateTimeValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"dateTimeValue"`
-		} `xml:"value"`
+		Value *Value `xml:"value"`
 	} `xml:"filters"`
-	Object            string `xml:"object"`
-	RecordTriggerType struct {
+	Object            *string `xml:"object"`
+	RecordTriggerType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordTriggerType"`
-	TriggerType string `xml:"triggerType"`
-	Schedule    struct {
+	Schedule *struct {
 		Frequency struct {
 			Text string `xml:",chardata"`
 		} `xml:"frequency"`
@@ -58,14 +55,34 @@ type Start struct {
 		} `xml:"startTime"`
 	} `xml:"schedule"`
 	ScheduledPaths []struct {
+		Name *struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
 		Connector struct {
+			IsGoTo *struct {
+				Text string `xml:",chardata"`
+			} `xml:"isGoTo"`
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"connector"`
-		PathType string `xml:"pathType"`
+		Label *struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
+		MaxBatchSize *struct {
+			Text string `xml:",chardata"`
+		} `xml:"maxBatchSize"`
+		OffsetNumber *struct {
+			Text string `xml:",chardata"`
+		} `xml:"offsetNumber"`
+		OffsetUnit *struct {
+			Text string `xml:",chardata"`
+		} `xml:"offsetUnit"`
+		PathType    *string `xml:"pathType"`
+		RecordField *string `xml:"recordField"`
+		TimeSource  *struct {
+			Text string `xml:",chardata"`
+		} `xml:"timeSource"`
 	} `xml:"scheduledPaths"`
-	DoesRequireRecordChangedToMeetCriteria struct {
-		Text string `xml:",chardata"`
-	} `xml:"doesRequireRecordChangedToMeetCriteria"`
+	TriggerType *string `xml:"triggerType"`
 }
 
 type Rule struct {
@@ -76,22 +93,26 @@ type Rule struct {
 	Conditions     []struct {
 		LeftValueReference string `xml:"leftValueReference"`
 		Operator           string `xml:"operator"`
-		RightValue         Value  `xml:"rightValue"`
+		RightValue         *Value `xml:"rightValue"`
 	} `xml:"conditions"`
-	Connector struct {
-		TargetReference ElementName `xml:"targetReference"`
-		IsGoTo          struct {
+	Connector *struct {
+		IsGoTo *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"connector"`
+	DoesRequireRecordChangedToMeetCriteria *struct {
+		Text string `xml:",chardata"`
+	} `xml:"doesRequireRecordChangedToMeetCriteria"`
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 }
 
 type Decision struct {
-	Name  ElementName `xml:"name"`
-	Label struct {
+	Description *TextLiteral `xml:"description"`
+	Name        ElementName  `xml:"name"`
+	Label       struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	LocationX struct {
@@ -100,26 +121,25 @@ type Decision struct {
 	LocationY struct {
 		Text string `xml:",chardata"`
 	} `xml:"locationY"`
+	DefaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"defaultConnector"`
 	DefaultConnectorLabel struct {
 		Text string `xml:",chardata"`
 	} `xml:"defaultConnectorLabel"`
-	Rules            []Rule `xml:"rules"`
-	DefaultConnector struct {
-		TargetReference ElementName `xml:"targetReference"`
-	} `xml:"defaultConnector"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
+	Rules []Rule `xml:"rules"`
 }
 
 type Value struct {
 	ElementReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"elementReference"`
-	StringValue *struct {
-		Text string `xml:",chardata"`
-	} `xml:"stringValue"`
-	NumberValue *struct {
+	StringValue   *TextLiteral `xml:"stringValue"`
+	DateTimeValue *TextLiteral `xml:"dateTimeValue"`
+	NumberValue   *struct {
 		Text string `xml:",chardata"`
 	} `xml:"numberValue"`
 	BooleanValue *BooleanText `xml:"booleanValue"`
@@ -139,6 +159,9 @@ func (v Value) String() string {
 }
 
 type RecordLookup struct {
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	Name  ElementName `xml:"name"`
 	Label struct {
 		Text string `xml:",chardata"`
@@ -153,30 +176,26 @@ type RecordLookup struct {
 	Connector                        struct {
 		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"connector"`
-	FilterLogic string `xml:"filterLogic"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	FilterLogic *string `xml:"filterLogic"`
 	Filters     []struct {
 		Field    string `xml:"field"`
 		Operator string `xml:"operator"`
-		Value    Value  `xml:"value"`
+		Value    *Value `xml:"value"`
 	} `xml:"filters"`
-	GetFirstRecordOnly       BooleanText `xml:"getFirstRecordOnly"`
-	Object                   string      `xml:"object"`
-	StoreOutputAutomatically BooleanText `xml:"storeOutputAutomatically"`
-	FaultConnector           struct {
-		TargetReference ElementName `xml:"targetReference"`
-		IsGoTo          struct {
-			Text string `xml:",chardata"`
-		} `xml:"isGoTo"`
-	} `xml:"faultConnector"`
-	OutputReference struct {
+	GetFirstRecordOnly *BooleanText `xml:"getFirstRecordOnly"`
+	Object             string       `xml:"object"`
+	OutputReference    *struct {
 		Text string `xml:",chardata"`
 	} `xml:"outputReference"`
 	QueriedFields []struct {
 		Text string `xml:",chardata"`
 	} `xml:"queriedFields"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 	OutputAssignments []struct {
 		AssignToReference struct {
 			Text string `xml:",chardata"`
@@ -185,12 +204,90 @@ type RecordLookup struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
 	} `xml:"outputAssignments"`
-	SortField struct {
+	SortField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sortField"`
-	SortOrder struct {
+	SortOrder *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sortOrder"`
+	StoreOutputAutomatically *BooleanText `xml:"storeOutputAutomatically"`
+}
+
+type RecordRollback struct {
+	Name struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+}
+
+type RecordCreate struct {
+	Description *TextLiteral `xml:"description"`
+	Name        struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	AssignRecordIdToReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"assignRecordIdToReference"`
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	InputReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"inputReference"`
+	InputAssignments []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Value struct {
+			BooleanValue *struct {
+				Text string `xml:",chardata"`
+			} `xml:"booleanValue"`
+			ElementReference *struct {
+				Text string `xml:",chardata"`
+			} `xml:"elementReference"`
+			StringValue *struct {
+				Text string `xml:",chardata"`
+			} `xml:"stringValue"`
+		} `xml:"value"`
+	} `xml:"inputAssignments"`
+	Object *struct {
+		Text string `xml:",chardata"`
+	} `xml:"object"`
+	StoreOutputAutomatically *struct {
+		Text string `xml:",chardata"`
+	} `xml:"storeOutputAutomatically"`
 }
 
 type RecordDelete struct {
@@ -204,69 +301,135 @@ type RecordDelete struct {
 	LocationY struct {
 		Text string `xml:",chardata"`
 	} `xml:"locationY"`
-	Connector struct {
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
 		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"connector"`
-	FaultConnector struct {
-		IsGoTo struct {
+	FaultConnector *struct {
+		IsGoTo *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isGoTo"`
 		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"faultConnector"`
-	InputReference struct {
+	FilterLogic *string `xml:"filterLogic"`
+	Filters     []struct {
+		Field    string `xml:"field"`
+		Operator string `xml:"operator"`
+		Value    *Value `xml:"value"`
+	} `xml:"filters"`
+	Object         *string `xml:"object"`
+	InputReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"inputReference"`
+}
+
+type RecordUpdate struct {
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	Name struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	FilterLogic *string `xml:"filterLogic"`
+	Filters     []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Operator struct {
+			Text string `xml:",chardata"`
+		} `xml:"operator"`
+		Value *Value `xml:"value"`
+	} `xml:"filters"`
+	InputAssignments []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Value *Value `xml:"value"`
+	} `xml:"inputAssignments"`
+	Object *struct {
+		Text string `xml:",chardata"`
+	} `xml:"object"`
+	InputReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"inputReference"`
 }
 
 type Field struct {
-	Name            string  `xml:"name"`
-	ExtensionName   string  `xml:"extensionName"`
+	ProcessMetadataValues []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"processMetadataValues"`
+	Name                           *string  `xml:"name"`
+	ChoiceReferences               []string `xml:"choiceReferences"`
+	DataType                       *string  `xml:"dataType"`
+	DefaultSelectedChoiceReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"defaultSelectedChoiceReference"`
+	DefaultValue     *Value `xml:"defaultValue"`
+	DataTypeMappings []struct {
+		TypeName struct {
+			Text string `xml:",chardata"`
+		} `xml:"typeName"`
+		TypeValue struct {
+			Text string `xml:",chardata"`
+		} `xml:"typeValue"`
+	} `xml:"dataTypeMappings"`
+	ExtensionName   *string `xml:"extensionName"`
+	FieldText       *string `xml:"fieldText"`
 	FieldType       string  `xml:"fieldType"`
 	Fields          []Field `xml:"fields"`
 	InputParameters []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		Value struct {
-			ElementReference struct {
-				Text string `xml:",chardata"`
-			} `xml:"elementReference"`
-			StringValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-			BooleanValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"booleanValue"`
-		} `xml:"value"`
+		Value Value `xml:"value"`
 	} `xml:"inputParameters"`
-	InputsOnNextNavToAssocScrn struct {
+	HelpText *struct {
+		Text string `xml:",chardata"`
+	} `xml:"helpText"`
+	InputsOnNextNavToAssocScrn *struct {
 		Text string `xml:",chardata"`
 	} `xml:"inputsOnNextNavToAssocScrn"`
-	IsRequired struct {
+	IsRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isRequired"`
-	StoreOutputAutomatically struct {
+	StoreOutputAutomatically *struct {
 		Text string `xml:",chardata"`
 	} `xml:"storeOutputAutomatically"`
-	FieldText    string `xml:"fieldText"`
-	DataType     string `xml:"dataType"`
-	DefaultValue struct {
-		ElementReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"elementReference"`
-		StringValue struct {
-			Text string `xml:",chardata"`
-		} `xml:"stringValue"`
-	} `xml:"defaultValue"`
-	ValidationRule struct {
+	Scale *struct {
+		Text string `xml:",chardata"`
+	} `xml:"scale"`
+	ValidationRule *struct {
 		ErrorMessage struct {
 			Text string `xml:",chardata"`
 		} `xml:"errorMessage"`
-		FormulaExpression struct {
-			Text string `xml:",chardata"`
-		} `xml:"formulaExpression"`
+		FormulaExpression TextLiteral `xml:"formulaExpression"`
 	} `xml:"validationRule"`
-	ChoiceReferences []string `xml:"choiceReferences"`
 	OutputParameters []struct {
 		AssignToReference struct {
 			Text string `xml:",chardata"`
@@ -275,41 +438,32 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 	} `xml:"outputParameters"`
-	HelpText struct {
+	RegionContainerType *struct {
 		Text string `xml:",chardata"`
-	} `xml:"helpText"`
-	VisibilityRule struct {
+	} `xml:"regionContainerType"`
+	VisibilityRule *struct {
 		ConditionLogic struct {
 			Text string `xml:",chardata"`
 		} `xml:"conditionLogic"`
-		Conditions struct {
+		Conditions []struct {
 			LeftValueReference struct {
 				Text string `xml:",chardata"`
 			} `xml:"leftValueReference"`
 			Operator struct {
 				Text string `xml:",chardata"`
 			} `xml:"operator"`
-			RightValue struct {
-				BooleanValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"booleanValue"`
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-			} `xml:"rightValue"`
+			RightValue *Value `xml:"rightValue"`
 		} `xml:"conditions"`
 	} `xml:"visibilityRule"`
-	ObjectFieldReference struct {
+	ObjectFieldReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"objectFieldReference"`
-	Scale struct {
-		Text string `xml:",chardata"`
-	} `xml:"scale"`
 }
 
 type Screen struct {
-	Name  ElementName `xml:"name"`
-	Label struct {
+	Description *TextLiteral `xml:"description"`
+	Name        ElementName  `xml:"name"`
+	Label       struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	LocationX struct {
@@ -325,61 +479,50 @@ type Screen struct {
 	AllowPause  struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowPause"`
-	Fields     []Field `xml:"fields"`
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	Fields                  []Field      `xml:"fields"`
+	HelpText                *TextLiteral `xml:"helpText"`
+	NextOrFinishButtonLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"nextOrFinishButtonLabel"`
+	PausedText *struct {
+		Text string `xml:",chardata"`
+	} `xml:"pausedText"`
 	ShowFooter struct {
 		Text string `xml:",chardata"`
 	} `xml:"showFooter"`
 	ShowHeader struct {
 		Text string `xml:",chardata"`
 	} `xml:"showHeader"`
-	Connector struct {
-		TargetReference ElementName `xml:"targetReference"`
-	} `xml:"connector"`
-	NextOrFinishButtonLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"nextOrFinishButtonLabel"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	HelpText struct {
-		Text string `xml:",chardata"`
-	} `xml:"helpText"`
-	PausedText struct {
-		Text string `xml:",chardata"`
-	} `xml:"pausedText"`
 }
 
 type Variable struct {
-	Description struct {
+	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	Name         string `xml:"name"`
-	DataType     string `xml:"dataType"`
-	IsCollection struct {
-		Text string `xml:",chardata"`
-	} `xml:"isCollection"`
-	IsInput    BooleanText `xml:"isInput"`
-	IsOutput   BooleanText `xml:"isOutput"`
-	ObjectType struct {
+	Name         string      `xml:"name"`
+	DataType     string      `xml:"dataType"`
+	IsCollection BooleanText `xml:"isCollection"`
+	IsInput      BooleanText `xml:"isInput"`
+	IsOutput     BooleanText `xml:"isOutput"`
+	ObjectType   *struct {
 		Text string `xml:",chardata"`
 	} `xml:"objectType"`
-	Scale struct {
+	Scale *struct {
 		Text string `xml:",chardata"`
 	} `xml:"scale"`
-	Value struct {
-		StringValue struct {
-			Text string `xml:",chardata"`
-		} `xml:"stringValue"`
-		ElementReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"elementReference"`
-		BooleanValue struct {
-			Text string `xml:",chardata"`
-		} `xml:"booleanValue"`
-	} `xml:"value"`
+	Value *Value `xml:"value"`
 }
 
 type Assignment struct {
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	Name  ElementName `xml:"name"`
 	Label struct {
 		Text string `xml:",chardata"`
@@ -393,364 +536,24 @@ type Assignment struct {
 	AssignmentItems []struct {
 		AssignToReference string `xml:"assignToReference"`
 		Operator          string `xml:"operator"`
-		Value             Value  `xml:"value"`
+		Value             *Value `xml:"value"`
 	} `xml:"assignmentItems"`
-	Connector struct {
-		TargetReference ElementName `xml:"targetReference"`
-		IsGoTo          struct {
+	Connector *struct {
+		IsGoTo *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
 	} `xml:"connector"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 type Flow struct {
 	internal.MetadataInfo
-	XMLName    xml.Name `xml:"Flow"`
-	Xmlns      string   `xml:"xmlns,attr"`
-	Xsi        string   `xml:"xsi,attr"`
-	ApiVersion struct {
-		Text string `xml:",chardata"`
-	} `xml:"apiVersion"`
-	Environments struct {
-		Text string `xml:",chardata"`
-	} `xml:"environments"`
-	Formulas []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		DataType struct {
-			Text string `xml:",chardata"`
-		} `xml:"dataType"`
-		Expression struct {
-			Text string `xml:",chardata"`
-		} `xml:"expression"`
-		Description struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-	} `xml:"formulas"`
-	InterviewLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"interviewLabel"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	ProcessMetadataValues []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Value struct {
-			StringValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-			BooleanValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"booleanValue"`
-		} `xml:"value"`
-	} `xml:"processMetadataValues"`
-	ProcessType struct {
-		Text string `xml:",chardata"`
-	} `xml:"processType"`
-	Start  Start `xml:"start"`
-	Status struct {
-		Text string `xml:",chardata"`
-	} `xml:"status"`
-	Subflows []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		FlowName struct {
-			Text string `xml:",chardata"`
-		} `xml:"flowName"`
-		InputAssignments []struct {
-			Name struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-			Value struct {
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-			} `xml:"value"`
-		} `xml:"inputAssignments"`
-		Connector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-		OutputAssignments []struct {
-			AssignToReference struct {
-				Text string `xml:",chardata"`
-			} `xml:"assignToReference"`
-			Name struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-		} `xml:"outputAssignments"`
-	} `xml:"subflows"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Loops struct {
-		Description struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		CollectionReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"collectionReference"`
-		IterationOrder struct {
-			Text string `xml:",chardata"`
-		} `xml:"iterationOrder"`
-		NextValueConnector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"nextValueConnector"`
-		NoMoreValuesConnector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"noMoreValuesConnector"`
-	} `xml:"loops"`
-	RecordUpdates []struct {
-		Description struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		Connector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-		FilterLogic struct {
-			Text string `xml:",chardata"`
-		} `xml:"filterLogic"`
-		Filters []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			Value struct {
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-				StringValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-				BooleanValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"booleanValue"`
-			} `xml:"value"`
-		} `xml:"filters"`
-		InputAssignments []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Value struct {
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-				BooleanValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"booleanValue"`
-				StringValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-			} `xml:"value"`
-		} `xml:"inputAssignments"`
-		Object struct {
-			Text string `xml:",chardata"`
-		} `xml:"object"`
-		InputReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"inputReference"`
-		FaultConnector struct {
-			IsGoTo struct {
-				Text string `xml:",chardata"`
-			} `xml:"isGoTo"`
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"faultConnector"`
-	} `xml:"recordUpdates"`
-	Variables     []Variable     `xml:"variables"`
-	Decisions     []Decision     `xml:"decisions"`
-	Screens       []Screen       `xml:"screens"`
-	RecordLookups []RecordLookup `xml:"recordLookups"`
-	Assignments   []Assignment   `xml:"assignments"`
-	Constants     struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		DataType struct {
-			Text string `xml:",chardata"`
-		} `xml:"dataType"`
-		Value struct {
-			StringValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-		} `xml:"value"`
-	} `xml:"constants"`
-	DynamicChoiceSets []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		DataType struct {
-			Text string `xml:",chardata"`
-		} `xml:"dataType"`
-		DisplayField struct {
-			Text string `xml:",chardata"`
-			Nil  string `xml:"nil,attr"`
-		} `xml:"displayField"`
-		Object struct {
-			Text string `xml:",chardata"`
-			Nil  string `xml:"nil,attr"`
-		} `xml:"object"`
-		PicklistField struct {
-			Text string `xml:",chardata"`
-		} `xml:"picklistField"`
-		PicklistObject struct {
-			Text string `xml:",chardata"`
-		} `xml:"picklistObject"`
-		FilterLogic struct {
-			Text string `xml:",chardata"`
-		} `xml:"filterLogic"`
-		Filters []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			Value struct {
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-				StringValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-			} `xml:"value"`
-		} `xml:"filters"`
-		SortField struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortField"`
-		SortOrder struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortOrder"`
-		ValueField struct {
-			Text string `xml:",chardata"`
-		} `xml:"valueField"`
-		OutputAssignments struct {
-			AssignToReference struct {
-				Text string `xml:",chardata"`
-			} `xml:"assignToReference"`
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-		} `xml:"outputAssignments"`
-		CollectionReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"collectionReference"`
-		Description struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-	} `xml:"dynamicChoiceSets"`
-	RecordCreates []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		Connector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-		FaultConnector struct {
-			IsGoTo struct {
-				Text string `xml:",chardata"`
-			} `xml:"isGoTo"`
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"faultConnector"`
-		InputReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"inputReference"`
-		InputAssignments []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Value struct {
-				BooleanValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"booleanValue"`
-				ElementReference struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-				StringValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-			} `xml:"value"`
-		} `xml:"inputAssignments"`
-		Object struct {
-			Text string `xml:",chardata"`
-		} `xml:"object"`
-		StoreOutputAutomatically struct {
-			Text string `xml:",chardata"`
-		} `xml:"storeOutputAutomatically"`
-	} `xml:"recordCreates"`
-	RunInMode struct {
-		Text string `xml:",chardata"`
-	} `xml:"runInMode"`
-	Choices []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		ChoiceText struct {
-			Text string `xml:",chardata"`
-		} `xml:"choiceText"`
-		DataType struct {
-			Text string `xml:",chardata"`
-		} `xml:"dataType"`
-		Value struct {
-			StringValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-			NumberValue struct {
-				Text string `xml:",chardata"`
-			} `xml:"numberValue"`
-		} `xml:"value"`
-	} `xml:"choices"`
+	XMLName     xml.Name `xml:"Flow"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Xsi         string   `xml:"xmlns:xsi,attr,omitempty"`
 	ActionCalls []struct {
-		Name struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		Label struct {
@@ -768,10 +571,16 @@ type Flow struct {
 		ActionType struct {
 			Text string `xml:",chardata"`
 		} `xml:"actionType"`
-		Connector struct {
+		Connector *struct {
+			IsGoTo *struct {
+				Text string `xml:",chardata"`
+			} `xml:"isGoTo"`
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"connector"`
-		FaultConnector struct {
+		FaultConnector *struct {
+			IsGoTo *struct {
+				Text string `xml:",chardata"`
+			} `xml:"isGoTo"`
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"faultConnector"`
 		FlowTransactionModel struct {
@@ -782,21 +591,21 @@ type Flow struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
 			Value struct {
-				ElementReference struct {
+				ElementReference *struct {
 					Text string `xml:",chardata"`
 				} `xml:"elementReference"`
-				StringValue struct {
+				StringValue *struct {
 					Text string `xml:",chardata"`
 				} `xml:"stringValue"`
-				BooleanValue struct {
+				BooleanValue *struct {
 					Text string `xml:",chardata"`
 				} `xml:"booleanValue"`
 			} `xml:"value"`
 		} `xml:"inputParameters"`
-		NameSegment struct {
+		NameSegment *struct {
 			Text string `xml:",chardata"`
 		} `xml:"nameSegment"`
-		OutputParameters struct {
+		OutputParameters []struct {
 			AssignToReference struct {
 				Text string `xml:",chardata"`
 			} `xml:"assignToReference"`
@@ -804,83 +613,30 @@ type Flow struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
 		} `xml:"outputParameters"`
-		VersionSegment struct {
-			Text string `xml:",chardata"`
-		} `xml:"versionSegment"`
-		StoreOutputAutomatically struct {
+		StoreOutputAutomatically *struct {
 			Text string `xml:",chardata"`
 		} `xml:"storeOutputAutomatically"`
+		VersionSegment *struct {
+			Text string `xml:",chardata"`
+		} `xml:"versionSegment"`
 	} `xml:"actionCalls"`
-	RecordDeletes         []RecordDelete `xml:"recordDeletes"`
-	StartElementReference struct {
+	ApiVersion *struct {
 		Text string `xml:",chardata"`
-	} `xml:"startElementReference"`
-	TextTemplates []struct {
+	} `xml:"apiVersion"`
+	Assignments []Assignment `xml:"assignments"`
+	Choices     []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		IsViewedAsPlainText struct {
+		ChoiceText struct {
 			Text string `xml:",chardata"`
-		} `xml:"isViewedAsPlainText"`
-		Text struct {
+		} `xml:"choiceText"`
+		DataType struct {
 			Text string `xml:",chardata"`
-		} `xml:"text"`
-	} `xml:"textTemplates"`
-	RecordRollbacks struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		Connector struct {
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-	} `xml:"recordRollbacks"`
-	Waits struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		ElementSubtype struct {
-			Text string `xml:",chardata"`
-		} `xml:"elementSubtype"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		DefaultConnectorLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"defaultConnectorLabel"`
-		WaitEvents struct {
-			ConditionLogic struct {
-				Text string `xml:",chardata"`
-			} `xml:"conditionLogic"`
-			Connector struct {
-				TargetReference ElementName `xml:"targetReference"`
-			} `xml:"connector"`
-			Label struct {
-				Text string `xml:",chardata"`
-			} `xml:"label"`
-			Offset struct {
-				Text string `xml:",chardata"`
-			} `xml:"offset"`
-			OffsetUnit struct {
-				Text string `xml:",chardata"`
-			} `xml:"offsetUnit"`
-		} `xml:"waitEvents"`
-	} `xml:"waits"`
-	CollectionProcessors struct {
+		} `xml:"dataType"`
+		Value *Value `xml:"value"`
+	} `xml:"choices"`
+	CollectionProcessors []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
@@ -915,20 +671,281 @@ type Flow struct {
 			Operator struct {
 				Text string `xml:",chardata"`
 			} `xml:"operator"`
-			RightValue struct {
-				StringValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-			} `xml:"rightValue"`
+			RightValue *Value `xml:"rightValue"`
 		} `xml:"conditions"`
 		Connector struct {
+			IsGoTo *struct {
+				Text string `xml:",chardata"`
+			} `xml:"isGoTo"`
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"connector"`
 	} `xml:"collectionProcessors"`
+	CustomErrors []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Label struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
+		LocationX struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationX"`
+		LocationY struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationY"`
+		CustomErrorMessages struct {
+			ErrorMessage struct {
+				Text string `xml:",chardata"`
+			} `xml:"errorMessage"`
+			IsFieldError struct {
+				Text string `xml:",chardata"`
+			} `xml:"isFieldError"`
+		} `xml:"customErrorMessages"`
+	} `xml:"customErrors"`
+	Constants []struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		DataType struct {
+			Text string `xml:",chardata"`
+		} `xml:"dataType"`
+		Value Value `xml:"value"`
+	} `xml:"constants"`
+	Decisions         []Decision   `xml:"decisions"`
+	Description       *TextLiteral `xml:"description"`
+	DynamicChoiceSets []struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		CollectionReference *struct {
+			Text string `xml:",chardata"`
+		} `xml:"collectionReference"`
+		DataType struct {
+			Text string `xml:",chardata"`
+		} `xml:"dataType"`
+		DisplayField struct {
+			Text string `xml:",chardata"`
+			Nil  string `xml:"xsi:nil,attr,omitempty"`
+		} `xml:"displayField"`
+		FilterLogic *string `xml:"filterLogic"`
+		Filters     []struct {
+			Field struct {
+				Text string `xml:",chardata"`
+			} `xml:"field"`
+			Operator struct {
+				Text string `xml:",chardata"`
+			} `xml:"operator"`
+			Value *Value `xml:"value"`
+		} `xml:"filters"`
+		Limit *struct {
+			Text string `xml:",chardata"`
+		} `xml:"limit"`
+		Object struct {
+			Text string `xml:",chardata"`
+			Nil  string `xml:"xsi:nil,attr,omitempty"`
+		} `xml:"object"`
+		OutputAssignments *struct {
+			AssignToReference struct {
+				Text string `xml:",chardata"`
+			} `xml:"assignToReference"`
+			Field struct {
+				Text string `xml:",chardata"`
+			} `xml:"field"`
+		} `xml:"outputAssignments"`
+		PicklistField *struct {
+			Text string `xml:",chardata"`
+		} `xml:"picklistField"`
+		PicklistObject *struct {
+			Text string `xml:",chardata"`
+		} `xml:"picklistObject"`
+		SortField *struct {
+			Text string `xml:",chardata"`
+		} `xml:"sortField"`
+		SortOrder *struct {
+			Text string `xml:",chardata"`
+		} `xml:"sortOrder"`
+		ValueField *struct {
+			Text string `xml:",chardata"`
+		} `xml:"valueField"`
+	} `xml:"dynamicChoiceSets"`
+	Environments *struct {
+		Text string `xml:",chardata"`
+	} `xml:"environments"`
+	Formulas []struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		DataType struct {
+			Text string `xml:",chardata"`
+		} `xml:"dataType"`
+		Expression *TextLiteral `xml:"expression"`
+		Scale      *struct {
+			Text string `xml:",chardata"`
+		} `xml:"scale"`
+	} `xml:"formulas"`
+	InterviewLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"interviewLabel"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	Loops []struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Label struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
+		LocationX struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationX"`
+		LocationY struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationY"`
+		CollectionReference struct {
+			Text string `xml:",chardata"`
+		} `xml:"collectionReference"`
+		IterationOrder struct {
+			Text string `xml:",chardata"`
+		} `xml:"iterationOrder"`
+		NextValueConnector struct {
+			TargetReference ElementName `xml:"targetReference"`
+		} `xml:"nextValueConnector"`
+		NoMoreValuesConnector *struct {
+			TargetReference ElementName `xml:"targetReference"`
+		} `xml:"noMoreValuesConnector"`
+	} `xml:"loops"`
+	ProcessMetadataValues []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"processMetadataValues"`
+	ProcessType struct {
+		Text string `xml:",chardata"`
+	} `xml:"processType"`
+	RecordCreates   []RecordCreate   `xml:"recordCreates"`
+	RecordDeletes   []RecordDelete   `xml:"recordDeletes"`
+	RecordLookups   []RecordLookup   `xml:"recordLookups"`
+	RecordRollbacks []RecordRollback `xml:"recordRollbacks"`
+	RecordUpdates   []RecordUpdate   `xml:"recordUpdates"`
+	RunInMode       *struct {
+		Text string `xml:",chardata"`
+	} `xml:"runInMode"`
+	Screens               []Screen `xml:"screens"`
+	Start                 *Start   `xml:"start"`
+	StartElementReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"startElementReference"`
+	Status struct {
+		Text string `xml:",chardata"`
+	} `xml:"status"`
+	Subflows []struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Label struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
+		LocationX struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationX"`
+		LocationY struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationY"`
+		Connector *struct {
+			IsGoTo *struct {
+				Text string `xml:",chardata"`
+			} `xml:"isGoTo"`
+			TargetReference ElementName `xml:"targetReference"`
+		} `xml:"connector"`
+		FlowName struct {
+			Text string `xml:",chardata"`
+		} `xml:"flowName"`
+		InputAssignments []struct {
+			Name struct {
+				Text string `xml:",chardata"`
+			} `xml:"name"`
+			Value Value `xml:"value"`
+		} `xml:"inputAssignments"`
+		OutputAssignments []struct {
+			AssignToReference struct {
+				Text string `xml:",chardata"`
+			} `xml:"assignToReference"`
+			Name struct {
+				Text string `xml:",chardata"`
+			} `xml:"name"`
+		} `xml:"outputAssignments"`
+		StoreOutputAutomatically *struct {
+			Text string `xml:",chardata"`
+		} `xml:"storeOutputAutomatically"`
+	} `xml:"subflows"`
+	TextTemplates []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		IsViewedAsPlainText struct {
+			Text string `xml:",chardata"`
+		} `xml:"isViewedAsPlainText"`
+		Text TextLiteral `xml:"text"`
+	} `xml:"textTemplates"`
+	TriggerOrder *struct {
+		Text string `xml:",chardata"`
+	} `xml:"triggerOrder"`
+	Variables []Variable `xml:"variables"`
+	Waits     []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		ElementSubtype struct {
+			Text string `xml:",chardata"`
+		} `xml:"elementSubtype"`
+		Label struct {
+			Text string `xml:",chardata"`
+		} `xml:"label"`
+		LocationX struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationX"`
+		LocationY struct {
+			Text string `xml:",chardata"`
+		} `xml:"locationY"`
+		DefaultConnectorLabel struct {
+			Text string `xml:",chardata"`
+		} `xml:"defaultConnectorLabel"`
+		WaitEvents struct {
+			ConditionLogic struct {
+				Text string `xml:",chardata"`
+			} `xml:"conditionLogic"`
+			Connector struct {
+				IsGoTo *struct {
+					Text string `xml:",chardata"`
+				} `xml:"isGoTo"`
+				TargetReference ElementName `xml:"targetReference"`
+			} `xml:"connector"`
+			Label struct {
+				Text string `xml:",chardata"`
+			} `xml:"label"`
+			Offset struct {
+				Text string `xml:",chardata"`
+			} `xml:"offset"`
+			OffsetUnit struct {
+				Text string `xml:",chardata"`
+			} `xml:"offsetUnit"`
+		} `xml:"waitEvents"`
+	} `xml:"waits"`
 }
 
 func (c *Flow) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *Flow) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*Flow, error) {

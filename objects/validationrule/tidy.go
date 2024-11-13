@@ -22,3 +22,12 @@ func (rules ValidationRuleList) Tidy() {
 		}
 	}
 }
+
+func (f ValidationRule) Tidy() {
+	formatted, err := formatter.Format(f.ErrorConditionFormula.String())
+	if err != nil {
+		log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
+	} else {
+		f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
+	}
+}

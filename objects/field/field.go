@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "CustomField"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type FieldFilter func(Field) bool
 
 type CustomField struct {
@@ -35,6 +41,7 @@ type Field struct {
 	DisplayLocationInDecimal *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayLocationInDecimal"`
+	EncryptionScheme   *TextLiteral `xml:"encryptionScheme"`
 	ExternalId         *BooleanText `xml:"externalId"`
 	FieldManageability *struct {
 		Text string `xml:",chardata"`
@@ -169,6 +176,10 @@ type Field struct {
 
 func (c *CustomField) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *CustomField) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*CustomField, error) {

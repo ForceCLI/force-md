@@ -38,24 +38,37 @@ Tidy object metadata.
 	* picklist fields missing from Record Types
 `,
 	Args: cobra.MinimumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		changes := false
+		list, _ := cmd.Flags().GetBool("list")
+		fixMissing, _ := cmd.Flags().GetBool("fix-missing")
+		fix := fixes{
+			recordTypePicklistOptions: fixMissing,
+		}
 		for _, file := range args {
-			list, _ := cmd.Flags().GetBool("list")
-			fixMissing, _ := cmd.Flags().GetBool("fix-missing")
-			fix := fixes{
-				recordTypePicklistOptions: fixMissing,
+			_, err := internal.Metadata.Open(file)
+			if err != nil {
+				return fmt.Errorf("invalid file %s: %w", file, err)
 			}
+		}
+
+		items := internal.Metadata.Items(objects.NAME)
+		if len(items) == 0 {
+			log.Warn("No objects to tidy")
+		}
+		for _, item := range items {
+			o := item.(*objects.CustomObject)
 			if list {
-				needsTidying := checkIfChanged(file, fix)
+				needsTidying := checkIfChanged(o, fix)
 				changes = needsTidying || changes
 			} else {
-				tidy(file, fix)
+				tidy(o, fix)
 			}
 		}
 		if changes {
 			os.Exit(1)
 		}
+		return nil
 	},
 }
 
@@ -153,13 +166,8 @@ func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	}
 }
 
-func checkIfChanged(file string, fix fixes) (changed bool) {
-	o := &objects.CustomObject{}
-	contents, err := internal.ParseMetadataXmlIfPossible(o, file)
-	if err != nil {
-		log.Warn("parse failure:" + err.Error())
-		return
-	}
+func checkIfChanged(o *objects.CustomObject, fix fixes) (changed bool) {
+	contents := o.Contents()
 	if fix.recordTypePicklistOptions {
 		addMissingRecordTypePicklistFields(o)
 	}
@@ -173,25 +181,20 @@ func checkIfChanged(file string, fix fixes) (changed bool) {
 		return
 	}
 	if !bytes.Equal(contents, newContents) {
-		fmt.Println(file)
+		fmt.Println(o.Path())
 		return true
 	}
 	return false
 }
 
-func tidy(file string, fix fixes) {
-	p, err := objects.Open(file)
-	if err != nil {
-		log.Warn("parsing object failed: " + err.Error())
-		return
-	}
+func tidy(o *objects.CustomObject, fix fixes) {
 	if warn {
-		checkUnassignedPicklistOptions(p)
+		checkUnassignedPicklistOptions(o)
 	}
 	if fix.recordTypePicklistOptions {
-		addMissingRecordTypePicklistFields(p)
+		addMissingRecordTypePicklistFields(o)
 	}
-	if err := general.Tidy(p, file); err != nil {
+	if err := general.Tidy(o, o.Path()); err != nil {
 		log.Warn("tidying failed: " + err.Error())
 	}
 }

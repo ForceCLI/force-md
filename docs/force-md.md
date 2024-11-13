@@ -34,6 +34,7 @@ force-md
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules
 * [force-md standardvalueset](force-md_standardvalueset.md)	 - Manage Standard Value Sets
+* [force-md tidy](force-md_tidy.md)	 - Tidy Metadata
 * [force-md version](force-md_version.md)	 - Display current version
 * [force-md workflows](force-md_workflows.md)	 - Manage Workflow
 

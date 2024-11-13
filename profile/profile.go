@@ -8,6 +8,12 @@ import (
 	"github.com/ForceCLI/force-md/permissionset"
 )
 
+const NAME = "Profile"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type ApplicationVisibilityList []ApplicationVisibility
 
 type TabVisibilityList []TabVisibility
@@ -115,6 +121,10 @@ func NewBooleanText(val string) BooleanText {
 
 func (c *Profile) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *Profile) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*Profile, error) {
