@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "Workflow"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type Recipient struct {
 	Field     *TextLiteral `xml:"field"`
 	Recipient *TextLiteral `xml:"recipient"`
@@ -104,4 +110,8 @@ func (c *Workflow) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*Workflow, error) {
 	p := &Workflow{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *Workflow) Type() internal.MetadataType {
+	return NAME
 }
