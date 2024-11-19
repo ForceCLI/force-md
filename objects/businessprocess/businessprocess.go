@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "BusinessProcess"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type BusinessProcessMetadata struct {
 	internal.MetadataInfo
@@ -35,6 +42,14 @@ type BusinessProcess struct {
 
 func (c *BusinessProcessMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *BusinessProcessMetadata) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *BusinessProcessMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*BusinessProcessMetadata, error) {

@@ -25,6 +25,7 @@ type MetadataType = string
 
 // If the file in path contains metadata, return it.  Otherwise, try to find
 // the corresponding file that contains metadata.
+
 func metadataFileFromPath(path string) (string, error) {
 	if IsMetadataFile(path) {
 		return path, nil
@@ -32,15 +33,51 @@ func metadataFileFromPath(path string) (string, error) {
 	if IsMetadataFile(path + "-meta.xml") {
 		return path + "-meta.xml", nil
 	}
-	// Static Resources in Source Format
-	resourceMetadata := strings.TrimSuffix(path, filepath.Ext(path)) + ".resource-meta.xml"
-	if IsMetadataFile(resourceMetadata) {
-		return resourceMetadata, nil
-	}
 	if m := metadataFileInSameFolder(path); m != "" && IsMetadataFile(m) {
 		return m, nil
 	}
-	return "", fmt.Errorf("%w: %s", MetadataFileNotFound, path)
+
+	// Documents
+	documentMetadata := strings.TrimSuffix(path, filepath.Ext(path)) + ".document-meta.xml"
+	if IsMetadataFile(documentMetadata) {
+		return documentMetadata, nil
+	}
+
+	// For static resources, walk up the filesystem to find the metadata file
+	currentPath := path
+	for {
+		if currentPath == "" || currentPath == "." || currentPath == "/" {
+			break
+		}
+
+		dirName := filepath.Base(currentPath)
+		parentDir := filepath.Dir(currentPath)
+		parentDirName := filepath.Base(parentDir)
+
+		// Check if parent directory is 'staticresources'
+		if parentDirName == "staticresources" {
+			// Determine if currentPath is a file or directory
+			var resourceName string
+			fileInfo, err := os.Stat(currentPath)
+			if err == nil && fileInfo.IsDir() {
+				// It's a directory under 'staticresources'
+				resourceName = dirName
+			} else {
+				// It's a file under 'staticresources', get file name without extension
+				resourceName = strings.TrimSuffix(dirName, filepath.Ext(dirName))
+			}
+			resourceMetadata := filepath.Join(parentDir, resourceName+".resource-meta.xml")
+			if IsMetadataFile(resourceMetadata) {
+				return resourceMetadata, nil
+			}
+			// If not found, break as we have reached 'staticresources'
+			break
+		}
+
+		currentPath = parentDir
+	}
+
+	return "", MetadataFileNotFound
 }
 
 // Look for a metadata file in the same folder as path to support bundled

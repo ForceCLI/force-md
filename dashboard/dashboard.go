@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "Dashboard"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type Dashboard struct {
 	internal.MetadataInfo
 	XMLName            xml.Name `xml:"Dashboard"`
@@ -589,6 +595,10 @@ type Dashboard struct {
 
 func (c *Dashboard) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *Dashboard) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*Dashboard, error) {

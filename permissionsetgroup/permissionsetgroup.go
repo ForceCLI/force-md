@@ -6,6 +6,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "PermissionSetGroup"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type PermissionSet struct {
 	Text string `xml:",chardata"`
 }
@@ -33,6 +39,10 @@ type PermissionSetGroup struct {
 
 func (c *PermissionSetGroup) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *PermissionSetGroup) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*PermissionSetGroup, error) {

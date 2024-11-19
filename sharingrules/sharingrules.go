@@ -74,6 +74,17 @@ type OwnerRule struct {
 	AccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"accessLevel"`
+	AccountSettings *struct {
+		CaseAccessLevel struct {
+			Text string `xml:",chardata"`
+		} `xml:"caseAccessLevel"`
+		ContactAccessLevel struct {
+			Text string `xml:",chardata"`
+		} `xml:"contactAccessLevel"`
+		OpportunityAccessLevel struct {
+			Text string `xml:",chardata"`
+		} `xml:"opportunityAccessLevel"`
+	} `xml:"accountSettings"`
 	Description *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"description"`
@@ -109,11 +120,46 @@ type OwnerRule struct {
 	} `xml:"sharedFrom"`
 }
 
+type GuestRuleList []GuestRule
+
+type GuestRule struct {
+	FullName    string `xml:"fullName"`
+	AccessLevel struct {
+		Text string `xml:",chardata"`
+	} `xml:"accessLevel"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	SharedTo struct {
+		GuestUser struct {
+			Text string `xml:",chardata"`
+		} `xml:"guestUser"`
+	} `xml:"sharedTo"`
+	CriteriaItems struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Operation struct {
+			Text string `xml:",chardata"`
+		} `xml:"operation"`
+		Value struct {
+			Text string `xml:",chardata"`
+		} `xml:"value"`
+	} `xml:"criteriaItems"`
+	IncludeHVUOwnedRecords *struct {
+		Text string `xml:",chardata"`
+	} `xml:"includeHVUOwnedRecords"`
+}
+
 type SharingRules struct {
 	internal.MetadataInfo
 	XMLName              xml.Name         `xml:"SharingRules"`
 	Xmlns                string           `xml:"xmlns,attr"`
 	SharingCriteriaRules CriteriaRuleList `xml:"sharingCriteriaRules"`
+	SharingGuestRules    GuestRuleList    `xml:"sharingGuestRules"`
 	SharingOwnerRules    OwnerRuleList    `xml:"sharingOwnerRules"`
 }
 

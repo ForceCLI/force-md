@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "Index"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type IndexFilter func(BigObjectIndex) bool
 
@@ -26,6 +33,14 @@ type BigObjectIndex struct {
 
 func (c *Index) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *Index) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *Index) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*Index, error) {

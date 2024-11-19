@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "WebLink"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type WebLinkMetadata struct {
 	internal.MetadataInfo
@@ -79,6 +86,14 @@ type WebLink struct {
 
 func (c *WebLinkMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *WebLinkMetadata) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *WebLinkMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*WebLinkMetadata, error) {

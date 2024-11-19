@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "ListView"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type ListViewMetadata struct {
 	internal.MetadataInfo
@@ -64,6 +71,14 @@ type ListView struct {
 
 func (c *ListViewMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *ListViewMetadata) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *ListViewMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*ListViewMetadata, error) {

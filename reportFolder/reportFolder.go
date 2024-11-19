@@ -6,6 +6,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "ReportFolder"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type FolderShare struct {
 	AccessLevel  string `xml:"accessLevel"`
 	SharedTo     string `xml:"sharedTo"`
@@ -22,6 +28,10 @@ type ReportFolder struct {
 
 func (c *ReportFolder) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *ReportFolder) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*ReportFolder, error) {

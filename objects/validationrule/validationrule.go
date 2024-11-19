@@ -5,6 +5,7 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
 
 const NAME = "ValidationRule"
@@ -45,6 +46,10 @@ func (c *ValidationRule) SetMetadata(m internal.MetadataInfo) {
 
 func (c *ValidationRule) Type() internal.MetadataType {
 	return NAME
+}
+
+func (c *ValidationRule) NameFromPath(path string) string {
+	return split.NameFromPath(path)
 }
 
 func Open(path string) (*ValidationRule, error) {
