@@ -5,6 +5,7 @@ import "sort"
 func (r *SharingRules) Tidy() {
 	r.SharingCriteriaRules.Tidy()
 	r.SharingOwnerRules.Tidy()
+	r.SharingGuestRules.Tidy()
 }
 
 func (r CriteriaRuleList) Tidy() {
@@ -14,6 +15,12 @@ func (r CriteriaRuleList) Tidy() {
 }
 
 func (r OwnerRuleList) Tidy() {
+	sort.Slice(r, func(i, j int) bool {
+		return r[i].FullName < r[j].FullName
+	})
+}
+
+func (r GuestRuleList) Tidy() {
 	sort.Slice(r, func(i, j int) bool {
 		return r[i].FullName < r[j].FullName
 	})

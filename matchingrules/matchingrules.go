@@ -8,6 +8,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "MatchingRules"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type MatchingRules struct {
 	internal.MetadataInfo
 	XMLName       xml.Name       `xml:"MatchingRules"`
@@ -51,6 +57,10 @@ func (c *MatchingRules) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*MatchingRules, error) {
 	p := &MatchingRules{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *MatchingRules) Type() internal.MetadataType {
+	return NAME
 }
 
 func (s *MatchingRules) GetMatchingRules() []MatchingRule {

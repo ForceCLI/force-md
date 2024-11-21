@@ -7,6 +7,12 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "ReportType"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type Field struct {
 	CheckedByDefault    BooleanText `xml:"checkedByDefault"`
 	DisplayNameOverride *struct {
@@ -74,6 +80,10 @@ type ReportType struct {
 
 func (c *ReportType) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *ReportType) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*ReportType, error) {

@@ -1,6 +1,8 @@
 package internal
 
-import "fmt"
+import (
+	log "github.com/sirupsen/logrus"
+)
 
 var Metadata *repo
 
@@ -34,7 +36,7 @@ func (o *repo) Items(t MetadataType) MetadataByName {
 func (o *repo) Open(file string) (MetadataPointer, error) {
 	m, err := MetadataFromPath(file)
 	if err != nil {
-		return m, fmt.Errorf("invalid file %s: %w", file, err)
+		return m, err
 	}
 	metadataType := m.Type()
 	name := m.GetMetadataInfo().Name()
@@ -43,6 +45,9 @@ func (o *repo) Open(file string) (MetadataPointer, error) {
 		o.openMetadata[metadataType] = &items
 	}
 	items := o.openMetadata[metadataType]
+	if _, exists := (*items)[name]; exists {
+		log.Warnf("file %s of type %s already registered", name, metadataType)
+	}
 	(*items)[name] = m
 	return m, nil
 }

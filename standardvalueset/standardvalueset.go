@@ -6,7 +6,14 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "StandardValueSet"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type StandardValue struct {
+	internal.MetadataInfo
 	FullName struct {
 		Text string `xml:",chardata"`
 	} `xml:"fullName"`
@@ -71,6 +78,10 @@ func (c *StandardValueSet) SetMetadata(m internal.MetadataInfo) {
 func Open(path string) (*StandardValueSet, error) {
 	p := &StandardValueSet{}
 	return p, internal.ParseMetadataXml(p, path)
+}
+
+func (c *StandardValueSet) Type() internal.MetadataType {
+	return NAME
 }
 
 func (s *StandardValueSet) GetValues() []StandardValue {

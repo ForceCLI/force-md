@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "FieldSet"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type FieldSetMetadata struct {
 	internal.MetadataInfo
@@ -47,6 +54,14 @@ type FieldSet struct {
 
 func (c *FieldSetMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *FieldSetMetadata) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *FieldSetMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*FieldSetMetadata, error) {

@@ -7,8 +7,14 @@ import (
 	"github.com/ForceCLI/force-md/internal"
 )
 
+const NAME = "CustomMetadata"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
+
 type TypedValue struct {
-	Text string `xml:",chardata"`
+	Text string `xml:",innerxml"`
 	Type string `xml:"xsi:type,attr,omitempty"`
 	Nil  string `xml:"xsi:nil,attr,omitempty"`
 }
@@ -22,8 +28,8 @@ type CustomMetadata struct {
 	internal.MetadataInfo
 	XMLName   xml.Name    `xml:"CustomMetadata"`
 	Xmlns     string      `xml:"xmlns,attr"`
-	Xsi       string      `xml:"xmlns:xsi,attr"`
-	Xsd       string      `xml:"xmlns:xsd,attr"`
+	Xsi       string      `xml:"xmlns:xsi,attr,omitempty"`
+	Xsd       string      `xml:"xmlns:xsd,attr,omitempty"`
 	Label     string      `xml:"label"`
 	Protected BooleanText `xml:"protected"`
 	Values    []Value     `xml:"values"`
@@ -31,6 +37,10 @@ type CustomMetadata struct {
 
 func (c *CustomMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *CustomMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*CustomMetadata, error) {

@@ -4,7 +4,14 @@ import (
 	"encoding/xml"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
+
+const NAME = "CompactLayout"
+
+func init() {
+	internal.TypeRegistry.Register(NAME, func(path string) (internal.RegisterableMetadata, error) { return Open(path) })
+}
 
 type CompactLayoutMetadata struct {
 	internal.MetadataInfo
@@ -27,6 +34,14 @@ type CompactLayout struct {
 
 func (c *CompactLayoutMetadata) SetMetadata(m internal.MetadataInfo) {
 	c.MetadataInfo = m
+}
+
+func (c *CompactLayoutMetadata) NameFromPath(path string) string {
+	return split.NameFromPath(path)
+}
+
+func (c *CompactLayoutMetadata) Type() internal.MetadataType {
+	return NAME
 }
 
 func Open(path string) (*CompactLayoutMetadata, error) {

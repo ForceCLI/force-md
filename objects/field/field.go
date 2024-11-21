@@ -5,6 +5,7 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/objects/split"
 )
 
 const NAME = "CustomField"
@@ -180,6 +181,10 @@ func (c *CustomField) SetMetadata(m internal.MetadataInfo) {
 
 func (c *CustomField) Type() internal.MetadataType {
 	return NAME
+}
+
+func (c *CustomField) NameFromPath(path string) string {
+	return split.NameFromPath(path)
 }
 
 func Open(path string) (*CustomField, error) {

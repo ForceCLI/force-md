@@ -19,6 +19,14 @@ type MetadataInfo struct {
 	contents []byte
 }
 
+func NameFromPath(path string) string {
+	return strings.TrimSuffix(filepath.Base(path), "-meta.xml")
+}
+
+func (m MetadataInfo) NameFromPath(path string) string {
+	return NameFromPath(path)
+}
+
 func (m MetadataInfo) Name() string {
 	return m.name
 }
@@ -45,6 +53,7 @@ type MetadataPointer interface {
 	// SetMetadata should have a pointer receiver.  This ensures that functions
 	// that take a MetadataPointer receive a pointer.
 	SetMetadata(MetadataInfo)
+	NameFromPath(path string) string
 }
 
 func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) {
@@ -74,8 +83,8 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 	meta := MetadataInfo{}
 	meta.path = path
 	meta.contents = contents
-	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
-	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
+	name := i.NameFromPath(path)
+	meta.name = name
 	i.SetMetadata(meta)
 
 	return contents, nil
@@ -108,8 +117,8 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	meta := MetadataInfo{}
 	meta.path = path
 	meta.contents = contents
-	name := strings.TrimSuffix(filepath.Base(path), "-meta.xml")
-	meta.name = strings.TrimSuffix(name, filepath.Ext(name))
+	name := i.NameFromPath(path)
+	meta.name = name
 	i.SetMetadata(meta)
 
 	return nil
