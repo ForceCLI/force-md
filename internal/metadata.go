@@ -74,6 +74,22 @@ func metadataFileFromPath(path string) (string, error) {
 			break
 		}
 
+		if parentDirName == "experiences" {
+			var siteName string
+			fileInfo, err := os.Stat(currentPath)
+			if err == nil && fileInfo.IsDir() {
+				siteName = dirName
+			} else {
+				siteName = strings.TrimSuffix(dirName, filepath.Ext(dirName))
+			}
+			siteMetadata := filepath.Join(parentDir, siteName+".site-meta.xml")
+			if IsMetadataFile(siteMetadata) {
+				return siteMetadata, nil
+			}
+			// If not found, break as we have reached 'experiences'
+			break
+		}
+
 		currentPath = parentDir
 	}
 
