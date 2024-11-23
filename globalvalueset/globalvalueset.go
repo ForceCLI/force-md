@@ -51,7 +51,7 @@ func (c *GlobalValueSet) Type() internal.MetadataType {
 }
 
 func (p *GlobalValueSet) Tidy() {
-	if p.Sorted.Text == "true" {
+	if p.Sorted != nil && p.Sorted.ToBool() {
 		sort.Slice(p.CustomValue, func(i, j int) bool {
 			return p.CustomValue[i].Label < p.CustomValue[j].Label
 		})
