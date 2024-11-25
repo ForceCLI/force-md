@@ -47,6 +47,7 @@ type FieldUpdate struct {
 	Operation          *TextLiteral `xml:"operation"`
 	Protected          *BooleanText `xml:"protected"`
 	ReevaluateOnChange *BooleanText `xml:"reevaluateOnChange"`
+	TargetObject       *TextLiteral `xml:"targetObject"`
 }
 
 type Rule struct {
@@ -94,6 +95,39 @@ type Rule struct {
 	} `xml:"workflowTimeTriggers"`
 }
 
+type Task struct {
+	FullName struct {
+		Text string `xml:",chardata"`
+	} `xml:"fullName"`
+	AssignedTo struct {
+		Text string `xml:",chardata"`
+	} `xml:"assignedTo"`
+	AssignedToType struct {
+		Text string `xml:",chardata"`
+	} `xml:"assignedToType"`
+	DueDateOffset struct {
+		Text string `xml:",chardata"`
+	} `xml:"dueDateOffset"`
+	NotifyAssignee struct {
+		Text string `xml:",chardata"`
+	} `xml:"notifyAssignee"`
+	OffsetFromField struct {
+		Text string `xml:",chardata"`
+	} `xml:"offsetFromField"`
+	Priority struct {
+		Text string `xml:",chardata"`
+	} `xml:"priority"`
+	Protected struct {
+		Text string `xml:",chardata"`
+	} `xml:"protected"`
+	Status struct {
+		Text string `xml:",chardata"`
+	} `xml:"status"`
+	Subject struct {
+		Text string `xml:",chardata"`
+	} `xml:"subject"`
+}
+
 type Workflow struct {
 	internal.MetadataInfo
 	XMLName      xml.Name      `xml:"Workflow"`
@@ -101,6 +135,7 @@ type Workflow struct {
 	Alerts       []Alert       `xml:"alerts"`
 	FieldUpdates []FieldUpdate `xml:"fieldUpdates"`
 	Rules        []Rule        `xml:"rules"`
+	Tasks        []Task        `xml:"tasks"`
 }
 
 func (c *Workflow) SetMetadata(m internal.MetadataInfo) {

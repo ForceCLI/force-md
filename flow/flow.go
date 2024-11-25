@@ -110,9 +110,10 @@ type Rule struct {
 }
 
 type Decision struct {
-	Description *TextLiteral `xml:"description"`
-	Name        ElementName  `xml:"name"`
-	Label       struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *TextLiteral           `xml:"description"`
+	Name                  ElementName            `xml:"name"`
+	Label                 struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	LocationX struct {
@@ -326,7 +327,8 @@ type RecordDelete struct {
 }
 
 type RecordUpdate struct {
-	Description *struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
 	Name struct {
@@ -355,7 +357,8 @@ type RecordUpdate struct {
 	} `xml:"faultConnector"`
 	FilterLogic *string `xml:"filterLogic"`
 	Filters     []struct {
-		Field struct {
+		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+		Field                 struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
 		Operator struct {
@@ -364,7 +367,8 @@ type RecordUpdate struct {
 		Value *Value `xml:"value"`
 	} `xml:"filters"`
 	InputAssignments []struct {
-		Field struct {
+		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+		Field                 struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
 		Value *Value `xml:"value"`
@@ -546,14 +550,20 @@ type Assignment struct {
 	} `xml:"connector"`
 }
 
+type ProcessMetadataValue struct {
+	Name  string `xml:"name"`
+	Value Value  `xml:"value"`
+}
+
 type Flow struct {
 	internal.MetadataInfo
 	XMLName     xml.Name `xml:"Flow"`
 	Xmlns       string   `xml:"xmlns,attr"`
 	Xsi         string   `xml:"xmlns:xsi,attr,omitempty"`
 	ActionCalls []struct {
-		Description *TextLiteral `xml:"description"`
-		Name        struct {
+		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+		Description           *TextLiteral           `xml:"description"`
+		Name                  struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		Label struct {
@@ -583,24 +593,15 @@ type Flow struct {
 			} `xml:"isGoTo"`
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"faultConnector"`
-		FlowTransactionModel struct {
+		FlowTransactionModel *struct {
 			Text string `xml:",chardata"`
 		} `xml:"flowTransactionModel"`
 		InputParameters []struct {
-			Name struct {
+			ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+			Name                  struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
-			Value struct {
-				ElementReference *struct {
-					Text string `xml:",chardata"`
-				} `xml:"elementReference"`
-				StringValue *struct {
-					Text string `xml:",chardata"`
-				} `xml:"stringValue"`
-				BooleanValue *struct {
-					Text string `xml:",chardata"`
-				} `xml:"booleanValue"`
-			} `xml:"value"`
+			Value Value `xml:"value"`
 		} `xml:"inputParameters"`
 		NameSegment *struct {
 			Text string `xml:",chardata"`
@@ -774,8 +775,9 @@ type Flow struct {
 		Text string `xml:",chardata"`
 	} `xml:"environments"`
 	Formulas []struct {
-		Description *TextLiteral `xml:"description"`
-		Name        struct {
+		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+		Description           *TextLiteral           `xml:"description"`
+		Name                  struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		DataType struct {
@@ -841,7 +843,7 @@ type Flow struct {
 	StartElementReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"startElementReference"`
-	Status struct {
+	Status *struct {
 		Text string `xml:",chardata"`
 	} `xml:"status"`
 	Subflows []struct {
