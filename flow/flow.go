@@ -555,73 +555,71 @@ type ProcessMetadataValue struct {
 	Value Value  `xml:"value"`
 }
 
-type Flow struct {
-	internal.MetadataInfo
-	XMLName     xml.Name `xml:"Flow"`
-	Xmlns       string   `xml:"xmlns,attr"`
-	Xsi         string   `xml:"xmlns:xsi,attr,omitempty"`
-	ActionCalls []struct {
+type ActionCall struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *TextLiteral           `xml:"description"`
+	Name                  ElementName            `xml:"name"`
+	Label                 struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	ActionName struct {
+		Text string `xml:",chardata"`
+	} `xml:"actionName"`
+	ActionType string `xml:"actionType"`
+	Connector  *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	FlowTransactionModel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"flowTransactionModel"`
+	InputParameters []struct {
 		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
-		Description           *TextLiteral           `xml:"description"`
 		Name                  struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		Label struct {
+		Value Value `xml:"value"`
+	} `xml:"inputParameters"`
+	NameSegment *struct {
+		Text string `xml:",chardata"`
+	} `xml:"nameSegment"`
+	OutputParameters []struct {
+		AssignToReference struct {
 			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
+		} `xml:"assignToReference"`
+		Name struct {
 			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		ActionName struct {
-			Text string `xml:",chardata"`
-		} `xml:"actionName"`
-		ActionType struct {
-			Text string `xml:",chardata"`
-		} `xml:"actionType"`
-		Connector *struct {
-			IsGoTo *struct {
-				Text string `xml:",chardata"`
-			} `xml:"isGoTo"`
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-		FaultConnector *struct {
-			IsGoTo *struct {
-				Text string `xml:",chardata"`
-			} `xml:"isGoTo"`
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"faultConnector"`
-		FlowTransactionModel *struct {
-			Text string `xml:",chardata"`
-		} `xml:"flowTransactionModel"`
-		InputParameters []struct {
-			ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
-			Name                  struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-			Value Value `xml:"value"`
-		} `xml:"inputParameters"`
-		NameSegment *struct {
-			Text string `xml:",chardata"`
-		} `xml:"nameSegment"`
-		OutputParameters []struct {
-			AssignToReference struct {
-				Text string `xml:",chardata"`
-			} `xml:"assignToReference"`
-			Name struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-		} `xml:"outputParameters"`
-		StoreOutputAutomatically *struct {
-			Text string `xml:",chardata"`
-		} `xml:"storeOutputAutomatically"`
-		VersionSegment *struct {
-			Text string `xml:",chardata"`
-		} `xml:"versionSegment"`
-	} `xml:"actionCalls"`
-	ApiVersion *struct {
+		} `xml:"name"`
+	} `xml:"outputParameters"`
+	StoreOutputAutomatically *struct {
+		Text string `xml:",chardata"`
+	} `xml:"storeOutputAutomatically"`
+	VersionSegment *struct {
+		Text string `xml:",chardata"`
+	} `xml:"versionSegment"`
+}
+
+type Flow struct {
+	internal.MetadataInfo
+	XMLName     xml.Name     `xml:"Flow"`
+	Xmlns       string       `xml:"xmlns,attr"`
+	Xsi         string       `xml:"xmlns:xsi,attr,omitempty"`
+	ActionCalls []ActionCall `xml:"actionCalls"`
+	ApiVersion  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"apiVersion"`
 	Assignments []Assignment `xml:"assignments"`
