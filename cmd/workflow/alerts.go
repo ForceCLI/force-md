@@ -11,7 +11,7 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/workflow"
+	"github.com/ForceCLI/force-md/metadata/workflow"
 )
 
 var (

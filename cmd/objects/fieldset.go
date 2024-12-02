@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/objects"
+	"github.com/ForceCLI/force-md/metadata/objects"
 )
 
 var (

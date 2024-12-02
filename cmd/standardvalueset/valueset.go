@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/standardvalueset"
+	"github.com/ForceCLI/force-md/metadata/standardvalueset"
 )
 
 var ListCmd = &cobra.Command{

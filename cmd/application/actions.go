@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
 
-	"github.com/ForceCLI/force-md/application"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata/application"
 )
 
 var action Action

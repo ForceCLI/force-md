@@ -10,7 +10,8 @@ import (
 
 	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/pkg"
+	"github.com/ForceCLI/force-md/metadata"
+	"github.com/ForceCLI/force-md/metadata/pkg"
 )
 
 var (
@@ -119,7 +120,7 @@ func add(file string, metadataType string, member string) {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return
 	}
-	if err := general.Tidy(p, file); err != nil {
+	if err := general.Tidy(p, metadata.MetadataFilePath(file)); err != nil {
 		log.Warn("tidying failed: " + err.Error())
 	}
 	err = internal.WriteToFile(p, file)
@@ -171,7 +172,7 @@ func listMembers(file string) {
 
 func checkIfChanged(file string) (changed bool) {
 	o := &pkg.Package{}
-	contents, err := internal.ParseMetadataXmlIfPossible(o, file)
+	contents, err := metadata.ParseMetadataXmlIfPossible(o, file)
 	if err != nil {
 		log.Warn("parse failure:" + err.Error())
 		return
@@ -195,7 +196,7 @@ func tidy(file string) {
 		log.Warn("parsing package.xml failed: " + err.Error())
 		return
 	}
-	if err := general.Tidy(p, file); err != nil {
+	if err := general.Tidy(p, metadata.MetadataFilePath(file)); err != nil {
 		log.Warn("tidying failed: " + err.Error())
 	}
 }

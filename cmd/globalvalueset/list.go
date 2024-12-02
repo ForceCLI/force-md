@@ -6,7 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/ForceCLI/force-md/globalvalueset"
+	"github.com/ForceCLI/force-md/metadata/globalvalueset"
 )
 
 var (

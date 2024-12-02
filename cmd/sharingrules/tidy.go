@@ -8,7 +8,8 @@ import (
 
 	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/sharingrules"
+	"github.com/ForceCLI/force-md/metadata"
+	"github.com/ForceCLI/force-md/metadata/sharingrules"
 )
 
 var (
@@ -59,7 +60,7 @@ func tidy(file string) {
 	var err error
 	if ignoreErrors {
 		p = &sharingrules.SharingRules{}
-		contents, err := internal.ParseMetadataXmlIfPossible(p, file)
+		contents, err := metadata.ParseMetadataXmlIfPossible(p, file)
 		if err != nil {
 			log.Warn("parse failure. leaving content unchanged.")
 			if _, err = os.Stdout.Write(contents); err != nil {
@@ -77,7 +78,7 @@ func tidy(file string) {
 	if wide {
 		internal.MarshalWide = true
 	}
-	if err := general.Tidy(p, file); err != nil {
+	if err := general.Tidy(p, metadata.MetadataFilePath(file)); err != nil {
 		log.Warn("tidying failed: " + err.Error())
 	}
 }

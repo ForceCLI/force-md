@@ -6,15 +6,16 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata"
 )
 
 type Tidyable interface {
 	Tidy()
 }
 
-func Tidy(t Tidyable, path string) error {
+func Tidy(t Tidyable, path metadata.MetadataFilePath) error {
 	t.Tidy()
-	if err := internal.WriteToFile(t, path); err != nil {
+	if err := internal.WriteToFile(t, string(path)); err != nil {
 		return errors.Wrap(err, "writing to file")
 	}
 	return nil

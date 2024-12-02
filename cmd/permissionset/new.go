@@ -6,7 +6,7 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/permissionset"
+	"github.com/ForceCLI/force-md/metadata/permissionset"
 )
 
 var (

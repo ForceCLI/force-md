@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/permissionset"
+	"github.com/ForceCLI/force-md/metadata/permissionset"
 )
 
 var sourceRecordType string

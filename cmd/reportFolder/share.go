@@ -9,7 +9,7 @@ import (
 	"github.com/thediveo/enumflag"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/reportFolder"
+	"github.com/ForceCLI/force-md/metadata/reportFolder"
 )
 
 type ShareType enumflag.Flag

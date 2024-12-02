@@ -1,14 +1,15 @@
 package general
 
 import (
+	"encoding/xml"
 	"html"
 	"strconv"
 	"strings"
 
-	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata"
 )
 
-type Metadata = internal.MetadataPointer
+type Metadata = metadata.MetadataPointer
 
 type TextLiteral struct {
 	Text string `xml:",innerxml"`
@@ -51,4 +52,8 @@ func (b *BooleanText) IsFalse() bool {
 
 func (b *BooleanText) String() string {
 	return strconv.FormatBool(b.ToBool())
+}
+
+func (b BooleanText) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return e.EncodeElement(b.String(), start)
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/sharingrules"
+	"github.com/ForceCLI/force-md/metadata/sharingrules"
 )
 
 var ruleName string

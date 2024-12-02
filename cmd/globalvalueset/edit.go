@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 
 	. "github.com/ForceCLI/force-md/general"
-	"github.com/ForceCLI/force-md/globalvalueset"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata/globalvalueset"
 )
 
 var ()

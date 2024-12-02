@@ -5,7 +5,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/general"
-	"github.com/ForceCLI/force-md/globalvalueset"
+	"github.com/ForceCLI/force-md/metadata"
+	"github.com/ForceCLI/force-md/metadata/globalvalueset"
 )
 
 var TidyCmd = &cobra.Command{
@@ -25,7 +26,7 @@ func tidy(file string) {
 		log.Warn("parsing permission set failed: " + err.Error())
 		return
 	}
-	if err := general.Tidy(p, file); err != nil {
+	if err := general.Tidy(p, metadata.MetadataFilePath(file)); err != nil {
 		log.Warn("tidying failed: " + err.Error())
 	}
 }

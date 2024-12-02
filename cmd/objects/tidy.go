@@ -10,10 +10,11 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
+	"github.com/ForceCLI/force-md/cmd/repo"
 	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/objects"
-	"github.com/ForceCLI/force-md/objects/field"
+	"github.com/ForceCLI/force-md/metadata/objects"
+	"github.com/ForceCLI/force-md/metadata/objects/field"
 )
 
 var warn bool
@@ -46,13 +47,13 @@ Tidy object metadata.
 			recordTypePicklistOptions: fixMissing,
 		}
 		for _, file := range args {
-			_, err := internal.Metadata.Open(file)
+			_, err := repo.Metadata.Open(file)
 			if err != nil {
 				return fmt.Errorf("invalid file %s: %w", file, err)
 			}
 		}
 
-		items := internal.Metadata.Items(objects.NAME)
+		items := repo.Metadata.Items(objects.NAME)
 		if len(items) == 0 {
 			log.Warn("No objects to tidy")
 		}
@@ -85,7 +86,7 @@ func checkUnassignedPicklistOptions(o *objects.CustomObject) {
 	picklists := o.GetFields(filter)
 PICKLIST:
 	for _, field := range picklists {
-		if strings.ToLower(o.Name()) == "account" && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
+		if strings.EqualFold(string(o.Name()), "account") && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
 			// Person Record Types are configured in the PersonAccount object
 			continue
 		}
@@ -142,7 +143,7 @@ func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	}
 	picklists := o.GetFields(filter)
 	for _, field := range picklists {
-		if strings.ToLower(o.Name()) == "account" && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
+		if strings.EqualFold(string(o.Name()), "account") && strings.HasPrefix(strings.ToLower(field.FullName), "person") && !strings.HasSuffix(strings.ToLower(field.FullName), "__c") {
 			// Person Record Types are configured in the PersonAccount object
 			continue
 		}

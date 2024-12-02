@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/profile"
+	"github.com/ForceCLI/force-md/metadata/profile"
 )
 
 var (

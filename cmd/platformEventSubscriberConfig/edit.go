@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/platformEventSubscriberConfig"
+	"github.com/ForceCLI/force-md/metadata/platformEventSubscriberConfig"
 )
 
 var (

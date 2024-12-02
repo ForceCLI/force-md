@@ -15,8 +15,8 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/objects"
-	rt "github.com/ForceCLI/force-md/objects/recordtype"
+	"github.com/ForceCLI/force-md/metadata/objects"
+	rt "github.com/ForceCLI/force-md/metadata/objects/recordtype"
 )
 
 var (

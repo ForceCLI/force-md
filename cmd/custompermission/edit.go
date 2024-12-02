@@ -4,8 +4,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/ForceCLI/force-md/custompermission"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata/custompermission"
 )
 
 var (

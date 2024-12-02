@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/thediveo/enumflag"
 
-	"github.com/ForceCLI/force-md/dashboard"
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata/dashboard"
 )
 
 type DashboardType enumflag.Flag

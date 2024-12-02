@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/objects"
-	"github.com/ForceCLI/force-md/objects/validationrule"
+	"github.com/ForceCLI/force-md/metadata/objects"
+	"github.com/ForceCLI/force-md/metadata/objects/validationrule"
 )
 
 var (

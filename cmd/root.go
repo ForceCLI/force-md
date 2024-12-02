@@ -13,13 +13,17 @@ import (
 var (
 	version     = "dev"
 	silent      bool
+	verbose     bool
 	xmlEntities bool
 )
 
 func init() {
 	cobra.OnInitialize(globalConfig)
 	RootCmd.PersistentFlags().BoolVarP(&silent, "silent", "", false, "show errors only")
+	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "", false, "show debugging output")
 	RootCmd.PersistentFlags().BoolVarP(&internal.ConvertNumericXMLEntities, "convert-xml-entities", "", true, "convert numeric xml entities to character entities")
+
+	RootCmd.MarkFlagsMutuallyExclusive("silent", "verbose")
 }
 
 var RootCmd = &cobra.Command{
@@ -35,6 +39,9 @@ var RootCmd = &cobra.Command{
 func globalConfig() {
 	if silent {
 		log.SetLevel(log.ErrorLevel)
+	}
+	if verbose {
+		log.SetLevel(log.DebugLevel)
 	}
 }
 
