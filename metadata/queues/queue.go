@@ -13,6 +13,22 @@ func init() {
 	internal.TypeRegistry.Register(NAME, func(path string) (metadata.RegisterableMetadata, error) { return Open(path) })
 }
 
+type RoleAndSubordinates struct {
+	RoleAndSubordinate []string `xml:"roleAndSubordinate"`
+}
+
+type Roles struct {
+	Role []string `xml:"role"`
+}
+
+type PublicGroups struct {
+	PublicGroup []string `xml:"publicGroup"`
+}
+
+type Users struct {
+	User []string `xml:"user"`
+}
+
 type Queue struct {
 	metadata.MetadataInfo
 	XMLName                xml.Name `xml:"Queue"`
@@ -20,28 +36,15 @@ type Queue struct {
 	DoesSendEmailToMembers struct {
 		Text string `xml:",chardata"`
 	} `xml:"doesSendEmailToMembers"`
-	Email struct {
-		Text string `xml:",chardata"`
-	} `xml:"email"`
-	Name struct {
+	Email *string `xml:"email"`
+	Name  struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
 	QueueMembers struct {
-		RoleAndSubordinates struct {
-			RoleAndSubordinate []struct {
-				Text string `xml:",chardata"`
-			} `xml:"roleAndSubordinate"`
-		} `xml:"roleAndSubordinates"`
-		Roles struct {
-			Role []struct {
-				Text string `xml:",chardata"`
-			} `xml:"role"`
-		} `xml:"roles"`
-		PublicGroups struct {
-			PublicGroup []struct {
-				Text string `xml:",chardata"`
-			} `xml:"publicGroup"`
-		} `xml:"publicGroups"`
+		PublicGroups        *PublicGroups        `xml:"publicGroups"`
+		RoleAndSubordinates *RoleAndSubordinates `xml:"roleAndSubordinates"`
+		Roles               *Roles               `xml:"roles"`
+		Users               *Users               `xml:"users"`
 	} `xml:"queueMembers"`
 	QueueSobject []struct {
 		SobjectType struct {
