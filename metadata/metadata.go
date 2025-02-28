@@ -2,10 +2,10 @@ package metadata
 
 import (
 	"bytes"
-	"encoding/xml"
 	"io"
 	"os"
 
+	"github.com/nbio/xml"
 	"github.com/pkg/errors"
 	"golang.org/x/net/html/charset"
 )
