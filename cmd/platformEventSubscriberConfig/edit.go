@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
-	"github.com/ForceCLI/force-md/metadata/platformEventSubscriberConfig"
+	"github.com/ForceCLI/force-md/metadata/platformEventSubscriberConfigs"
 )
 
 var (
@@ -29,7 +29,7 @@ var EditCmd = &cobra.Command{
 }
 
 func updatePlatformEventSubscriberConfig(file string) {
-	a, err := platformEventSubscriberConfig.Open(file)
+	a, err := platformEventSubscriberConfigs.Open(file)
 	if err != nil {
 		log.Warn("parsing PlatformEventSubscriberConfig failed: " + err.Error())
 		return

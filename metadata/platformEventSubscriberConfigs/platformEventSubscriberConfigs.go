@@ -1,8 +1,9 @@
-package platformEventSubscriberConfig
+package platformEventSubscriberConfigs
 
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -26,9 +27,7 @@ type PlatformEventSubscriberConfig struct {
 	PlatformEventConsumer struct {
 		Text string `xml:",chardata"`
 	} `xml:"platformEventConsumer"`
-	User struct {
-		Text string `xml:",chardata"`
-	} `xml:"user"`
+	User *TextLiteral `xml:"user"`
 }
 
 func (c *PlatformEventSubscriberConfig) SetMetadata(m metadata.MetadataInfo) {

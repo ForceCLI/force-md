@@ -1,4 +1,4 @@
-package platformEventSubscriberConfig
+package platformEventSubscriberConfigs
 
 import (
 	. "github.com/ForceCLI/force-md/general"
