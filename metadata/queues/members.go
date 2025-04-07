@@ -5,6 +5,7 @@ import (
 )
 
 var MemberExistsError = errors.New("member already exists")
+var SobjectExistsError = errors.New("sobject already exists")
 
 func (q *Queue) AddRole(memberName string) error {
 	if q.QueueMembers.Roles == nil {
@@ -59,5 +60,19 @@ func (q *Queue) AddUser(memberName string) error {
 	}
 	q.QueueMembers.Users.User = append(q.QueueMembers.Users.User, memberName)
 	q.QueueMembers.Users.Tidy()
+	return nil
+}
+
+func (q *Queue) AddSobject(sobject string) error {
+	if q.QueueSobject == nil {
+		q.QueueMembers.Users = &Users{}
+	}
+	for _, c := range q.QueueSobject {
+		if c.SobjectType == sobject {
+			return SobjectExistsError
+		}
+	}
+	q.QueueSobject = append(q.QueueSobject, SobjectType{SobjectType: sobject})
+	q.QueueSobject.Tidy()
 	return nil
 }

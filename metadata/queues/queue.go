@@ -29,6 +29,12 @@ type Users struct {
 	User []string `xml:"user"`
 }
 
+type SobjectTypes []SobjectType
+
+type SobjectType struct {
+	SobjectType string `xml:"sobjectType"`
+}
+
 type Queue struct {
 	metadata.MetadataInfo
 	XMLName                xml.Name `xml:"Queue"`
@@ -46,11 +52,7 @@ type Queue struct {
 		Roles               *Roles               `xml:"roles"`
 		Users               *Users               `xml:"users"`
 	} `xml:"queueMembers"`
-	QueueSobject []struct {
-		SobjectType struct {
-			Text string `xml:",chardata"`
-		} `xml:"sobjectType"`
-	} `xml:"queueSobject"`
+	QueueSobject SobjectTypes `xml:"queueSobject"`
 }
 
 func (c *Queue) SetMetadata(m metadata.MetadataInfo) {

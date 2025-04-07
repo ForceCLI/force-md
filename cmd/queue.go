@@ -8,6 +8,7 @@ import (
 
 func init() {
 	queueCmd.AddCommand(queue.MemberCmd)
+	queueCmd.AddCommand(queue.SobjectCmd)
 	RootCmd.AddCommand(queueCmd)
 }
 

@@ -25,3 +25,9 @@ func (users Users) Tidy() {
 		return users.User[i] < users.User[j]
 	})
 }
+
+func (sobjectTypes SobjectTypes) Tidy() {
+	sort.Slice(sobjectTypes, func(i, j int) bool {
+		return sobjectTypes[i].SobjectType < sobjectTypes[j].SobjectType
+	})
+}
