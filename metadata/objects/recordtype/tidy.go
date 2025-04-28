@@ -13,3 +13,15 @@ func (picklists PicklistList) Tidy() {
 		return picklists[i].Picklist < picklists[j].Picklist
 	})
 }
+
+// Tidy implements the general.Tidyable interface for standalone RecordType metadata.
+// It sorts the list of picklists and then sorts each picklist's values.
+func (r *RecordTypeMetadata) Tidy() {
+	// sort the picklist entries by picklist (field) name
+	r.PicklistValues.Tidy()
+	// sort values within each picklist
+	for i := range r.PicklistValues {
+		// sort the values of this picklist
+		r.PicklistValues[i].Values.Tidy()
+	}
+}
