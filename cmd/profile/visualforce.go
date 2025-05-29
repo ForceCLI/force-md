@@ -25,9 +25,16 @@ func init() {
 	cloneVisualforcePageCmd.MarkFlagRequired("page")
 	cloneVisualforcePageCmd.MarkFlagRequired("source")
 
+	editVisualforcePageCmd.Flags().StringVarP(&pageName, "page", "p", "", "visualforce page name")
+	editVisualforcePageCmd.Flags().BoolP("enable", "e", false, "enable page")
+	editVisualforcePageCmd.Flags().BoolP("disable", "E", false, "disable page")
+	editVisualforcePageCmd.MarkFlagsMutuallyExclusive("enable", "disable")
+	editVisualforcePageCmd.MarkFlagRequired("page")
+
 	VisualforceCmd.AddCommand(addVisualforcePageCmd)
 	VisualforceCmd.AddCommand(cloneVisualforcePageCmd)
 	VisualforceCmd.AddCommand(deleteVisualforcePageCmd)
+	VisualforceCmd.AddCommand(editVisualforcePageCmd)
 	VisualforceCmd.AddCommand(listVisualforcePageCmd)
 }
 
@@ -71,6 +78,25 @@ var deleteVisualforcePageCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteVisualforceAccess(file, pageName)
+		}
+	},
+}
+
+var editVisualforcePageCmd = &cobra.Command{
+	Use:                   "edit -p PageName [flags] [filename]...",
+	Short:                 "Edit visualforce page access",
+	Long:                  "Edit visualforce page access in profiles",
+	Args:                  cobra.MinimumNArgs(1),
+	DisableFlagsInUseLine: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		enabled, _ := cmd.Flags().GetBool("enable")
+		disabled, _ := cmd.Flags().GetBool("disable")
+		for _, file := range args {
+			if enabled {
+				editVisualforceAccess(file, pageName, true)
+			} else if disabled {
+				editVisualforceAccess(file, pageName, false)
+			}
 		}
 	},
 }
@@ -131,6 +157,24 @@ func cloneVisualforcePageAccess(file string) {
 		return
 	}
 	err = p.CloneVisualforcePageAccess(sourcePageName, pageName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func editVisualforceAccess(file string, pageName string, enabled bool) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.UpdateVisualforcePageAccess(pageName, enabled)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
 		return

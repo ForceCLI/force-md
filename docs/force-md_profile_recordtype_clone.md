@@ -23,6 +23,7 @@ force-md profile recordtype clone -s SObject.RecordType -r SObject.RecordType [f
 ```
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO

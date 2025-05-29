@@ -13,6 +13,7 @@ Manage visualforce page visibility
 ```
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO
@@ -21,5 +22,6 @@ Manage visualforce page visibility
 * [force-md profile visualforce add](force-md_profile_visualforce_add.md)	 - Add visualforce page access
 * [force-md profile visualforce clone](force-md_profile_visualforce_clone.md)	 - Clone visualforce permissions
 * [force-md profile visualforce delete](force-md_profile_visualforce_delete.md)	 - Delete visualforce page access
+* [force-md profile visualforce edit](force-md_profile_visualforce_edit.md)	 - Edit visualforce page access
 * [force-md profile visualforce list](force-md_profile_visualforce_list.md)	 - List VisualForce page visibility
 

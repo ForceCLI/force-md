@@ -37,6 +37,7 @@ force-md objects fields edit -f Field [flags] [filename]...
 ```
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO

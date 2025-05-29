@@ -29,6 +29,7 @@ force-md profile object-permissions list [flags] [filename]...
 ```
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO

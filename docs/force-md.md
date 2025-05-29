@@ -12,6 +12,7 @@ force-md
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
   -h, --help                   help for force-md
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO
@@ -28,8 +29,11 @@ force-md
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml
 * [force-md permissionset](force-md_permissionset.md)	 - Manage Permission Sets
 * [force-md permissionsetgroup](force-md_permissionsetgroup.md)	 - Manage Permission Set Groups
+* [force-md platformEventChannel](force-md_platformEventChannel.md)	 - Manage Platform Event Channels
+* [force-md platformEventChannelMember](force-md_platformEventChannelMember.md)	 - Manage Platform Event Channel Members
 * [force-md platformEventSubscriberConfig](force-md_platformEventSubscriberConfig.md)	 - Manage Platform Event Subscriber Config Metadata
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
+* [force-md queue](force-md_queue.md)	 - Manage Queues
 * [force-md reportfolder](force-md_reportfolder.md)	 - Manage Report Folders
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules

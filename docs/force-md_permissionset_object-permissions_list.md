@@ -33,6 +33,7 @@ force-md permissionset object-permissions list [filename]...
 ```
       --convert-xml-entities   convert numeric xml entities to character entities (default true)
       --silent                 show errors only
+      --verbose                show debugging output
 ```
 
 ### SEE ALSO
