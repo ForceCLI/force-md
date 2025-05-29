@@ -76,3 +76,22 @@ func (p *Profile) CloneVisualforcePageAccess(src, dest string) error {
 	p.PageAccesses.Tidy()
 	return nil
 }
+
+func (p *Profile) UpdateVisualforcePageAccess(pageName string, enabled bool) error {
+	found := false
+	for i, f := range p.PageAccesses {
+		if f.ApexPage == pageName {
+			found = true
+			if enabled {
+				p.PageAccesses[i].Enabled = TrueText
+			} else {
+				p.PageAccesses[i].Enabled = FalseText
+			}
+			break
+		}
+	}
+	if !found {
+		return fmt.Errorf("page %s not found", pageName)
+	}
+	return nil
+}
