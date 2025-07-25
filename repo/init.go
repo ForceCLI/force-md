@@ -38,6 +38,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/installedPackages"
 	_ "github.com/ForceCLI/force-md/metadata/labels"
 	_ "github.com/ForceCLI/force-md/metadata/layouts"
+	_ "github.com/ForceCLI/force-md/metadata/leadConvertSettings"
 	_ "github.com/ForceCLI/force-md/metadata/letterhead"
 	_ "github.com/ForceCLI/force-md/metadata/lwc"
 	_ "github.com/ForceCLI/force-md/metadata/matchingrules"
