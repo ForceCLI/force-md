@@ -42,7 +42,7 @@ type AssignmentRules struct {
 					Text string `xml:",chardata"`
 				} `xml:"value"`
 			} `xml:"criteriaItems"`
-			Template struct {
+			Template *struct {
 				Text string `xml:",chardata"`
 			} `xml:"template"`
 		} `xml:"ruleEntry"`

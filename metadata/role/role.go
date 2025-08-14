@@ -23,7 +23,7 @@ type Role struct {
 	ContactAccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"contactAccessLevel"`
-	Description struct {
+	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
 	MayForecastManagerShare struct {
@@ -35,7 +35,7 @@ type Role struct {
 	OpportunityAccessLevel struct {
 		Text string `xml:",chardata"`
 	} `xml:"opportunityAccessLevel"`
-	ParentRole struct {
+	ParentRole *struct {
 		Text string `xml:",chardata"`
 	} `xml:"parentRole"`
 }

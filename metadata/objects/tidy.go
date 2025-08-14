@@ -18,6 +18,21 @@ func (p *CustomObject) Tidy() {
 	sort.Slice(p.ListViews, func(i, j int) bool {
 		return p.ListViews[i].FullName.Text < p.ListViews[j].FullName.Text
 	})
+	sort.Slice(p.CompactLayouts, func(i, j int) bool {
+		return p.CompactLayouts[i].FullName.Text < p.CompactLayouts[j].FullName.Text
+	})
+	sort.Slice(p.RecordTypes, func(i, j int) bool {
+		return p.RecordTypes[i].FullName < p.RecordTypes[j].FullName
+	})
+	sort.Slice(p.WebLinks, func(i, j int) bool {
+		return p.WebLinks[i].FullName < p.WebLinks[j].FullName
+	})
+	sort.Slice(p.SharingReasons, func(i, j int) bool {
+		return p.SharingReasons[i].FullName < p.SharingReasons[j].FullName
+	})
+	sort.Slice(p.BusinessProcesses, func(i, j int) bool {
+		return p.BusinessProcesses[i].FullName.Text < p.BusinessProcesses[j].FullName.Text
+	})
 }
 
 func (fields FieldList) Tidy() {

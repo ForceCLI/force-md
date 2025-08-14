@@ -3,6 +3,7 @@ package omniIntegrationProcedure
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -15,12 +16,10 @@ func init() {
 
 type OmniIntegrationProcedure struct {
 	metadata.MetadataInfo
-	XMLName          xml.Name `xml:"OmniIntegrationProcedure"`
-	Xmlns            string   `xml:"xmlns,attr"`
-	CustomJavaScript struct {
-		Text string `xml:",chardata"`
-	} `xml:"customJavaScript"`
-	Description struct {
+	XMLName          xml.Name     `xml:"OmniIntegrationProcedure"`
+	Xmlns            string       `xml:"xmlns,attr"`
+	CustomJavaScript *TextLiteral `xml:"customJavaScript"`
+	Description      *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
 	ElementTypeComponentMapping struct {
@@ -29,9 +28,15 @@ type OmniIntegrationProcedure struct {
 	IsActive struct {
 		Text string `xml:",chardata"`
 	} `xml:"isActive"`
+	IsIntegProcdSignatureAvl *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isIntegProcdSignatureAvl"`
 	IsIntegrationProcedure struct {
 		Text string `xml:",chardata"`
 	} `xml:"isIntegrationProcedure"`
+	IsManagedUsingStdDesigner *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isManagedUsingStdDesigner"`
 	IsMetadataCacheDisabled struct {
 		Text string `xml:",chardata"`
 	} `xml:"isMetadataCacheDisabled"`
@@ -51,6 +56,31 @@ type OmniIntegrationProcedure struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
 	OmniProcessElements []struct {
+		ChildElements []struct {
+			Description *TextLiteral `xml:"description"`
+			IsActive    struct {
+				Text string `xml:",chardata"`
+			} `xml:"isActive"`
+			IsOmniScriptEmbeddable struct {
+				Text string `xml:",chardata"`
+			} `xml:"isOmniScriptEmbeddable"`
+			Level struct {
+				Text string `xml:",chardata"`
+			} `xml:"level"`
+			Name struct {
+				Text string `xml:",chardata"`
+			} `xml:"name"`
+			OmniProcessVersionNumber struct {
+				Text string `xml:",chardata"`
+			} `xml:"omniProcessVersionNumber"`
+			PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+			SequenceNumber    struct {
+				Text string `xml:",chardata"`
+			} `xml:"sequenceNumber"`
+			Type struct {
+				Text string `xml:",chardata"`
+			} `xml:"type"`
+		} `xml:"childElements"`
 		IsActive struct {
 			Text string `xml:",chardata"`
 		} `xml:"isActive"`
@@ -66,44 +96,13 @@ type OmniIntegrationProcedure struct {
 		OmniProcessVersionNumber struct {
 			Text string `xml:",chardata"`
 		} `xml:"omniProcessVersionNumber"`
-		PropertySetConfig struct {
-			Text string `xml:",chardata"`
-		} `xml:"propertySetConfig"`
-		SequenceNumber struct {
+		PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+		SequenceNumber    struct {
 			Text string `xml:",chardata"`
 		} `xml:"sequenceNumber"`
 		Type struct {
 			Text string `xml:",chardata"`
 		} `xml:"type"`
-		ChildElements []struct {
-			IsActive struct {
-				Text string `xml:",chardata"`
-			} `xml:"isActive"`
-			IsOmniScriptEmbeddable struct {
-				Text string `xml:",chardata"`
-			} `xml:"isOmniScriptEmbeddable"`
-			Level struct {
-				Text string `xml:",chardata"`
-			} `xml:"level"`
-			Name struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-			OmniProcessVersionNumber struct {
-				Text string `xml:",chardata"`
-			} `xml:"omniProcessVersionNumber"`
-			PropertySetConfig struct {
-				Text string `xml:",chardata"`
-			} `xml:"propertySetConfig"`
-			SequenceNumber struct {
-				Text string `xml:",chardata"`
-			} `xml:"sequenceNumber"`
-			Type struct {
-				Text string `xml:",chardata"`
-			} `xml:"type"`
-			Description struct {
-				Text string `xml:",chardata"`
-			} `xml:"description"`
-		} `xml:"childElements"`
 	} `xml:"omniProcessElements"`
 	OmniProcessKey struct {
 		Text string `xml:",chardata"`
@@ -111,10 +110,8 @@ type OmniIntegrationProcedure struct {
 	OmniProcessType struct {
 		Text string `xml:",chardata"`
 	} `xml:"omniProcessType"`
-	PropertySetConfig struct {
-		Text string `xml:",chardata"`
-	} `xml:"propertySetConfig"`
-	SubType struct {
+	PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+	SubType           struct {
 		Text string `xml:",chardata"`
 	} `xml:"subType"`
 	IntegrationProcedureType struct {

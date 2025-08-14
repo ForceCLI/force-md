@@ -15,15 +15,50 @@ func init() {
 
 type QuickAction struct {
 	metadata.MetadataInfo
-	XMLName xml.Name `xml:"QuickAction"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	Label   struct {
+	XMLName       xml.Name `xml:"QuickAction"`
+	Xmlns         string   `xml:"xmlns,attr"`
+	ActionSubtype *struct {
+		Text string `xml:",chardata"`
+	} `xml:"actionSubtype"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	FieldOverrides []struct {
+		Field struct {
+			Text string `xml:",chardata"`
+		} `xml:"field"`
+		Formula *struct {
+			Text string `xml:",chardata"`
+		} `xml:"formula"`
+		LiteralValue *struct {
+			Text string `xml:",chardata"`
+		} `xml:"literalValue"`
+	} `xml:"fieldOverrides"`
+	FlowDefinition *struct {
+		Text string `xml:",chardata"`
+	} `xml:"flowDefinition"`
+	Height *struct {
+		Text string `xml:",chardata"`
+	} `xml:"height"`
+	Icon *struct {
+		Text string `xml:",chardata"`
+	} `xml:"icon"`
+	Label *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
+	LightningComponent *struct {
+		Text string `xml:",chardata"`
+	} `xml:"lightningComponent"`
+	LightningWebComponent *struct {
+		Text string `xml:",chardata"`
+	} `xml:"lightningWebComponent"`
 	OptionsCreateFeedItem struct {
 		Text string `xml:",chardata"`
 	} `xml:"optionsCreateFeedItem"`
-	QuickActionLayout struct {
+	Page *struct {
+		Text string `xml:",chardata"`
+	} `xml:"page"`
+	QuickActionLayout *struct {
 		LayoutSectionStyle struct {
 			Text string `xml:",chardata"`
 		} `xml:"layoutSectionStyle"`
@@ -32,7 +67,7 @@ type QuickAction struct {
 				EmptySpace struct {
 					Text string `xml:",chardata"`
 				} `xml:"emptySpace"`
-				Field struct {
+				Field *struct {
 					Text string `xml:",chardata"`
 				} `xml:"field"`
 				UiBehavior struct {
@@ -41,62 +76,27 @@ type QuickAction struct {
 			} `xml:"quickActionLayoutItems"`
 		} `xml:"quickActionLayoutColumns"`
 	} `xml:"quickActionLayout"`
-	TargetObject struct {
+	StandardLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"standardLabel"`
+	SuccessMessage *struct {
+		Text string `xml:",chardata"`
+	} `xml:"successMessage"`
+	TargetObject *struct {
 		Text string `xml:",chardata"`
 	} `xml:"targetObject"`
-	TargetParentField struct {
+	TargetParentField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"targetParentField"`
-	TargetRecordType struct {
+	TargetRecordType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"targetRecordType"`
 	QuickActionType struct {
 		Text string `xml:",chardata"`
 	} `xml:"type"`
-	FieldOverrides []struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Formula struct {
-			Text string `xml:",chardata"`
-		} `xml:"formula"`
-		LiteralValue struct {
-			Text string `xml:",chardata"`
-		} `xml:"literalValue"`
-	} `xml:"fieldOverrides"`
-	StandardLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"standardLabel"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	SuccessMessage struct {
-		Text string `xml:",chardata"`
-	} `xml:"successMessage"`
-	FlowDefinition struct {
-		Text string `xml:",chardata"`
-	} `xml:"flowDefinition"`
-	Height struct {
-		Text string `xml:",chardata"`
-	} `xml:"height"`
-	Page struct {
-		Text string `xml:",chardata"`
-	} `xml:"page"`
-	Width struct {
+	Width *struct {
 		Text string `xml:",chardata"`
 	} `xml:"width"`
-	ActionSubtype struct {
-		Text string `xml:",chardata"`
-	} `xml:"actionSubtype"`
-	LightningWebComponent struct {
-		Text string `xml:",chardata"`
-	} `xml:"lightningWebComponent"`
-	LightningComponent struct {
-		Text string `xml:",chardata"`
-	} `xml:"lightningComponent"`
-	Icon struct {
-		Text string `xml:",chardata"`
-	} `xml:"icon"`
 }
 
 func (c *QuickAction) SetMetadata(m metadata.MetadataInfo) {

@@ -17,40 +17,40 @@ type CustomTab struct {
 	metadata.MetadataInfo
 	XMLName      xml.Name `xml:"CustomTab"`
 	Xmlns        string   `xml:"xmlns,attr"`
-	CustomObject struct {
+	CustomObject *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customObject"`
-	Description struct {
+	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
+	FlexiPage *struct {
+		Text string `xml:",chardata"`
+	} `xml:"flexiPage"`
+	FrameHeight *struct {
+		Text string `xml:",chardata"`
+	} `xml:"frameHeight"`
+	HasSidebar *struct {
+		Text string `xml:",chardata"`
+	} `xml:"hasSidebar"`
+	Icon *struct {
+		Text string `xml:",chardata"`
+	} `xml:"icon"`
+	Label *struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LwcComponent *struct {
+		Text string `xml:",chardata"`
+	} `xml:"lwcComponent"`
 	Motif struct {
 		Text string `xml:",chardata"`
 	} `xml:"motif"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	Page struct {
+	Page *struct {
 		Text string `xml:",chardata"`
 	} `xml:"page"`
-	FlexiPage struct {
-		Text string `xml:",chardata"`
-	} `xml:"flexiPage"`
-	Icon struct {
-		Text string `xml:",chardata"`
-	} `xml:"icon"`
-	LwcComponent struct {
-		Text string `xml:",chardata"`
-	} `xml:"lwcComponent"`
-	FrameHeight struct {
-		Text string `xml:",chardata"`
-	} `xml:"frameHeight"`
-	HasSidebar struct {
-		Text string `xml:",chardata"`
-	} `xml:"hasSidebar"`
-	URL struct {
+	URL *struct {
 		Text string `xml:",chardata"`
 	} `xml:"url"`
-	UrlEncodingKey struct {
+	UrlEncodingKey *struct {
 		Text string `xml:",chardata"`
 	} `xml:"urlEncodingKey"`
 }

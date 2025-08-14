@@ -2,18 +2,17 @@ package repo
 
 import (
 	"github.com/ForceCLI/force-md/metadata"
-	log "github.com/sirupsen/logrus"
 )
 
 type Repo struct {
-	openMetadata map[metadata.MetadataType]*MetadataByName
+	openMetadata map[metadata.MetadataType]*MetadataByPath
 }
 
-type MetadataByName map[metadata.MetadataObjectName]metadata.RegisterableMetadata
+type MetadataByPath map[metadata.MetadataFilePath]metadata.RegisterableMetadata
 
 func NewRepo() *Repo {
 	return &Repo{
-		openMetadata: make(map[metadata.MetadataType]*MetadataByName),
+		openMetadata: make(map[metadata.MetadataType]*MetadataByPath),
 	}
 }
 
@@ -25,11 +24,15 @@ func (o *Repo) Types() []metadata.MetadataType {
 	return types
 }
 
-func (o *Repo) Items(t metadata.MetadataType) MetadataByName {
-	if _, ok := o.openMetadata[t]; !ok {
-		return make(MetadataByName)
+// Items returns all metadata items for a type as a slice
+func (o *Repo) Items(t metadata.MetadataType) []metadata.RegisterableMetadata {
+	var items []metadata.RegisterableMetadata
+	if pathMap, ok := o.openMetadata[t]; ok {
+		for _, item := range *pathMap {
+			items = append(items, item)
+		}
 	}
-	return *(*o).openMetadata[t]
+	return items
 }
 
 func (o *Repo) Open(file string) (metadata.MetadataPointer, error) {
@@ -38,15 +41,12 @@ func (o *Repo) Open(file string) (metadata.MetadataPointer, error) {
 		return m, err
 	}
 	metadataType := m.Type()
-	name := m.GetMetadataInfo().Name()
+	path := m.GetMetadataInfo().Path()
 	if _, ok := o.openMetadata[metadataType]; !ok {
-		items := make(MetadataByName)
+		items := make(MetadataByPath)
 		o.openMetadata[metadataType] = &items
 	}
 	items := o.openMetadata[metadataType]
-	if _, exists := (*items)[name]; exists {
-		log.Warnf("file %s of type %s already registered", name, metadataType)
-	}
-	(*items)[name] = m
+	(*items)[path] = m
 	return m, nil
 }

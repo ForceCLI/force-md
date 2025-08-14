@@ -9,7 +9,7 @@ func (d *Dashboard) GetReports() []string {
 	var reports []string
 	if d.DashboardGridLayout != nil {
 		for _, c := range d.DashboardGridLayout.DashboardGridComponents {
-			reports = append(reports, c.DashboardComponent.Report)
+			reports = append(reports, *c.DashboardComponent.Report)
 		}
 	}
 	if d.LeftSection != nil {
@@ -35,7 +35,7 @@ func (d *Dashboard) DeleteReport(report string) error {
 	if d.DashboardGridLayout != nil {
 		newComponents := d.DashboardGridLayout.DashboardGridComponents[:0]
 		for _, f := range d.DashboardGridLayout.DashboardGridComponents {
-			if strings.ToLower(f.DashboardComponent.Report) == strings.ToLower(report) {
+			if strings.ToLower(*f.DashboardComponent.Report) == strings.ToLower(report) {
 				found = true
 			} else {
 				newComponents = append(newComponents, f)

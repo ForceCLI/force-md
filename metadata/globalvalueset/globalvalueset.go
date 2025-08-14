@@ -20,8 +20,8 @@ type ValueFilter func(CustomValue) bool
 type CustomValue struct {
 	FullName string       `xml:"fullName"`
 	Default  BooleanText  `xml:"default"`
-	Label    string       `xml:"label"`
 	IsActive *BooleanText `xml:"isActive"`
+	Label    string       `xml:"label"`
 }
 
 type GlobalValueSet struct {

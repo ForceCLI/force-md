@@ -2,6 +2,8 @@ package settings
 
 import (
 	"encoding/xml"
+	"fmt"
+	"strings"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -139,19 +141,11 @@ func init() {
 	internal.TypeRegistry.Register("WorkDotComSettings", open)
 }
 
-type GenericNode struct {
-	XMLName xml.Name
-	Attrs   []xml.Attr    `xml:",any,attr"`
-	Content []GenericNode `xml:",any"`
-	Text    string        `xml:",chardata"`
-}
-
 type Settings struct {
 	metadata.MetadataInfo
-	XMLName xml.Name
-	XMLNS   string        `xml:"xmlns,attr"`
-	Content []GenericNode `xml:",any"`
-	Text    string        `xml:",chardata"`
+	XMLName xml.Name `xml:""`
+	XMLNS   string   `xml:"xmlns,attr"`
+	Content []byte   `xml:",innerxml"`
 }
 
 func (c *Settings) SetMetadata(m metadata.MetadataInfo) {
@@ -162,7 +156,57 @@ func (c *Settings) Type() metadata.MetadataType {
 	return c.XMLName.Local
 }
 
+func (c *Settings) Files(metadataFormat metadata.Format) (map[string][]byte, error) {
+	files := make(map[string][]byte)
+
+	// Use the Type() method which returns XMLName.Local
+	settingsType := c.Type()
+	if settingsType == "" {
+		// Fallback: try to extract from metadata name
+		if c.MetadataInfo.Name() != "" {
+			settingsType = string(c.MetadataInfo.Name())
+			// Ensure it has Settings suffix
+			if !strings.HasSuffix(settingsType, "Settings") {
+				settingsType = settingsType + "Settings"
+			}
+		} else {
+			return nil, fmt.Errorf("unable to determine settings type")
+		}
+	}
+
+	// Extract the base name without "Settings" suffix for the filename
+	baseName := settingsType
+	if strings.HasSuffix(settingsType, "Settings") {
+		baseName = strings.TrimSuffix(settingsType, "Settings")
+	}
+
+	// Build the XML manually to preserve the inner content structure
+	// Always use the full type name (with Settings suffix) in the XML
+	var xmlContent []byte
+	if metadataFormat == metadata.SourceFormat {
+		xmlContent = []byte(fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
+<%s xmlns="%s">%s</%s>
+`, settingsType, c.XMLNS, string(c.Content), settingsType))
+		filename := fmt.Sprintf("settings/%s.settings-meta.xml", baseName)
+		files[filename] = xmlContent
+	} else {
+		// In metadata format, also use full Settings name in XML
+		xmlContent = []byte(fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
+<%s xmlns="%s">%s</%s>
+`, settingsType, c.XMLNS, string(c.Content), settingsType))
+		filename := fmt.Sprintf("settings/%s.settings", baseName)
+		files[filename] = xmlContent
+	}
+
+	return files, nil
+}
+
 func Open(path string) (*Settings, error) {
 	p := &Settings{}
-	return p, metadata.ParseMetadataXml(p, path)
+	err := metadata.ParseMetadataXml(p, path)
+	// Ensure XMLName is preserved with proper namespace
+	if p.XMLName.Local != "" && p.XMLNS == "" {
+		p.XMLNS = "http://soap.sforce.com/2006/04/metadata"
+	}
+	return p, err
 }

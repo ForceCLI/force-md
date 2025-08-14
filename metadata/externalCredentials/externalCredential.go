@@ -21,18 +21,27 @@ type ExternalCredential struct {
 		Text string `xml:",chardata"`
 	} `xml:"authenticationProtocol"`
 	ExternalCredentialParameters []struct {
+		Certificate *struct {
+			Text string `xml:",chardata"`
+		} `xml:"certificate"`
+		Description *struct {
+			Text string `xml:",chardata"`
+		} `xml:"description"`
+		ParameterGroup *struct {
+			Text string `xml:",chardata"`
+		} `xml:"parameterGroup"`
 		ParameterName struct {
 			Text string `xml:",chardata"`
 		} `xml:"parameterName"`
 		ParameterType struct {
 			Text string `xml:",chardata"`
 		} `xml:"parameterType"`
-		SequenceNumber struct {
-			Text string `xml:",chardata"`
-		} `xml:"sequenceNumber"`
-		ParameterValue struct {
+		ParameterValue *struct {
 			Text string `xml:",chardata"`
 		} `xml:"parameterValue"`
+		SequenceNumber *struct {
+			Text string `xml:",chardata"`
+		} `xml:"sequenceNumber"`
 	} `xml:"externalCredentialParameters"`
 	Label struct {
 		Text string `xml:",chardata"`

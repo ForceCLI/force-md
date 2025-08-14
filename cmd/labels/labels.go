@@ -39,7 +39,7 @@ func tableCustomLabels(files []string) {
 	table.SetHeader([]string{"Name", "Categories", "Language", "Protected", "Description", "Value"})
 	table.SetRowLine(true)
 	for _, r := range rows {
-		row := []string{r.FullName, r.Categories, r.Language, r.Protected, r.ShortDescription, r.Value}
+		row := []string{r.FullName, *r.Categories, r.Language, r.Protected, r.ShortDescription, r.Value}
 		table.Append(row)
 	}
 	if table.NumLines() > 0 {

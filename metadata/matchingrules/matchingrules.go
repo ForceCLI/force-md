@@ -26,6 +26,9 @@ type MatchingRule struct {
 	FullName struct {
 		Text string `xml:",chardata"`
 	} `xml:"fullName"`
+	BooleanFilter *struct {
+		Text string `xml:",chardata"`
+	} `xml:"booleanFilter"`
 	Description struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
@@ -46,9 +49,6 @@ type MatchingRule struct {
 	RuleStatus struct {
 		Text string `xml:",chardata"`
 	} `xml:"ruleStatus"`
-	BooleanFilter struct {
-		Text string `xml:",chardata"`
-	} `xml:"booleanFilter"`
 }
 
 func (c *MatchingRules) SetMetadata(m metadata.MetadataInfo) {

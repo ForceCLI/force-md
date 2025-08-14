@@ -15,22 +15,28 @@ func init() {
 
 type FlexiPage struct {
 	metadata.MetadataInfo
-	XMLName          xml.Name `xml:"FlexiPage"`
-	Xmlns            string   `xml:"xmlns,attr"`
+	XMLName     xml.Name `xml:"FlexiPage"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	FlexiPageRegions []struct {
 		ItemInstances []struct {
-			ComponentInstance struct {
+			ComponentInstance *struct {
 				ComponentInstanceProperties []struct {
 					Name struct {
 						Text string `xml:",chardata"`
 					} `xml:"name"`
-					ValueList struct {
+					Type *struct {
+						Text string `xml:",chardata"`
+					} `xml:"type"`
+					ValueList *struct {
 						ValueListItems []struct {
 							Value struct {
 								Text string `xml:",chardata"`
 							} `xml:"value"`
-							VisibilityRule struct {
-								BooleanFilter struct {
+							VisibilityRule *struct {
+								BooleanFilter *struct {
 									Text string `xml:",chardata"`
 								} `xml:"booleanFilter"`
 								Criteria []struct {
@@ -40,19 +46,16 @@ type FlexiPage struct {
 									Operator struct {
 										Text string `xml:",chardata"`
 									} `xml:"operator"`
-									RightValue struct {
+									RightValue *struct {
 										Text string `xml:",chardata"`
 									} `xml:"rightValue"`
 								} `xml:"criteria"`
 							} `xml:"visibilityRule"`
 						} `xml:"valueListItems"`
 					} `xml:"valueList"`
-					Value struct {
+					Value *struct {
 						Text string `xml:",chardata"`
 					} `xml:"value"`
-					Type struct {
-						Text string `xml:",chardata"`
-					} `xml:"type"`
 				} `xml:"componentInstanceProperties"`
 				ComponentName struct {
 					Text string `xml:",chardata"`
@@ -60,7 +63,10 @@ type FlexiPage struct {
 				Identifier struct {
 					Text string `xml:",chardata"`
 				} `xml:"identifier"`
-				VisibilityRule struct {
+				VisibilityRule *struct {
+					BooleanFilter *struct {
+						Text string `xml:",chardata"`
+					} `xml:"booleanFilter"`
 					Criteria []struct {
 						LeftValue struct {
 							Text string `xml:",chardata"`
@@ -68,17 +74,14 @@ type FlexiPage struct {
 						Operator struct {
 							Text string `xml:",chardata"`
 						} `xml:"operator"`
-						RightValue struct {
+						RightValue *struct {
 							Text string `xml:",chardata"`
 						} `xml:"rightValue"`
 					} `xml:"criteria"`
-					BooleanFilter struct {
-						Text string `xml:",chardata"`
-					} `xml:"booleanFilter"`
 				} `xml:"visibilityRule"`
 			} `xml:"componentInstance"`
-			FieldInstance struct {
-				FieldInstanceProperties struct {
+			FieldInstance *struct {
+				FieldInstanceProperties []struct {
 					Name struct {
 						Text string `xml:",chardata"`
 					} `xml:"name"`
@@ -92,7 +95,10 @@ type FlexiPage struct {
 				Identifier struct {
 					Text string `xml:",chardata"`
 				} `xml:"identifier"`
-				VisibilityRule struct {
+				VisibilityRule *struct {
+					BooleanFilter *struct {
+						Text string `xml:",chardata"`
+					} `xml:"booleanFilter"`
 					Criteria []struct {
 						LeftValue struct {
 							Text string `xml:",chardata"`
@@ -100,37 +106,37 @@ type FlexiPage struct {
 						Operator struct {
 							Text string `xml:",chardata"`
 						} `xml:"operator"`
-						RightValue struct {
+						RightValue *struct {
 							Text string `xml:",chardata"`
 						} `xml:"rightValue"`
 					} `xml:"criteria"`
-					BooleanFilter struct {
-						Text string `xml:",chardata"`
-					} `xml:"booleanFilter"`
 				} `xml:"visibilityRule"`
 			} `xml:"fieldInstance"`
 		} `xml:"itemInstances"`
+		Mode *struct {
+			Text string `xml:",chardata"`
+		} `xml:"mode"`
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		Type struct {
 			Text string `xml:",chardata"`
 		} `xml:"type"`
-		Mode struct {
-			Text string `xml:",chardata"`
-		} `xml:"mode"`
 	} `xml:"flexiPageRegions"`
 	MasterLabel struct {
 		Text string `xml:",chardata"`
 	} `xml:"masterLabel"`
-	SobjectType struct {
+	ParentFlexiPage *struct {
+		Text string `xml:",chardata"`
+	} `xml:"parentFlexiPage"`
+	SobjectType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sobjectType"`
 	Template struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		Properties struct {
+		Properties []struct {
 			Name struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
@@ -142,12 +148,6 @@ type FlexiPage struct {
 	FlexiPageType struct {
 		Text string `xml:",chardata"`
 	} `xml:"type"`
-	ParentFlexiPage struct {
-		Text string `xml:",chardata"`
-	} `xml:"parentFlexiPage"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 func (c *FlexiPage) SetMetadata(m metadata.MetadataInfo) {

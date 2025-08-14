@@ -43,10 +43,8 @@ type ReportType struct {
 	Deployed struct {
 		Text string `xml:",chardata"`
 	} `xml:"deployed"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Join *struct {
+	Description *TextLiteral `xml:"description"`
+	Join        *struct {
 		Join *struct {
 			Join *struct {
 				OuterJoin struct {

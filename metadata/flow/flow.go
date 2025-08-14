@@ -404,10 +404,10 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"typeValue"`
 	} `xml:"dataTypeMappings"`
-	ExtensionName   *string `xml:"extensionName"`
-	FieldText       *string `xml:"fieldText"`
-	FieldType       string  `xml:"fieldType"`
-	Fields          []Field `xml:"fields"`
+	ExtensionName   *string      `xml:"extensionName"`
+	FieldText       *TextLiteral `xml:"fieldText"`
+	FieldType       string       `xml:"fieldType"`
+	Fields          []Field      `xml:"fields"`
 	InputParameters []struct {
 		Name struct {
 			Text string `xml:",chardata"`
@@ -420,6 +420,12 @@ type Field struct {
 	InputsOnNextNavToAssocScrn *struct {
 		Text string `xml:",chardata"`
 	} `xml:"inputsOnNextNavToAssocScrn"`
+	IsDisabled *struct {
+		ElementReference *struct {
+			Text string `xml:",chardata"`
+		} `xml:"elementReference"`
+		BooleanValue *BooleanText `xml:"booleanValue"`
+	} `xml:"isDisabled"`
 	IsRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isRequired"`
@@ -484,6 +490,9 @@ type Screen struct {
 	AllowPause  struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowPause"`
+	BackButtonLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"backButtonLabel"`
 	Connector *struct {
 		IsGoTo *struct {
 			Text string `xml:",chardata"`

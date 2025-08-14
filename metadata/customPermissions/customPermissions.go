@@ -15,17 +15,17 @@ func init() {
 
 type CustomPermission struct {
 	metadata.MetadataInfo
-	XMLName    xml.Name `xml:"CustomPermission"`
-	Xmlns      string   `xml:"xmlns,attr"`
+	XMLName     xml.Name `xml:"CustomPermission"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	IsLicensed struct {
 		Text string `xml:",chardata"`
 	} `xml:"isLicensed"`
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 func (c *CustomPermission) SetMetadata(m metadata.MetadataInfo) {

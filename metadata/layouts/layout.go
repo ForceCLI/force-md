@@ -15,8 +15,14 @@ func init() {
 
 type Layout struct {
 	metadata.MetadataInfo
-	XMLName        xml.Name `xml:"Layout"`
-	Xmlns          string   `xml:"xmlns,attr"`
+	XMLName       xml.Name `xml:"Layout"`
+	Xmlns         string   `xml:"xmlns,attr"`
+	CustomButtons []struct {
+		Text string `xml:",chardata"`
+	} `xml:"customButtons"`
+	EmailDefault *struct {
+		Text string `xml:",chardata"`
+	} `xml:"emailDefault"`
 	ExcludeButtons []struct {
 		Text string `xml:",chardata"`
 	} `xml:"excludeButtons"`
@@ -30,36 +36,36 @@ type Layout struct {
 		EditHeading struct {
 			Text string `xml:",chardata"`
 		} `xml:"editHeading"`
-		Label struct {
+		Label *struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 		LayoutColumns []struct {
 			LayoutItems []struct {
-				Behavior struct {
+				Behavior *struct {
 					Text string `xml:",chardata"`
 				} `xml:"behavior"`
-				Field struct {
+				Field *struct {
 					Text string `xml:",chardata"`
 				} `xml:"field"`
-				CustomLink struct {
+				CustomLink *struct {
 					Text string `xml:",chardata"`
 				} `xml:"customLink"`
-				EmptySpace struct {
+				EmptySpace *struct {
 					Text string `xml:",chardata"`
 				} `xml:"emptySpace"`
-				Height struct {
+				Height *struct {
 					Text string `xml:",chardata"`
 				} `xml:"height"`
-				Page struct {
+				Page *struct {
 					Text string `xml:",chardata"`
 				} `xml:"page"`
-				ShowLabel struct {
+				ShowLabel *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showLabel"`
-				ShowScrollbars struct {
+				ShowScrollbars *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showScrollbars"`
-				Width struct {
+				Width *struct {
 					Text string `xml:",chardata"`
 				} `xml:"width"`
 			} `xml:"layoutItems"`
@@ -68,7 +74,15 @@ type Layout struct {
 			Text string `xml:",chardata"`
 		} `xml:"style"`
 	} `xml:"layoutSections"`
-	PlatformActionList struct {
+	MultilineLayoutFields []struct {
+		Text string `xml:",chardata"`
+	} `xml:"multilineLayoutFields"`
+	MiniLayout *struct {
+		Fields []struct {
+			Text string `xml:",chardata"`
+		} `xml:"fields"`
+	} `xml:"miniLayout"`
+	PlatformActionList *struct {
 		ActionListContext struct {
 			Text string `xml:",chardata"`
 		} `xml:"actionListContext"`
@@ -84,77 +98,14 @@ type Layout struct {
 			} `xml:"sortOrder"`
 		} `xml:"platformActionListItems"`
 	} `xml:"platformActionList"`
-	RelatedLists []struct {
-		ExcludeButtons []struct {
-			Text string `xml:",chardata"`
-		} `xml:"excludeButtons"`
-		Fields []struct {
-			Text string `xml:",chardata"`
-		} `xml:"fields"`
-		RelatedList struct {
-			Text string `xml:",chardata"`
-		} `xml:"relatedList"`
-		SortField struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortField"`
-		SortOrder struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortOrder"`
-		CustomButtons struct {
-			Text string `xml:",chardata"`
-		} `xml:"customButtons"`
-	} `xml:"relatedLists"`
-	RelatedObjects []struct {
-		Text string `xml:",chardata"`
-	} `xml:"relatedObjects"`
-	ShowEmailCheckbox struct {
-		Text string `xml:",chardata"`
-	} `xml:"showEmailCheckbox"`
-	ShowHighlightsPanel struct {
-		Text string `xml:",chardata"`
-	} `xml:"showHighlightsPanel"`
-	ShowInteractionLogPanel struct {
-		Text string `xml:",chardata"`
-	} `xml:"showInteractionLogPanel"`
-	ShowRunAssignmentRulesCheckbox struct {
-		Text string `xml:",chardata"`
-	} `xml:"showRunAssignmentRulesCheckbox"`
-	ShowSubmitAndAttachButton struct {
-		Text string `xml:",chardata"`
-	} `xml:"showSubmitAndAttachButton"`
-	SummaryLayout struct {
-		MasterLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"masterLabel"`
-		SizeX struct {
-			Text string `xml:",chardata"`
-		} `xml:"sizeX"`
-		SizeY struct {
-			Text string `xml:",chardata"`
-		} `xml:"sizeY"`
-		SummaryLayoutStyle struct {
-			Text string `xml:",chardata"`
-		} `xml:"summaryLayoutStyle"`
-		SummaryLayoutItems []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			PosX struct {
-				Text string `xml:",chardata"`
-			} `xml:"posX"`
-			PosY struct {
-				Text string `xml:",chardata"`
-			} `xml:"posY"`
-		} `xml:"summaryLayoutItems"`
-	} `xml:"summaryLayout"`
-	QuickActionList struct {
+	QuickActionList *struct {
 		QuickActionListItems []struct {
 			QuickActionName struct {
 				Text string `xml:",chardata"`
 			} `xml:"quickActionName"`
 		} `xml:"quickActionListItems"`
 	} `xml:"quickActionList"`
-	RelatedContent struct {
+	RelatedContent *struct {
 		RelatedContentItems []struct {
 			LayoutItem struct {
 				Behavior struct {
@@ -166,29 +117,78 @@ type Layout struct {
 			} `xml:"layoutItem"`
 		} `xml:"relatedContentItems"`
 	} `xml:"relatedContent"`
-	CustomButtons []struct {
-		Text string `xml:",chardata"`
-	} `xml:"customButtons"`
-	EmailDefault struct {
-		Text string `xml:",chardata"`
-	} `xml:"emailDefault"`
-	RunAssignmentRulesDefault struct {
-		Text string `xml:",chardata"`
-	} `xml:"runAssignmentRulesDefault"`
-	ShowKnowledgeComponent struct {
-		Text string `xml:",chardata"`
-	} `xml:"showKnowledgeComponent"`
-	ShowSolutionSection struct {
-		Text string `xml:",chardata"`
-	} `xml:"showSolutionSection"`
-	MiniLayout struct {
+	RelatedLists []struct {
+		CustomButtons []struct {
+			Text string `xml:",chardata"`
+		} `xml:"customButtons"`
+		ExcludeButtons []struct {
+			Text string `xml:",chardata"`
+		} `xml:"excludeButtons"`
 		Fields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"fields"`
-	} `xml:"miniLayout"`
-	MultilineLayoutFields []struct {
+		RelatedList struct {
+			Text string `xml:",chardata"`
+		} `xml:"relatedList"`
+		SortField *struct {
+			Text string `xml:",chardata"`
+		} `xml:"sortField"`
+		SortOrder *struct {
+			Text string `xml:",chardata"`
+		} `xml:"sortOrder"`
+	} `xml:"relatedLists"`
+	RelatedObjects []struct {
 		Text string `xml:",chardata"`
-	} `xml:"multilineLayoutFields"`
+	} `xml:"relatedObjects"`
+	RunAssignmentRulesDefault *struct {
+		Text string `xml:",chardata"`
+	} `xml:"runAssignmentRulesDefault"`
+	ShowEmailCheckbox struct {
+		Text string `xml:",chardata"`
+	} `xml:"showEmailCheckbox"`
+	ShowHighlightsPanel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showHighlightsPanel"`
+	ShowInteractionLogPanel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showInteractionLogPanel"`
+	ShowKnowledgeComponent *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showKnowledgeComponent"`
+	ShowRunAssignmentRulesCheckbox *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showRunAssignmentRulesCheckbox"`
+	ShowSolutionSection *struct {
+		Text string `xml:",chardata"`
+	} `xml:"showSolutionSection"`
+	ShowSubmitAndAttachButton struct {
+		Text string `xml:",chardata"`
+	} `xml:"showSubmitAndAttachButton"`
+	SummaryLayout *struct {
+		MasterLabel struct {
+			Text string `xml:",chardata"`
+		} `xml:"masterLabel"`
+		SizeX struct {
+			Text string `xml:",chardata"`
+		} `xml:"sizeX"`
+		SizeY struct {
+			Text string `xml:",chardata"`
+		} `xml:"sizeY"`
+		SummaryLayoutItems []struct {
+			Field struct {
+				Text string `xml:",chardata"`
+			} `xml:"field"`
+			PosX struct {
+				Text string `xml:",chardata"`
+			} `xml:"posX"`
+			PosY struct {
+				Text string `xml:",chardata"`
+			} `xml:"posY"`
+		} `xml:"summaryLayoutItems"`
+		SummaryLayoutStyle struct {
+			Text string `xml:",chardata"`
+		} `xml:"summaryLayoutStyle"`
+	} `xml:"summaryLayout"`
 }
 
 func (c *Layout) SetMetadata(m metadata.MetadataInfo) {

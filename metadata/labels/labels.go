@@ -2,6 +2,7 @@ package labels
 
 import (
 	"encoding/xml"
+	"sort"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -16,12 +17,12 @@ func init() {
 type CustomLabelList []CustomLabel
 
 type CustomLabel struct {
-	FullName         string `xml:"fullName"`
-	Categories       string `xml:"categories"`
-	Language         string `xml:"language"`
-	Protected        string `xml:"protected"`
-	ShortDescription string `xml:"shortDescription"`
-	Value            string `xml:"value"`
+	FullName         string  `xml:"fullName"`
+	Categories       *string `xml:"categories"`
+	Language         string  `xml:"language"`
+	Protected        string  `xml:"protected"`
+	ShortDescription string  `xml:"shortDescription"`
+	Value            string  `xml:"value"`
 }
 
 type CustomLabels struct {
@@ -37,6 +38,13 @@ func (c *CustomLabels) SetMetadata(m metadata.MetadataInfo) {
 
 func (c *CustomLabels) Type() metadata.MetadataType {
 	return NAME
+}
+
+// Tidy sorts the labels by fullName
+func (c *CustomLabels) Tidy() {
+	sort.Slice(c.Labels, func(i, j int) bool {
+		return c.Labels[i].FullName < c.Labels[j].FullName
+	})
 }
 
 func Open(path string) (*CustomLabels, error) {

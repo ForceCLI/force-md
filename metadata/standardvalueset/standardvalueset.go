@@ -24,37 +24,37 @@ type StandardValue struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
-	CssExposed struct {
+	CssExposed *struct {
 		Text string `xml:",chardata"`
 	} `xml:"cssExposed"`
-	Closed struct {
+	Closed *struct {
 		Text string `xml:",chardata"`
 	} `xml:"closed"`
-	GroupingString struct {
+	GroupingString *struct {
 		Text string `xml:",chardata"`
 	} `xml:"groupingString"`
-	Converted struct {
+	Converted *struct {
 		Text string `xml:",chardata"`
 	} `xml:"converted"`
-	Description struct {
+	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	ForecastCategory struct {
+	ForecastCategory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"forecastCategory"`
-	Probability struct {
+	Probability *struct {
 		Text string `xml:",chardata"`
 	} `xml:"probability"`
-	Won struct {
+	Won *struct {
 		Text string `xml:",chardata"`
 	} `xml:"won"`
-	ReverseRole struct {
+	ReverseRole *struct {
 		Text string `xml:",chardata"`
 	} `xml:"reverseRole"`
-	AllowEmail struct {
+	AllowEmail *struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowEmail"`
-	HighPriority struct {
+	HighPriority *struct {
 		Text string `xml:",chardata"`
 	} `xml:"highPriority"`
 }
@@ -67,7 +67,7 @@ type StandardValueSet struct {
 		Text string `xml:",chardata"`
 	} `xml:"sorted"`
 	StandardValue      []StandardValue `xml:"standardValue"`
-	GroupingStringEnum struct {
+	GroupingStringEnum *struct {
 		Text string `xml:",chardata"`
 	} `xml:"groupingStringEnum"`
 }

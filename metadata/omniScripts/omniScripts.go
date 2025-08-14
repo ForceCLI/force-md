@@ -3,6 +3,7 @@ package omniscript
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -26,6 +27,9 @@ type OmniScript struct {
 	IsIntegrationProcedure struct {
 		Text string `xml:",chardata"`
 	} `xml:"isIntegrationProcedure"`
+	IsManagedUsingStdDesigner *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isManagedUsingStdDesigner"`
 	IsMetadataCacheDisabled struct {
 		Text string `xml:",chardata"`
 	} `xml:"isMetadataCacheDisabled"`
@@ -45,56 +49,8 @@ type OmniScript struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
 	OmniProcessElements []struct {
-		IsActive struct {
-			Text string `xml:",chardata"`
-		} `xml:"isActive"`
-		IsOmniScriptEmbeddable struct {
-			Text string `xml:",chardata"`
-		} `xml:"isOmniScriptEmbeddable"`
-		Level struct {
-			Text string `xml:",chardata"`
-		} `xml:"level"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		OmniProcessVersionNumber struct {
-			Text string `xml:",chardata"`
-		} `xml:"omniProcessVersionNumber"`
-		PropertySetConfig struct {
-			Text string `xml:",chardata"`
-		} `xml:"propertySetConfig"`
-		SequenceNumber struct {
-			Text string `xml:",chardata"`
-		} `xml:"sequenceNumber"`
-		Type struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
 		ChildElements []struct {
 			ChildElements []struct {
-				IsActive struct {
-					Text string `xml:",chardata"`
-				} `xml:"isActive"`
-				IsOmniScriptEmbeddable struct {
-					Text string `xml:",chardata"`
-				} `xml:"isOmniScriptEmbeddable"`
-				Level struct {
-					Text string `xml:",chardata"`
-				} `xml:"level"`
-				Name struct {
-					Text string `xml:",chardata"`
-				} `xml:"name"`
-				OmniProcessVersionNumber struct {
-					Text string `xml:",chardata"`
-				} `xml:"omniProcessVersionNumber"`
-				PropertySetConfig struct {
-					Text string `xml:",chardata"`
-				} `xml:"propertySetConfig"`
-				SequenceNumber struct {
-					Text string `xml:",chardata"`
-				} `xml:"sequenceNumber"`
-				Type struct {
-					Text string `xml:",chardata"`
-				} `xml:"type"`
 				ChildElements []struct {
 					IsActive struct {
 						Text string `xml:",chardata"`
@@ -111,16 +67,36 @@ type OmniScript struct {
 					OmniProcessVersionNumber struct {
 						Text string `xml:",chardata"`
 					} `xml:"omniProcessVersionNumber"`
-					PropertySetConfig struct {
-						Text string `xml:",chardata"`
-					} `xml:"propertySetConfig"`
-					SequenceNumber struct {
+					PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+					SequenceNumber    struct {
 						Text string `xml:",chardata"`
 					} `xml:"sequenceNumber"`
 					Type struct {
 						Text string `xml:",chardata"`
 					} `xml:"type"`
 				} `xml:"childElements"`
+				IsActive struct {
+					Text string `xml:",chardata"`
+				} `xml:"isActive"`
+				IsOmniScriptEmbeddable struct {
+					Text string `xml:",chardata"`
+				} `xml:"isOmniScriptEmbeddable"`
+				Level struct {
+					Text string `xml:",chardata"`
+				} `xml:"level"`
+				Name struct {
+					Text string `xml:",chardata"`
+				} `xml:"name"`
+				OmniProcessVersionNumber struct {
+					Text string `xml:",chardata"`
+				} `xml:"omniProcessVersionNumber"`
+				PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+				SequenceNumber    struct {
+					Text string `xml:",chardata"`
+				} `xml:"sequenceNumber"`
+				Type struct {
+					Text string `xml:",chardata"`
+				} `xml:"type"`
 			} `xml:"childElements"`
 			IsActive struct {
 				Text string `xml:",chardata"`
@@ -137,27 +113,43 @@ type OmniScript struct {
 			OmniProcessVersionNumber struct {
 				Text string `xml:",chardata"`
 			} `xml:"omniProcessVersionNumber"`
-			PropertySetConfig struct {
-				Text string `xml:",chardata"`
-			} `xml:"propertySetConfig"`
-			SequenceNumber struct {
+			PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+			SequenceNumber    struct {
 				Text string `xml:",chardata"`
 			} `xml:"sequenceNumber"`
 			Type struct {
 				Text string `xml:",chardata"`
 			} `xml:"type"`
 		} `xml:"childElements"`
-		Description struct {
+		Description *TextLiteral `xml:"description"`
+		IsActive    struct {
 			Text string `xml:",chardata"`
-		} `xml:"description"`
+		} `xml:"isActive"`
+		IsOmniScriptEmbeddable struct {
+			Text string `xml:",chardata"`
+		} `xml:"isOmniScriptEmbeddable"`
+		Level struct {
+			Text string `xml:",chardata"`
+		} `xml:"level"`
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		OmniProcessVersionNumber struct {
+			Text string `xml:",chardata"`
+		} `xml:"omniProcessVersionNumber"`
+		PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+		SequenceNumber    struct {
+			Text string `xml:",chardata"`
+		} `xml:"sequenceNumber"`
+		Type struct {
+			Text string `xml:",chardata"`
+		} `xml:"type"`
 	} `xml:"omniProcessElements"`
 	OmniProcessType struct {
 		Text string `xml:",chardata"`
 	} `xml:"omniProcessType"`
-	PropertySetConfig struct {
-		Text string `xml:",chardata"`
-	} `xml:"propertySetConfig"`
-	SubType struct {
+	PropertySetConfig *TextLiteral `xml:"propertySetConfig"`
+	SubType           struct {
 		Text string `xml:",chardata"`
 	} `xml:"subType"`
 	OmniScriptType struct {
