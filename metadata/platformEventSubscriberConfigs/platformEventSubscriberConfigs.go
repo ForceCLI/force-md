@@ -24,6 +24,12 @@ type PlatformEventSubscriberConfig struct {
 	MasterLabel struct {
 		Text string `xml:",chardata"`
 	} `xml:"masterLabel"`
+	NumPartitions *struct {
+		Text string `xml:",chardata"`
+	} `xml:"numPartitions"`
+	PartitionKey *struct {
+		Text string `xml:",chardata"`
+	} `xml:"partitionKey"`
 	PlatformEventConsumer struct {
 		Text string `xml:",chardata"`
 	} `xml:"platformEventConsumer"`

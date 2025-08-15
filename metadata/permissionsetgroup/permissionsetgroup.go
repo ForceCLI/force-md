@@ -26,7 +26,7 @@ type PermissionSetGroup struct {
 	Description struct {
 		Text string `xml:",innerxml"`
 	} `xml:"description"`
-	HasActivationRequired struct {
+	HasActivationRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"hasActivationRequired"`
 	Label struct {

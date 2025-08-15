@@ -20,6 +20,9 @@ type ConnectedApp struct {
 	ContactEmail struct {
 		Text string `xml:",chardata"`
 	} `xml:"contactEmail"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
@@ -57,10 +60,7 @@ type ConnectedApp struct {
 			Text string `xml:",chardata"`
 		} `xml:"refreshTokenPolicy"`
 	} `xml:"oauthPolicy"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	PermissionSetName struct {
+	PermissionSetName *struct {
 		Text string `xml:",chardata"`
 	} `xml:"permissionSetName"`
 }

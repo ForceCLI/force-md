@@ -15,8 +15,11 @@ func init() {
 
 type Group struct {
 	metadata.MetadataInfo
-	XMLName           xml.Name `xml:"Group"`
-	Xmlns             string   `xml:"xmlns,attr"`
+	XMLName     xml.Name `xml:"Group"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	DoesIncludeBosses struct {
 		Text string `xml:",chardata"`
 	} `xml:"doesIncludeBosses"`

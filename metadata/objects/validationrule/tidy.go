@@ -14,20 +14,24 @@ func (rules ValidationRuleList) Tidy() {
 		return rules[i].FullName < rules[j].FullName
 	})
 	for _, f := range rules {
+		if f.ErrorConditionFormula != nil {
+			formatted, err := formatter.Format(f.ErrorConditionFormula.String())
+			if err != nil {
+				log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
+			} else {
+				f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
+			}
+		}
+	}
+}
+
+func (f ValidationRule) Tidy() {
+	if f.ErrorConditionFormula != nil {
 		formatted, err := formatter.Format(f.ErrorConditionFormula.String())
 		if err != nil {
 			log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
 		} else {
 			f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
 		}
-	}
-}
-
-func (f ValidationRule) Tidy() {
-	formatted, err := formatter.Format(f.ErrorConditionFormula.String())
-	if err != nil {
-		log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
-	} else {
-		f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
 	}
 }

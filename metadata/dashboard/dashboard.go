@@ -2,10 +2,14 @@ package dashboard
 
 import (
 	"encoding/xml"
+	"fmt"
+	"path/filepath"
+	"strings"
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
+	"github.com/ForceCLI/force-md/registry"
 )
 
 const NAME = "Dashboard"
@@ -18,6 +22,7 @@ type Dashboard struct {
 	metadata.MetadataInfo
 	XMLName            xml.Name `xml:"Dashboard"`
 	Xmlns              string   `xml:"xmlns,attr"`
+	Xsi                *string  `xml:"xsi,attr"`
 	BackgroundEndColor struct {
 		Text string `xml:",chardata"`
 	} `xml:"backgroundEndColor"`
@@ -39,6 +44,19 @@ type Dashboard struct {
 	DashboardColorPalette *struct {
 		Text string `xml:",chardata"`
 	} `xml:"dashboardColorPalette"`
+	DashboardFilters []struct {
+		DashboardFilterOptions []struct {
+			Operator struct {
+				Text string `xml:",chardata"`
+			} `xml:"operator"`
+			Values struct {
+				Text string `xml:",chardata"`
+			} `xml:"values"`
+		} `xml:"dashboardFilterOptions"`
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+	} `xml:"dashboardFilters"`
 	DashboardGridLayout *struct {
 		DashboardGridComponents []struct {
 			ColSpan struct {
@@ -54,6 +72,9 @@ type Dashboard struct {
 				ChartAxisRange *struct {
 					Text string `xml:",chardata"`
 				} `xml:"chartAxisRange"`
+				ChartAxisRangeMax *struct {
+					Text string `xml:",chardata"`
+				} `xml:"chartAxisRangeMax"`
 				ChartSummary *struct {
 					Aggregate *struct {
 						Text string `xml:",chardata"`
@@ -68,6 +89,16 @@ type Dashboard struct {
 				ComponentType struct {
 					Text string `xml:",chardata"`
 				} `xml:"componentType"`
+				DashboardComponentContents *struct {
+					RichTextContent struct {
+						Text string `xml:",chardata"`
+					} `xml:"richTextContent"`
+				} `xml:"dashboardComponentContents"`
+				DashboardFilterColumns []struct {
+					Column struct {
+						Text string `xml:",chardata"`
+					} `xml:"column"`
+				} `xml:"dashboardFilterColumns"`
 				DecimalPrecision *struct {
 					Text string `xml:",chardata"`
 				} `xml:"decimalPrecision"`
@@ -91,6 +122,24 @@ type Dashboard struct {
 						Text string `xml:",chardata"`
 					} `xml:"decimalPrecision"`
 					FlexTableColumn []struct {
+						BreakPoint1 *struct {
+							Text string `xml:",chardata"`
+						} `xml:"breakPoint1"`
+						BreakPoint2 *struct {
+							Text string `xml:",chardata"`
+						} `xml:"breakPoint2"`
+						BreakPointOrder *struct {
+							Text string `xml:",chardata"`
+						} `xml:"breakPointOrder"`
+						HighRangeColor *struct {
+							Text string `xml:",chardata"`
+						} `xml:"highRangeColor"`
+						LowRangeColor *struct {
+							Text string `xml:",chardata"`
+						} `xml:"lowRangeColor"`
+						MidRangeColor *struct {
+							Text string `xml:",chardata"`
+						} `xml:"midRangeColor"`
 						ReportColumn struct {
 							Text string `xml:",chardata"`
 						} `xml:"reportColumn"`
@@ -171,7 +220,7 @@ type Dashboard struct {
 				MetricLabel *struct {
 					Text string `xml:",chardata"`
 				} `xml:"metricLabel"`
-				Report         string `xml:"report"`
+				Report         *string `xml:"report"`
 				ShowPercentage *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showPercentage"`
@@ -211,19 +260,6 @@ type Dashboard struct {
 			Text string `xml:",chardata"`
 		} `xml:"rowHeight"`
 	} `xml:"dashboardGridLayout"`
-	DashboardFilters []struct {
-		DashboardFilterOptions []struct {
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			Values struct {
-				Text string `xml:",chardata"`
-			} `xml:"values"`
-		} `xml:"dashboardFilterOptions"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-	} `xml:"dashboardFilters"`
 	DashboardType *TextLiteral `xml:"dashboardType"`
 	Description   *TextLiteral `xml:"description"`
 	IsGridLayout  struct {
@@ -579,6 +615,7 @@ type Dashboard struct {
 			} `xml:"useReportChart"`
 		} `xml:"components"`
 	} `xml:"rightSection"`
+	Owner       *TextLiteral `xml:"owner"`
 	RunningUser *TextLiteral `xml:"runningUser"`
 	TextColor   struct {
 		Text string `xml:",chardata"`
@@ -600,6 +637,60 @@ func (c *Dashboard) SetMetadata(m metadata.MetadataInfo) {
 
 func (c *Dashboard) Type() metadata.MetadataType {
 	return NAME
+}
+
+func (c *Dashboard) Files(format metadata.Format) (map[string][]byte, error) {
+	// Get the original path from metadata info
+	originalPath := string(c.MetadataInfo.Path())
+
+	// Extract the folder structure from the original path
+	// e.g., dashboards/HomePageMaster/Business_Development_Individual21.dashboard-meta.xml
+	// Should preserve: HomePageMaster/Business_Development_Individual21
+
+	// Get the directory name for dashboards
+	dirName := registry.GetCanonicalDirectoryName(NAME)
+
+	// Get relative path within the dashboards directory
+	var relativePath string
+	if strings.Contains(originalPath, "dashboards/") {
+		// Extract everything after "dashboards/"
+		parts := strings.Split(originalPath, "dashboards/")
+		if len(parts) > 1 {
+			relativePath = parts[1]
+		}
+	}
+
+	if relativePath == "" {
+		return nil, fmt.Errorf("could not extract dashboard path from %s", originalPath)
+	}
+
+	// Remove the file extension and -meta.xml suffix to get the clean relative path
+	relativePath = strings.TrimSuffix(relativePath, "-meta.xml")
+	relativePath = strings.TrimSuffix(relativePath, ".dashboard")
+
+	// Marshal the metadata to XML using internal.Marshal to get proper formatting
+	xmlContent, err := internal.Marshal(c)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal dashboard metadata: %w", err)
+	}
+
+	files := make(map[string][]byte)
+
+	var fileName string
+	switch format {
+	case metadata.SourceFormat:
+		// Source format: preserve folder structure and add -meta.xml suffix
+		fileName = relativePath + ".dashboard-meta.xml"
+	case metadata.MetadataFormat:
+		// Metadata format: preserve folder structure, no -meta.xml suffix
+		fileName = relativePath + ".dashboard"
+	default:
+		return nil, fmt.Errorf("unsupported format: %v", format)
+	}
+
+	files[filepath.Join(dirName, fileName)] = xmlContent
+
+	return files, nil
 }
 
 func Open(path string) (*Dashboard, error) {

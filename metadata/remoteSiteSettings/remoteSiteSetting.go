@@ -15,8 +15,11 @@ func init() {
 
 type RemoteSiteSetting struct {
 	metadata.MetadataInfo
-	XMLName                 xml.Name `xml:"RemoteSiteSetting"`
-	Xmlns                   string   `xml:"xmlns,attr"`
+	XMLName     xml.Name `xml:"RemoteSiteSetting"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	DisableProtocolSecurity struct {
 		Text string `xml:",chardata"`
 	} `xml:"disableProtocolSecurity"`
@@ -26,9 +29,6 @@ type RemoteSiteSetting struct {
 	URL struct {
 		Text string `xml:",chardata"`
 	} `xml:"url"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 func (c *RemoteSiteSetting) SetMetadata(m metadata.MetadataInfo) {

@@ -38,12 +38,12 @@ type OmniUiCard struct {
 	SampleDataSourceResponse struct {
 		Text string `xml:",chardata"`
 	} `xml:"sampleDataSourceResponse"`
+	StylingConfiguration *struct {
+		Text string `xml:",chardata"`
+	} `xml:"stylingConfiguration"`
 	VersionNumber struct {
 		Text string `xml:",chardata"`
 	} `xml:"versionNumber"`
-	StylingConfiguration struct {
-		Text string `xml:",chardata"`
-	} `xml:"stylingConfiguration"`
 }
 
 func (c *OmniUiCard) SetMetadata(m metadata.MetadataInfo) {

@@ -2,6 +2,8 @@ package pkg
 
 import (
 	"encoding/xml"
+	"fmt"
+	"path/filepath"
 	"sort"
 
 	. "github.com/ForceCLI/force-md/general"
@@ -70,4 +72,32 @@ func (members *MetadataItems) Tidy() {
 		return members.Members[i] < members.Members[j]
 	})
 	RemoveDuplicates(&members.Members)
+}
+
+// Files implements the FilesGenerator interface
+func (p *Package) Files(format metadata.Format) (map[string][]byte, error) {
+	// Marshal the package to XML
+	xmlContent, err := internal.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal package: %w", err)
+	}
+
+	files := make(map[string][]byte)
+
+	// Get the original path to determine the package file name
+	originalPath := string(p.MetadataInfo.Path())
+	fileName := ""
+	if originalPath != "" {
+		fileName = filepath.Base(originalPath)
+	}
+
+	// If no path info or generic name, default to package.xml
+	if fileName == "" || fileName == "Package" {
+		fileName = "package.xml"
+	}
+
+	// Package files go in the root directory for both formats
+	files[fileName] = xmlContent
+
+	return files, nil
 }

@@ -37,8 +37,11 @@ type SobjectType struct {
 
 type Queue struct {
 	metadata.MetadataInfo
-	XMLName                xml.Name `xml:"Queue"`
-	Xmlns                  string   `xml:"xmlns,attr"`
+	XMLName     xml.Name `xml:"Queue"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	DoesSendEmailToMembers struct {
 		Text string `xml:",chardata"`
 	} `xml:"doesSendEmailToMembers"`

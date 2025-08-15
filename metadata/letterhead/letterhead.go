@@ -34,6 +34,9 @@ type Letterhead struct {
 			Text string `xml:",chardata"`
 		} `xml:"height"`
 	} `xml:"bottomLine"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	Footer struct {
 		BackgroundColor struct {
 			Text string `xml:",chardata"`
@@ -58,7 +61,7 @@ type Letterhead struct {
 		HorizontalAlignment struct {
 			Text string `xml:",chardata"`
 		} `xml:"horizontalAlignment"`
-		Logo struct {
+		Logo *struct {
 			Text string `xml:",chardata"`
 		} `xml:"logo"`
 		VerticalAlignment struct {
@@ -84,9 +87,6 @@ type Letterhead struct {
 			Text string `xml:",chardata"`
 		} `xml:"height"`
 	} `xml:"topLine"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 func (c *Letterhead) SetMetadata(m metadata.MetadataInfo) {

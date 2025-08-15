@@ -17,7 +17,10 @@ type DelegateGroup struct {
 	metadata.MetadataInfo
 	XMLName xml.Name `xml:"DelegateGroup"`
 	Xmlns   string   `xml:"xmlns,attr"`
-	Label   struct {
+	Groups  *struct {
+		Text string `xml:",chardata"`
+	} `xml:"groups"`
+	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	LoginAccess struct {
@@ -26,9 +29,6 @@ type DelegateGroup struct {
 	Roles []struct {
 		Text string `xml:",chardata"`
 	} `xml:"roles"`
-	Groups struct {
-		Text string `xml:",chardata"`
-	} `xml:"groups"`
 }
 
 func (c *DelegateGroup) SetMetadata(m metadata.MetadataInfo) {
