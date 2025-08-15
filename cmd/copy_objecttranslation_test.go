@@ -81,7 +81,7 @@ func TestCopyObjectTranslationToMetadataFormat(t *testing.T) {
 	}
 
 	// Run the copy command
-	err = copyMetadata(sourceDir, targetDir, "metadata")
+	err = CopyMetadata(sourceDir, targetDir, "metadata", "")
 	if err != nil {
 		t.Fatalf("Failed to copy metadata: %v", err)
 	}

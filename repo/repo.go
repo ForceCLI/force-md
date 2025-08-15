@@ -50,3 +50,15 @@ func (o *Repo) Open(file string) (metadata.MetadataPointer, error) {
 	(*items)[path] = m
 	return m, nil
 }
+
+// AddItem adds an already-loaded metadata item to the repo
+func (o *Repo) AddItem(m metadata.RegisterableMetadata) {
+	metadataType := m.Type()
+	path := m.GetMetadataInfo().Path()
+	if _, ok := o.openMetadata[metadataType]; !ok {
+		items := make(MetadataByPath)
+		o.openMetadata[metadataType] = &items
+	}
+	items := o.openMetadata[metadataType]
+	(*items)[path] = m
+}
