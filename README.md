@@ -77,6 +77,16 @@ unchanged.
 $ force-md profile object-permissions edit -o Account -e -D src/profiles/*
 ```
 
+### Copy and Convert Metadata
+
+Copy metadata between source format (SFDX) and metadata format (MDAPI).
+Automatically handles merging/splitting of CustomObjects and CustomObjectTranslations.
+
+```
+$ force-md copy src -t sfdx -f source      # Convert from metadata to source format
+$ force-md copy sfdx -t src -f metadata    # Convert from source to metadata format
+```
+
 ## Developing
 
 To add support for a new metadata type, [zek](https://github.com/miku/zek) can
