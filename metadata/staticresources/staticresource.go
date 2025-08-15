@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -51,6 +52,9 @@ func zipDirectory(dirPath string) ([]byte, error) {
 	zipWriter := zip.NewWriter(&buf)
 	defer zipWriter.Close()
 
+	// Use a consistent timestamp for all files
+	modTime := time.Now()
+
 	err := filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -67,12 +71,26 @@ func zipDirectory(dirPath string) ([]byte, error) {
 			return nil
 		}
 
-		// Create header
-		header, err := zip.FileInfoHeader(info)
-		if err != nil {
-			return err
+		// Create header with explicit settings like force CLI does
+		header := &zip.FileHeader{
+			Name:     filepath.ToSlash(relPath),
+			Modified: modTime,
 		}
-		header.Name = filepath.ToSlash(relPath)
+
+		// Set compression method
+		if !info.IsDir() {
+			header.Method = zip.Deflate
+		}
+
+		// Handle directories properly
+		if info.IsDir() {
+			header.Name += "/"
+			// Set external attributes for directory (0x10 for directory flag)
+			header.SetMode(info.Mode())
+		} else {
+			// Set file mode for regular files
+			header.SetMode(info.Mode())
+		}
 
 		// Write header
 		writer, err := zipWriter.CreateHeader(header)
