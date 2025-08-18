@@ -85,7 +85,13 @@ Automatically handles merging/splitting of CustomObjects and CustomObjectTransla
 ```
 $ force-md copy src -t sfdx -f source      # Convert from metadata to source format
 $ force-md copy sfdx -t src -f metadata    # Convert from source to metadata format
+$ force-md copy src -t sfdx -f source -x package.xml  # Convert with package.xml filter
 ```
+
+The `-x` flag allows filtering metadata based on a package.xml file:
+- Named components: Only the specified components are copied
+- Wildcards (`*`): All components of that type are copied
+- Mixed (wildcards + named): All components are copied, but fails if any named component is missing
 
 ## Developing
 

@@ -9,6 +9,7 @@ Copy and convert metadata between source format (SFDX) and metadata format (MDAP
 Examples:
   force-md copy src -t sfdx -f source      # Convert from metadata to source format
   force-md copy sfdx -t src -f metadata    # Convert from source to metadata format
+  force-md copy src -t sfdx -f source -x package.xml  # Convert with package.xml filter
 
 ```
 force-md copy [source directory] [flags]
@@ -17,9 +18,10 @@ force-md copy [source directory] [flags]
 ### Options
 
 ```
-  -f, --format string   target format (source or metadata)
-  -h, --help            help for copy
-  -t, --target string   target directory
+  -f, --format string    target format (source or metadata)
+  -h, --help             help for copy
+  -x, --package string   package.xml file to filter metadata
+  -t, --target string    target directory
 ```
 
 ### Options inherited from parent commands

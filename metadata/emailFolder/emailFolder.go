@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -42,14 +43,33 @@ func (c *EmailFolder) Type() metadata.MetadataType {
 }
 
 func (c *EmailFolder) Files(format metadata.Format) (map[string][]byte, error) {
+	// Get the original path from metadata info
+	originalPath := string(c.MetadataInfo.Path())
+
+	// Get the directory name for email folders
+	dirName := registry.GetCanonicalDirectoryName(NAME)
+
+	// Extract the relative path within the email directory to preserve folder structure
+	var relativePath string
+	if strings.Contains(originalPath, "email/") {
+		// Extract everything after "email/"
+		parts := strings.Split(originalPath, "email/")
+		if len(parts) > 1 {
+			relativePath = parts[1]
+			// Remove the file name to get just the directory path
+			relativePath = filepath.Dir(relativePath)
+			// If it's just ".", we're in the root
+			if relativePath == "." {
+				relativePath = ""
+			}
+		}
+	}
+
 	// Get the folder name from metadata
 	folderName := c.MetadataInfo.Name()
 	if folderName == "" {
 		return nil, fmt.Errorf("folder name is empty")
 	}
-
-	// Get the directory name for email folders
-	dirName := registry.GetCanonicalDirectoryName(NAME)
 
 	// Marshal the metadata to XML using internal.Marshal to get proper formatting
 	xmlContent, err := internal.Marshal(c)
@@ -62,13 +82,18 @@ func (c *EmailFolder) Files(format metadata.Format) (map[string][]byte, error) {
 	var fileName string
 	switch format {
 	case metadata.SourceFormat:
-		// Source format: Benefit_Verification_Templates.emailFolder-meta.xml
+		// Source format: FolderName.emailFolder-meta.xml
 		fileName = string(folderName) + ".emailFolder-meta.xml"
 	case metadata.MetadataFormat:
-		// Metadata format: Benefit_Verification_Templates-meta.xml (no .emailFolder part)
+		// Metadata format: FolderName-meta.xml (no .emailFolder part)
 		fileName = string(folderName) + "-meta.xml"
 	default:
 		return nil, fmt.Errorf("unsupported format: %v", format)
+	}
+
+	// If there's a subfolder structure, preserve it
+	if relativePath != "" {
+		fileName = filepath.Join(relativePath, fileName)
 	}
 
 	files[filepath.Join(dirName, fileName)] = xmlContent

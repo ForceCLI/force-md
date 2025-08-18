@@ -1,12 +1,16 @@
 package settings
 
 import (
+	"bytes"
 	"encoding/xml"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
+	"golang.org/x/net/html/charset"
 )
 
 func init() {
@@ -143,9 +147,9 @@ func init() {
 
 type Settings struct {
 	metadata.MetadataInfo
-	XMLName xml.Name `xml:""`
-	XMLNS   string   `xml:"xmlns,attr"`
-	Content []byte   `xml:",innerxml"`
+	XMLName xml.Name
+	XMLNS   string `xml:"xmlns,attr"`
+	Content []byte `xml:",innerxml"`
 }
 
 func (c *Settings) SetMetadata(m metadata.MetadataInfo) {
@@ -201,11 +205,45 @@ func (c *Settings) Files(metadataFormat metadata.Format) (map[string][]byte, err
 	return files, nil
 }
 
+func getRootElementName(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	contents, err := io.ReadAll(f)
+	if err != nil {
+		return "", err
+	}
+
+	r := bytes.NewReader(contents)
+	dec := xml.NewDecoder(r)
+	dec.CharsetReader = charset.NewReaderLabel
+
+	for {
+		t, err := dec.Token()
+		if err != nil {
+			return "", err
+		}
+		if se, ok := t.(xml.StartElement); ok {
+			return se.Name.Local, nil
+		}
+	}
+}
+
 func Open(path string) (*Settings, error) {
 	p := &Settings{}
 	err := metadata.ParseMetadataXml(p, path)
 	// Ensure XMLName is preserved with proper namespace
-	if p.XMLName.Local != "" && p.XMLNS == "" {
+	if p.XMLName.Local == "" {
+		// Try to get the root element name from the file to determine the settings type
+		elementName, _ := getRootElementName(path)
+		if elementName != "" {
+			p.XMLName.Local = elementName
+		}
+	}
+	if p.XMLNS == "" {
 		p.XMLNS = "http://soap.sforce.com/2006/04/metadata"
 	}
 	return p, err
