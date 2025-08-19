@@ -412,7 +412,7 @@ type Field struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		Value Value `xml:"value"`
+		Value *Value `xml:"value"`
 	} `xml:"inputParameters"`
 	HelpText *struct {
 		Text string `xml:",chardata"`
@@ -602,7 +602,7 @@ type ActionCall struct {
 		Name                  struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		Value Value `xml:"value"`
+		Value *Value `xml:"value"`
 	} `xml:"inputParameters"`
 	NameSegment *struct {
 		Text string `xml:",chardata"`
