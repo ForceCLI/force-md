@@ -11,6 +11,7 @@ import (
 )
 
 var apexClassName string
+var sourceClassName string
 
 func init() {
 	addClassCmd.Flags().StringP("class", "c", "", "class name")
@@ -25,10 +26,16 @@ func init() {
 	editClassCmd.MarkFlagsMutuallyExclusive("enable", "disable")
 	editClassCmd.MarkFlagRequired("class")
 
+	cloneClassCmd.Flags().StringVarP(&sourceClassName, "source", "s", "", "source class name")
+	cloneClassCmd.Flags().StringVarP(&apexClassName, "class", "c", "", "new class name")
+	cloneClassCmd.MarkFlagRequired("source")
+	cloneClassCmd.MarkFlagRequired("class")
+
 	ApexCmd.AddCommand(addClassCmd)
 	ApexCmd.AddCommand(editClassCmd)
 	ApexCmd.AddCommand(deleteClassCmd)
 	ApexCmd.AddCommand(listClassesCmd)
+	ApexCmd.AddCommand(cloneClassCmd)
 }
 
 var ApexCmd = &cobra.Command{
@@ -87,6 +94,18 @@ var listClassesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			listClasses(file)
+		}
+	},
+}
+
+var cloneClassCmd = &cobra.Command{
+	Use:   "clone -s ClassName -c ClassName [filename]...",
+	Short: "Clone apex class permissions",
+	Long:  "Clone apex class permissions in profiles for a new class",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			cloneClass(file)
 		}
 	},
 }
@@ -156,5 +175,23 @@ func listClasses(file string) {
 		if a.Enabled.Text == "true" {
 			fmt.Println(a.ApexClass)
 		}
+	}
+}
+
+func cloneClass(file string) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	err = p.CloneApexClassAccess(sourceClassName, apexClassName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }

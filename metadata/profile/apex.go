@@ -81,3 +81,27 @@ func (p *Profile) GetEnabledClasses() []string {
 	}
 	return classes
 }
+
+func (p *Profile) CloneApexClassAccess(src, dest string) error {
+	for _, c := range p.ClassAccesses {
+		if c.ApexClass == dest {
+			return errors.New("apex class already exists")
+		}
+	}
+	found := false
+	for _, c := range p.ClassAccesses {
+		if c.ApexClass == src {
+			found = true
+			clone := permissionset.ApexClass{}
+			clone.Enabled.Text = c.Enabled.Text
+			clone.ApexClass = dest
+			p.ClassAccesses = append(p.ClassAccesses, clone)
+			p.ClassAccesses.Tidy()
+			break
+		}
+	}
+	if !found {
+		return errors.New("source apex class not found")
+	}
+	return nil
+}
