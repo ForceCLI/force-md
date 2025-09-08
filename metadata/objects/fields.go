@@ -100,6 +100,50 @@ func (p *CustomObject) DeleteField(fieldName string) error {
 	return nil
 }
 
+func (o *CustomObject) CloneField(sourceFieldName string, targetFieldName string) error {
+	// Find the source field
+	var sourceField field.Field
+	found := false
+	for _, f := range o.Fields {
+		if strings.ToLower(f.FullName) == strings.ToLower(sourceFieldName) {
+			sourceField = f
+			found = true
+			break
+		}
+	}
+	if !found {
+		return errors.New("source field not found")
+	}
+
+	// Check if target field already exists
+	for _, f := range o.Fields {
+		if strings.ToLower(f.FullName) == strings.ToLower(targetFieldName) {
+			return errors.New("target field already exists")
+		}
+	}
+
+	// Create a copy of the source field
+	targetField := sourceField
+	targetField.FullName = targetFieldName
+
+	// Update the label if it exists
+	if targetField.Label != nil {
+		// Create a new label based on the target field name
+		// Convert field name from API format (e.g., My_Field__c) to label format (e.g., My Field)
+		labelText := targetFieldName
+		if strings.HasSuffix(labelText, "__c") {
+			labelText = strings.TrimSuffix(labelText, "__c")
+		}
+		labelText = strings.ReplaceAll(labelText, "_", " ")
+		targetField.Label = &TextLiteral{Text: labelText}
+	}
+
+	// Add the new field
+	o.Fields = append(o.Fields, targetField)
+	o.Fields.Tidy()
+	return nil
+}
+
 func (p *CustomObject) DeleteFieldPicklistValues(fieldName string) {
 	for i, f := range p.RecordTypes {
 		newPicklistValues := f.PicklistValues[:0]

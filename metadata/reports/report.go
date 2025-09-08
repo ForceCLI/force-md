@@ -49,40 +49,8 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"scale"`
 	} `xml:"aggregates"`
-	Buckets []struct {
-		BucketType struct {
-			Text string `xml:",chardata"`
-		} `xml:"bucketType"`
-		DeveloperName struct {
-			Text string `xml:",chardata"`
-		} `xml:"developerName"`
-		MasterLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"masterLabel"`
-		NullTreatment struct {
-			Text string `xml:",chardata"`
-		} `xml:"nullTreatment"`
-		OtherBucketLabel *struct {
-			Text string `xml:",chardata"`
-		} `xml:"otherBucketLabel"`
-		SourceColumnName struct {
-			Text string `xml:",chardata"`
-		} `xml:"sourceColumnName"`
-		UseOther struct {
-			Text string `xml:",chardata"`
-		} `xml:"useOther"`
-		Values []struct {
-			SourceValues []struct {
-				SourceValue struct {
-					Text string `xml:",chardata"`
-				} `xml:"sourceValue"`
-			} `xml:"sourceValues"`
-			Value struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-		} `xml:"values"`
-	} `xml:"buckets"`
-	Chart *struct {
+	Buckets []ReportBucket `xml:"buckets"`
+	Chart   *struct {
 		BackgroundColor1 struct {
 			Text string `xml:",chardata"`
 		} `xml:"backgroundColor1"`
@@ -178,14 +146,7 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"midColor"`
 	} `xml:"colorRanges"`
-	Columns []struct {
-		AggregateTypes *struct {
-			Text string `xml:",chardata"`
-		} `xml:"aggregateTypes"`
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-	} `xml:"columns"`
+	Columns      []ReportColumn `xml:"columns"`
 	CrossFilters []struct {
 		Operation struct {
 			Text string `xml:",chardata"`
@@ -220,32 +181,9 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"scale"`
 	} `xml:"customDetailFormulas"`
-	Description *TextLiteral `xml:"description"`
-	Filter      *struct {
-		BooleanFilter *struct {
-			Text string `xml:",chardata"`
-		} `xml:"booleanFilter"`
-		CriteriaItems []struct {
-			Column struct {
-				Text string `xml:",chardata"`
-			} `xml:"column"`
-			ColumnToColumn struct {
-				Text string `xml:",chardata"`
-			} `xml:"columnToColumn"`
-			IsUnlocked struct {
-				Text string `xml:",chardata"`
-			} `xml:"isUnlocked"`
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			Value struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-		} `xml:"criteriaItems"`
-	} `xml:"filter"`
-	Format struct {
-		Text string `xml:",chardata"`
-	} `xml:"format"`
+	Description     *TextLiteral  `xml:"description"`
+	Filter          *ReportFilter `xml:"filter"`
+	Format          TextLiteral   `xml:"format"`
 	FormattingRules []struct {
 		ColumnName struct {
 			Text string `xml:",chardata"`
@@ -259,41 +197,10 @@ type Report struct {
 			} `xml:"rangeUpperBound"`
 		} `xml:"values"`
 	} `xml:"formattingRules"`
-	GroupingsAcross []struct {
-		DateGranularity *struct {
-			Text string `xml:",chardata"`
-		} `xml:"dateGranularity"`
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		SortOrder struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortOrder"`
-	} `xml:"groupingsAcross"`
-	GroupingsDown []struct {
-		AggregateType *struct {
-			Text string `xml:",chardata"`
-		} `xml:"aggregateType"`
-		DateGranularity *struct {
-			Text string `xml:",chardata"`
-		} `xml:"dateGranularity"`
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		SortByName *struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortByName"`
-		SortOrder struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortOrder"`
-		SortType *struct {
-			Text string `xml:",chardata"`
-		} `xml:"sortType"`
-	} `xml:"groupingsDown"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
-	Params []struct {
+	GroupingsAcross []ReportGroupingAcross `xml:"groupingsAcross"`
+	GroupingsDown   []ReportGroupingDown   `xml:"groupingsDown"`
+	Name            TextLiteral            `xml:"name"`
+	Params          []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
@@ -301,9 +208,7 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"value"`
 	} `xml:"params"`
-	ReportType struct {
-		Text string `xml:",chardata"`
-	} `xml:"reportType"`
+	ReportType          TextLiteral `xml:"reportType"`
 	RoleHierarchyFilter []struct {
 		Text string `xml:",chardata"`
 	} `xml:"roleHierarchyFilter"`
@@ -403,4 +308,82 @@ func (c *Report) Files(format metadata.Format) (map[string][]byte, error) {
 func Open(path string) (*Report, error) {
 	p := &Report{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+func (r *Report) DeleteField(fieldName string) error {
+	fieldDeleted := false
+
+	// Filter out the field from columns
+	filteredColumns := r.Columns[:0]
+	for _, column := range r.Columns {
+		// Match exact field name or field name with object prefix (e.g., Object__c$Field__c)
+		fieldText := column.Field.Text
+		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
+			fieldDeleted = true
+			// Skip this column
+			continue
+		}
+		filteredColumns = append(filteredColumns, column)
+	}
+	r.Columns = filteredColumns
+
+	// Also check and remove the field from groupingsAcross
+	filteredGroupingsAcross := r.GroupingsAcross[:0]
+	for _, grouping := range r.GroupingsAcross {
+		fieldText := grouping.Field.Text
+		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
+			fieldDeleted = true
+			// Skip this grouping
+			continue
+		}
+		filteredGroupingsAcross = append(filteredGroupingsAcross, grouping)
+	}
+	r.GroupingsAcross = filteredGroupingsAcross
+
+	// Also check and remove the field from groupingsDown
+	filteredGroupingsDown := r.GroupingsDown[:0]
+	for _, grouping := range r.GroupingsDown {
+		fieldText := grouping.Field.Text
+		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
+			fieldDeleted = true
+			// Skip this grouping
+			continue
+		}
+		filteredGroupingsDown = append(filteredGroupingsDown, grouping)
+	}
+	r.GroupingsDown = filteredGroupingsDown
+
+	// Also check and remove the field from filter criteriaItems
+	if r.Filter != nil {
+		filteredCriteriaItems := r.Filter.CriteriaItems[:0]
+		for _, criteria := range r.Filter.CriteriaItems {
+			fieldText := criteria.Column.Text
+			if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
+				fieldDeleted = true
+				// Skip this criteria
+				continue
+			}
+			filteredCriteriaItems = append(filteredCriteriaItems, criteria)
+		}
+		r.Filter.CriteriaItems = filteredCriteriaItems
+	}
+
+	// Also check and remove the field from buckets sourceColumnName
+	filteredBuckets := r.Buckets[:0]
+	for _, bucket := range r.Buckets {
+		fieldText := bucket.SourceColumnName.Text
+		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
+			fieldDeleted = true
+			// Skip this bucket
+			continue
+		}
+		filteredBuckets = append(filteredBuckets, bucket)
+	}
+	r.Buckets = filteredBuckets
+
+	if !fieldDeleted {
+		return fmt.Errorf("field '%s' not found in report", fieldName)
+	}
+
+	return nil
 }

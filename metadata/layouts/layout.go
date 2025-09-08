@@ -2,6 +2,7 @@ package layout
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -202,4 +203,90 @@ func (c *Layout) Type() metadata.MetadataType {
 func Open(path string) (*Layout, error) {
 	p := &Layout{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+func (l *Layout) DeleteField(fieldName string) error {
+	fieldDeleted := false
+
+	// Iterate through layout sections
+	for sectionIdx := range l.LayoutSections {
+		section := &l.LayoutSections[sectionIdx]
+
+		// Iterate through layout columns in each section
+		for columnIdx := range section.LayoutColumns {
+			column := &section.LayoutColumns[columnIdx]
+
+			// Filter out the field from layout items
+			filteredItems := column.LayoutItems[:0]
+			for _, item := range column.LayoutItems {
+				if item.Field != nil && item.Field.Text == fieldName {
+					fieldDeleted = true
+					// Skip this item (don't add to filteredItems)
+					continue
+				}
+				filteredItems = append(filteredItems, item)
+			}
+
+			column.LayoutItems = filteredItems
+		}
+	}
+
+	// Also check and remove from multilineLayoutFields
+	if l.MultilineLayoutFields != nil {
+		filteredMultiline := l.MultilineLayoutFields[:0]
+		for _, field := range l.MultilineLayoutFields {
+			if field.Text == fieldName {
+				fieldDeleted = true
+				continue
+			}
+			filteredMultiline = append(filteredMultiline, field)
+		}
+		l.MultilineLayoutFields = filteredMultiline
+	}
+
+	// Also check and remove from miniLayout fields
+	if l.MiniLayout != nil && l.MiniLayout.Fields != nil {
+		filteredMini := l.MiniLayout.Fields[:0]
+		for _, field := range l.MiniLayout.Fields {
+			if field.Text == fieldName {
+				fieldDeleted = true
+				continue
+			}
+			filteredMini = append(filteredMini, field)
+		}
+		l.MiniLayout.Fields = filteredMini
+	}
+
+	// Also check and remove from relatedLists fields
+	for i := range l.RelatedLists {
+		relatedList := &l.RelatedLists[i]
+		filteredFields := relatedList.Fields[:0]
+		for _, field := range relatedList.Fields {
+			if field.Text == fieldName {
+				fieldDeleted = true
+				continue
+			}
+			filteredFields = append(filteredFields, field)
+		}
+		relatedList.Fields = filteredFields
+	}
+
+	// Also check and remove from summaryLayout
+	if l.SummaryLayout != nil && l.SummaryLayout.SummaryLayoutItems != nil {
+		filteredSummary := l.SummaryLayout.SummaryLayoutItems[:0]
+		for _, item := range l.SummaryLayout.SummaryLayoutItems {
+			if item.Field.Text == fieldName {
+				fieldDeleted = true
+				continue
+			}
+			filteredSummary = append(filteredSummary, item)
+		}
+		l.SummaryLayout.SummaryLayoutItems = filteredSummary
+	}
+
+	if !fieldDeleted {
+		return fmt.Errorf("field '%s' not found in layout", fieldName)
+	}
+
+	return nil
 }
