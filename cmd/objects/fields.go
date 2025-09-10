@@ -27,6 +27,8 @@ var (
 	references     string
 	fieldsDir      string
 	label          string
+	sourceField    string
+	targetField    string
 )
 
 func init() {
@@ -115,6 +117,11 @@ func init() {
 	listPicklistOptionsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	listPicklistOptionsCmd.MarkFlagRequired("field")
 
+	cloneFieldCmd.Flags().StringVarP(&sourceField, "source", "s", "", "source field name")
+	cloneFieldCmd.Flags().StringVarP(&targetField, "target", "t", "", "target field name")
+	cloneFieldCmd.MarkFlagRequired("source")
+	cloneFieldCmd.MarkFlagRequired("target")
+
 	fieldPicklistCmd.AddCommand(listPicklistOptionsCmd)
 
 	FieldCmd.AddCommand(listFieldsCmd)
@@ -124,6 +131,7 @@ func init() {
 	FieldCmd.AddCommand(editFieldCmd)
 	FieldCmd.AddCommand(showFieldCmd)
 	FieldCmd.AddCommand(deleteFieldCmd)
+	FieldCmd.AddCommand(cloneFieldCmd)
 	FieldCmd.AddCommand(writeFieldsCmd)
 	FieldCmd.AddCommand(fieldPicklistCmd)
 }
@@ -225,6 +233,17 @@ var deleteFieldCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			deleteField(file, fieldName)
+		}
+	},
+}
+
+var cloneFieldCmd = &cobra.Command{
+	Use:   "clone -s SourceField -t TargetField [filename]...",
+	Short: "Clone a field to create a new field with the same properties",
+	Args:  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			cloneField(file, sourceField, targetField)
 		}
 	},
 }
@@ -611,6 +630,27 @@ func deleteField(file string, fieldName string) {
 	err = o.DeleteField(fieldName)
 	if err != nil {
 		log.Warn(fmt.Sprintf("update failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
+}
+
+func cloneField(file string, sourceFieldName string, targetFieldName string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
+	sourceFieldName = strings.TrimPrefix(sourceFieldName, objectName+".")
+	targetFieldName = strings.TrimPrefix(targetFieldName, objectName+".")
+	err = o.CloneField(sourceFieldName, targetFieldName)
+	if err != nil {
+		log.Warn(fmt.Sprintf("clone failed for %s: %s", file, err.Error()))
 		return
 	}
 	err = internal.WriteToFile(o, file)

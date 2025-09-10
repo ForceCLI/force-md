@@ -17,142 +17,39 @@ func init() {
 type CriteriaRuleList []CriteriaRule
 
 type CriteriaRule struct {
-	FullName    string `xml:"fullName"`
-	AccessLevel struct {
-		Text string `xml:",chardata"`
-	} `xml:"accessLevel"`
-	AccountSettings *struct {
-		CaseAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"caseAccessLevel"`
-		ContactAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"contactAccessLevel"`
-		OpportunityAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"opportunityAccessLevel"`
-	} `xml:"accountSettings"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",innerxml"`
-	} `xml:"label"`
-	SharedTo struct {
-		Group *struct {
-			Text string `xml:",chardata"`
-		} `xml:"group"`
-		Role *struct {
-			Text string `xml:",chardata"`
-		} `xml:"role"`
-		AllInternalUsers *struct {
-		} `xml:"allInternalUsers"`
-		RoleAndSubordinates *struct {
-			Text string `xml:",chardata"`
-		} `xml:"roleAndSubordinates"`
-	} `xml:"sharedTo"`
-	BooleanFilter *struct {
-		Text string `xml:",chardata"`
-	} `xml:"booleanFilter"`
-	CriteriaItems []struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Operation struct {
-			Text string `xml:",chardata"`
-		} `xml:"operation"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
-	} `xml:"criteriaItems"`
-	IncludeRecordsOwnedByAll *BooleanText `xml:"includeRecordsOwnedByAll"`
+	FullName                 string           `xml:"fullName"`
+	AccessLevel              AccessLevel      `xml:"accessLevel"`
+	AccountSettings          *AccountSettings `xml:"accountSettings"`
+	Description              *Description     `xml:"description"`
+	Label                    Label            `xml:"label"`
+	SharedTo                 SharedTo         `xml:"sharedTo"`
+	BooleanFilter            *BooleanFilter   `xml:"booleanFilter"`
+	CriteriaItems            []CriteriaItem   `xml:"criteriaItems"`
+	IncludeRecordsOwnedByAll *BooleanText     `xml:"includeRecordsOwnedByAll"`
 }
 
 type OwnerRuleList []OwnerRule
 
 type OwnerRule struct {
-	FullName    string `xml:"fullName"`
-	AccessLevel struct {
-		Text string `xml:",chardata"`
-	} `xml:"accessLevel"`
-	AccountSettings *struct {
-		CaseAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"caseAccessLevel"`
-		ContactAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"contactAccessLevel"`
-		OpportunityAccessLevel struct {
-			Text string `xml:",chardata"`
-		} `xml:"opportunityAccessLevel"`
-	} `xml:"accountSettings"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",innerxml"`
-	} `xml:"label"`
-	SharedTo struct {
-		Role *struct {
-			Text string `xml:",chardata"`
-		} `xml:"role"`
-		Group *struct {
-			Text string `xml:",chardata"`
-		} `xml:"group"`
-		RoleAndSubordinates *struct {
-			Text string `xml:",chardata"`
-		} `xml:"roleAndSubordinates"`
-	} `xml:"sharedTo"`
-	SharedFrom struct {
-		RoleAndSubordinates *struct {
-			Text string `xml:",chardata"`
-		} `xml:"roleAndSubordinates"`
-		Group *struct {
-			Text string `xml:",chardata"`
-		} `xml:"group"`
-		Queue *struct {
-			Text string `xml:",chardata"`
-		} `xml:"queue"`
-		Role *struct {
-			Text string `xml:",chardata"`
-		} `xml:"role"`
-		AllInternalUsers *struct {
-		} `xml:"allInternalUsers"`
-	} `xml:"sharedFrom"`
+	FullName        string           `xml:"fullName"`
+	AccessLevel     AccessLevel      `xml:"accessLevel"`
+	AccountSettings *AccountSettings `xml:"accountSettings"`
+	Description     *Description     `xml:"description"`
+	Label           Label            `xml:"label"`
+	SharedTo        SharedTo         `xml:"sharedTo"`
+	SharedFrom      SharedFrom       `xml:"sharedFrom"`
 }
 
 type GuestRuleList []GuestRule
 
 type GuestRule struct {
-	FullName    string `xml:"fullName"`
-	AccessLevel struct {
-		Text string `xml:",chardata"`
-	} `xml:"accessLevel"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	SharedTo struct {
-		GuestUser struct {
-			Text string `xml:",chardata"`
-		} `xml:"guestUser"`
-	} `xml:"sharedTo"`
-	CriteriaItems struct {
-		Field struct {
-			Text string `xml:",chardata"`
-		} `xml:"field"`
-		Operation struct {
-			Text string `xml:",chardata"`
-		} `xml:"operation"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
-	} `xml:"criteriaItems"`
-	IncludeHVUOwnedRecords *struct {
-		Text string `xml:",chardata"`
-	} `xml:"includeHVUOwnedRecords"`
+	FullName               string       `xml:"fullName"`
+	AccessLevel            AccessLevel  `xml:"accessLevel"`
+	Description            *Description `xml:"description"`
+	Label                  Label        `xml:"label"`
+	SharedTo               SharedTo     `xml:"sharedTo"`
+	CriteriaItems          CriteriaItem `xml:"criteriaItems"`
+	IncludeHVUOwnedRecords *TextLiteral `xml:"includeHVUOwnedRecords"`
 }
 
 type SharingRules struct {

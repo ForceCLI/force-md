@@ -151,4 +151,3 @@ func ComposeFromChildren(objectName string, provider ChildComponentProvider) *Cu
 
 	return obj
 }
-

@@ -447,10 +447,10 @@ func TestZipDirectorySalesforceCompliance(t *testing.T) {
 	require.NoError(t, os.MkdirAll(filepath.Join(tmpDir, "img"), 0755))
 
 	files := map[string]string{
-		"css/main.css":     "body { font-family: Arial; }",
-		"js/app.js":        "function init() { console.log('ready'); }",
-		"img/logo.svg":     "<svg></svg>",
-		"index.html":       "<html><head></head><body></body></html>",
+		"css/main.css": "body { font-family: Arial; }",
+		"js/app.js":    "function init() { console.log('ready'); }",
+		"img/logo.svg": "<svg></svg>",
+		"index.html":   "<html><head></head><body></body></html>",
 	}
 
 	for path, content := range files {

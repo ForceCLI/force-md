@@ -9,6 +9,8 @@ import (
 func init() {
 	sharingRulesCmd.AddCommand(sharingrules.CriteriaCmd)
 	sharingRulesCmd.AddCommand(sharingrules.OwnerCmd)
+	sharingRulesCmd.AddCommand(sharingrules.ListCmd)
+	sharingRulesCmd.AddCommand(sharingrules.DeleteCmd)
 	sharingRulesCmd.AddCommand(sharingrules.TidyCmd)
 	RootCmd.AddCommand(sharingRulesCmd)
 }

@@ -20,6 +20,7 @@ Manage object field metadata
 
 * [force-md objects](force-md_objects.md)	 - Manage Custom and Standard Objects
 * [force-md objects fields add](force-md_objects_fields_add.md)	 - Add field
+* [force-md objects fields clone](force-md_objects_fields_clone.md)	 - Clone a field to create a new field with the same properties
 * [force-md objects fields delete](force-md_objects_fields_delete.md)	 - Delete object field
 * [force-md objects fields edit](force-md_objects_fields_edit.md)	 - Edit object fields
 * [force-md objects fields graph](force-md_objects_fields_graph.md)	 - List relationship between fields and other objects

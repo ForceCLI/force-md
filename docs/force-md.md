@@ -23,8 +23,10 @@ force-md
 * [force-md custommetadata](force-md_custommetadata.md)	 - Manage Custom Metadata
 * [force-md custompermission](force-md_custompermission.md)	 - Manage Custom Permissions
 * [force-md dashboard](force-md_dashboard.md)	 - Manage Dashboards
+* [force-md flexipage](force-md_flexipage.md)	 - Manage Lightning Pages (FlexiPages)
 * [force-md globalvalueset](force-md_globalvalueset.md)	 - Manage Global Value Sets
 * [force-md labels](force-md_labels.md)	 - Manage Custom Labels
+* [force-md layout](force-md_layout.md)	 - Manage Page Layouts
 * [force-md matchingrules](force-md_matchingrules.md)	 - Manage Matching Rules
 * [force-md objects](force-md_objects.md)	 - Manage Custom and Standard Objects
 * [force-md package](force-md_package.md)	 - Manage package.xml or destructiveChanges[Pre|Post].xml
@@ -35,6 +37,7 @@ force-md
 * [force-md platformEventSubscriberConfig](force-md_platformEventSubscriberConfig.md)	 - Manage Platform Event Subscriber Config Metadata
 * [force-md profile](force-md_profile.md)	 - Manage Profiles
 * [force-md queue](force-md_queue.md)	 - Manage Queues
+* [force-md report](force-md_report.md)	 - Manage Reports
 * [force-md reportfolder](force-md_reportfolder.md)	 - Manage Report Folders
 * [force-md reporttype](force-md_reporttype.md)	 - Manage Report Types
 * [force-md sharingrules](force-md_sharingrules.md)	 - Manage Sharing Rules

@@ -2,7 +2,9 @@ package flexipage
 
 import (
 	"encoding/xml"
+	"fmt"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -15,139 +17,15 @@ func init() {
 
 type FlexiPage struct {
 	metadata.MetadataInfo
-	XMLName     xml.Name `xml:"FlexiPage"`
-	Xmlns       string   `xml:"xmlns,attr"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	FlexiPageRegions []struct {
-		ItemInstances []struct {
-			ComponentInstance *struct {
-				ComponentInstanceProperties []struct {
-					Name struct {
-						Text string `xml:",chardata"`
-					} `xml:"name"`
-					Type *struct {
-						Text string `xml:",chardata"`
-					} `xml:"type"`
-					ValueList *struct {
-						ValueListItems []struct {
-							Value struct {
-								Text string `xml:",chardata"`
-							} `xml:"value"`
-							VisibilityRule *struct {
-								BooleanFilter *struct {
-									Text string `xml:",chardata"`
-								} `xml:"booleanFilter"`
-								Criteria []struct {
-									LeftValue struct {
-										Text string `xml:",chardata"`
-									} `xml:"leftValue"`
-									Operator struct {
-										Text string `xml:",chardata"`
-									} `xml:"operator"`
-									RightValue *struct {
-										Text string `xml:",chardata"`
-									} `xml:"rightValue"`
-								} `xml:"criteria"`
-							} `xml:"visibilityRule"`
-						} `xml:"valueListItems"`
-					} `xml:"valueList"`
-					Value *struct {
-						Text string `xml:",chardata"`
-					} `xml:"value"`
-				} `xml:"componentInstanceProperties"`
-				ComponentName struct {
-					Text string `xml:",chardata"`
-				} `xml:"componentName"`
-				Identifier struct {
-					Text string `xml:",chardata"`
-				} `xml:"identifier"`
-				VisibilityRule *struct {
-					BooleanFilter *struct {
-						Text string `xml:",chardata"`
-					} `xml:"booleanFilter"`
-					Criteria []struct {
-						LeftValue struct {
-							Text string `xml:",chardata"`
-						} `xml:"leftValue"`
-						Operator struct {
-							Text string `xml:",chardata"`
-						} `xml:"operator"`
-						RightValue *struct {
-							Text string `xml:",chardata"`
-						} `xml:"rightValue"`
-					} `xml:"criteria"`
-				} `xml:"visibilityRule"`
-			} `xml:"componentInstance"`
-			FieldInstance *struct {
-				FieldInstanceProperties []struct {
-					Name struct {
-						Text string `xml:",chardata"`
-					} `xml:"name"`
-					Value struct {
-						Text string `xml:",chardata"`
-					} `xml:"value"`
-				} `xml:"fieldInstanceProperties"`
-				FieldItem struct {
-					Text string `xml:",chardata"`
-				} `xml:"fieldItem"`
-				Identifier struct {
-					Text string `xml:",chardata"`
-				} `xml:"identifier"`
-				VisibilityRule *struct {
-					BooleanFilter *struct {
-						Text string `xml:",chardata"`
-					} `xml:"booleanFilter"`
-					Criteria []struct {
-						LeftValue struct {
-							Text string `xml:",chardata"`
-						} `xml:"leftValue"`
-						Operator struct {
-							Text string `xml:",chardata"`
-						} `xml:"operator"`
-						RightValue *struct {
-							Text string `xml:",chardata"`
-						} `xml:"rightValue"`
-					} `xml:"criteria"`
-				} `xml:"visibilityRule"`
-			} `xml:"fieldInstance"`
-		} `xml:"itemInstances"`
-		Mode *struct {
-			Text string `xml:",chardata"`
-		} `xml:"mode"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Type struct {
-			Text string `xml:",chardata"`
-		} `xml:"type"`
-	} `xml:"flexiPageRegions"`
-	MasterLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"masterLabel"`
-	ParentFlexiPage *struct {
-		Text string `xml:",chardata"`
-	} `xml:"parentFlexiPage"`
-	SobjectType *struct {
-		Text string `xml:",chardata"`
-	} `xml:"sobjectType"`
-	Template struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Properties []struct {
-			Name struct {
-				Text string `xml:",chardata"`
-			} `xml:"name"`
-			Value struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-		} `xml:"properties"`
-	} `xml:"template"`
-	FlexiPageType struct {
-		Text string `xml:",chardata"`
-	} `xml:"type"`
+	XMLName          xml.Name          `xml:"FlexiPage"`
+	Xmlns            string            `xml:"xmlns,attr"`
+	Description      *TextLiteral      `xml:"description"`
+	FlexiPageRegions []FlexiPageRegion `xml:"flexiPageRegions"`
+	MasterLabel      TextLiteral       `xml:"masterLabel"`
+	ParentFlexiPage  *TextLiteral      `xml:"parentFlexiPage"`
+	SobjectType      *TextLiteral      `xml:"sobjectType"`
+	Template         Template          `xml:"template"`
+	FlexiPageType    TextLiteral       `xml:"type"`
 }
 
 func (c *FlexiPage) SetMetadata(m metadata.MetadataInfo) {
@@ -161,4 +39,38 @@ func (c *FlexiPage) Type() metadata.MetadataType {
 func Open(path string) (*FlexiPage, error) {
 	p := &FlexiPage{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+func (p *FlexiPage) DeleteField(fieldName string) error {
+	fieldDeleted := false
+
+	// Iterate through flexipage regions
+	for regionIdx := range p.FlexiPageRegions {
+		region := &p.FlexiPageRegions[regionIdx]
+
+		// Filter out the field from item instances
+		filteredInstances := region.ItemInstances[:0]
+		for _, instance := range region.ItemInstances {
+			// Check if this is a field instance with the field we want to delete
+			if instance.FieldInstance != nil {
+				fieldItemText := instance.FieldInstance.FieldItem.Text
+
+				// Match exact field name or field name with Record. prefix
+				if fieldItemText == fieldName || fieldItemText == "Record."+fieldName {
+					fieldDeleted = true
+					// Skip this instance (don't add to filteredInstances)
+					continue
+				}
+			}
+			filteredInstances = append(filteredInstances, instance)
+		}
+
+		region.ItemInstances = filteredInstances
+	}
+
+	if !fieldDeleted {
+		return fmt.Errorf("field '%s' not found in flexipage", fieldName)
+	}
+
+	return nil
 }
