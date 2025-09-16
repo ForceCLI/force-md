@@ -56,15 +56,17 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 	var program *vm.Program
 	fieldNames := []string{"Label"}
 	customFields := make(map[string]struct{})
-	var records []map[string]string
+	var records []map[string]interface{}
 	for _, file := range files {
 		m, err := custommetadata.Open(file)
 		if err != nil {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		fields := make(map[string]string)
+		fields := make(map[string]interface{})
+		displayFields := make(map[string]string)
 		fields["Label"] = m.Label
+		displayFields["Label"] = m.Label
 		for _, v := range m.Values {
 			if _, w := wantedFields[strings.ToLower(v.Field)]; !w && len(wantedFields) > 0 {
 				// Skip fields not wanted in output
@@ -74,7 +76,13 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 				fieldNames = append(fieldNames, v.Field)
 				customFields[v.Field] = struct{}{}
 			}
-			fields[v.Field] = v.Value.Text
+			// Convert boolean strings to actual booleans for filtering
+			if v.Value.Type == "xsd:boolean" {
+				fields[v.Field] = v.Value.Text == "true"
+			} else {
+				fields[v.Field] = v.Value.Text
+			}
+			displayFields[v.Field] = v.Value.Text
 		}
 		if program == nil {
 			program, err = expr.Compile(filter, expr.Env(fields))
@@ -88,7 +96,12 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 		}
 		include, _ := out.(bool)
 		if include {
-			records = append(records, fields)
+			// Store display values for output
+			recordDisplay := make(map[string]interface{})
+			for k, v := range displayFields {
+				recordDisplay[k] = v
+			}
+			records = append(records, recordDisplay)
 		}
 
 	}
@@ -99,7 +112,11 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 	for _, r := range records {
 		row := []string{}
 		for _, f := range fieldNames {
-			row = append(row, r[f])
+			if val, ok := r[f]; ok {
+				row = append(row, fmt.Sprintf("%v", val))
+			} else {
+				row = append(row, "")
+			}
 		}
 		table.Append(row)
 	}
@@ -116,9 +133,14 @@ func listCustomMetadata(files []string, filter string) {
 			log.Warn("parsing profile failed: " + err.Error())
 			return
 		}
-		fields := make(map[string]string)
+		fields := make(map[string]interface{})
 		for _, v := range m.Values {
-			fields[v.Field] = v.Value.Text
+			// Convert boolean strings to actual booleans for filtering
+			if v.Value.Type == "xsd:boolean" {
+				fields[v.Field] = v.Value.Text == "true"
+			} else {
+				fields[v.Field] = v.Value.Text
+			}
 		}
 		if program == nil {
 			program, err = expr.Compile(filter, expr.Env(fields))
