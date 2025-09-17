@@ -14,11 +14,14 @@ import (
 
 var (
 	webLinkName string
+	urlFilter   string
 )
 
 func init() {
 	deleteWebLinkCmd.Flags().StringVarP(&webLinkName, "weblink", "w", "", "web link name")
 	deleteWebLinkCmd.MarkFlagRequired("weblink")
+
+	listWebLinksCmd.Flags().StringVarP(&urlFilter, "url", "u", "", "filter weblinks containing this string in the URL")
 
 	WebLinkCmd.AddCommand(listWebLinksCmd)
 	WebLinkCmd.AddCommand(deleteWebLinkCmd)
@@ -63,6 +66,12 @@ func listWebLinks(file string) {
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
 	webLinks := o.GetWebLinks()
 	for _, f := range webLinks {
+		// Apply URL filter if specified
+		if urlFilter != "" {
+			if f.URL == nil || !strings.Contains(f.URL.Text, urlFilter) {
+				continue
+			}
+		}
 		fmt.Printf("%s.%s\n", objectName, f.FullName)
 	}
 }
