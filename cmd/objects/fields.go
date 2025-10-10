@@ -20,15 +20,17 @@ import (
 )
 
 var (
-	formulaField   bool
-	filteredLookup bool
-	fieldName      string
-	fieldTypes     []string
-	references     string
-	fieldsDir      string
-	label          string
-	sourceField    string
-	targetField    string
+	formulaField       bool
+	filteredLookup     bool
+	fieldName          string
+	fieldTypes         []string
+	references         string
+	fieldsDir          string
+	label              string
+	sourceField        string
+	targetField        string
+	recordTypes        []string
+	fieldPicklistValue string
 )
 
 func init() {
@@ -117,12 +119,19 @@ func init() {
 	listPicklistOptionsCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
 	listPicklistOptionsCmd.MarkFlagRequired("field")
 
+	addPicklistValueCmd.Flags().StringVarP(&fieldName, "field", "f", "", "field name")
+	addPicklistValueCmd.Flags().StringVarP(&fieldPicklistValue, "value", "v", "", "picklist value to add")
+	addPicklistValueCmd.Flags().StringSliceVarP(&recordTypes, "recordtype", "r", []string{}, "record type (can be specified multiple times)")
+	addPicklistValueCmd.MarkFlagRequired("field")
+	addPicklistValueCmd.MarkFlagRequired("value")
+
 	cloneFieldCmd.Flags().StringVarP(&sourceField, "source", "s", "", "source field name")
 	cloneFieldCmd.Flags().StringVarP(&targetField, "target", "t", "", "target field name")
 	cloneFieldCmd.MarkFlagRequired("source")
 	cloneFieldCmd.MarkFlagRequired("target")
 
 	fieldPicklistCmd.AddCommand(listPicklistOptionsCmd)
+	fieldPicklistCmd.AddCommand(addPicklistValueCmd)
 
 	FieldCmd.AddCommand(listFieldsCmd)
 	FieldCmd.AddCommand(tableFieldsCmd)
@@ -167,6 +176,19 @@ var listPicklistOptionsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, file := range args {
 			listPicklistOptions(file, fieldName)
+		}
+	},
+}
+
+var addPicklistValueCmd = &cobra.Command{
+	Use:                   "add -f Field -v Value [flags] [filename]...",
+	Short:                 "Add picklist value",
+	Long:                  "Add a picklist value to a field. By default, adds to all record types. Use --recordtype to specify specific record types.",
+	DisableFlagsInUseLine: true,
+	Args:                  cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, file := range args {
+			addPicklistValue(file, fieldName, fieldPicklistValue, recordTypes)
 		}
 	},
 }
@@ -677,6 +699,26 @@ func writeFields(file string, fieldsDir string) {
 			log.Warn("write failed: " + err.Error())
 			return
 		}
+	}
+}
+
+func addPicklistValue(file string, fieldName string, picklistValue string, recordTypes []string) {
+	o, err := objects.Open(file)
+	if err != nil {
+		log.Warn("parsing object failed: " + err.Error())
+		return
+	}
+	objectName := internal.TrimSuffixToEnd(path.Base(file), ".object")
+	fieldName = strings.TrimPrefix(fieldName, objectName+".")
+	err = o.AddPicklistValue(fieldName, picklistValue, recordTypes)
+	if err != nil {
+		log.Warn(fmt.Sprintf("add picklist value failed for %s: %s", file, err.Error()))
+		return
+	}
+	err = internal.WriteToFile(o, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
 	}
 }
 

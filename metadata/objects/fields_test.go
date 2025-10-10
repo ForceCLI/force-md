@@ -5,6 +5,7 @@ import (
 
 	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/metadata/objects/field"
+	rt "github.com/ForceCLI/force-md/metadata/objects/recordtype"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -157,5 +158,310 @@ func TestCloneField(t *testing.T) {
 		err = obj.CloneField("Source_Field__c", "target_field__c")
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "target field already exists")
+	})
+}
+
+func TestAddPicklistValue(t *testing.T) {
+	t.Run("add_value_to_all_record_types", func(t *testing.T) {
+		obj := &CustomObject{
+			Xmlns: "http://soap.sforce.com/2006/04/metadata",
+			Fields: []field.Field{
+				{
+					FullName: "Status__c",
+					Type:     &TextLiteral{Text: "Picklist"},
+					ValueSet: &struct {
+						ControllingField *struct {
+							Text string `xml:",chardata"`
+						} `xml:"controllingField"`
+						Restricted *struct {
+							Text string `xml:",chardata"`
+						} `xml:"restricted"`
+						ValueSetDefinition *struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						} `xml:"valueSetDefinition"`
+						ValueSetName *struct {
+							Text string `xml:",chardata"`
+						} `xml:"valueSetName"`
+						ValueSettings []struct {
+							ControllingFieldValue []struct {
+								Text string `xml:",innerxml"`
+							} `xml:"controllingFieldValue"`
+							ValueName struct {
+								Text string `xml:",chardata"`
+							} `xml:"valueName"`
+						} `xml:"valueSettings"`
+					}{
+						ValueSetDefinition: &struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						}{
+							Value: []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							}{
+								{FullName: "Active"},
+								{FullName: "Inactive"},
+							},
+						},
+					},
+				},
+			},
+			RecordTypes: []rt.RecordType{
+				{FullName: "RecordType1"},
+				{FullName: "RecordType2"},
+			},
+		}
+
+		err := obj.AddPicklistValue("Status__c", "Pending", []string{})
+		assert.NoError(t, err)
+
+		assert.Equal(t, 3, len(obj.Fields[0].ValueSet.ValueSetDefinition.Value))
+		assert.Equal(t, "Pending", obj.Fields[0].ValueSet.ValueSetDefinition.Value[2].FullName)
+	})
+
+	t.Run("add_value_to_specific_record_types", func(t *testing.T) {
+		obj := &CustomObject{
+			Xmlns: "http://soap.sforce.com/2006/04/metadata",
+			Fields: []field.Field{
+				{
+					FullName: "Status__c",
+					Type:     &TextLiteral{Text: "Picklist"},
+					ValueSet: &struct {
+						ControllingField *struct {
+							Text string `xml:",chardata"`
+						} `xml:"controllingField"`
+						Restricted *struct {
+							Text string `xml:",chardata"`
+						} `xml:"restricted"`
+						ValueSetDefinition *struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						} `xml:"valueSetDefinition"`
+						ValueSetName *struct {
+							Text string `xml:",chardata"`
+						} `xml:"valueSetName"`
+						ValueSettings []struct {
+							ControllingFieldValue []struct {
+								Text string `xml:",innerxml"`
+							} `xml:"controllingFieldValue"`
+							ValueName struct {
+								Text string `xml:",chardata"`
+							} `xml:"valueName"`
+						} `xml:"valueSettings"`
+					}{
+						ValueSetDefinition: &struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						}{
+							Value: []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							}{
+								{FullName: "Active"},
+							},
+						},
+					},
+				},
+			},
+			RecordTypes: []rt.RecordType{
+				{FullName: "RecordType1"},
+				{FullName: "RecordType2"},
+			},
+		}
+
+		err := obj.AddPicklistValue("Status__c", "Pending", []string{"RecordType1"})
+		assert.NoError(t, err)
+
+		assert.Equal(t, 2, len(obj.Fields[0].ValueSet.ValueSetDefinition.Value))
+		assert.Equal(t, "Pending", obj.Fields[0].ValueSet.ValueSetDefinition.Value[1].FullName)
+	})
+
+	t.Run("error_field_not_found", func(t *testing.T) {
+		obj := &CustomObject{
+			Fields: []field.Field{
+				{FullName: "Other_Field__c"},
+			},
+		}
+
+		err := obj.AddPicklistValue("Status__c", "Pending", []string{})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "field not found")
+	})
+
+	t.Run("error_not_a_picklist", func(t *testing.T) {
+		obj := &CustomObject{
+			Fields: []field.Field{
+				{
+					FullName: "Status__c",
+					Type:     &TextLiteral{Text: "Text"},
+				},
+			},
+		}
+
+		err := obj.AddPicklistValue("Status__c", "Pending", []string{})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "not a picklist")
+	})
+
+	t.Run("error_value_already_exists", func(t *testing.T) {
+		obj := &CustomObject{
+			Fields: []field.Field{
+				{
+					FullName: "Status__c",
+					Type:     &TextLiteral{Text: "Picklist"},
+					ValueSet: &struct {
+						ControllingField *struct {
+							Text string `xml:",chardata"`
+						} `xml:"controllingField"`
+						Restricted *struct {
+							Text string `xml:",chardata"`
+						} `xml:"restricted"`
+						ValueSetDefinition *struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						} `xml:"valueSetDefinition"`
+						ValueSetName *struct {
+							Text string `xml:",chardata"`
+						} `xml:"valueSetName"`
+						ValueSettings []struct {
+							ControllingFieldValue []struct {
+								Text string `xml:",innerxml"`
+							} `xml:"controllingFieldValue"`
+							ValueName struct {
+								Text string `xml:",chardata"`
+							} `xml:"valueName"`
+						} `xml:"valueSettings"`
+					}{
+						ValueSetDefinition: &struct {
+							Sorted struct {
+								Text string `xml:",chardata"`
+							} `xml:"sorted"`
+							Value []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							} `xml:"value"`
+						}{
+							Value: []struct {
+								FullName string `xml:"fullName"`
+								Default  struct {
+									Text string `xml:",chardata"`
+								} `xml:"default"`
+								IsActive *BooleanText `xml:"isActive"`
+								Label    struct {
+									Text string `xml:",innerxml"`
+								} `xml:"label"`
+								Color *struct {
+									Text string `xml:",chardata"`
+								} `xml:"color"`
+							}{
+								{FullName: "Active"},
+							},
+						},
+					},
+				},
+			},
+		}
+
+		err := obj.AddPicklistValue("Status__c", "Active", []string{})
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "already exists")
 	})
 }

@@ -244,3 +244,63 @@ func (p *CustomObject) DeleteFieldFromCompactLayouts(fieldName string) {
 		p.CompactLayouts[i].Fields = newFields
 	}
 }
+
+func (o *CustomObject) AddPicklistValue(fieldName string, picklistValue string, recordTypes []string) error {
+	var picklistField field.Field
+	found := false
+	for i, f := range o.Fields {
+		if strings.ToLower(f.FullName) == strings.ToLower(fieldName) {
+			picklistField = f
+			found = true
+			if picklistField.ValueSet == nil {
+				return errors.New("field is not a picklist")
+			}
+			if picklistField.ValueSet.ValueSetDefinition == nil {
+				return errors.New("field does not have a value set definition")
+			}
+			for _, v := range picklistField.ValueSet.ValueSetDefinition.Value {
+				if strings.ToLower(v.FullName) == strings.ToLower(picklistValue) {
+					return errors.New("picklist value already exists")
+				}
+			}
+			newValue := struct {
+				FullName string `xml:"fullName"`
+				Default  struct {
+					Text string `xml:",chardata"`
+				} `xml:"default"`
+				IsActive *BooleanText `xml:"isActive"`
+				Label    struct {
+					Text string `xml:",innerxml"`
+				} `xml:"label"`
+				Color *struct {
+					Text string `xml:",chardata"`
+				} `xml:"color"`
+			}{
+				FullName: picklistValue,
+			}
+			newValue.Default.Text = "false"
+			newValue.Label.Text = picklistValue
+			o.Fields[i].ValueSet.ValueSetDefinition.Value = append(o.Fields[i].ValueSet.ValueSetDefinition.Value, newValue)
+			break
+		}
+	}
+	if !found {
+		return errors.New("field not found")
+	}
+
+	if len(recordTypes) == 0 {
+		for i := range o.RecordTypes {
+			if err := o.AddFieldPicklistValue(fieldName, o.RecordTypes[i].FullName, picklistValue); err != nil {
+				return errors.Wrap(err, "adding picklist value to record type "+o.RecordTypes[i].FullName)
+			}
+		}
+	} else {
+		for _, rt := range recordTypes {
+			if err := o.AddFieldPicklistValue(fieldName, rt, picklistValue); err != nil {
+				return errors.Wrap(err, "adding picklist value to record type "+rt)
+			}
+		}
+	}
+
+	return nil
+}
