@@ -20,6 +20,9 @@ type CustomSite struct {
 	Active  struct {
 		Text string `xml:",chardata"`
 	} `xml:"active"`
+	AllowGuestPaymentsApi struct {
+		Text string `xml:",chardata"`
+	} `xml:"allowGuestPaymentsApi"`
 	AllowHomePage struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowHomePage"`
@@ -56,6 +59,9 @@ type CustomSite struct {
 	ContentSniffingProtection struct {
 		Text string `xml:",chardata"`
 	} `xml:"contentSniffingProtection"`
+	Description struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
 	EnableAuraRequests struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableAuraRequests"`
@@ -89,6 +95,12 @@ type CustomSite struct {
 	RobotsTxtPage struct {
 		Text string `xml:",chardata"`
 	} `xml:"robotsTxtPage"`
+	SelfRegPage struct {
+		Text string `xml:",chardata"`
+	} `xml:"selfRegPage"`
+	ServerIsDown struct {
+		Text string `xml:",chardata"`
+	} `xml:"serverIsDown"`
 	SiteAdmin struct {
 		Text string `xml:",chardata"`
 	} `xml:"siteAdmin"`
@@ -109,9 +121,15 @@ type CustomSite struct {
 			Text string `xml:",chardata"`
 		} `xml:"target"`
 	} `xml:"siteRedirectMappings"`
+	SiteTemplate struct {
+		Text string `xml:",chardata"`
+	} `xml:"siteTemplate"`
 	SiteType struct {
 		Text string `xml:",chardata"`
 	} `xml:"siteType"`
+	UrlPathPrefix struct {
+		Text string `xml:",chardata"`
+	} `xml:"urlPathPrefix"`
 	Subdomain struct {
 		Text string `xml:",chardata"`
 	} `xml:"subdomain"`
