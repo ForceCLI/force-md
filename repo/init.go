@@ -4,6 +4,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/analyticSnapshots"
 	_ "github.com/ForceCLI/force-md/metadata/appMenus"
 	_ "github.com/ForceCLI/force-md/metadata/application"
+	_ "github.com/ForceCLI/force-md/metadata/approvalProcesses"
 	_ "github.com/ForceCLI/force-md/metadata/assignmentRules"
 	_ "github.com/ForceCLI/force-md/metadata/aura"
 	_ "github.com/ForceCLI/force-md/metadata/autoResponseRules"
