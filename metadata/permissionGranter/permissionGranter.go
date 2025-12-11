@@ -49,6 +49,6 @@ func Open(path string) (PermissionGranter, error) {
 	case "PermissionSet":
 		return permissionset.Open(path)
 	default:
-		return nil, fmt.Errorf("Invalid type: " + g.XMLName.Local)
+		return nil, fmt.Errorf("Invalid type: %s", g.XMLName.Local)
 	}
 }
