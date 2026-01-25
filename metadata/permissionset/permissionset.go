@@ -36,6 +36,7 @@ type ObjectPermissions struct {
 	AllowRead        BooleanText `xml:"allowRead"`
 	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
 	Object           string      `xml:"object"`
+	ViewAllFields    BooleanText `xml:"viewAllFields"`
 	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
 }
 
