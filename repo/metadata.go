@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -16,6 +17,19 @@ import (
 
 var NotXMLError = errors.New("Could not parse as XML")
 var MetadataFileNotFound = errors.New("Could not identify metadata type")
+
+var allowMissingXMLDeclaration atomic.Bool
+
+// SetAllowMissingXMLDeclaration enables parsing XML files that omit the XML declaration.
+// By default, RootElementName requires a declaration.
+func SetAllowMissingXMLDeclaration(allow bool) {
+	allowMissingXMLDeclaration.Store(allow)
+}
+
+// AllowMissingXMLDeclaration reports whether XML declaration checks are disabled.
+func AllowMissingXMLDeclaration() bool {
+	return allowMissingXMLDeclaration.Load()
+}
 
 // If the file in path contains metadata, return it.  Otherwise, try to find
 // the corresponding file that contains metadata.
@@ -168,7 +182,7 @@ func RootElementName(xmlData []byte) (string, error) {
 				foundXML = true
 			}
 		case xml.StartElement:
-			if !foundXML {
+			if !foundXML && !allowMissingXMLDeclaration.Load() {
 				return "", fmt.Errorf("%w: No XML declaration found", NotXMLError)
 			}
 			// Return the name of the root element
