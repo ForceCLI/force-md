@@ -519,7 +519,10 @@ type Variable struct {
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
-	Name         string      `xml:"name"`
+	Name      string `xml:"name"`
+	ApexClass *struct {
+		Text string `xml:",chardata"`
+	} `xml:"apexClass"`
 	DataType     string      `xml:"dataType"`
 	IsCollection BooleanText `xml:"isCollection"`
 	IsInput      BooleanText `xml:"isInput"`
