@@ -32,6 +32,18 @@ type NamedCredential struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
+	Endpoint *struct {
+		Text string `xml:",chardata"`
+	} `xml:"endpoint"`
+	PrincipalType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"principalType"`
+	Protocol *struct {
+		Text string `xml:",chardata"`
+	} `xml:"protocol"`
+	AuthProvider *struct {
+		Text string `xml:",chardata"`
+	} `xml:"authProvider"`
 	NamedCredentialParameters []struct {
 		ExternalCredential *struct {
 			Text string `xml:",chardata"`
