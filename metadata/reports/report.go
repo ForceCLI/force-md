@@ -218,10 +218,10 @@ type Report struct {
 	ShowDetails struct {
 		Text string `xml:",chardata"`
 	} `xml:"showDetails"`
-	ShowGrandTotal struct {
+	ShowGrandTotal *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showGrandTotal"`
-	ShowSubTotals struct {
+	ShowSubTotals *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showSubTotals"`
 	SortColumn *struct {
@@ -230,7 +230,7 @@ type Report struct {
 	SortOrder *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sortOrder"`
-	TimeFrameFilter struct {
+	TimeFrameFilter *struct {
 		DateColumn struct {
 			Text string `xml:",chardata"`
 		} `xml:"dateColumn"`

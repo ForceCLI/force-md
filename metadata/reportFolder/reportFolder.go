@@ -27,6 +27,7 @@ type ReportFolder struct {
 	metadata.MetadataInfo
 	XMLName      xml.Name      `xml:"ReportFolder"`
 	Xmlns        string        `xml:"xmlns,attr"`
+	AccessType   *string       `xml:"accessType"`
 	FolderShares []FolderShare `xml:"folderShares"`
 	Name         string        `xml:"name"`
 }
