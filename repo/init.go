@@ -91,6 +91,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/translations"
 	_ "github.com/ForceCLI/force-md/metadata/triggers"
 	_ "github.com/ForceCLI/force-md/metadata/uiFormatSpecificationSets"
+	_ "github.com/ForceCLI/force-md/metadata/uibundles"
 	_ "github.com/ForceCLI/force-md/metadata/wave"
 	_ "github.com/ForceCLI/force-md/metadata/weblinks"
 	_ "github.com/ForceCLI/force-md/metadata/workflow"
