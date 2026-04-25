@@ -215,7 +215,7 @@ type Report struct {
 	Scope *struct {
 		Text string `xml:",chardata"`
 	} `xml:"scope"`
-	ShowDetails struct {
+	ShowDetails *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showDetails"`
 	ShowGrandTotal *struct {

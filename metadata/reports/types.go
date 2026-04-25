@@ -29,11 +29,11 @@ type ReportGroupingDown struct {
 
 // ReportFilterCriteriaItem represents a filter criteria item in a report
 type ReportFilterCriteriaItem struct {
-	Column         TextLiteral `xml:"column"`
-	ColumnToColumn TextLiteral `xml:"columnToColumn"`
-	IsUnlocked     TextLiteral `xml:"isUnlocked"`
-	Operator       TextLiteral `xml:"operator"`
-	Value          TextLiteral `xml:"value"`
+	Column         TextLiteral  `xml:"column"`
+	ColumnToColumn *TextLiteral `xml:"columnToColumn"`
+	IsUnlocked     *TextLiteral `xml:"isUnlocked"`
+	Operator       TextLiteral  `xml:"operator"`
+	Value          TextLiteral  `xml:"value"`
 }
 
 // ReportFilter represents a filter in a report
