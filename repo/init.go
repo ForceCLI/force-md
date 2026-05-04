@@ -28,6 +28,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/emailTemplate"
 	_ "github.com/ForceCLI/force-md/metadata/experiences"
 	_ "github.com/ForceCLI/force-md/metadata/externalCredentials"
+	_ "github.com/ForceCLI/force-md/metadata/externalServiceRegistrations"
 	_ "github.com/ForceCLI/force-md/metadata/flexipages"
 	_ "github.com/ForceCLI/force-md/metadata/flow"
 	_ "github.com/ForceCLI/force-md/metadata/flowDefinitions"
