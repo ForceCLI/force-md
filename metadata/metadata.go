@@ -76,6 +76,7 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 		if err != nil {
 			return nil, errors.Wrap(err, "opening file")
 		}
+		defer f.Close()
 	}
 	contents, err := io.ReadAll(f)
 	if err != nil {
@@ -110,6 +111,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 		if err != nil {
 			return errors.Wrap(err, "opening file")
 		}
+		defer f.Close()
 	}
 	contents, err := io.ReadAll(f)
 	if err != nil {

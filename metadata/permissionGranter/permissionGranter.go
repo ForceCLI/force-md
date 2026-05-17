@@ -31,6 +31,7 @@ func Open(path string) (PermissionGranter, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "opening file")
 	}
+	defer r.Close()
 	dec := xml.NewDecoder(r)
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = true
