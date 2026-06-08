@@ -19,6 +19,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/dashboard"
 	_ "github.com/ForceCLI/force-md/metadata/dashboardFolder"
 	_ "github.com/ForceCLI/force-md/metadata/dataSources"
+	_ "github.com/ForceCLI/force-md/metadata/datacategorygroup"
 	_ "github.com/ForceCLI/force-md/metadata/delegateGroups"
 	_ "github.com/ForceCLI/force-md/metadata/documentFolder"
 	_ "github.com/ForceCLI/force-md/metadata/documents"
