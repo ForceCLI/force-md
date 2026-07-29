@@ -74,6 +74,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/platformEventChannelMembers"
 	_ "github.com/ForceCLI/force-md/metadata/platformEventChannels"
 	_ "github.com/ForceCLI/force-md/metadata/platformEventSubscriberConfigs"
+	_ "github.com/ForceCLI/force-md/metadata/productAttributeSets"
 	_ "github.com/ForceCLI/force-md/metadata/profile"
 	_ "github.com/ForceCLI/force-md/metadata/queues"
 	_ "github.com/ForceCLI/force-md/metadata/quickActions"
