@@ -17,7 +17,7 @@ require (
 
 require (
 	github.com/nbio/xml v0.0.0-20260302224236-9f64bb3b5a9e
-	github.com/octoberswimmer/sformula v0.11.0
+	github.com/octoberswimmer/sformula v0.16.0
 	github.com/stretchr/testify v1.8.4
 )
 
