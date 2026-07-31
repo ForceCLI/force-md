@@ -90,13 +90,9 @@ type Rule struct {
 	Name struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
-	ConditionLogic string `xml:"conditionLogic"`
-	Conditions     []struct {
-		LeftValueReference string `xml:"leftValueReference"`
-		Operator           string `xml:"operator"`
-		RightValue         *Value `xml:"rightValue"`
-	} `xml:"conditions"`
-	Connector *struct {
+	ConditionLogic string      `xml:"conditionLogic"`
+	Conditions     []Condition `xml:"conditions"`
+	Connector      *struct {
 		IsGoTo *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isGoTo"`
@@ -108,6 +104,14 @@ type Rule struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
+}
+
+// Condition is one condition an element evaluates. Decision rules and
+// Collection Filters share the shape.
+type Condition struct {
+	LeftValueReference string `xml:"leftValueReference"`
+	Operator           string `xml:"operator"`
+	RightValue         *Value `xml:"rightValue"`
 }
 
 type Decision struct {
@@ -158,6 +162,63 @@ func (v Value) String() string {
 		return v.BooleanValue.String()
 	}
 	return ""
+}
+
+// CollectionProcessor is a Collection Filter or Collection Sort element,
+// distinguished by CollectionProcessorType. A filter keeps the members of
+// CollectionReference that satisfy Conditions (or Formula); a sort orders them
+// by SortOptions and keeps at most Limit of them.
+type CollectionProcessor struct {
+	Description *TextLiteral `xml:"description"`
+	Name        struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	ElementSubtype struct {
+		Text string `xml:",chardata"`
+	} `xml:"elementSubtype"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	AssignNextValueToReference struct {
+		Text string `xml:",chardata"`
+	} `xml:"assignNextValueToReference"`
+	CollectionProcessorType struct {
+		Text string `xml:",chardata"`
+	} `xml:"collectionProcessorType"`
+	CollectionReference struct {
+		Text string `xml:",chardata"`
+	} `xml:"collectionReference"`
+	ConditionLogic struct {
+		Text string `xml:",chardata"`
+	} `xml:"conditionLogic"`
+	Conditions  []Condition  `xml:"conditions"`
+	Formula     *TextLiteral `xml:"formula"`
+	Limit       *IntegerText `xml:"limit"`
+	SortOptions []SortOption `xml:"sortOptions"`
+	Connector   struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+}
+
+// SortOption is one level of a Collection Sort's ordering, applied in the order
+// the options appear.
+type SortOption struct {
+	DoesPutEmptyStringAndNullFirst BooleanText `xml:"doesPutEmptyStringAndNullFirst"`
+	SortField                      struct {
+		Text string `xml:",chardata"`
+	} `xml:"sortField"`
+	SortOrder struct {
+		Text string `xml:",chardata"`
+	} `xml:"sortOrder"`
 }
 
 // CustomError is a Custom Error element. It ends the path it sits on and
@@ -681,52 +742,9 @@ type Flow struct {
 		} `xml:"dataType"`
 		Value *Value `xml:"value"`
 	} `xml:"choices"`
-	CollectionProcessors []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		ElementSubtype struct {
-			Text string `xml:",chardata"`
-		} `xml:"elementSubtype"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		AssignNextValueToReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"assignNextValueToReference"`
-		CollectionProcessorType struct {
-			Text string `xml:",chardata"`
-		} `xml:"collectionProcessorType"`
-		CollectionReference struct {
-			Text string `xml:",chardata"`
-		} `xml:"collectionReference"`
-		ConditionLogic struct {
-			Text string `xml:",chardata"`
-		} `xml:"conditionLogic"`
-		Conditions struct {
-			LeftValueReference struct {
-				Text string `xml:",chardata"`
-			} `xml:"leftValueReference"`
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			RightValue *Value `xml:"rightValue"`
-		} `xml:"conditions"`
-		Connector struct {
-			IsGoTo *struct {
-				Text string `xml:",chardata"`
-			} `xml:"isGoTo"`
-			TargetReference ElementName `xml:"targetReference"`
-		} `xml:"connector"`
-	} `xml:"collectionProcessors"`
-	CustomErrors []CustomError `xml:"customErrors"`
-	Constants    []struct {
+	CollectionProcessors []CollectionProcessor `xml:"collectionProcessors"`
+	CustomErrors         []CustomError         `xml:"customErrors"`
+	Constants            []struct {
 		Description *TextLiteral `xml:"description"`
 		Name        struct {
 			Text string `xml:",chardata"`

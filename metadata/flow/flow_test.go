@@ -129,3 +129,160 @@ func TestCustomErrorsAbsent(t *testing.T) {
 		t.Errorf("CustomErrors = %d, want 0", got)
 	}
 }
+
+const collectionProcessorFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <collectionProcessors>
+        <description>Keeps the open ones</description>
+        <name>Open_Jobs</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>Open Jobs</label>
+        <locationX>1106</locationX>
+        <locationY>395</locationY>
+        <assignNextValueToReference>currentItem_Open_Jobs</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>Get_Jobs</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_Open_Jobs.Status__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <stringValue>Open</stringValue>
+            </rightValue>
+        </conditions>
+        <conditions>
+            <leftValueReference>currentItem_Open_Jobs.Is_Paid__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <booleanValue>false</booleanValue>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>Next_Element</targetReference>
+        </connector>
+    </collectionProcessors>
+    <collectionProcessors>
+        <name>Sort_Jobs</name>
+        <elementSubtype>SortCollectionProcessor</elementSubtype>
+        <label>Sort Jobs</label>
+        <locationX>842</locationX>
+        <locationY>1250</locationY>
+        <collectionProcessorType>SortCollectionProcessor</collectionProcessorType>
+        <collectionReference>Get_Jobs</collectionReference>
+        <limit>5</limit>
+        <sortOptions>
+            <doesPutEmptyStringAndNullFirst>false</doesPutEmptyStringAndNullFirst>
+            <sortField>Is_GC__c</sortField>
+            <sortOrder>Desc</sortOrder>
+        </sortOptions>
+        <sortOptions>
+            <doesPutEmptyStringAndNullFirst>true</doesPutEmptyStringAndNullFirst>
+            <sortField>Name</sortField>
+            <sortOrder>Asc</sortOrder>
+        </sortOptions>
+    </collectionProcessors>
+    <label>Test Flow</label>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Active</status>
+</Flow>
+`
+
+func TestCollectionProcessors(t *testing.T) {
+	f := openFlow(t, collectionProcessorFlow)
+
+	if got := len(f.CollectionProcessors); got != 2 {
+		t.Fatalf("CollectionProcessors = %d, want 2", got)
+	}
+
+	filter := f.CollectionProcessors[0]
+	if got := filter.Name.Text; got != "Open_Jobs" {
+		t.Errorf("Name = %q, want Open_Jobs", got)
+	}
+	if got := filter.CollectionProcessorType.Text; got != "FilterCollectionProcessor" {
+		t.Errorf("CollectionProcessorType = %q, want FilterCollectionProcessor", got)
+	}
+	if got := filter.CollectionReference.Text; got != "Get_Jobs" {
+		t.Errorf("CollectionReference = %q, want Get_Jobs", got)
+	}
+	if got := filter.AssignNextValueToReference.Text; got != "currentItem_Open_Jobs" {
+		t.Errorf("AssignNextValueToReference = %q, want currentItem_Open_Jobs", got)
+	}
+	if got := filter.ConditionLogic.Text; got != "and" {
+		t.Errorf("ConditionLogic = %q, want and", got)
+	}
+	if got := filter.Description.String(); got != "Keeps the open ones" {
+		t.Errorf("Description = %q, want %q", got, "Keeps the open ones")
+	}
+	if got := string(filter.Connector.TargetReference); got != "Next_Element" {
+		t.Errorf("Connector.TargetReference = %q, want Next_Element", got)
+	}
+
+	// A filter routinely applies more than one condition, so they have to
+	// survive as separate entries rather than collapsing onto one.
+	if got := len(filter.Conditions); got != 2 {
+		t.Fatalf("Conditions = %d, want 2", got)
+	}
+	if got := filter.Conditions[0].LeftValueReference; got != "currentItem_Open_Jobs.Status__c" {
+		t.Errorf("condition 0 LeftValueReference = %q, want currentItem_Open_Jobs.Status__c", got)
+	}
+	if got := filter.Conditions[0].Operator; got != "EqualTo" {
+		t.Errorf("condition 0 Operator = %q, want EqualTo", got)
+	}
+	if got := filter.Conditions[0].RightValue.String(); got != "Open" {
+		t.Errorf("condition 0 RightValue = %q, want Open", got)
+	}
+	if got := filter.Conditions[1].LeftValueReference; got != "currentItem_Open_Jobs.Is_Paid__c" {
+		t.Errorf("condition 1 LeftValueReference = %q, want currentItem_Open_Jobs.Is_Paid__c", got)
+	}
+	if got := filter.Conditions[1].RightValue.BooleanValue.ToBool(); got {
+		t.Error("condition 1 RightValue = true, want false")
+	}
+	if filter.Limit != nil {
+		t.Errorf("Limit = %v, want nil for a filter", filter.Limit)
+	}
+	if got := len(filter.SortOptions); got != 0 {
+		t.Errorf("SortOptions = %d, want 0 for a filter", got)
+	}
+
+	sort := f.CollectionProcessors[1]
+	if got := sort.CollectionProcessorType.Text; got != "SortCollectionProcessor" {
+		t.Errorf("CollectionProcessorType = %q, want SortCollectionProcessor", got)
+	}
+	if sort.Limit == nil {
+		t.Fatal("Limit = nil, want 5")
+	}
+	if got := sort.Limit.Text; got != "5" {
+		t.Errorf("Limit = %q, want 5", got)
+	}
+	if sort.Description != nil {
+		t.Errorf("Description = %v, want nil", sort.Description)
+	}
+	if got := len(sort.Conditions); got != 0 {
+		t.Errorf("Conditions = %d, want 0 for a sort", got)
+	}
+
+	// Sort levels apply in the order they appear, so order and per-level
+	// options both matter.
+	if got := len(sort.SortOptions); got != 2 {
+		t.Fatalf("SortOptions = %d, want 2", got)
+	}
+	for i, want := range []struct {
+		field     string
+		order     string
+		nullFirst bool
+	}{
+		{"Is_GC__c", "Desc", false},
+		{"Name", "Asc", true},
+	} {
+		option := sort.SortOptions[i]
+		if got := option.SortField.Text; got != want.field {
+			t.Errorf("sort option %d SortField = %q, want %q", i, got, want.field)
+		}
+		if got := option.SortOrder.Text; got != want.order {
+			t.Errorf("sort option %d SortOrder = %q, want %q", i, got, want.order)
+		}
+		if got := option.DoesPutEmptyStringAndNullFirst.ToBool(); got != want.nullFirst {
+			t.Errorf("sort option %d DoesPutEmptyStringAndNullFirst = %v, want %v", i, got, want.nullFirst)
+		}
+	}
+}
