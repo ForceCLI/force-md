@@ -160,6 +160,39 @@ func (v Value) String() string {
 	return ""
 }
 
+// CustomError is a Custom Error element. It ends the path it sits on and
+// blocks the save, reporting each of its messages against either the record or
+// a named field.
+type CustomError struct {
+	Description *TextLiteral `xml:"description"`
+	Name        struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	CustomErrorMessages []CustomErrorMessage `xml:"customErrorMessages"`
+}
+
+// CustomErrorMessage is one message a Custom Error element reports.
+// FieldSelection names the field the message attaches to and is set only when
+// IsFieldError is true.
+type CustomErrorMessage struct {
+	ErrorMessage struct {
+		Text string `xml:",chardata"`
+	} `xml:"errorMessage"`
+	FieldSelection *struct {
+		Text string `xml:",chardata"`
+	} `xml:"fieldSelection"`
+	IsFieldError BooleanText `xml:"isFieldError"`
+}
+
 type RecordLookup struct {
 	Description *struct {
 		Text string `xml:",chardata"`
@@ -692,29 +725,8 @@ type Flow struct {
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"connector"`
 	} `xml:"collectionProcessors"`
-	CustomErrors []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		CustomErrorMessages struct {
-			ErrorMessage struct {
-				Text string `xml:",chardata"`
-			} `xml:"errorMessage"`
-			IsFieldError struct {
-				Text string `xml:",chardata"`
-			} `xml:"isFieldError"`
-		} `xml:"customErrorMessages"`
-	} `xml:"customErrors"`
-	Constants []struct {
+	CustomErrors []CustomError `xml:"customErrors"`
+	Constants    []struct {
 		Description *TextLiteral `xml:"description"`
 		Name        struct {
 			Text string `xml:",chardata"`
