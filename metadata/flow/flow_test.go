@@ -286,3 +286,146 @@ func TestCollectionProcessors(t *testing.T) {
 		}
 	}
 }
+
+const waitFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <waits>
+        <name>myWait_myRule_1</name>
+        <label>myWait_myRule_1</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>After_Wait</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>defaultLabel</defaultConnectorLabel>
+        <faultConnector>
+            <targetReference>On_Fault</targetReference>
+        </faultConnector>
+        <timeZoneId>America/Los_Angeles</timeZoneId>
+        <waitEvents>
+            <name>myWaitEvent_event_0</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>postActionExecutionVariable</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Post_Wait_Decision</targetReference>
+            </connector>
+            <eventType>DateRefAlarmEvent</eventType>
+            <inputParameters>
+                <name>TimeTableColumnEnumOrId</name>
+                <value>
+                    <stringValue>Showing__c</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>TimeOffset</name>
+                <value>
+                    <numberValue>24.0</numberValue>
+                </value>
+            </inputParameters>
+            <label>myWaitEvent_event_0</label>
+        </waitEvents>
+        <waitEvents>
+            <name>myWaitEvent_event_1</name>
+            <conditionLogic>or</conditionLogic>
+            <connector>
+                <targetReference>Other_Path</targetReference>
+            </connector>
+            <eventType>AlarmEvent</eventType>
+            <offset>2</offset>
+            <offsetUnit>Hours</offsetUnit>
+            <label>myWaitEvent_event_1</label>
+        </waitEvents>
+    </waits>
+</Flow>`
+
+func TestWaits(t *testing.T) {
+	f := openFlow(t, waitFlow)
+
+	if len(f.Waits) != 1 {
+		t.Fatalf("Waits = %d, want 1", len(f.Waits))
+	}
+	w := f.Waits[0]
+	if w.Name.Text != "myWait_myRule_1" {
+		t.Errorf("Name = %q, want %q", w.Name.Text, "myWait_myRule_1")
+	}
+	if w.DefaultConnector == nil || string(w.DefaultConnector.TargetReference) != "After_Wait" {
+		t.Errorf("DefaultConnector = %+v, want target After_Wait", w.DefaultConnector)
+	}
+	if w.FaultConnector == nil || string(w.FaultConnector.TargetReference) != "On_Fault" {
+		t.Errorf("FaultConnector = %+v, want target On_Fault", w.FaultConnector)
+	}
+	if w.TimeZoneId == nil || w.TimeZoneId.Text != "America/Los_Angeles" {
+		t.Errorf("TimeZoneId = %+v, want America/Los_Angeles", w.TimeZoneId)
+	}
+
+	if len(w.WaitEvents) != 2 {
+		t.Fatalf("WaitEvents = %d, want 2", len(w.WaitEvents))
+	}
+
+	first := w.WaitEvents[0]
+	if first.Name.Text != "myWaitEvent_event_0" {
+		t.Errorf("event 0 Name = %q", first.Name.Text)
+	}
+	if first.ConditionLogic.Text != "and" {
+		t.Errorf("event 0 ConditionLogic = %q, want and", first.ConditionLogic.Text)
+	}
+	if len(first.Conditions) != 1 {
+		t.Fatalf("event 0 Conditions = %d, want 1", len(first.Conditions))
+	}
+	cond := first.Conditions[0]
+	if cond.LeftValueReference != "postActionExecutionVariable" || cond.Operator != "EqualTo" {
+		t.Errorf("event 0 condition = %+v", cond)
+	}
+	if cond.RightValue == nil || cond.RightValue.BooleanValue == nil || cond.RightValue.BooleanValue.ToBool() {
+		t.Errorf("event 0 condition RightValue = %+v, want booleanValue false", cond.RightValue)
+	}
+	if first.Connector == nil || string(first.Connector.TargetReference) != "Post_Wait_Decision" {
+		t.Errorf("event 0 Connector = %+v, want target Post_Wait_Decision", first.Connector)
+	}
+	if first.EventType.Text != "DateRefAlarmEvent" {
+		t.Errorf("event 0 EventType = %q, want DateRefAlarmEvent", first.EventType.Text)
+	}
+	if len(first.InputParameters) != 2 {
+		t.Fatalf("event 0 InputParameters = %d, want 2", len(first.InputParameters))
+	}
+	if first.InputParameters[0].Name.Text != "TimeTableColumnEnumOrId" ||
+		first.InputParameters[0].Value == nil ||
+		first.InputParameters[0].Value.StringValue == nil ||
+		first.InputParameters[0].Value.StringValue.Text != "Showing__c" {
+		t.Errorf("event 0 input parameter 0 = %+v", first.InputParameters[0])
+	}
+	if first.InputParameters[1].Name.Text != "TimeOffset" ||
+		first.InputParameters[1].Value == nil ||
+		first.InputParameters[1].Value.NumberValue == nil ||
+		first.InputParameters[1].Value.NumberValue.Text != "24.0" {
+		t.Errorf("event 0 input parameter 1 = %+v", first.InputParameters[1])
+	}
+
+	second := w.WaitEvents[1]
+	if second.ConditionLogic.Text != "or" {
+		t.Errorf("event 1 ConditionLogic = %q, want or", second.ConditionLogic.Text)
+	}
+	if len(second.Conditions) != 0 {
+		t.Errorf("event 1 Conditions = %d, want 0", len(second.Conditions))
+	}
+	if second.EventType.Text != "AlarmEvent" {
+		t.Errorf("event 1 EventType = %q, want AlarmEvent", second.EventType.Text)
+	}
+	if second.Offset.Text != "2" || second.OffsetUnit.Text != "Hours" {
+		t.Errorf("event 1 offset = %q %q, want 2 Hours", second.Offset.Text, second.OffsetUnit.Text)
+	}
+}
+
+func TestWaitsAbsent(t *testing.T) {
+	f := openFlow(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata"></Flow>`)
+	if len(f.Waits) != 0 {
+		t.Errorf("Waits = %d, want 0", len(f.Waits))
+	}
+}

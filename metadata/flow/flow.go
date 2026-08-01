@@ -941,46 +941,87 @@ type Flow struct {
 		Text string `xml:",chardata"`
 	} `xml:"triggerOrder"`
 	Variables []Variable `xml:"variables"`
-	Waits     []struct {
+	Waits     []Wait     `xml:"waits"`
+}
+
+// Wait is a Wait element. Each wait event whose conditions are met is armed
+// and pauses the interview until its event (e.g. a time-based alarm) fires;
+// when no event arms, the default connector runs immediately.
+type Wait struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Name                  struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	ElementSubtype struct {
+		Text string `xml:",chardata"`
+	} `xml:"elementSubtype"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	DefaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"defaultConnector"`
+	DefaultConnectorLabel struct {
+		Text string `xml:",chardata"`
+	} `xml:"defaultConnectorLabel"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	TimeZoneId *struct {
+		Text string `xml:",chardata"`
+	} `xml:"timeZoneId"`
+	WaitEvents []WaitEvent `xml:"waitEvents"`
+}
+
+// WaitEvent is one event a Wait element can pause on. Conditions (combined
+// per ConditionLogic) decide whether the event arms; EventType names the
+// event kind (AlarmEvent, DateRefAlarmEvent, platform event API name);
+// InputParameters carry the alarm's offset definition.
+type WaitEvent struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Name                  struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	ConditionLogic struct {
+		Text string `xml:",chardata"`
+	} `xml:"conditionLogic"`
+	Conditions []Condition `xml:"conditions"`
+	Connector  *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	EventType struct {
+		Text string `xml:",chardata"`
+	} `xml:"eventType"`
+	InputParameters []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
-		ElementSubtype struct {
-			Text string `xml:",chardata"`
-		} `xml:"elementSubtype"`
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		LocationX struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationX"`
-		LocationY struct {
-			Text string `xml:",chardata"`
-		} `xml:"locationY"`
-		DefaultConnectorLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"defaultConnectorLabel"`
-		WaitEvents struct {
-			ConditionLogic struct {
-				Text string `xml:",chardata"`
-			} `xml:"conditionLogic"`
-			Connector struct {
-				IsGoTo *struct {
-					Text string `xml:",chardata"`
-				} `xml:"isGoTo"`
-				TargetReference ElementName `xml:"targetReference"`
-			} `xml:"connector"`
-			Label struct {
-				Text string `xml:",chardata"`
-			} `xml:"label"`
-			Offset struct {
-				Text string `xml:",chardata"`
-			} `xml:"offset"`
-			OffsetUnit struct {
-				Text string `xml:",chardata"`
-			} `xml:"offsetUnit"`
-		} `xml:"waitEvents"`
-	} `xml:"waits"`
+		Value *Value `xml:"value"`
+	} `xml:"inputParameters"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	Offset struct {
+		Text string `xml:",chardata"`
+	} `xml:"offset"`
+	OffsetUnit struct {
+		Text string `xml:",chardata"`
+	} `xml:"offsetUnit"`
 }
 
 func (c *Flow) SetMetadata(m metadata.MetadataInfo) {
