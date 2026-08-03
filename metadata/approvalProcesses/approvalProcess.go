@@ -139,6 +139,9 @@ type ApprovalProcess struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
+	ProcessOrder struct {
+		Text string `xml:",chardata"`
+	} `xml:"processOrder"`
 	RecordEditability struct {
 		Text string `xml:",chardata"`
 	} `xml:"recordEditability"`
