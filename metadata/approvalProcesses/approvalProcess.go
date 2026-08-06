@@ -42,7 +42,7 @@ type ApprovalProcess struct {
 			Text string `xml:",chardata"`
 		} `xml:"allowDelegate"`
 		ApprovalActions *struct {
-			Action struct {
+			Action []struct {
 				Name struct {
 					Text string `xml:",chardata"`
 				} `xml:"name"`
@@ -93,7 +93,7 @@ type ApprovalProcess struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		RejectionActions *struct {
-			Action struct {
+			Action []struct {
 				Name struct {
 					Text string `xml:",chardata"`
 				} `xml:"name"`
@@ -169,7 +169,7 @@ type ApprovalProcess struct {
 		} `xml:"action"`
 	} `xml:"finalRejectionActions"`
 	InitialSubmissionActions *struct {
-		Action struct {
+		Action []struct {
 			Name struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
@@ -190,7 +190,7 @@ type ApprovalProcess struct {
 		} `xml:"userHierarchyField"`
 	} `xml:"nextAutomatedApprover"`
 	RecallActions *struct {
-		Action struct {
+		Action []struct {
 			Name struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
