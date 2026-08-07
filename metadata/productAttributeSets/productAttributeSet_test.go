@@ -65,3 +65,46 @@ func TestOpenWithoutOptionalFields(t *testing.T) {
 		t.Errorf("nil Description String() = %q, want empty", got)
 	}
 }
+
+const sampleProductAttributeSetWithItems = `<?xml version="1.0" encoding="UTF-8"?>
+<ProductAttributeSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <developerName>Campus_Attributes</developerName>
+    <masterLabel>Campus Attributes</masterLabel>
+    <productAttributeSetItems>
+        <field>Campus__c</field>
+        <sequence>0</sequence>
+    </productAttributeSetItems>
+    <productAttributeSetItems>
+        <field>Color__c</field>
+        <sequence>1</sequence>
+    </productAttributeSetItems>
+</ProductAttributeSet>
+`
+
+func TestOpenWithItems(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "Campus_Attributes.productAttributeSet-meta.xml")
+	if err := os.WriteFile(path, []byte(sampleProductAttributeSetWithItems), 0644); err != nil {
+		t.Fatalf("write fixture: %v", err)
+	}
+
+	p, err := Open(path)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if got := len(p.ProductAttributeSetItems); got != 2 {
+		t.Fatalf("len(ProductAttributeSetItems) = %d, want 2", got)
+	}
+	if got := p.ProductAttributeSetItems[0].Field.String(); got != "Campus__c" {
+		t.Errorf("item[0].Field = %q, want %q", got, "Campus__c")
+	}
+	if got := p.ProductAttributeSetItems[0].Sequence.String(); got != "0" {
+		t.Errorf("item[0].Sequence = %q, want %q", got, "0")
+	}
+	if got := p.ProductAttributeSetItems[1].Field.String(); got != "Color__c" {
+		t.Errorf("item[1].Field = %q, want %q", got, "Color__c")
+	}
+	if got := p.ProductAttributeSetItems[1].Sequence.String(); got != "1" {
+		t.Errorf("item[1].Sequence = %q, want %q", got, "1")
+	}
+}

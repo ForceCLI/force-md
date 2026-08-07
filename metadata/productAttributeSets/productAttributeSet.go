@@ -16,11 +16,17 @@ func init() {
 
 type ProductAttributeSet struct {
 	metadata.MetadataInfo
-	XMLName       xml.Name     `xml:"ProductAttributeSet"`
-	Xmlns         string       `xml:"xmlns,attr"`
-	Description   *TextLiteral `xml:"description"`
-	DeveloperName *TextLiteral `xml:"developerName"`
-	MasterLabel   *TextLiteral `xml:"masterLabel"`
+	XMLName                  xml.Name                  `xml:"ProductAttributeSet"`
+	Xmlns                    string                    `xml:"xmlns,attr"`
+	Description              *TextLiteral              `xml:"description"`
+	DeveloperName            *TextLiteral              `xml:"developerName"`
+	MasterLabel              *TextLiteral              `xml:"masterLabel"`
+	ProductAttributeSetItems []ProductAttributeSetItem `xml:"productAttributeSetItems"`
+}
+
+type ProductAttributeSetItem struct {
+	Field    *TextLiteral `xml:"field"`
+	Sequence *TextLiteral `xml:"sequence"`
 }
 
 func (p *ProductAttributeSet) SetMetadata(m metadata.MetadataInfo) {
