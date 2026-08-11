@@ -72,6 +72,9 @@ type CustomObject struct {
 	EnableBulkApi *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableBulkApi"`
+	EnableDivisions *struct {
+		Text string `xml:",chardata"`
+	} `xml:"enableDivisions"`
 	EnableEnhancedLookup *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableEnhancedLookup"`
