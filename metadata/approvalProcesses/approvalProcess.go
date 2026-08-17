@@ -129,6 +129,9 @@ type ApprovalProcess struct {
 		Formula *struct {
 			Text string `xml:",chardata"`
 		} `xml:"formula"`
+		BooleanFilter struct {
+			Text string `xml:",chardata"`
+		} `xml:"booleanFilter"`
 	} `xml:"entryCriteria"`
 	FinalApprovalRecordLock *struct {
 		Text string `xml:",chardata"`
