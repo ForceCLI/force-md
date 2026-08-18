@@ -92,6 +92,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/standardvalueset"
 	_ "github.com/ForceCLI/force-md/metadata/staticresources"
 	_ "github.com/ForceCLI/force-md/metadata/tabs"
+	_ "github.com/ForceCLI/force-md/metadata/testSuites"
 	_ "github.com/ForceCLI/force-md/metadata/translations"
 	_ "github.com/ForceCLI/force-md/metadata/triggers"
 	_ "github.com/ForceCLI/force-md/metadata/uiFormatSpecificationSets"
