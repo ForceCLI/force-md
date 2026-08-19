@@ -149,6 +149,10 @@ type Value struct {
 		Text string `xml:",chardata"`
 	} `xml:"numberValue"`
 	BooleanValue *BooleanText `xml:"booleanValue"`
+	// A Transform maps its output through a formula rather than a literal or
+	// a reference, carrying the expression and its result type in the value.
+	FormulaDataType   *TextLiteral `xml:"formulaDataType"`
+	FormulaExpression *TextLiteral `xml:"formulaExpression"`
 }
 
 func (v Value) String() string {
@@ -720,6 +724,75 @@ type ActionCall struct {
 	} `xml:"versionSegment"`
 }
 
+// Transform is a Transform element. It either maps a source collection onto a
+// new collection, one output member per source member, or reduces a collection
+// to a single value; IsCollection tells the two apart. The output is stored
+// automatically under the element's own name.
+type Transform struct {
+	Description *TextLiteral `xml:"description"`
+	Name        struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	ElementSubtype *TextLiteral `xml:"elementSubtype"`
+	ApexClass      *TextLiteral `xml:"apexClass"`
+	Connector      *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	FaultConnector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"faultConnector"`
+	// DataType and ObjectType describe what the transform produces: an
+	// ObjectType is present only when DataType is SObject.
+	DataType                 *TextLiteral     `xml:"dataType"`
+	ObjectType               *TextLiteral     `xml:"objectType"`
+	IsCollection             *BooleanText     `xml:"isCollection"`
+	Scale                    *TextLiteral     `xml:"scale"`
+	StoreOutputAutomatically *BooleanText     `xml:"storeOutputAutomatically"`
+	TransformValues          []TransformValue `xml:"transformValues"`
+}
+
+// TransformValue groups the actions that produce one output value of a
+// Transform.
+type TransformValue struct {
+	Name                  *TextLiteral           `xml:"name"`
+	Label                 *TextLiteral           `xml:"label"`
+	TransformValueActions []TransformValueAction `xml:"transformValueActions"`
+}
+
+// TransformValueAction produces one output of a Transform. A Map action names
+// the expression it maps from in Value, and the field it lands on in
+// OutputFieldApiName when the output is a record. An aggregate action (Count,
+// Sum) carries no Value: it names the collection it reduces through an
+// InputParameters entry called aggregationValues.
+type TransformValueAction struct {
+	// OutputFieldApiName is empty when the transform produces scalars rather
+	// than records.
+	OutputFieldApiName *TextLiteral `xml:"outputFieldApiName"`
+	TransformType      *TextLiteral `xml:"transformType"`
+	Value              *Value       `xml:"value"`
+	InputParameters    []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"inputParameters"`
+}
+
 type Flow struct {
 	metadata.MetadataInfo
 	XMLName     xml.Name     `xml:"Flow"`
@@ -940,8 +1013,9 @@ type Flow struct {
 	TriggerOrder *struct {
 		Text string `xml:",chardata"`
 	} `xml:"triggerOrder"`
-	Variables []Variable `xml:"variables"`
-	Waits     []Wait     `xml:"waits"`
+	Transforms []Transform `xml:"transforms"`
+	Variables  []Variable  `xml:"variables"`
+	Waits      []Wait      `xml:"waits"`
 }
 
 // Wait is a Wait element. Each wait event whose conditions are met is armed

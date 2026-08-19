@@ -429,3 +429,121 @@ func TestWaitsAbsent(t *testing.T) {
 		t.Errorf("Waits = %d, want 0", len(f.Waits))
 	}
 }
+
+const transformFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <transforms>
+        <name>Map_Records</name>
+        <label>Map Records</label>
+        <locationX>314</locationX>
+        <locationY>863</locationY>
+        <connector>
+            <targetReference>Update_Records</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>Account</objectType>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>Id</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Records[$EachItem].Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Name</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <formulaDataType>String</formulaDataType>
+                    <formulaExpression>{!var_Prefix} + ' - ' + {!Get_Records[$EachItem].Name}</formulaExpression>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
+    <transforms>
+        <name>Email_List</name>
+        <label>Email List</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Users[$EachItem].Email</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
+</Flow>`
+
+func TestTransformElements(t *testing.T) {
+	f := openFlow(t, transformFlow)
+
+	if len(f.Transforms) != 2 {
+		t.Fatalf("expected 2 transforms, got %d", len(f.Transforms))
+	}
+
+	records := f.Transforms[0]
+	if records.Name.Text != "Map_Records" {
+		t.Errorf("name = %q", records.Name.Text)
+	}
+	if records.Connector == nil || string(records.Connector.TargetReference) != "Update_Records" {
+		t.Errorf("connector = %+v", records.Connector)
+	}
+	if records.DataType == nil || records.DataType.Text != "SObject" {
+		t.Errorf("dataType = %+v", records.DataType)
+	}
+	if records.ObjectType == nil || records.ObjectType.Text != "Account" {
+		t.Errorf("objectType = %+v", records.ObjectType)
+	}
+	if records.IsCollection == nil || !records.IsCollection.ToBool() {
+		t.Errorf("isCollection = %+v", records.IsCollection)
+	}
+	if records.StoreOutputAutomatically == nil || !records.StoreOutputAutomatically.ToBool() {
+		t.Errorf("storeOutputAutomatically = %+v", records.StoreOutputAutomatically)
+	}
+	if len(records.TransformValues) != 1 {
+		t.Fatalf("expected 1 transformValues, got %d", len(records.TransformValues))
+	}
+	actions := records.TransformValues[0].TransformValueActions
+	if len(actions) != 2 {
+		t.Fatalf("expected 2 transformValueActions, got %d", len(actions))
+	}
+	if actions[0].OutputFieldApiName == nil || actions[0].OutputFieldApiName.Text != "Id" {
+		t.Errorf("outputFieldApiName = %+v", actions[0].OutputFieldApiName)
+	}
+	if actions[0].TransformType == nil || actions[0].TransformType.Text != "Map" {
+		t.Errorf("transformType = %+v", actions[0].TransformType)
+	}
+	if actions[0].Value == nil || actions[0].Value.ElementReference == nil ||
+		actions[0].Value.ElementReference.Text != "Get_Records[$EachItem].Id" {
+		t.Errorf("value = %+v", actions[0].Value)
+	}
+	// A mapped value may be a formula rather than a reference.
+	if actions[1].Value == nil || actions[1].Value.FormulaExpression == nil ||
+		actions[1].Value.FormulaExpression.Text != "{!var_Prefix} + ' - ' + {!Get_Records[$EachItem].Name}" {
+		t.Errorf("formulaExpression = %+v", actions[1].Value)
+	}
+	if actions[1].Value.FormulaDataType == nil || actions[1].Value.FormulaDataType.Text != "String" {
+		t.Errorf("formulaDataType = %+v", actions[1].Value)
+	}
+
+	// A scalar transform carries no objectType and its actions no output field.
+	scalars := f.Transforms[1]
+	if scalars.ObjectType != nil {
+		t.Errorf("expected no objectType, got %+v", scalars.ObjectType)
+	}
+	if scalars.Connector != nil {
+		t.Errorf("expected no connector, got %+v", scalars.Connector)
+	}
+	if got := scalars.TransformValues[0].TransformValueActions[0].OutputFieldApiName; got != nil {
+		t.Errorf("expected no outputFieldApiName, got %+v", got)
+	}
+}
