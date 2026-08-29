@@ -144,6 +144,7 @@ type Value struct {
 		Text string `xml:",chardata"`
 	} `xml:"elementReference"`
 	StringValue   *TextLiteral `xml:"stringValue"`
+	DateValue     *TextLiteral `xml:"dateValue"`
 	DateTimeValue *TextLiteral `xml:"dateTimeValue"`
 	NumberValue   *struct {
 		Text string `xml:",chardata"`
@@ -370,17 +371,7 @@ type RecordCreate struct {
 		Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
-		Value struct {
-			BooleanValue *struct {
-				Text string `xml:",chardata"`
-			} `xml:"booleanValue"`
-			ElementReference *struct {
-				Text string `xml:",chardata"`
-			} `xml:"elementReference"`
-			StringValue *struct {
-				Text string `xml:",chardata"`
-			} `xml:"stringValue"`
-		} `xml:"value"`
+		Value *Value `xml:"value"`
 	} `xml:"inputAssignments"`
 	Object *struct {
 		Text string `xml:",chardata"`

@@ -547,3 +547,120 @@ func TestTransformElements(t *testing.T) {
 		t.Errorf("expected no outputFieldApiName, got %+v", got)
 	}
 }
+
+const literalValueFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <decisions>
+        <name>Check_Cutoff</name>
+        <label>Check Cutoff</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <rules>
+            <name>Before_Cutoff</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Signed_On__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <dateValue>2020-12-15</dateValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CreatedDate</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <dateTimeValue>2020-12-15T07:00:00.000Z</dateTimeValue>
+                </rightValue>
+            </conditions>
+            <label>Before Cutoff</label>
+        </rules>
+    </decisions>
+    <recordCreates>
+        <name>Create_Record</name>
+        <label>Create Record</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Literal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Signed_On__c</field>
+            <value>
+                <dateValue>2021-03-04</dateValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Signed_At__c</field>
+            <value>
+                <dateTimeValue>2021-03-04T09:30:00.000Z</dateTimeValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Amount__c</field>
+            <value>
+                <numberValue>7.25</numberValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Active__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Agreement__c</object>
+    </recordCreates>
+    <label>Test Flow</label>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Active</status>
+</Flow>`
+
+func TestDateValueCondition(t *testing.T) {
+	f := openFlow(t, literalValueFlow)
+
+	if len(f.Decisions) != 1 {
+		t.Fatalf("expected 1 decision, got %d", len(f.Decisions))
+	}
+	conditions := f.Decisions[0].Rules[0].Conditions
+	if len(conditions) != 2 {
+		t.Fatalf("expected 2 conditions, got %d", len(conditions))
+	}
+	if got := conditions[0].RightValue; got == nil || got.DateValue == nil || got.DateValue.Text != "2020-12-15" {
+		t.Errorf("dateValue = %+v", got)
+	}
+	if got := conditions[1].RightValue; got == nil || got.DateTimeValue == nil || got.DateTimeValue.Text != "2020-12-15T07:00:00.000Z" {
+		t.Errorf("dateTimeValue = %+v", got)
+	}
+}
+
+// A Create Records input assignment carries the same value forms every other
+// element does: a record created with a date, datetime or number literal must
+// not lose it.
+func TestRecordCreateInputAssignmentValues(t *testing.T) {
+	f := openFlow(t, literalValueFlow)
+
+	if len(f.RecordCreates) != 1 {
+		t.Fatalf("expected 1 recordCreates, got %d", len(f.RecordCreates))
+	}
+	assignments := f.RecordCreates[0].InputAssignments
+	if len(assignments) != 5 {
+		t.Fatalf("expected 5 inputAssignments, got %d", len(assignments))
+	}
+	if got := assignments[0].Value; got == nil || got.StringValue == nil || got.StringValue.Text != "Literal" {
+		t.Errorf("stringValue = %+v", got)
+	}
+	if got := assignments[1].Value; got == nil || got.DateValue == nil || got.DateValue.Text != "2021-03-04" {
+		t.Errorf("dateValue = %+v", got)
+	}
+	if got := assignments[2].Value; got == nil || got.DateTimeValue == nil || got.DateTimeValue.Text != "2021-03-04T09:30:00.000Z" {
+		t.Errorf("dateTimeValue = %+v", got)
+	}
+	if got := assignments[3].Value; got == nil || got.NumberValue == nil || got.NumberValue.Text != "7.25" {
+		t.Errorf("numberValue = %+v", got)
+	}
+	if got := assignments[4].Value; got == nil || got.BooleanValue == nil || !got.BooleanValue.ToBool() {
+		t.Errorf("booleanValue = %+v", got)
+	}
+}
