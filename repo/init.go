@@ -68,6 +68,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/omniScripts"
 	_ "github.com/ForceCLI/force-md/metadata/omniUiCard"
 	_ "github.com/ForceCLI/force-md/metadata/pages"
+	_ "github.com/ForceCLI/force-md/metadata/pathAssistants"
 	_ "github.com/ForceCLI/force-md/metadata/permissionset"
 	_ "github.com/ForceCLI/force-md/metadata/permissionsetgroup"
 	_ "github.com/ForceCLI/force-md/metadata/pkg"
