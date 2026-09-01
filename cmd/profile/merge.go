@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ForceCLI/force-md/internal"
+	"github.com/ForceCLI/force-md/metadata/permissionGranter"
 	"github.com/ForceCLI/force-md/metadata/profile"
 )
 
@@ -23,18 +24,110 @@ func init() {
 var MergeCmd = &cobra.Command{
 	Use:                   "merge -s path/to/Source.profile [filename]...",
 	Short:                 "Merge profiles",
-	Long:                  "Apply permissions granted in source profile",
+	Long:                  "Apply permissions granted in source profile or permission set",
 	Args:                  cobra.MinimumNArgs(1),
 	DisableFlagsInUseLine: true,
 	Run: func(cmd *cobra.Command, args []string) {
-		apply, err := profile.Open(sourceFileName)
+		grant, err := permissionGranter.Open(sourceFileName)
 		if err != nil {
-			log.Fatal("loading source profile failed: " + err.Error())
+			log.Fatal("loading source permissions failed: " + err.Error())
+		}
+		if apply, ok := grant.(*profile.Profile); ok {
+			for _, file := range args {
+				mergePermissions(file, *apply)
+			}
+			return
 		}
 		for _, file := range args {
-			mergePermissions(file, *apply)
+			mergeGrantedPermissions(file, grant)
 		}
 	},
+}
+
+// mergeGrantedPermissions applies the permissions granted by a
+// non-profile source (a permission set) to a profile.  Only granted
+// permissions are applied, so existing profile permissions are never
+// downgraded.
+func mergeGrantedPermissions(file string, granter permissionGranter.PermissionGranter) {
+	p, err := profile.Open(file)
+	if err != nil {
+		log.Warn("parsing profile failed: " + err.Error())
+		return
+	}
+	for _, a := range granter.GetVisibleApplications() {
+		err = p.AddApplicationVisibility(a, false)
+		if err != nil && err != profile.ApplicationExistsError {
+			log.Warn(fmt.Sprintf("adding application %s permissions failed for %s: %s", a, file, err.Error()))
+			return
+		}
+	}
+	for _, c := range granter.GetEnabledClasses() {
+		err = p.AddClass(c)
+		if err != nil && err != profile.ClassExistsError {
+			log.Warn(fmt.Sprintf("adding apex class %s permissions failed for %s: %s", c, file, err.Error()))
+			return
+		}
+	}
+	for _, c := range granter.GetEnabledCustomPermissions() {
+		err = p.AddCustomPermission(c)
+		if err != nil && err != profile.CustomPermissionExistsError {
+			log.Warn(fmt.Sprintf("adding custom permission %s failed for %s: %s", c, file, err.Error()))
+			return
+		}
+	}
+	for _, o := range granter.GetGrantedObjectPermissions() {
+		objectName := o.Object
+		err = p.AddObjectPermissions(objectName)
+		if err != nil && err != profile.ObjectExistsError {
+			log.Warn(fmt.Sprintf("adding object %s permissions failed for %s: %s", objectName, file, err.Error()))
+			return
+		}
+		err = p.SetObjectPermissions(objectName, o)
+		if err != nil {
+			log.Warn(fmt.Sprintf("updating object %s permissions failed for %s: %s", objectName, file, err.Error()))
+			return
+		}
+	}
+	for _, f := range granter.GetGrantedFieldPermissions() {
+		fieldName := f.Field
+		err = p.AddFieldPermissions(fieldName)
+		if err != nil && err != profile.FieldExistsError {
+			log.Warn(fmt.Sprintf("adding field %s permissions failed for %s: %s", fieldName, file, err.Error()))
+			return
+		}
+		err = p.SetFieldPermissions(fieldName, f)
+		if err != nil {
+			log.Warn(fmt.Sprintf("updating field %s permissions failed for %s: %s", fieldName, file, err.Error()))
+			return
+		}
+	}
+	for _, v := range granter.GetEnabledPageAccesses() {
+		err = p.AddVisualforcePageAccess(v)
+		if err != nil && err != profile.VisualforcePageExistsError {
+			log.Warn(fmt.Sprintf("adding visualforce page %s failed for %s: %s", v, file, err.Error()))
+			return
+		}
+	}
+	for _, r := range granter.GetVisibleRecordTypes() {
+		err = p.AddRecordType(r)
+		if err != nil && err != profile.RecordTypeExistsError {
+			log.Warn(fmt.Sprintf("adding record type %s failed for %s: %s", r, file, err.Error()))
+			return
+		}
+	}
+	for _, u := range granter.GetEnabledUserPermissions() {
+		err = p.AddUserPermission(u)
+		if err != nil && err != profile.UserPermissionExistsError {
+			log.Warn(fmt.Sprintf("adding user permission %s failed for %s: %s", u, file, err.Error()))
+			return
+		}
+	}
+	p.Tidy()
+	err = internal.WriteToFile(p, file)
+	if err != nil {
+		log.Warn("update failed: " + err.Error())
+		return
+	}
 }
 
 func mergePermissions(file string, apply profile.Profile) {
