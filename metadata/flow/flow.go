@@ -602,6 +602,25 @@ type Screen struct {
 	ShowHeader struct {
 		Text string `xml:",chardata"`
 	} `xml:"showHeader"`
+	StageReference *struct {
+		ElementReference struct {
+			Text string `xml:",chardata"`
+		} `xml:"elementReference"`
+	} `xml:"stageReference"`
+}
+
+// Stage is a flow stage resource: one step of the flow's screen progress
+// indicator, referenced by screens through stageReference.
+type Stage struct {
+	Description *TextLiteral `xml:"description"`
+	Name        ElementName  `xml:"name"`
+	IsActive    BooleanText  `xml:"isActive"`
+	Label       struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	StageOrder struct {
+		Text string `xml:",chardata"`
+	} `xml:"stageOrder"`
 }
 
 type Variable struct {
@@ -808,7 +827,13 @@ type Flow struct {
 	} `xml:"choices"`
 	CollectionProcessors []CollectionProcessor `xml:"collectionProcessors"`
 	CustomErrors         []CustomError         `xml:"customErrors"`
-	Constants            []struct {
+	CustomProperties     []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"customProperties"`
+	Constants []struct {
 		Description *TextLiteral `xml:"description"`
 		Name        struct {
 			Text string `xml:",chardata"`
@@ -944,6 +969,7 @@ type Flow struct {
 		Text string `xml:",chardata"`
 	} `xml:"runInMode"`
 	Screens               []Screen `xml:"screens"`
+	Stages                []Stage  `xml:"stages"`
 	Start                 *Start   `xml:"start"`
 	StartElementReference *struct {
 		Text string `xml:",chardata"`

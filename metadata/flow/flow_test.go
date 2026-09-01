@@ -664,3 +664,113 @@ func TestRecordCreateInputAssignmentValues(t *testing.T) {
 		t.Errorf("booleanValue = %+v", got)
 	}
 }
+
+const stagedFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;path&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <label>Staged Flow</label>
+    <processType>Flow</processType>
+    <screens>
+        <name>Screen_Identity</name>
+        <label>Identity</label>
+        <connector>
+            <targetReference>Screen_Referral</targetReference>
+        </connector>
+        <stageReference>
+            <elementReference>Stage_Identity</elementReference>
+        </stageReference>
+    </screens>
+    <screens>
+        <name>Screen_Referral</name>
+        <label>Referral</label>
+    </screens>
+    <stages>
+        <name>Stage_Referral</name>
+        <isActive>true</isActive>
+        <label>Referral</label>
+        <stageOrder>2</stageOrder>
+    </stages>
+    <stages>
+        <description>The first stage</description>
+        <name>Stage_Identity</name>
+        <isActive>false</isActive>
+        <label>Identity</label>
+        <stageOrder>1</stageOrder>
+    </stages>
+    <status>Active</status>
+</Flow>
+`
+
+func TestStagesAndScreenProgressIndicator(t *testing.T) {
+	f := openFlow(t, stagedFlow)
+
+	if got := len(f.Stages); got != 2 {
+		t.Fatalf("Stages = %d, want 2", got)
+	}
+	referral := f.Stages[0]
+	if got := referral.Name; got != "Stage_Referral" {
+		t.Errorf("Name = %q, want Stage_Referral", got)
+	}
+	if !referral.IsActive.ToBool() {
+		t.Error("Stage_Referral IsActive = false, want true")
+	}
+	if got := referral.Label.Text; got != "Referral" {
+		t.Errorf("Label = %q, want Referral", got)
+	}
+	if got := referral.StageOrder.Text; got != "2" {
+		t.Errorf("StageOrder = %q, want 2", got)
+	}
+	identity := f.Stages[1]
+	if identity.IsActive.ToBool() {
+		t.Error("Stage_Identity IsActive = true, want false")
+	}
+	if got := identity.Description.String(); got != "The first stage" {
+		t.Errorf("Description = %q, want %q", got, "The first stage")
+	}
+
+	if got := len(f.CustomProperties); got != 1 {
+		t.Fatalf("CustomProperties = %d, want 1", got)
+	}
+	property := f.CustomProperties[0]
+	if got := property.Name.Text; got != "ScreenProgressIndicator" {
+		t.Errorf("property Name = %q, want ScreenProgressIndicator", got)
+	}
+	if property.Value == nil || property.Value.StringValue == nil {
+		t.Fatal("property StringValue missing")
+	}
+	// The stringValue is an innerxml TextLiteral: Text keeps the entities
+	// raw, and String() decodes them to the JSON the property carries.
+	want := `{"location":"top","type":"path"}`
+	if got := property.Value.StringValue.String(); got != want {
+		t.Errorf("property value = %q, want %q", got, want)
+	}
+
+	if got := len(f.Screens); got != 2 {
+		t.Fatalf("Screens = %d, want 2", got)
+	}
+	withStage := f.Screens[0]
+	if withStage.StageReference == nil {
+		t.Fatal("Screen_Identity StageReference missing")
+	}
+	if got := withStage.StageReference.ElementReference.Text; got != "Stage_Identity" {
+		t.Errorf("StageReference = %q, want Stage_Identity", got)
+	}
+	if f.Screens[1].StageReference != nil {
+		t.Errorf("Screen_Referral StageReference = %+v, want nil", f.Screens[1].StageReference)
+	}
+}
+
+func TestStagesAbsent(t *testing.T) {
+	f := openFlow(t, customErrorFlow)
+	if got := len(f.Stages); got != 0 {
+		t.Errorf("Stages = %d, want 0", got)
+	}
+	if got := len(f.CustomProperties); got != 0 {
+		t.Errorf("CustomProperties = %d, want 0", got)
+	}
+}
