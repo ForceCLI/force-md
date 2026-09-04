@@ -3,6 +3,7 @@ package tab
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -13,11 +14,24 @@ func init() {
 	internal.TypeRegistry.Register(NAME, func(path string) (metadata.RegisterableMetadata, error) { return Open(path) })
 }
 
+// ActionOverride is one <actionOverrides> entry: the Lightning page assigned
+// to a tab action. The Home tab's org-default page assignment is recorded as
+// an override of its Tab action on standard-home.
+type ActionOverride struct {
+	ActionName           string       `xml:"actionName"`
+	Comment              *string      `xml:"comment"`
+	Content              *string      `xml:"content"`
+	FormFactor           *string      `xml:"formFactor"`
+	SkipRecordTypeSelect *BooleanText `xml:"skipRecordTypeSelect"`
+	Type                 string       `xml:"type"`
+}
+
 type CustomTab struct {
 	metadata.MetadataInfo
-	XMLName      xml.Name `xml:"CustomTab"`
-	Xmlns        string   `xml:"xmlns,attr"`
-	CustomObject *struct {
+	XMLName         xml.Name         `xml:"CustomTab"`
+	Xmlns           string           `xml:"xmlns,attr"`
+	ActionOverrides []ActionOverride `xml:"actionOverrides"`
+	CustomObject    *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customObject"`
 	Description *struct {
