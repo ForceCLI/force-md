@@ -127,11 +127,15 @@ type Field struct {
 	MetadataRelationshipControllingField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"metadataRelationshipControllingField"`
-	TrackHistory            *BooleanText `xml:"trackHistory"`
-	TrackTrending           *BooleanText `xml:"trackTrending"`
-	Type                    *TextLiteral `xml:"type"`
-	Unique                  *BooleanText `xml:"unique"`
-	WriteRequiresMasterRead *struct {
+	// MktDataLakeFieldAttributes is present on a Data Lake Object (__dll)
+	// field; MktDataModelFieldAttributes on a Data Model Object (__dlm) field.
+	MktDataLakeFieldAttributes  *MktDataLakeFieldAttributes  `xml:"mktDataLakeFieldAttributes"`
+	MktDataModelFieldAttributes *MktDataModelFieldAttributes `xml:"mktDataModelFieldAttributes"`
+	TrackHistory                *BooleanText                 `xml:"trackHistory"`
+	TrackTrending               *BooleanText                 `xml:"trackTrending"`
+	Type                        *TextLiteral                 `xml:"type"`
+	Unique                      *BooleanText                 `xml:"unique"`
+	WriteRequiresMasterRead     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"writeRequiresMasterRead"`
 	ValueSet *struct {
@@ -191,4 +195,55 @@ func (c *CustomField) NameFromPath(path string) metadata.MetadataObjectName {
 func Open(path string) (*CustomField, error) {
 	p := &CustomField{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+type MktDataLakeFieldAttributes struct {
+	DefinitionCreationType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"definitionCreationType"`
+	ExternalName *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalName"`
+	IsEventDate *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isEventDate"`
+	IsInternalOrganization *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isInternalOrganization"`
+	IsRecordModified *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isRecordModified"`
+	PrimaryIndexOrder *struct {
+		Text string `xml:",chardata"`
+	} `xml:"primaryIndexOrder"`
+	UsageTag *struct {
+		Text string `xml:",chardata"`
+	} `xml:"usageTag"`
+}
+
+type MktDataModelFieldAttributes struct {
+	DefinitionCreationType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"definitionCreationType"`
+	InvalidMergeActionType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"invalidMergeActionType"`
+	IsDynamicLookup *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isDynamicLookup"`
+	LabelOverride *struct {
+		Text string `xml:",chardata"`
+	} `xml:"labelOverride"`
+	MasterLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"masterLabel"`
+	PrimaryIndexOrder *struct {
+		Text string `xml:",chardata"`
+	} `xml:"primaryIndexOrder"`
+	RefAttrDeveloperName *struct {
+		Text string `xml:",chardata"`
+	} `xml:"refAttrDeveloperName"`
+	UsageTag *struct {
+		Text string `xml:",chardata"`
+	} `xml:"usageTag"`
 }

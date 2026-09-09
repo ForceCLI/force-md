@@ -112,7 +112,11 @@ type CustomObject struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	ListViews ListViewList `xml:"listViews"`
-	NameField *struct {
+	// MktDataLakeAttributes is present on Data Cloud Data Lake Objects
+	// (__dll); MktDataModelAttributes on Data Model Objects (__dlm).
+	MktDataLakeAttributes  *MktDataLakeAttributes  `xml:"mktDataLakeAttributes"`
+	MktDataModelAttributes *MktDataModelAttributes `xml:"mktDataModelAttributes"`
+	NameField              *struct {
 		DisplayFormat *struct {
 			Text string `xml:",chardata"`
 		} `xml:"displayFormat"`
@@ -409,4 +413,55 @@ func (c *CustomObject) decompose() (map[string][]byte, error) {
 func Open(path string) (*CustomObject, error) {
 	p := &CustomObject{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+type MktDataLakeAttributes struct {
+	CreationType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"creationType"`
+	DataSource *struct {
+		Text string `xml:",chardata"`
+	} `xml:"dataSource"`
+	IsEnabled *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isEnabled"`
+	Label *struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	ObjectCategory *struct {
+		Text string `xml:",chardata"`
+	} `xml:"objectCategory"`
+}
+
+type MktDataModelAttributes struct {
+	CreationType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"creationType"`
+	DataModelTaxonomy *struct {
+		Text string `xml:",chardata"`
+	} `xml:"dataModelTaxonomy"`
+	DataSpaceName *struct {
+		Text string `xml:",chardata"`
+	} `xml:"dataSpaceName"`
+	IsEnabled *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isEnabled"`
+	IsSegmentable *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isSegmentable"`
+	IsSqlDmo *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isSqlDmo"`
+	IsUsedForMetrics *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isUsedForMetrics"`
+	LabelOverride *struct {
+		Text string `xml:",chardata"`
+	} `xml:"labelOverride"`
+	MasterLabel *struct {
+		Text string `xml:",chardata"`
+	} `xml:"masterLabel"`
+	ObjectCategory *struct {
+		Text string `xml:",chardata"`
+	} `xml:"objectCategory"`
 }
