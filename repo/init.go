@@ -46,6 +46,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/lwc"
 	_ "github.com/ForceCLI/force-md/metadata/matchingrules"
 	_ "github.com/ForceCLI/force-md/metadata/messageChannels"
+	_ "github.com/ForceCLI/force-md/metadata/mktDataSources"
 	_ "github.com/ForceCLI/force-md/metadata/namedCredentials"
 	_ "github.com/ForceCLI/force-md/metadata/networks"
 	_ "github.com/ForceCLI/force-md/metadata/notificationTypeConfig"
