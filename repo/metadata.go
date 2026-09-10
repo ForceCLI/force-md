@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 
 	"github.com/ForceCLI/force-md/internal"
@@ -63,16 +64,27 @@ func metadataFileInSameFolder(path string) string {
 		return ""
 	}
 	dirName := filepath.Dir(path)
+	if cached, ok := sameFolderMetadata.Load(dirName); ok {
+		return cached.(string)
+	}
 	pattern := dirName + string(os.PathSeparator) + "*-meta.xml"
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		return ""
 	}
+	result := ""
 	if len(files) == 1 {
-		return files[0]
+		result = files[0]
 	}
-	return ""
+	sameFolderMetadata.Store(dirName, result)
+	return result
 }
+
+// sameFolderMetadata caches the result of the *-meta.xml glob per directory.
+// Walking a source tree calls metadataFileInSameFolder once for every file
+// that has no -meta.xml of its own, so without the cache a directory of N
+// such files is globbed N times.
+var sameFolderMetadata sync.Map
 
 func metadataFileFromPath(path string) (string, error) {
 	if IsMetadataFile(path) {

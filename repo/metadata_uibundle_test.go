@@ -30,3 +30,28 @@ func TestMetadataFromPathFindsUIBundleMetadataFromBundleFile(t *testing.T) {
 	require.True(t, ok)
 	assert.Equal(t, "demoBundle", string(bundle.Name()))
 }
+
+func TestMetadataFileInSameFolderCachesGlobPerDirectory(t *testing.T) {
+	sameFolderMetadata.Clear()
+	root := t.TempDir()
+	bundleDir := filepath.Join(root, "uiBundles", "cachedBundle")
+	require.NoError(t, os.MkdirAll(bundleDir, 0o755))
+	metadataPath := filepath.Join(bundleDir, "cachedBundle.uibundle-meta.xml")
+	require.NoError(t, os.WriteFile(metadataPath, []byte("<UIBundle/>"), 0o644))
+	filePath := filepath.Join(bundleDir, "index.html")
+	require.NoError(t, os.WriteFile(filePath, []byte("<!doctype html>"), 0o644))
+
+	assert.Equal(t, metadataPath, metadataFileInSameFolder(filePath))
+
+	// A second metadata file would make the glob ambiguous, but the cached
+	// result for the directory is returned without globbing again.
+	require.NoError(t, os.WriteFile(filepath.Join(bundleDir, "other.uibundle-meta.xml"), []byte("<UIBundle/>"), 0o644))
+	assert.Equal(t, metadataPath, metadataFileInSameFolder(filePath))
+
+	// Other directories are looked up independently.
+	otherDir := filepath.Join(root, "uiBundles", "otherBundle")
+	require.NoError(t, os.MkdirAll(otherDir, 0o755))
+	otherFile := filepath.Join(otherDir, "index.html")
+	require.NoError(t, os.WriteFile(otherFile, []byte("<!doctype html>"), 0o644))
+	assert.Equal(t, "", metadataFileInSameFolder(otherFile))
+}
