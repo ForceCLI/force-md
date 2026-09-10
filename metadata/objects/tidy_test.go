@@ -3,6 +3,8 @@ package objects
 import (
 	"testing"
 
+	"github.com/ForceCLI/force-md/general"
+	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata/objects/field"
 	"github.com/ForceCLI/force-md/metadata/objects/listview"
 	"github.com/ForceCLI/force-md/metadata/objects/recordtype"
@@ -62,4 +64,27 @@ func TestCustomObjectTidy(t *testing.T) {
 	// Verify weblinks are sorted
 	assert.Equal(t, "ALink", obj.WebLinks[0].FullName)
 	assert.Equal(t, "ZLink", obj.WebLinks[1].FullName)
+}
+
+func TestFieldListTidyFormatsFormulasUsingEveryFunction(t *testing.T) {
+	// sformula v0.16.0 had no formatter visitor for these functions, so
+	// tidying a field that used one panicked.
+	formulas := []string{
+		"EXP(ExpInput__c)",
+		"CURRENCYRATE(Amount__c)",
+		"GETRECORDIDS($ObjectType.Account)",
+		"GETSESSIONID()",
+		"HTMLENCODE(Name__c)",
+		`IMAGEPROXYURL("https://example.com/logo.png")`,
+	}
+	for _, formula := range formulas {
+		fields := FieldList{
+			field.Field{
+				FullName: "Formula__c",
+				Formula:  &general.TextLiteral{Text: formula},
+			},
+		}
+		assert.NotPanics(t, fields.Tidy, formula)
+		assert.Equal(t, internal.FormulaEscaper.Replace(formula), fields[0].Formula.Text)
+	}
 }
