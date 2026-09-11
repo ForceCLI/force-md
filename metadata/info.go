@@ -14,6 +14,12 @@ type MetadataInfo struct {
 	contents []byte
 }
 
+// NewMetadataInfo builds the info for metadata that was composed in memory
+// rather than parsed from a file.
+func NewMetadataInfo(name MetadataObjectName, path MetadataFilePath) MetadataInfo {
+	return MetadataInfo{path: path, name: name}
+}
+
 func (m MetadataInfo) NameFromPath(path string) MetadataObjectName {
 	return NameFromPath(path)
 }

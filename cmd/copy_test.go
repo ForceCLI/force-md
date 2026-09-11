@@ -1265,3 +1265,49 @@ func TestCopyDashboardWithPackageFilter(t *testing.T) {
 		}
 	})
 }
+
+func TestCopyToMetadataFormatWritesObjectsThatOnlyHaveFields(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "sfdx")
+	targetDir := filepath.Join(tempDir, "src")
+
+	// Standard objects in source format often have custom fields but no
+	// object-meta.xml file of their own.
+	for _, objectName := range []string{"Account", "Contact"} {
+		fieldsDir := filepath.Join(sourceDir, "objects", objectName, "fields")
+		if err := os.MkdirAll(fieldsDir, 0755); err != nil {
+			t.Fatal(err)
+		}
+		testField := field.CustomField{
+			Xmlns: "http://soap.sforce.com/2006/04/metadata",
+			Field: field.Field{
+				FullName: objectName + "Field__c",
+				Label:    &TextLiteral{Text: "Test Field"},
+				Type:     &TextLiteral{Text: "Text"},
+				Length:   &IntegerText{Text: "255"},
+			},
+		}
+		fieldPath := filepath.Join(fieldsDir, objectName+"Field__c.field-meta.xml")
+		if err := internal.WriteToFile(testField, fieldPath); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "metadata", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, objectName := range []string{"Account", "Contact"} {
+		objectPath := filepath.Join(targetDir, "objects", objectName+".object")
+		data, err := os.ReadFile(objectPath)
+		if err != nil {
+			t.Fatalf("expected %s to be written: %v", objectPath, err)
+		}
+		if !strings.Contains(string(data), objectName+"Field__c") {
+			t.Errorf("%s does not contain %sField__c:\n%s", objectPath, objectName, data)
+		}
+	}
+	if _, err := os.Stat(filepath.Join(targetDir, "objects", ".object")); err == nil {
+		t.Error("an object with an empty name was written")
+	}
+}

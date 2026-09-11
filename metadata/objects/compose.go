@@ -42,11 +42,16 @@ func ComposeFromChildren(objectName string, provider ChildComponentProvider) *Cu
 		}
 	}
 
-	// If no base object exists, create a minimal one
+	// If no base object exists, create a minimal one. Files derives the
+	// output path from the object's name, so the name has to be set here.
 	if !baseObjectExists {
 		obj = &CustomObject{
 			XMLName: xml.Name{Local: "CustomObject"},
 			Xmlns:   "http://soap.sforce.com/2006/04/metadata",
+			MetadataInfo: metadata.NewMetadataInfo(
+				metadata.MetadataObjectName(objectName),
+				metadata.MetadataFilePath("objects/"+objectName+".object"),
+			),
 		}
 	} else {
 		// Clear child component arrays since we'll rebuild them from the provider
