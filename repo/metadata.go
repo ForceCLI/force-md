@@ -105,11 +105,7 @@ func metadataFileFromPath(path string) (string, error) {
 
 	// For static resources, walk up the filesystem to find the metadata file
 	currentPath := path
-	for {
-		if currentPath == "" || currentPath == "." || currentPath == "/" {
-			break
-		}
-
+	for currentPath != "" && currentPath != "." {
 		dirName := filepath.Base(currentPath)
 		parentDir := filepath.Dir(currentPath)
 		parentDirName := filepath.Base(parentDir)
@@ -150,6 +146,11 @@ func metadataFileFromPath(path string) (string, error) {
 			break
 		}
 
+		// filepath.Dir returns its argument unchanged only at a filesystem
+		// root: "/" on Unix, or a volume root such as `C:\` on Windows.
+		if parentDir == currentPath {
+			break
+		}
 		currentPath = parentDir
 	}
 
