@@ -774,3 +774,200 @@ func TestStagesAbsent(t *testing.T) {
 		t.Errorf("CustomProperties = %d, want 0", got)
 	}
 }
+
+const orchestratedStageFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>66.0</apiVersion>
+    <label>Approval Process</label>
+    <orchestratedStages>
+        <description>First stage</description>
+        <name>Approval_Stage</name>
+        <label>Approval Stage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Approved</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+        <stageSteps>
+            <name>Submit_to_Owner</name>
+            <actionName>standard_approvals__EvaluateApproval</actionName>
+            <actionType>stepApproval</actionType>
+            <assignees>
+                <assignee>
+                    <elementReference>$Record.Owner.Username</elementReference>
+                </assignee>
+                <assigneeType>User</assigneeType>
+            </assignees>
+            <canAssigneeEdit>true</canAssigneeEdit>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>ActionInput__RecordId</name>
+                <value>
+                    <elementReference>$Record.Id</elementReference>
+                </value>
+            </inputParameters>
+            <label>Submit to Owner</label>
+            <outputConfigParams>
+                <name>approvalDecision</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>false</runAsUser>
+            <shouldLock>true</shouldLock>
+            <stepSubtype>ApprovalStep</stepSubtype>
+        </stageSteps>
+        <stageSteps>
+            <name>Mark_Reviewed</name>
+            <actionName>Set_Description</actionName>
+            <actionType>stepBackground</actionType>
+            <entryConditionLogic>and</entryConditionLogic>
+            <entryConditions>
+                <conditionType>EntryCondition</conditionType>
+                <leftValueReference>Submit_to_Owner.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </entryConditions>
+            <inputParameters>
+                <name>description</name>
+                <value>
+                    <stringValue>reviewed</stringValue>
+                </value>
+            </inputParameters>
+            <label>Mark Reviewed</label>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+    </orchestratedStages>
+    <orchestratedStages>
+        <name>Recall</name>
+        <label>Recall Path Stage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <exitConditionLogic>and</exitConditionLogic>
+    </orchestratedStages>
+    <processType>ApprovalWorkflow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Approval_Stage</targetReference>
+        </connector>
+        <object>Account</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Recall</targetReference>
+            </connector>
+            <pathType>ApprovalRecall</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>`
+
+func TestOrchestratedStages(t *testing.T) {
+	f := openFlow(t, orchestratedStageFlow)
+
+	if len(f.OrchestratedStages) != 2 {
+		t.Fatalf("OrchestratedStages = %d, want 2", len(f.OrchestratedStages))
+	}
+	stage := f.OrchestratedStages[0]
+	if string(stage.Name) != "Approval_Stage" || stage.Label.Text != "Approval Stage" {
+		t.Errorf("stage 0 = %q / %q", stage.Name, stage.Label.Text)
+	}
+	if stage.Description == nil || stage.Description.String() != "First stage" {
+		t.Errorf("stage 0 Description = %+v", stage.Description)
+	}
+	if stage.Connector == nil || string(stage.Connector.TargetReference) != "Is_Approved" {
+		t.Errorf("stage 0 Connector = %+v, want target Is_Approved", stage.Connector)
+	}
+	if stage.ExitConditionLogic == nil || stage.ExitConditionLogic.String() != "and" {
+		t.Errorf("stage 0 ExitConditionLogic = %+v", stage.ExitConditionLogic)
+	}
+	if len(stage.StageSteps) != 2 {
+		t.Fatalf("stage 0 StageSteps = %d, want 2", len(stage.StageSteps))
+	}
+
+	approval := stage.StageSteps[0]
+	if string(approval.Name) != "Submit_to_Owner" || approval.Label.Text != "Submit to Owner" {
+		t.Errorf("step 0 = %q / %q", approval.Name, approval.Label.Text)
+	}
+	if approval.ActionName.Text != "standard_approvals__EvaluateApproval" || approval.ActionType != "stepApproval" {
+		t.Errorf("step 0 action = %q / %q", approval.ActionName.Text, approval.ActionType)
+	}
+	if approval.StepSubtype == nil || approval.StepSubtype.String() != "ApprovalStep" {
+		t.Errorf("step 0 StepSubtype = %+v", approval.StepSubtype)
+	}
+	if len(approval.Assignees) != 1 {
+		t.Fatalf("step 0 Assignees = %d, want 1", len(approval.Assignees))
+	}
+	assignee := approval.Assignees[0]
+	if assignee.AssigneeType.Text != "User" {
+		t.Errorf("step 0 AssigneeType = %q", assignee.AssigneeType.Text)
+	}
+	if assignee.Assignee == nil || assignee.Assignee.ElementReference == nil || assignee.Assignee.ElementReference.Text != "$Record.Owner.Username" {
+		t.Errorf("step 0 Assignee = %+v", assignee.Assignee)
+	}
+	if approval.ShouldLock == nil || !approval.ShouldLock.ToBool() {
+		t.Errorf("step 0 ShouldLock = %+v, want true", approval.ShouldLock)
+	}
+	if approval.CanAssigneeEdit == nil || !approval.CanAssigneeEdit.ToBool() {
+		t.Errorf("step 0 CanAssigneeEdit = %+v, want true", approval.CanAssigneeEdit)
+	}
+	if approval.RequiresAsyncProcessing == nil || approval.RequiresAsyncProcessing.ToBool() {
+		t.Errorf("step 0 RequiresAsyncProcessing = %+v, want false", approval.RequiresAsyncProcessing)
+	}
+	if len(approval.InputParameters) != 1 || approval.InputParameters[0].Name.Text != "ActionInput__RecordId" ||
+		approval.InputParameters[0].Value == nil || approval.InputParameters[0].Value.ElementReference == nil ||
+		approval.InputParameters[0].Value.ElementReference.Text != "$Record.Id" {
+		t.Errorf("step 0 InputParameters = %+v", approval.InputParameters)
+	}
+	if len(approval.OutputConfigParams) != 1 || approval.OutputConfigParams[0].Name.Text != "approvalDecision" {
+		t.Errorf("step 0 OutputConfigParams = %+v", approval.OutputConfigParams)
+	}
+
+	background := stage.StageSteps[1]
+	if background.ActionType != "stepBackground" || background.ActionName.Text != "Set_Description" {
+		t.Errorf("step 1 action = %q / %q", background.ActionName.Text, background.ActionType)
+	}
+	if background.EntryConditionLogic == nil || background.EntryConditionLogic.String() != "and" {
+		t.Errorf("step 1 EntryConditionLogic = %+v", background.EntryConditionLogic)
+	}
+	if len(background.EntryConditions) != 1 {
+		t.Fatalf("step 1 EntryConditions = %d, want 1", len(background.EntryConditions))
+	}
+	cond := background.EntryConditions[0]
+	if cond.ConditionType == nil || cond.ConditionType.String() != "EntryCondition" {
+		t.Errorf("step 1 condition ConditionType = %+v", cond.ConditionType)
+	}
+	if cond.LeftValueReference != "Submit_to_Owner.Status" || cond.Operator != "EqualTo" {
+		t.Errorf("step 1 condition = %+v", cond)
+	}
+	if cond.RightValue == nil || cond.RightValue.StringValue == nil || cond.RightValue.StringValue.String() != "Completed" {
+		t.Errorf("step 1 condition RightValue = %+v", cond.RightValue)
+	}
+	if len(background.InputParameters) != 1 || background.InputParameters[0].Value == nil ||
+		background.InputParameters[0].Value.StringValue == nil || background.InputParameters[0].Value.StringValue.String() != "reviewed" {
+		t.Errorf("step 1 InputParameters = %+v", background.InputParameters)
+	}
+
+	recall := f.OrchestratedStages[1]
+	if string(recall.Name) != "Recall" || len(recall.StageSteps) != 0 || recall.Connector != nil {
+		t.Errorf("stage 1 = %+v", recall)
+	}
+	if f.Start == nil || len(f.Start.ScheduledPaths) != 1 || f.Start.ScheduledPaths[0].PathType == nil ||
+		*f.Start.ScheduledPaths[0].PathType != "ApprovalRecall" ||
+		string(f.Start.ScheduledPaths[0].Connector.TargetReference) != "Recall" {
+		t.Errorf("Start scheduled paths = %+v", f.Start)
+	}
+}
+
+func TestOrchestratedStagesAbsent(t *testing.T) {
+	f := openFlow(t, waitFlow)
+	if len(f.OrchestratedStages) != 0 {
+		t.Errorf("OrchestratedStages = %d, want 0", len(f.OrchestratedStages))
+	}
+}

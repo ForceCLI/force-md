@@ -623,6 +623,118 @@ type Stage struct {
 	} `xml:"stageOrder"`
 }
 
+// OrchestratedStage is a stage of a flow orchestration or flow approval
+// process (processType Orchestrator or ApprovalWorkflow). A stage holds the
+// steps that run while the orchestration is in it and connects to the next
+// element once it completes.
+type OrchestratedStage struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *TextLiteral           `xml:"description"`
+	Name                  ElementName            `xml:"name"`
+	Label                 struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	LocationX struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationX"`
+	LocationY struct {
+		Text string `xml:",chardata"`
+	} `xml:"locationY"`
+	Connector *struct {
+		IsGoTo *struct {
+			Text string `xml:",chardata"`
+		} `xml:"isGoTo"`
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connector"`
+	ExitActionInputParameters  []StageStepParameter       `xml:"exitActionInputParameters"`
+	ExitActionName             *TextLiteral               `xml:"exitActionName"`
+	ExitActionOutputParameters []StageStepOutputParameter `xml:"exitActionOutputParameters"`
+	ExitActionType             *TextLiteral               `xml:"exitActionType"`
+	ExitConditionLogic         *TextLiteral               `xml:"exitConditionLogic"`
+	ExitConditions             []StageStepCondition       `xml:"exitConditions"`
+	RunAsUser                  *BooleanText               `xml:"runAsUser"`
+	StageSteps                 []StageStep                `xml:"stageSteps"`
+}
+
+// StageStep is one step of an OrchestratedStage: a background step runs an
+// autolaunched flow, an approval step assigns an approval work item, and an
+// interactive step assigns a screen flow to a user, group, or queue.
+type StageStep struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *TextLiteral           `xml:"description"`
+	Name                  ElementName            `xml:"name"`
+	ActionName            struct {
+		Text string `xml:",chardata"`
+	} `xml:"actionName"`
+	ActionType string `xml:"actionType"`
+	Assignees  []struct {
+		Assignee     *Value `xml:"assignee"`
+		AssigneeType struct {
+			Text string `xml:",chardata"`
+		} `xml:"assigneeType"`
+	} `xml:"assignees"`
+	CanAssigneeEdit             *BooleanText               `xml:"canAssigneeEdit"`
+	DebugSimulateStep           *BooleanText               `xml:"debugSimulateStep"`
+	EntryActionInputParameters  []StageStepParameter       `xml:"entryActionInputParameters"`
+	EntryActionName             *TextLiteral               `xml:"entryActionName"`
+	EntryActionOutputParameters []StageStepOutputParameter `xml:"entryActionOutputParameters"`
+	EntryActionType             *TextLiteral               `xml:"entryActionType"`
+	EntryConditionLogic         *TextLiteral               `xml:"entryConditionLogic"`
+	EntryConditions             []StageStepCondition       `xml:"entryConditions"`
+	ExitActionInputParameters   []StageStepParameter       `xml:"exitActionInputParameters"`
+	ExitActionName              *TextLiteral               `xml:"exitActionName"`
+	ExitActionOutputParameters  []StageStepOutputParameter `xml:"exitActionOutputParameters"`
+	ExitActionType              *TextLiteral               `xml:"exitActionType"`
+	ExitConditionLogic          *TextLiteral               `xml:"exitConditionLogic"`
+	ExitConditions              []StageStepCondition       `xml:"exitConditions"`
+	InputParameters             []StageStepParameter       `xml:"inputParameters"`
+	Label                       struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	OutputConfigParams []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"outputConfigParams"`
+	OutputParameters        []StageStepOutputParameter `xml:"outputParameters"`
+	RequiresAsyncProcessing *BooleanText               `xml:"requiresAsyncProcessing"`
+	RunAsUser               *BooleanText               `xml:"runAsUser"`
+	ShouldLock              *BooleanText               `xml:"shouldLock"`
+	StepSubtype             *TextLiteral               `xml:"stepSubtype"`
+}
+
+// StageStepParameter is an input parameter of a stage step or of a stage or
+// step entry/exit evaluation flow.
+type StageStepParameter struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Name                  struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+	Value *Value `xml:"value"`
+}
+
+// StageStepOutputParameter maps an output of a stage step's flow onto a flow
+// resource.
+type StageStepOutputParameter struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	AssignToReference     struct {
+		Text string `xml:",chardata"`
+	} `xml:"assignToReference"`
+	Name struct {
+		Text string `xml:",chardata"`
+	} `xml:"name"`
+}
+
+// StageStepCondition is an entry or exit condition of a stage or step. It
+// carries a conditionType the decision Condition type does not.
+type StageStepCondition struct {
+	ConditionType      *TextLiteral `xml:"conditionType"`
+	LeftValueReference string       `xml:"leftValueReference"`
+	Operator           string       `xml:"operator"`
+	RightValue         *Value       `xml:"rightValue"`
+}
+
 type Variable struct {
 	Description *struct {
 		Text string `xml:",chardata"`
@@ -968,9 +1080,10 @@ type Flow struct {
 	RunInMode       *struct {
 		Text string `xml:",chardata"`
 	} `xml:"runInMode"`
-	Screens               []Screen `xml:"screens"`
-	Stages                []Stage  `xml:"stages"`
-	Start                 *Start   `xml:"start"`
+	Screens               []Screen            `xml:"screens"`
+	OrchestratedStages    []OrchestratedStage `xml:"orchestratedStages"`
+	Stages                []Stage             `xml:"stages"`
+	Start                 *Start              `xml:"start"`
 	StartElementReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"startElementReference"`
