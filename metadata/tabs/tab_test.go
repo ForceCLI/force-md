@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/ForceCLI/force-md/internal"
 )
 
 // The Home tab's org-default Lightning page assignment is stored as an
@@ -46,5 +48,38 @@ func TestOpenActionOverrides(t *testing.T) {
 	}
 	if override.Type != "Flexipage" {
 		t.Errorf("Type = %q, want Flexipage", override.Type)
+	}
+}
+
+// A Lightning Component tab showing an Aura component names it in
+// auraComponent, which a round trip keeps in Salesforce's element order.
+const sampleAuraTab = `<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <auraComponent>projectBoard</auraComponent>
+    <label>Project Board</label>
+    <motif>Custom57: Pencil</motif>
+</CustomTab>
+`
+
+func TestOpenAuraComponent(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "Project_Board.tab-meta.xml")
+	if err := os.WriteFile(path, []byte(sampleAuraTab), 0644); err != nil {
+		t.Fatalf("write fixture: %v", err)
+	}
+
+	c, err := Open(path)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if c.AuraComponent == nil || c.AuraComponent.Text != "projectBoard" {
+		t.Fatalf("AuraComponent = %v, want projectBoard", c.AuraComponent)
+	}
+	out, err := internal.Marshal(c)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	if string(out) != sampleAuraTab {
+		t.Errorf("round trip =\n%s\nwant\n%s", out, sampleAuraTab)
 	}
 }

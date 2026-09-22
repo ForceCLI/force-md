@@ -31,7 +31,10 @@ type CustomTab struct {
 	XMLName         xml.Name         `xml:"CustomTab"`
 	Xmlns           string           `xml:"xmlns,attr"`
 	ActionOverrides []ActionOverride `xml:"actionOverrides"`
-	CustomObject    *struct {
+	AuraComponent   *struct {
+		Text string `xml:",chardata"`
+	} `xml:"auraComponent"`
+	CustomObject *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customObject"`
 	Description *struct {
