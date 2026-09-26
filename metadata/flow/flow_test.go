@@ -971,3 +971,42 @@ func TestOrchestratedStagesAbsent(t *testing.T) {
 		t.Errorf("OrchestratedStages = %d, want 0", len(f.OrchestratedStages))
 	}
 }
+
+// A loop can name the variable that holds its current item, the form flows
+// used before the loop element itself became the current item.
+func TestLoopAssignNextValueToReference(t *testing.T) {
+	f := openFlow(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Test Flow</label>
+    <loops>
+        <name>Loop_Contacts</name>
+        <label>Loop Contacts</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNextValueToReference>currentItem</assignNextValueToReference>
+        <collectionReference>Get_Contacts</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+    </loops>
+    <loops>
+        <name>Loop_Accounts</name>
+        <label>Loop Accounts</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Accounts</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+    </loops>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Active</status>
+</Flow>
+`)
+
+	if got := len(f.Loops); got != 2 {
+		t.Fatalf("Loops = %d, want 2", got)
+	}
+	if ref := f.Loops[0].AssignNextValueToReference; ref == nil || ref.Text != "currentItem" {
+		t.Errorf("Loop_Contacts AssignNextValueToReference = %v, want currentItem", ref)
+	}
+	if ref := f.Loops[1].AssignNextValueToReference; ref != nil {
+		t.Errorf("Loop_Accounts AssignNextValueToReference = %q, want absent", ref.Text)
+	}
+}

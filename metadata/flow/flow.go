@@ -1050,6 +1050,9 @@ type Flow struct {
 		LocationY struct {
 			Text string `xml:",chardata"`
 		} `xml:"locationY"`
+		AssignNextValueToReference *struct {
+			Text string `xml:",chardata"`
+		} `xml:"assignNextValueToReference"`
 		CollectionReference struct {
 			Text string `xml:",chardata"`
 		} `xml:"collectionReference"`
