@@ -43,9 +43,12 @@ type Field struct {
 	DisplayLocationInDecimal *struct {
 		Text string `xml:",chardata"`
 	} `xml:"displayLocationInDecimal"`
-	EncryptionScheme   *TextLiteral `xml:"encryptionScheme"`
-	ExternalId         *BooleanText `xml:"externalId"`
-	FieldManageability *struct {
+	EncryptionScheme *TextLiteral `xml:"encryptionScheme"`
+	// ExternalDeveloperName is an external object field's name in the
+	// external system.
+	ExternalDeveloperName *TextLiteral `xml:"externalDeveloperName"`
+	ExternalId            *BooleanText `xml:"externalId"`
+	FieldManageability    *struct {
 		Text string `xml:",chardata"`
 	} `xml:"fieldManageability"`
 	Formula              *TextLiteral `xml:"formula"`
@@ -84,10 +87,13 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"isOptional"`
 	} `xml:"lookupFilter"`
-	Precision              *IntegerText `xml:"precision"`
-	Length                 *IntegerText `xml:"length"`
-	MaskChar               *TextLiteral `xml:"maskChar"`
-	MaskType               *TextLiteral `xml:"maskType"`
+	Precision *IntegerText `xml:"precision"`
+	Length    *IntegerText `xml:"length"`
+	MaskChar  *TextLiteral `xml:"maskChar"`
+	MaskType  *TextLiteral `xml:"maskType"`
+	// ReadOnlyProxy marks an external object field whose value the external
+	// system supplies.
+	ReadOnlyProxy          *BooleanText `xml:"readOnlyProxy"`
 	ReferenceTo            *TextLiteral `xml:"referenceTo"`
 	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
 	RelationshipName       *TextLiteral `xml:"relationshipName"`

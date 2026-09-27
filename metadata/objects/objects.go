@@ -102,6 +102,18 @@ type CustomObject struct {
 	EventType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"eventType"`
+	// ExternalDataSource, ExternalName and ExternalRepository are present on
+	// external objects (__x): the data source that serves the object, the
+	// object's name in the external system, and its repository.
+	ExternalDataSource *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalDataSource"`
+	ExternalName *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalName"`
+	ExternalRepository *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalRepository"`
 	ExternalSharingModel *struct {
 		Text string `xml:",chardata"`
 	} `xml:"externalSharingModel"`
