@@ -150,6 +150,9 @@ type Value struct {
 		Text string `xml:",chardata"`
 	} `xml:"numberValue"`
 	BooleanValue *BooleanText `xml:"booleanValue"`
+	// An action input that takes a collection lists its members as
+	// collectionElements, each a literal or an element reference.
+	CollectionElements []Value `xml:"collectionElements"`
 	// A Transform maps its output through a formula rather than a literal or
 	// a reference, carrying the expression and its result type in the value.
 	FormulaDataType   *TextLiteral `xml:"formulaDataType"`

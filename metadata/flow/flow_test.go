@@ -1010,3 +1010,46 @@ func TestLoopAssignNextValueToReference(t *testing.T) {
 		t.Errorf("Loop_Accounts AssignNextValueToReference = %q, want absent", ref.Text)
 	}
 }
+
+const collectionElementsFlow = `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email</name>
+        <label>Send Email</label>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+                <collectionElements>
+                    <elementReference>varToAddress</elementReference>
+                </collectionElements>
+                <collectionElements>
+                    <stringValue>second@example.com</stringValue>
+                </collectionElements>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <label>Collection Elements Flow</label>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Active</status>
+</Flow>
+`
+
+func TestCollectionElementsValue(t *testing.T) {
+	f := openFlow(t, collectionElementsFlow)
+
+	if len(f.ActionCalls) != 1 || len(f.ActionCalls[0].InputParameters) != 1 {
+		t.Fatalf("expected 1 action with 1 input parameter, got %+v", f.ActionCalls)
+	}
+	value := f.ActionCalls[0].InputParameters[0].Value
+	if value == nil || len(value.CollectionElements) != 2 {
+		t.Fatalf("collectionElements = %+v", value)
+	}
+	if got := value.CollectionElements[0].ElementReference; got == nil || got.Text != "varToAddress" {
+		t.Errorf("first element = %+v", value.CollectionElements[0])
+	}
+	if got := value.CollectionElements[1].StringValue; got == nil || got.Text != "second@example.com" {
+		t.Errorf("second element = %+v", value.CollectionElements[1])
+	}
+}
