@@ -73,6 +73,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/permissionset"
 	_ "github.com/ForceCLI/force-md/metadata/permissionsetgroup"
 	_ "github.com/ForceCLI/force-md/metadata/pkg"
+	_ "github.com/ForceCLI/force-md/metadata/platformCachePartitions"
 	_ "github.com/ForceCLI/force-md/metadata/platformEventChannelMembers"
 	_ "github.com/ForceCLI/force-md/metadata/platformEventChannels"
 	_ "github.com/ForceCLI/force-md/metadata/platformEventSubscriberConfigs"
