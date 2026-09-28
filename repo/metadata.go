@@ -194,6 +194,13 @@ func RootElementName(xmlData []byte) (string, error) {
 			if element.Target == "xml" {
 				foundXML = true
 			}
+		case xml.CharData:
+			// Text before the root element means the file is not an XML
+			// document, even if it later contains something shaped like an
+			// element, such as List<ApexClass> in Apex source.
+			if len(bytes.TrimSpace(element)) > 0 {
+				return "", fmt.Errorf("%w: text before the root element", NotXMLError)
+			}
 		case xml.StartElement:
 			if !foundXML && !allowMissingXMLDeclaration.Load() {
 				return "", fmt.Errorf("%w: No XML declaration found", NotXMLError)

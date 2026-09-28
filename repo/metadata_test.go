@@ -53,3 +53,15 @@ func TestMetadataFromPathReturnsNotFoundForUnidentifiableAbsolutePath(t *testing
 		t.Fatal("MetadataFromPath did not return for an unidentifiable absolute path")
 	}
 }
+
+func TestRootElementNameRejectsTextBeforeRootElement(t *testing.T) {
+	SetAllowMissingXMLDeclaration(true)
+	t.Cleanup(func() {
+		SetAllowMissingXMLDeclaration(false)
+	})
+
+	apex := []byte("public class NamespaceUtil {\n\tList<ApexClass> classes = [SELECT Id FROM ApexClass];\n}\n")
+	if _, err := RootElementName(apex); !errors.Is(err, NotXMLError) {
+		t.Fatalf("expected NotXMLError for Apex source, got %v", err)
+	}
+}
