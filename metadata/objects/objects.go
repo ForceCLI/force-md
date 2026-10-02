@@ -135,6 +135,8 @@ type CustomObject struct {
 		Label struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
+		// StartingNumber is an auto-number Name field's first number.
+		StartingNumber   *IntegerText `xml:"startingNumber"`
 		TrackFeedHistory *struct {
 			Text string `xml:",chardata"`
 		} `xml:"trackFeedHistory"`

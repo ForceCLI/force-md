@@ -101,7 +101,9 @@ type Field struct {
 	Required               *BooleanText `xml:"required"`
 	Scale                  *IntegerText `xml:"scale"`
 	SecurityClassification *TextLiteral `xml:"securityClassification"`
-	TrackFeedHistory       *struct {
+	// StartingNumber is an auto-number field's first number.
+	StartingNumber   *IntegerText `xml:"startingNumber"`
+	TrackFeedHistory *struct {
 		Text string `xml:",chardata"`
 	} `xml:"trackFeedHistory"`
 	SummarizedField *struct {
