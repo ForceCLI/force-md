@@ -92,6 +92,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/sharingrules"
 	_ "github.com/ForceCLI/force-md/metadata/sites"
 	_ "github.com/ForceCLI/force-md/metadata/slackapps"
+	_ "github.com/ForceCLI/force-md/metadata/standardValueSetTranslations"
 	_ "github.com/ForceCLI/force-md/metadata/standardvalueset"
 	_ "github.com/ForceCLI/force-md/metadata/staticresources"
 	_ "github.com/ForceCLI/force-md/metadata/tabs"
