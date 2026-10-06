@@ -41,6 +41,7 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"masterLabel"`
 		Translation struct {
+			Text string `xml:",chardata"`
 		} `xml:"translation"`
 	} `xml:"picklistValues"`
 }
