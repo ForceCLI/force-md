@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -16,30 +17,18 @@ func init() {
 }
 
 type RecordType struct {
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
+	Description *TranslationText `xml:"description"`
+	Label       TranslationText  `xml:"label"`
+	Name        TranslationText  `xml:"name"`
 }
 
 type RecordTypeTranslation struct {
 	metadata.MetadataInfo
-	XMLName     xml.Name `xml:"RecordTypeTranslation"`
-	Xmlns       string   `xml:"xmlns,attr"`
-	Description struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
+	XMLName     xml.Name         `xml:"RecordTypeTranslation"`
+	Xmlns       string           `xml:"xmlns,attr"`
+	Description *TranslationText `xml:"description"`
+	Label       TranslationText  `xml:"label"`
+	Name        TranslationText  `xml:"name"`
 }
 
 func (r *RecordTypeTranslation) SetMetadata(m metadata.MetadataInfo) {

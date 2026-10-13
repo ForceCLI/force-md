@@ -3,6 +3,7 @@ package objectTranslations
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 	"github.com/ForceCLI/force-md/metadata/objectTranslations/field"
@@ -25,86 +26,43 @@ type CustomObjectTranslation struct {
 	XMLName    xml.Name `xml:"CustomObjectTranslation"`
 	Xmlns      string   `xml:"xmlns,attr"`
 	CaseValues []struct {
-		Article *struct {
-			Text string `xml:",chardata"`
-		} `xml:"article"`
-		CaseType *struct {
-			Text string `xml:",chardata"`
-		} `xml:"caseType"`
-		Plural *struct {
-			Text string `xml:",chardata"`
-		} `xml:"plural"`
-		PossessivePlural *struct {
-			Text string `xml:",chardata"`
-		} `xml:"possessivePlural"`
-		Value *struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
+		Article          *TranslationText `xml:"article"`
+		CaseType         *TranslationText `xml:"caseType"`
+		Plural           *TranslationText `xml:"plural"`
+		PossessivePlural *TranslationText `xml:"possessivePlural"`
+		Value            *TranslationText `xml:"value"`
 	} `xml:"caseValues"`
 	FieldSets []struct {
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
+		Label TranslationText `xml:"label"`
+		Name  TranslationText `xml:"name"`
 	} `xml:"fieldSets"`
-	Gender *struct {
-		Text string `xml:",chardata"`
-	} `xml:"gender"`
+	Gender  *TranslationText `xml:"gender"`
 	Layouts []struct {
-		Layout struct {
-			Text string `xml:",chardata"`
-		} `xml:"layout"`
-		Sections []struct {
-			Label struct {
-				Text string `xml:",chardata"`
-			} `xml:"label"`
-			Section struct {
-				Text string `xml:",chardata"`
-			} `xml:"section"`
+		Layout     TranslationText  `xml:"layout"`
+		LayoutType *TranslationText `xml:"layoutType"`
+		Sections   []struct {
+			Label   TranslationText `xml:"label"`
+			Section TranslationText `xml:"section"`
 		} `xml:"sections"`
 	} `xml:"layouts"`
-	NameFieldLabel *struct {
-		Text string `xml:",chardata"`
-	} `xml:"nameFieldLabel"`
-	QuickActions []struct {
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
+	NameFieldLabel *TranslationText `xml:"nameFieldLabel"`
+	QuickActions   []struct {
+		Label TranslationText `xml:"label"`
+		Name  TranslationText `xml:"name"`
 	} `xml:"quickActions"`
 	SharingReasons []struct {
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
+		Label TranslationText `xml:"label"`
+		Name  TranslationText `xml:"name"`
 	} `xml:"sharingReasons"`
-	StartsWith *struct {
-		Text string `xml:",chardata"`
-	} `xml:"startsWith"`
-	WebLinks []struct {
-		Label struct {
-			Text string `xml:",chardata"`
-		} `xml:"label"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
+	StartsWith *TranslationText `xml:"startsWith"`
+	WebLinks   []struct {
+		Label TranslationText `xml:"label"`
+		Name  TranslationText `xml:"name"`
 	} `xml:"webLinks"`
 	WorkflowTasks []struct {
-		Description *struct {
-			Text string `xml:",chardata"`
-		} `xml:"description"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Subject *struct {
-			Text string `xml:",chardata"`
-		} `xml:"subject"`
+		Description *TranslationText `xml:"description"`
+		Name        TranslationText  `xml:"name"`
+		Subject     *TranslationText `xml:"subject"`
 	} `xml:"workflowTasks"`
 	Fields          FieldList          `xml:"fields"`
 	RecordTypes     RecordTypeList     `xml:"recordTypes"`

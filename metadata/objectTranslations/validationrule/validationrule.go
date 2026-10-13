@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -16,24 +17,16 @@ func init() {
 }
 
 type ValidationRule struct {
-	ErrorMessage struct {
-		Text string `xml:",chardata"`
-	} `xml:"errorMessage"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
+	ErrorMessage TranslationText `xml:"errorMessage"`
+	Name         TranslationText `xml:"name"`
 }
 
 type ValidationRuleTranslation struct {
 	metadata.MetadataInfo
-	XMLName      xml.Name `xml:"ValidationRuleTranslation"`
-	Xmlns        string   `xml:"xmlns,attr"`
-	ErrorMessage struct {
-		Text string `xml:",chardata"`
-	} `xml:"errorMessage"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
+	XMLName      xml.Name        `xml:"ValidationRuleTranslation"`
+	Xmlns        string          `xml:"xmlns,attr"`
+	ErrorMessage TranslationText `xml:"errorMessage"`
+	Name         TranslationText `xml:"name"`
 }
 
 func (v *ValidationRuleTranslation) SetMetadata(m metadata.MetadataInfo) {

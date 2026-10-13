@@ -2,10 +2,10 @@ package field
 
 import (
 	"encoding/xml"
-
 	"path/filepath"
 	"regexp"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -20,30 +20,27 @@ func init() {
 
 type Field struct {
 	CaseValues []struct {
-		Plural struct {
-			Text string `xml:",chardata"`
-		} `xml:"plural"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
+		Article    *TranslationText `xml:"article"`
+		CaseType   *TranslationText `xml:"caseType"`
+		Plural     TranslationText  `xml:"plural"`
+		Possessive *TranslationText `xml:"possessive"`
+		Value      TranslationText  `xml:"value"`
 	} `xml:"caseValues"`
-	Label *struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	Name struct {
-		Text string `xml:",chardata"`
-	} `xml:"name"`
-	StartsWith *struct {
-		Text string `xml:",chardata"`
-	} `xml:"startsWith"`
+	Description  *TranslationText `xml:"description"`
+	Gender       *TranslationText `xml:"gender"`
+	Help         *TranslationText `xml:"help"`
+	Label        *TranslationText `xml:"label"`
+	LookupFilter *struct {
+		ErrorMessage         *TranslationText `xml:"errorMessage"`
+		InformationalMessage *TranslationText `xml:"informationalMessage"`
+	} `xml:"lookupFilter"`
+	Name           TranslationText `xml:"name"`
 	PicklistValues []struct {
-		MasterLabel struct {
-			Text string `xml:",chardata"`
-		} `xml:"masterLabel"`
-		Translation struct {
-			Text string `xml:",chardata"`
-		} `xml:"translation"`
+		MasterLabel TranslationText `xml:"masterLabel"`
+		Translation TranslationText `xml:"translation"`
 	} `xml:"picklistValues"`
+	RelationshipLabel *TranslationText `xml:"relationshipLabel"`
+	StartsWith        *TranslationText `xml:"startsWith"`
 }
 
 type CustomFieldTranslation struct {

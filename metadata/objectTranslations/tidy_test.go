@@ -3,6 +3,8 @@ package objectTranslations
 import (
 	"testing"
 
+	. "github.com/ForceCLI/force-md/general"
+
 	"github.com/ForceCLI/force-md/metadata/objectTranslations/field"
 	"github.com/ForceCLI/force-md/metadata/objectTranslations/recordtype"
 	"github.com/ForceCLI/force-md/metadata/objectTranslations/validationrule"
@@ -12,31 +14,17 @@ import (
 func TestCustomObjectTranslationTidy(t *testing.T) {
 	trans := &CustomObjectTranslation{
 		Fields: FieldList{
-			field.Field{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "ZField__c"}},
-			field.Field{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "AField__c"}},
-			field.Field{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "MField__c"}},
+			field.Field{Name: TranslationText{Text: "ZField__c"}},
+			field.Field{Name: TranslationText{Text: "AField__c"}},
+			field.Field{Name: TranslationText{Text: "MField__c"}},
 		},
 		RecordTypes: RecordTypeList{
-			recordtype.RecordType{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "ZType"}},
-			recordtype.RecordType{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "AType"}},
+			recordtype.RecordType{Name: TranslationText{Text: "ZType"}},
+			recordtype.RecordType{Name: TranslationText{Text: "AType"}},
 		},
 		ValidationRules: ValidationRuleList{
-			validationrule.ValidationRule{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "ZRule"}},
-			validationrule.ValidationRule{Name: struct {
-				Text string `xml:",chardata"`
-			}{Text: "ARule"}},
+			validationrule.ValidationRule{Name: TranslationText{Text: "ZRule"}},
+			validationrule.ValidationRule{Name: TranslationText{Text: "ARule"}},
 		},
 	}
 
