@@ -31,6 +31,7 @@ type Field struct {
 	CaseSensitive     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
+	ComplianceGroup  *TextLiteral `xml:"complianceGroup"`
 	DefaultValue     *TextLiteral `xml:"defaultValue"`
 	DeleteConstraint *struct {
 		Text string `xml:",chardata"`
@@ -55,7 +56,11 @@ type Field struct {
 	FormulaTreatBlanksAs *struct {
 		Text string `xml:",chardata"`
 	} `xml:"formulaTreatBlanksAs"`
+	// GlobalPicklist names the global value set of a picklist field in API
+	// versions before 38.0, which replaced it with valueSet.
+	GlobalPicklist      *TextLiteral `xml:"globalPicklist"`
 	InlineHelpText      *TextLiteral `xml:"inlineHelpText"`
+	IsAIPredictionField *BooleanText `xml:"isAIPredictionField"`
 	IsFilteringDisabled *BooleanText `xml:"isFilteringDisabled"`
 	IsNameField         *BooleanText `xml:"isNameField"`
 	IsSortingDisabled   *BooleanText `xml:"isSortingDisabled"`
@@ -91,6 +96,9 @@ type Field struct {
 	Length    *IntegerText `xml:"length"`
 	MaskChar  *TextLiteral `xml:"maskChar"`
 	MaskType  *TextLiteral `xml:"maskType"`
+	// Picklist holds a picklist field's values in API versions before 38.0,
+	// which replaced it with valueSet.
+	Picklist *Picklist `xml:"picklist"`
 	// ReadOnlyProxy marks an external object field whose value the external
 	// system supplies.
 	ReadOnlyProxy          *BooleanText `xml:"readOnlyProxy"`

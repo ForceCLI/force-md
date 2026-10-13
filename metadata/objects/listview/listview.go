@@ -3,6 +3,8 @@ package listview
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
+
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 	"github.com/ForceCLI/force-md/metadata/objects/split"
@@ -51,20 +53,7 @@ type ListView struct {
 	Queue *struct {
 		Text string `xml:",chardata"`
 	} `xml:"queue"`
-	SharedTo *struct {
-		Group []struct {
-			Text string `xml:",chardata"`
-		} `xml:"group"`
-		Rol []struct {
-			Text string `xml:",chardata"`
-		} `xml:"role"`
-		RoleAndSubordinates []struct {
-			Text string `xml:",chardata"`
-		} `xml:"roleAndSubordinates"`
-		AllInternalUsers *struct {
-			Text string `xml:",chardata"`
-		} `xml:"allInternalUsers"`
-	} `xml:"sharedTo"`
+	SharedTo *SharedTo `xml:"sharedTo"`
 	Language *struct {
 		Text string `xml:",chardata"`
 	} `xml:"language"`
@@ -85,4 +74,28 @@ func (c *ListViewMetadata) Type() metadata.MetadataType {
 func Open(path string) (*ListViewMetadata, error) {
 	p := &ListViewMetadata{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+// SharedTo lists who a list view is shared with.
+type SharedTo struct {
+	AllCustomerPortalUsers      *TextLiteral  `xml:"allCustomerPortalUsers"`
+	AllInternalUsers            *TextLiteral  `xml:"allInternalUsers"`
+	AllPartnerUsers             *TextLiteral  `xml:"allPartnerUsers"`
+	ChannelProgramGroup         []TextLiteral `xml:"channelProgramGroup"`
+	ChannelProgramGroups        []TextLiteral `xml:"channelProgramGroups"`
+	Group                       []TextLiteral `xml:"group"`
+	Groups                      []TextLiteral `xml:"groups"`
+	GuestUser                   []TextLiteral `xml:"guestUser"`
+	ManagerSubordinates         []TextLiteral `xml:"managerSubordinates"`
+	Managers                    []TextLiteral `xml:"managers"`
+	PortalRole                  []TextLiteral `xml:"portalRole"`
+	PortalRoleAndSubordinates   []TextLiteral `xml:"portalRoleAndSubordinates"`
+	Queue                       []TextLiteral `xml:"queue"`
+	Role                        []TextLiteral `xml:"role"`
+	RoleAndSubordinates         []TextLiteral `xml:"roleAndSubordinates"`
+	RoleAndSubordinatesInternal []TextLiteral `xml:"roleAndSubordinatesInternal"`
+	Territories                 []TextLiteral `xml:"territories"`
+	TerritoriesAndSubordinates  []TextLiteral `xml:"territoriesAndSubordinates"`
+	Territory                   []TextLiteral `xml:"territory"`
+	TerritoryAndSubordinates    []TextLiteral `xml:"territoryAndSubordinates"`
 }

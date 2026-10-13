@@ -46,8 +46,9 @@ type CustomObject struct {
 	AllowInChatterGroups *struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowInChatterGroups"`
-	BusinessProcesses       []businessprocess.BusinessProcess `xml:"businessProcesses"`
-	CompactLayoutAssignment *struct {
+	ArticleTypeChannelDisplay *ArticleTypeChannelDisplay        `xml:"articleTypeChannelDisplay"`
+	BusinessProcesses         []businessprocess.BusinessProcess `xml:"businessProcesses"`
+	CompactLayoutAssignment   *struct {
 		Text string `xml:",chardata"`
 	} `xml:"compactLayoutAssignment"`
 	CompactLayouts []compactlayout.CompactLayout `xml:"compactLayouts"`
@@ -57,7 +58,10 @@ type CustomObject struct {
 	CustomSettingsType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"customSettingsType"`
-	DeploymentStatus *struct {
+	// CustomSettingsVisibility is a custom setting's visibility in API
+	// versions before 47.0, which replaced it with visibility.
+	CustomSettingsVisibility *TextLiteral `xml:"customSettingsVisibility"`
+	DeploymentStatus         *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deploymentStatus"`
 	Deprecated *struct {
@@ -72,7 +76,8 @@ type CustomObject struct {
 	EnableBulkApi *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableBulkApi"`
-	EnableDivisions *struct {
+	EnableChangeDataCapture *BooleanText `xml:"enableChangeDataCapture"`
+	EnableDivisions         *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableDivisions"`
 	EnableEnhancedLookup *struct {
@@ -132,7 +137,8 @@ type CustomObject struct {
 		DisplayFormat *struct {
 			Text string `xml:",chardata"`
 		} `xml:"displayFormat"`
-		Label struct {
+		EncryptionScheme *TextLiteral `xml:"encryptionScheme"`
+		Label            struct {
 			Text string `xml:",chardata"`
 		} `xml:"label"`
 		// StartingNumber is an auto-number Name field's first number.
@@ -147,7 +153,8 @@ type CustomObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"type"`
 	} `xml:"nameField"`
-	PluralLabel *struct {
+	NamedFilters []NamedFilter `xml:"namedFilters"`
+	PluralLabel  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"pluralLabel"`
 	ProfileSearchLayouts []struct {
@@ -187,6 +194,7 @@ type CustomObject struct {
 		LookupPhoneDialogsAdditionalFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"lookupPhoneDialogsAdditionalFields"`
+		MassQuickActions   []TextLiteral `xml:"massQuickActions"`
 		SearchFilterFields []struct {
 			Text string `xml:",chardata"`
 		} `xml:"searchFilterFields"`
@@ -328,7 +336,7 @@ func (c *CustomObject) decompose() (map[string][]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		files[baseDir+"/indexes/"+idx.Label+".index-meta.xml"] = idxContent
+		files[baseDir+"/indexes/"+idx.FullName+".index-meta.xml"] = idxContent
 	}
 
 	// Write field sets as separate files
@@ -427,6 +435,35 @@ func (c *CustomObject) decompose() (map[string][]byte, error) {
 func Open(path string) (*CustomObject, error) {
 	p := &CustomObject{}
 	return p, metadata.ParseMetadataXml(p, path)
+}
+
+type ArticleTypeChannelDisplay struct {
+	ArticleTypeTemplates []struct {
+		Channel  TextLiteral  `xml:"channel"`
+		Page     *TextLiteral `xml:"page"`
+		Template TextLiteral  `xml:"template"`
+	} `xml:"articleTypeTemplates"`
+}
+
+// NamedFilter is a lookup filter in API versions before 30.0, which moved
+// lookup filters into the lookupFilter element of the field.
+type NamedFilter struct {
+	FullName      string       `xml:"fullName"`
+	Active        *BooleanText `xml:"active"`
+	BooleanFilter *TextLiteral `xml:"booleanFilter"`
+	Description   *TextLiteral `xml:"description"`
+	ErrorMessage  *TextLiteral `xml:"errorMessage"`
+	Field         *TextLiteral `xml:"field"`
+	FilterItems   []struct {
+		Field      TextLiteral  `xml:"field"`
+		Operation  TextLiteral  `xml:"operation"`
+		Value      *TextLiteral `xml:"value"`
+		ValueField *TextLiteral `xml:"valueField"`
+	} `xml:"filterItems"`
+	InfoMessage  *TextLiteral `xml:"infoMessage"`
+	IsOptional   *BooleanText `xml:"isOptional"`
+	Name         *TextLiteral `xml:"name"`
+	SourceObject *TextLiteral `xml:"sourceObject"`
 }
 
 type MktDataLakeAttributes struct {

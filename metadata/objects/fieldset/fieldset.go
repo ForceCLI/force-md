@@ -27,10 +27,10 @@ type FieldSet struct {
 		Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
-		IsFieldManaged struct {
+		IsFieldManaged *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isFieldManaged"`
-		IsRequired struct {
+		IsRequired *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isRequired"`
 	} `xml:"availableFields"`
@@ -41,10 +41,10 @@ type FieldSet struct {
 		Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
-		IsFieldManaged struct {
+		IsFieldManaged *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isFieldManaged"`
-		IsRequired struct {
+		IsRequired *struct {
 			Text string `xml:",chardata"`
 		} `xml:"isRequired"`
 	} `xml:"displayedFields"`

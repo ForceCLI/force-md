@@ -71,6 +71,11 @@ type WebLink struct {
 	RequireRowSelection *struct {
 		Text string `xml:",chardata"`
 	} `xml:"requireRowSelection"`
+	// Scontrol names the s-control a link runs, which Salesforce no longer
+	// allows creating.
+	Scontrol *struct {
+		Text string `xml:",chardata"`
+	} `xml:"scontrol"`
 	ShowsLocation *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showsLocation"`
