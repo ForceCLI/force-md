@@ -8,6 +8,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/assignmentRules"
 	_ "github.com/ForceCLI/force-md/metadata/aura"
 	_ "github.com/ForceCLI/force-md/metadata/autoResponseRules"
+	_ "github.com/ForceCLI/force-md/metadata/callCenters"
 	_ "github.com/ForceCLI/force-md/metadata/classes"
 	_ "github.com/ForceCLI/force-md/metadata/communities"
 	_ "github.com/ForceCLI/force-md/metadata/components"

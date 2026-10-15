@@ -1311,3 +1311,50 @@ func TestCopyToMetadataFormatWritesObjectsThatOnlyHaveFields(t *testing.T) {
 		t.Error("an object with an empty name was written")
 	}
 }
+
+func TestCopyCallCenterToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	if err := os.MkdirAll(filepath.Join(sourceDir, "callCenters"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	callCenter := `<?xml version="1.0" encoding="UTF-8"?>
+<CallCenter xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <adapterUrl>https://example.com/adapter</adapterUrl>
+    <displayName>Example Phone</displayName>
+    <displayNameLabel>Display Name</displayNameLabel>
+    <internalNameLabel>Internal Name</internalNameLabel>
+    <sections>
+        <items>
+            <label>Description</label>
+            <name>reqDescription</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>CTI Adapter URL</label>
+            <name>reqAdapterUrl</name>
+            <value>https://example.com/adapter</value>
+        </items>
+        <label>General Info</label>
+        <name>reqGeneralInfo</name>
+    </sections>
+</CallCenter>
+`
+	if err := os.WriteFile(filepath.Join(sourceDir, "callCenters", "ExamplePhone.callCenter"), []byte(callCenter), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(filepath.Join(targetDir, "callCenters", "ExamplePhone.callCenter-meta.xml"))
+	if err != nil {
+		t.Fatalf("Expected call center file not created: %v", err)
+	}
+	if string(got) != callCenter {
+		t.Errorf("copied call center differs from source:\n%s", got)
+	}
+}
