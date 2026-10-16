@@ -1668,3 +1668,48 @@ func TestCopySkillToSourceFormat(t *testing.T) {
 		t.Errorf("copied skill differs from source:\n%s", got)
 	}
 }
+
+func TestCopyServicePresenceStatusToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	if err := os.MkdirAll(filepath.Join(sourceDir, "servicePresenceStatuses"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	statuses := map[string]string{
+		"Available": `<?xml version="1.0" encoding="UTF-8"?>
+<ServicePresenceStatus xmlns="http://soap.sforce.com/2006/04/metadata">
+    <channels>
+        <channel>Cases</channel>
+        <channel>sfdc_phone</channel>
+    </channels>
+    <label>Available</label>
+</ServicePresenceStatus>
+`,
+		"Busy": `<?xml version="1.0" encoding="UTF-8"?>
+<ServicePresenceStatus xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Busy</label>
+</ServicePresenceStatus>
+`,
+	}
+	for name, content := range statuses {
+		if err := os.WriteFile(filepath.Join(sourceDir, "servicePresenceStatuses", name+".servicePresenceStatus"), []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	for name, content := range statuses {
+		got, err := os.ReadFile(filepath.Join(targetDir, "servicePresenceStatuses", name+".servicePresenceStatus-meta.xml"))
+		if err != nil {
+			t.Fatalf("Expected service presence status file not created: %v", err)
+		}
+		if string(got) != content {
+			t.Errorf("copied service presence status %s differs from source:\n%s", name, got)
+		}
+	}
+}

@@ -90,6 +90,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/restrictionrules"
 	_ "github.com/ForceCLI/force-md/metadata/role"
 	_ "github.com/ForceCLI/force-md/metadata/serviceChannels"
+	_ "github.com/ForceCLI/force-md/metadata/servicePresenceStatuses"
 	_ "github.com/ForceCLI/force-md/metadata/settings"
 	_ "github.com/ForceCLI/force-md/metadata/sharingSets"
 	_ "github.com/ForceCLI/force-md/metadata/sharingrules"
