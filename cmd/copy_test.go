@@ -1586,3 +1586,85 @@ func TestCopyTerritoriesByModelQualifiedPackageMembers(t *testing.T) {
 		t.Errorf("copied files:\n%s\nwant:\n%s", strings.Join(got, "\n"), strings.Join(want, "\n"))
 	}
 }
+
+func TestCopyServiceChannelToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	if err := os.MkdirAll(filepath.Join(sourceDir, "serviceChannels"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	serviceChannel := `<?xml version="1.0" encoding="UTF-8"?>
+<ServiceChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <afterConvoWorkMaxTime>90</afterConvoWorkMaxTime>
+    <capacityModel>TAB_BASED</capacityModel>
+    <doesMinimizeWidgetOnAccept>true</doesMinimizeWidgetOnAccept>
+    <hasAcwExtensionEnabled>false</hasAcwExtensionEnabled>
+    <hasAfterConvoWorkTimer>true</hasAfterConvoWorkTimer>
+    <hasAutoAcceptEnabled>false</hasAutoAcceptEnabled>
+    <isInterruptible>false</isInterruptible>
+    <label>Phone</label>
+    <relatedEntityType>VoiceCall</relatedEntityType>
+    <serviceChannelStatusFieldMappings>
+        <type>COMPLETED</type>
+        <value>Closed</value>
+    </serviceChannelStatusFieldMappings>
+    <statusField>Status</statusField>
+</ServiceChannel>
+`
+	if err := os.WriteFile(filepath.Join(sourceDir, "serviceChannels", "sfdc_phone.serviceChannel"), []byte(serviceChannel), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(filepath.Join(targetDir, "serviceChannels", "sfdc_phone.serviceChannel-meta.xml"))
+	if err != nil {
+		t.Fatalf("Expected service channel file not created: %v", err)
+	}
+	if string(got) != serviceChannel {
+		t.Errorf("copied service channel differs from source:\n%s", got)
+	}
+}
+
+func TestCopySkillToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	if err := os.MkdirAll(filepath.Join(sourceDir, "skills"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	skill := `<?xml version="1.0" encoding="UTF-8"?>
+<Skill xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <profiles>
+            <profile>admin</profile>
+        </profiles>
+        <users>
+            <user>first@example.com</user>
+        </users>
+    </assignments>
+    <description>Routes support cases</description>
+    <label>Support Team</label>
+</Skill>
+`
+	if err := os.WriteFile(filepath.Join(sourceDir, "skills", "Support_Team.skill"), []byte(skill), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(filepath.Join(targetDir, "skills", "Support_Team.skill-meta.xml"))
+	if err != nil {
+		t.Fatalf("Expected skill file not created: %v", err)
+	}
+	if string(got) != skill {
+		t.Errorf("copied skill differs from source:\n%s", got)
+	}
+}
