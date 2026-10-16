@@ -15,17 +15,17 @@ func init() {
 
 type Territory2Type struct {
 	metadata.MetadataInfo
-	XMLName xml.Name `xml:"Territory2Type"`
-	Xmlns   string   `xml:"xmlns,attr"`
-	Name    struct {
+	XMLName     xml.Name `xml:"Territory2Type"`
+	Xmlns       string   `xml:"xmlns,attr"`
+	Description *struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	Name struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
 	Priority struct {
 		Text string `xml:",chardata"`
 	} `xml:"priority"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
 }
 
 func (c *Territory2Type) SetMetadata(m metadata.MetadataInfo) {

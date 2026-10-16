@@ -48,3 +48,32 @@ func TestOpenParsesTerritory2Rule(t *testing.T) {
 		t.Errorf("Type() = %q, want %q", m.Type(), NAME)
 	}
 }
+
+func TestOpenLeavesOmittedRuleItemValueNil(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "No_City.territory2Rule")
+	xml := `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Rule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <name>No City</name>
+    <objectType>Account</objectType>
+    <ruleItems>
+        <field>Account.BillingCity</field>
+        <operation>equals</operation>
+    </ruleItems>
+</Territory2Rule>`
+	if err := os.WriteFile(path, []byte(xml), 0644); err != nil {
+		t.Fatalf("write fixture: %v", err)
+	}
+
+	m, err := Open(path)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if len(m.RuleItems) != 1 {
+		t.Fatalf("ruleItems length = %d, want 1", len(m.RuleItems))
+	}
+	if m.RuleItems[0].Value != nil {
+		t.Errorf("ruleItems[0].Value = %v, want nil", m.RuleItems[0].Value)
+	}
+}

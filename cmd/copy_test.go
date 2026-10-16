@@ -1358,3 +1358,231 @@ func TestCopyCallCenterToSourceFormat(t *testing.T) {
 		t.Errorf("copied call center differs from source:\n%s", got)
 	}
 }
+
+// territoryFixture maps each metadata-format path of a territory model to its
+// contents. Both models define a West territory and a West rule, and the US
+// model and its West territory carry custom field values. The US West
+// territory also sets its access to leads, and the US model sets its record
+// visibility and user record access. The Canada West territory sets no
+// access levels, and the Canada West rule has an item with no value.
+var territoryFixture = map[string]string{
+	"territory2Types/Region.territory2Type": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Type xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Sales regions</description>
+    <name>Region</name>
+    <priority>1</priority>
+</Territory2Type>
+`,
+	"territory2Models/US/US.territory2Model": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Model xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <customFields>
+        <name>Activation_Date__c</name>
+        <value xsi:type="xsd:date">2026-01-01</value>
+    </customFields>
+    <description>United States</description>
+    <name>US</name>
+    <recordVisibility>Private</recordVisibility>
+    <userRecordAccess>Read</userRecordAccess>
+</Territory2Model>
+`,
+	"territory2Models/US/territories/All_US.territory2": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2 xmlns="http://soap.sforce.com/2006/04/metadata">
+    <accountAccessLevel>Read</accountAccessLevel>
+    <caseAccessLevel>None</caseAccessLevel>
+    <contactAccessLevel>Edit</contactAccessLevel>
+    <name>All US</name>
+    <opportunityAccessLevel>None</opportunityAccessLevel>
+    <territory2Type>Region</territory2Type>
+</Territory2>
+`,
+	"territory2Models/US/territories/West.territory2": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2 xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <accountAccessLevel>Edit</accountAccessLevel>
+    <caseAccessLevel>Read</caseAccessLevel>
+    <contactAccessLevel>Edit</contactAccessLevel>
+    <customFields>
+        <name>Region_Code__c</name>
+        <value xsi:type="xsd:string">W &amp; NW</value>
+    </customFields>
+    <customFields>
+        <name>Manager_Phone__c</name>
+        <value xsi:nil="true"/>
+    </customFields>
+    <description>Western states</description>
+    <name>West</name>
+    <objectAccessLevels>
+        <accessLevel>All</accessLevel>
+        <objectType>Lead</objectType>
+    </objectAccessLevels>
+    <opportunityAccessLevel>Read</opportunityAccessLevel>
+    <parentTerritory>All_US</parentTerritory>
+    <ruleAssociations>
+        <inherited>false</inherited>
+        <ruleName>West</ruleName>
+    </ruleAssociations>
+    <territory2Type>Region</territory2Type>
+</Territory2>
+`,
+	"territory2Models/US/rules/West.territory2Rule": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Rule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <booleanFilter>1 OR 2</booleanFilter>
+    <name>West</name>
+    <objectType>Account</objectType>
+    <ruleItems>
+        <field>Account.BillingState</field>
+        <operation>equals</operation>
+        <value>CA</value>
+    </ruleItems>
+    <ruleItems>
+        <field>Account.BillingState</field>
+        <operation>equals</operation>
+        <value>OR</value>
+    </ruleItems>
+</Territory2Rule>
+`,
+	"territory2Models/Canada/Canada.territory2Model": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Model xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Canada</name>
+</Territory2Model>
+`,
+	"territory2Models/Canada/territories/West.territory2": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2 xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>West</name>
+    <territory2Type>Region</territory2Type>
+</Territory2>
+`,
+	"territory2Models/Canada/rules/West.territory2Rule": `<?xml version="1.0" encoding="UTF-8"?>
+<Territory2Rule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>false</active>
+    <name>West</name>
+    <objectType>Account</objectType>
+    <ruleItems>
+        <field>Account.BillingState</field>
+        <operation>equals</operation>
+        <value>BC</value>
+    </ruleItems>
+    <ruleItems>
+        <field>Account.BillingCity</field>
+        <operation>equals</operation>
+    </ruleItems>
+</Territory2Rule>
+`,
+}
+
+func writeTerritoryFixture(t *testing.T, dir string) {
+	t.Helper()
+	for relativePath, content := range territoryFixture {
+		path := filepath.Join(dir, relativePath)
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+// assertTerritoryFiles checks that dir holds exactly the fixture's files, each
+// unchanged, with suffix appended to every path.
+func assertTerritoryFiles(t *testing.T, dir, suffix string) {
+	t.Helper()
+	found := 0
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() {
+			return err
+		}
+		found++
+		relativePath, err := filepath.Rel(dir, path)
+		if err != nil {
+			return err
+		}
+		want, ok := territoryFixture[strings.TrimSuffix(filepath.ToSlash(relativePath), suffix)]
+		if !ok {
+			t.Errorf("unexpected file %s", relativePath)
+			return nil
+		}
+		got, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		if string(got) != want {
+			t.Errorf("%s differs from source:\n%s", relativePath, got)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if found != len(territoryFixture) {
+		t.Errorf("wrote %d files, want %d", found, len(territoryFixture))
+	}
+}
+
+func TestCopyTerritoryModelsBetweenFormats(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	sfdxDir := filepath.Join(tempDir, "sfdx")
+	mdapiDir := filepath.Join(tempDir, "mdapi")
+	writeTerritoryFixture(t, sourceDir)
+
+	if err := CopyMetadata(sourceDir, sfdxDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+	assertTerritoryFiles(t, sfdxDir, "-meta.xml")
+
+	if err := CopyMetadata(sfdxDir, mdapiDir, "metadata", ""); err != nil {
+		t.Fatal(err)
+	}
+	assertTerritoryFiles(t, mdapiDir, "")
+}
+
+func TestCopyTerritoriesByModelQualifiedPackageMembers(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+	writeTerritoryFixture(t, sourceDir)
+
+	packageXML := `<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>US.West</members>
+        <name>Territory2</name>
+    </types>
+    <types>
+        <members>Canada.West</members>
+        <name>Territory2Rule</name>
+    </types>
+    <version>67.0</version>
+</Package>
+`
+	packagePath := filepath.Join(tempDir, "package.xml")
+	if err := os.WriteFile(packagePath, []byte(packageXML), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", packagePath); err != nil {
+		t.Fatal(err)
+	}
+
+	var got []string
+	err := filepath.Walk(targetDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() {
+			return err
+		}
+		relativePath, err := filepath.Rel(targetDir, path)
+		got = append(got, filepath.ToSlash(relativePath))
+		return err
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{
+		"package.xml",
+		"territory2Models/Canada/rules/West.territory2Rule-meta.xml",
+		"territory2Models/US/territories/West.territory2-meta.xml",
+	}
+	if strings.Join(got, "\n") != strings.Join(want, "\n") {
+		t.Errorf("copied files:\n%s\nwant:\n%s", strings.Join(got, "\n"), strings.Join(want, "\n"))
+	}
+}
