@@ -1713,3 +1713,107 @@ func TestCopyServicePresenceStatusToSourceFormat(t *testing.T) {
 		}
 	}
 }
+
+func TestCopyManufacturingCloudSettingsToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	files := map[string]string{
+		"AccountForecastSettings/AccountForecastSettings.accountForecastSetting": `<?xml version="1.0" encoding="UTF-8"?>
+<AccountForecastSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <accountFilterId>000000000000000</accountFilterId>
+    <accountForecastFormulas>
+        <endingPeriod>12</endingPeriod>
+        <formula>SalesAgreementPlannedQuantity + OpportunityQuantity</formula>
+        <formulaType>QUANTITY</formulaType>
+        <startingPeriod>1</startingPeriod>
+    </accountForecastFormulas>
+    <acctPrdctPrdFrcstVolCnt>0</acctPrdctPrdFrcstVolCnt>
+    <calculationFrequency>Monthly</calculationFrequency>
+    <displayDuration>12</displayDuration>
+    <displayedForecastMetrics>OpportunityQuantity,PastOrdersQuantity</displayedForecastMetrics>
+    <displayedRevenueMetrics>OpportunityRevenue,PastOrdersRevenue</displayedRevenueMetrics>
+    <editableAtStartOfPeriod>true</editableAtStartOfPeriod>
+    <editsAllowedFor>31</editsAllowedFor>
+    <forecastFrequency>Monthly</forecastFrequency>
+    <objectMapping>
+        <inputObject>AccountProductPeriodForecast</inputObject>
+        <mappingFields>
+            <inputField>APPF1__c</inputField>
+            <outputField>APF1__c</outputField>
+        </mappingFields>
+        <outputObject>AccountProductForecast</outputObject>
+    </objectMapping>
+    <opportunityItemScheduleEnabled>false</opportunityItemScheduleEnabled>
+    <opportunityProbabilityEnabled>false</opportunityProbabilityEnabled>
+    <primaryNotifEmailAddress>a@example.com</primaryNotifEmailAddress>
+    <productFilterId>000000000000000</productFilterId>
+    <recalculateAllFrcstCnt>0</recalculateAllFrcstCnt>
+    <regenerateForecastCnt>0</regenerateForecastCnt>
+    <salesAgreementFilterId>000000000000000</salesAgreementFilterId>
+    <secondaryNotifEmailAddress>b@example.com</secondaryNotifEmailAddress>
+    <startingPeriod>6</startingPeriod>
+</AccountForecastSettings>
+`,
+		"acctMgrTargetSettings/AcctMgrTargetSettings.acctMgrTargetSetting": `<?xml version="1.0" encoding="UTF-8"?>
+<AcctMgrTargetSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <acctMgrPeriodicTargetDstrCnt>0</acctMgrPeriodicTargetDstrCnt>
+    <periodType>Month</periodType>
+    <pricebookId>000000000000000</pricebookId>
+    <teamMemberHierarchyType>ManagerHierarchy</teamMemberHierarchyType>
+</AcctMgrTargetSettings>
+`,
+		"salesAgreementSettings/SalesAgreementSettings.salesAgreementSetting": `<?xml version="1.0" encoding="UTF-8"?>
+<SalesAgreementSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actualsCalculationMode>Manual</actualsCalculationMode>
+    <arePredfndStatusValOveride>false</arePredfndStatusValOveride>
+    <decimalScale>2</decimalScale>
+    <displayGroups>
+        <advAcctFrcstDisplayGroupName>Preset Group</advAcctFrcstDisplayGroupName>
+        <displayGroupItems>
+            <advAcctFrcstDplyGroupItemName>PlannedQuantity</advAcctFrcstDplyGroupItemName>
+            <displayOrder>1</displayOrder>
+            <measureReferenceName>PlannedQuantity</measureReferenceName>
+        </displayGroupItems>
+        <displayGroupType>MEASURE</displayGroupType>
+        <isDefault>false</isDefault>
+    </displayGroups>
+    <displayedAgreementTermsMetrics>PlannedQuantity,ActualQuantity</displayedAgreementTermsMetrics>
+    <futureActCalcSchedules>0</futureActCalcSchedules>
+    <isOnlyApprovalProcessUsed>false</isOnlyApprovalProcessUsed>
+    <measureDefinitions>
+        <advAcctForecastMeasureDefName>PlannedQuantity</advAcctForecastMeasureDefName>
+        <forecastDataMeasureName>PlannedQuantity</forecastDataMeasureName>
+        <forecastMeasureName>PlannedQuantity</forecastMeasureName>
+        <forecastMeasureType>QUANTITY</forecastMeasureType>
+        <isAdjustmentTracked>false</isAdjustmentTracked>
+    </measureDefinitions>
+    <renewalPeriodDayCount>60</renewalPeriodDayCount>
+    <transactionGraceDay>4</transactionGraceDay>
+</SalesAgreementSettings>
+`,
+	}
+	for path, content := range files {
+		if err := os.MkdirAll(filepath.Join(sourceDir, filepath.Dir(path)), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(sourceDir, path), []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	for path, content := range files {
+		got, err := os.ReadFile(filepath.Join(targetDir, path+"-meta.xml"))
+		if err != nil {
+			t.Fatalf("Expected settings file not created: %v", err)
+		}
+		if string(got) != content {
+			t.Errorf("copied %s differs from source:\n%s", path, got)
+		}
+	}
+}

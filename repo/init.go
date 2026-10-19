@@ -1,6 +1,8 @@
 package repo
 
 import (
+	_ "github.com/ForceCLI/force-md/metadata/accountForecastSettings"
+	_ "github.com/ForceCLI/force-md/metadata/acctMgrTargetSettings"
 	_ "github.com/ForceCLI/force-md/metadata/analyticSnapshots"
 	_ "github.com/ForceCLI/force-md/metadata/appMenus"
 	_ "github.com/ForceCLI/force-md/metadata/application"
@@ -89,6 +91,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/reports"
 	_ "github.com/ForceCLI/force-md/metadata/restrictionrules"
 	_ "github.com/ForceCLI/force-md/metadata/role"
+	_ "github.com/ForceCLI/force-md/metadata/salesAgreementSettings"
 	_ "github.com/ForceCLI/force-md/metadata/serviceChannels"
 	_ "github.com/ForceCLI/force-md/metadata/servicePresenceStatuses"
 	_ "github.com/ForceCLI/force-md/metadata/settings"
