@@ -1817,3 +1817,60 @@ func TestCopyManufacturingCloudSettingsToSourceFormat(t *testing.T) {
 		}
 	}
 }
+
+func TestCopyObjectHierarchyRelationshipToSourceFormat(t *testing.T) {
+	tempDir := t.TempDir()
+	sourceDir := filepath.Join(tempDir, "src")
+	targetDir := filepath.Join(tempDir, "sfdx")
+
+	// As a Manufacturing Cloud org returns a sales agreement conversion
+	// mapping with a child mapping.
+	path := "ObjectHierarchyRelationship/OppToSA.settings"
+	content := `<?xml version="1.0" encoding="UTF-8"?>
+<ObjectHierarchyRelationship xmlns="http://soap.sforce.com/2006/04/metadata">
+    <childObjectMapping>
+        <inputObject>OpportunityLineItem</inputObject>
+        <mappingFields>
+            <inputField>Quantity</inputField>
+            <outputField>InitialPlannedQuantity</outputField>
+        </mappingFields>
+        <outputObject>SalesAgreementProduct</outputObject>
+    </childObjectMapping>
+    <mappingType>ParentToChild</mappingType>
+    <masterLabel>Opp To SA</masterLabel>
+    <outputPntRelationshipFieldName>SalesAgreement</outputPntRelationshipFieldName>
+    <parentObjectMapping>
+        <inputObject>Opportunity</inputObject>
+        <mappingFields>
+            <inputField>Name</inputField>
+            <outputField>Name</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Account</inputField>
+            <outputField>Account</outputField>
+        </mappingFields>
+        <outputObject>SalesAgreement</outputObject>
+    </parentObjectMapping>
+    <parentRelationshipFieldName>Opportunity</parentRelationshipFieldName>
+    <usageType>ConvertToSalesAgreement</usageType>
+</ObjectHierarchyRelationship>
+`
+	if err := os.MkdirAll(filepath.Join(sourceDir, filepath.Dir(path)), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(sourceDir, path), []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CopyMetadata(sourceDir, targetDir, "source", ""); err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(filepath.Join(targetDir, path+"-meta.xml"))
+	if err != nil {
+		t.Fatalf("Expected mapping file not created: %v", err)
+	}
+	if string(got) != content {
+		t.Errorf("copied %s differs from source:\n%s", path, got)
+	}
+}

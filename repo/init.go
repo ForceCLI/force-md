@@ -55,6 +55,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/networks"
 	_ "github.com/ForceCLI/force-md/metadata/notificationTypeConfig"
 	_ "github.com/ForceCLI/force-md/metadata/notificationtypes"
+	_ "github.com/ForceCLI/force-md/metadata/objectHierarchyRelationship"
 	_ "github.com/ForceCLI/force-md/metadata/objectTranslations"
 	_ "github.com/ForceCLI/force-md/metadata/objects"
 	_ "github.com/ForceCLI/force-md/metadata/objects/businessprocess"
