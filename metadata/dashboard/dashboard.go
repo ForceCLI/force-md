@@ -227,6 +227,9 @@ type Dashboard struct {
 				ShowPicturesOnCharts *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showPicturesOnCharts"`
+				ShowPicturesOnTables *struct {
+					Text string `xml:",chardata"`
+				} `xml:"showPicturesOnTables"`
 				ShowRange *struct {
 					Text string `xml:",chardata"`
 				} `xml:"showRange"`
@@ -262,7 +265,7 @@ type Dashboard struct {
 	} `xml:"dashboardGridLayout"`
 	DashboardType *TextLiteral `xml:"dashboardType"`
 	Description   *TextLiteral `xml:"description"`
-	IsGridLayout  struct {
+	IsGridLayout  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isGridLayout"`
 	LeftSection *struct {
@@ -301,7 +304,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"sortBy"`
 			} `xml:"dashboardTableColumn"`
-			DisplayUnits struct {
+			DisplayUnits *struct {
 				Text string `xml:",chardata"`
 			} `xml:"displayUnits"`
 			DrillEnabled *struct {
@@ -358,6 +361,12 @@ type Dashboard struct {
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`
+			ShowPicturesOnCharts *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnCharts"`
+			ShowPicturesOnTables *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnTables"`
 			ShowRange *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showRange"`
@@ -419,7 +428,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"sortBy"`
 			} `xml:"dashboardTableColumn"`
-			DisplayUnits struct {
+			DisplayUnits *struct {
 				Text string `xml:",chardata"`
 			} `xml:"displayUnits"`
 			DrillDownUrl *struct {
@@ -482,6 +491,12 @@ type Dashboard struct {
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`
+			ShowPicturesOnCharts *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnCharts"`
+			ShowPicturesOnTables *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnTables"`
 			ShowRange *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showRange"`
@@ -502,6 +517,7 @@ type Dashboard struct {
 			} `xml:"useReportChart"`
 		} `xml:"components"`
 	} `xml:"middleSection"`
+	Owner        *TextLiteral `xml:"owner"`
 	RightSection *struct {
 		ColumnSize struct {
 			Text string `xml:",chardata"`
@@ -538,7 +554,7 @@ type Dashboard struct {
 					Text string `xml:",chardata"`
 				} `xml:"sortBy"`
 			} `xml:"dashboardTableColumn"`
-			DisplayUnits struct {
+			DisplayUnits *struct {
 				Text string `xml:",chardata"`
 			} `xml:"displayUnits"`
 			DrillEnabled *struct {
@@ -595,6 +611,12 @@ type Dashboard struct {
 			ShowPercentage *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showPercentage"`
+			ShowPicturesOnCharts *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnCharts"`
+			ShowPicturesOnTables *struct {
+				Text string `xml:",chardata"`
+			} `xml:"showPicturesOnTables"`
 			ShowRange *struct {
 				Text string `xml:",chardata"`
 			} `xml:"showRange"`
@@ -615,7 +637,6 @@ type Dashboard struct {
 			} `xml:"useReportChart"`
 		} `xml:"components"`
 	} `xml:"rightSection"`
-	Owner       *TextLiteral `xml:"owner"`
 	RunningUser *TextLiteral `xml:"runningUser"`
 	TextColor   struct {
 		Text string `xml:",chardata"`
