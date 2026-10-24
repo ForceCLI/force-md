@@ -47,7 +47,7 @@ func MetadataFromPath(path string) (metadata.RegisterableMetadata, error) {
 	if err != nil {
 		return nil, err
 	}
-	if open, ok := internal.TypeRegistry[element]; ok {
+	if open, ok := internal.TypeRegistry.Lookup(element); ok {
 		return open(path)
 	}
 	return nil, fmt.Errorf("Could not find metadata")
@@ -169,7 +169,7 @@ func IsMetadataFile(path string) bool {
 	if err != nil {
 		return false
 	}
-	if _, ok := internal.TypeRegistry[element]; ok {
+	if _, ok := internal.TypeRegistry.Lookup(element); ok {
 		return ok
 	}
 	return false

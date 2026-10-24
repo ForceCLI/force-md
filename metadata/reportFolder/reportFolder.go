@@ -52,12 +52,8 @@ func (c *ReportFolder) Files(format metadata.Format) (map[string][]byte, error) 
 	// Should preserve: CRM_Admin_Exception_Reports/SystemAdminExceptionDashboard/BD_Discharge_Reports_Master
 
 	var relativePath string
-	if strings.Contains(originalPath, "reports/") {
-		// Extract everything after "reports/"
-		parts := strings.Split(originalPath, "reports/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-		}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "reports"); ok {
+		relativePath = within
 	}
 
 	if relativePath == "" {

@@ -35,10 +35,12 @@ type EmailTemplate struct {
 	EncodingKey struct {
 		Text string `xml:",chardata"`
 	} `xml:"encodingKey"`
-	Name struct {
+	Letterhead *TextLiteral `xml:"letterhead"`
+	Name       struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
-	Style struct {
+	RelatedEntityType *TextLiteral `xml:"relatedEntityType"`
+	Style             struct {
 		Text string `xml:",chardata"`
 	} `xml:"style"`
 	Subject struct {
@@ -77,26 +79,8 @@ func (c *EmailTemplate) Files(format metadata.Format) (map[string][]byte, error)
 
 	// Extract the folder structure from the original path
 	var relativePath string
-	if strings.Contains(originalPath, "/email/") {
-		// Extract everything after "/email/"
-		parts := strings.Split(originalPath, "/email/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-		}
-	} else if strings.HasPrefix(filepath.Base(filepath.Dir(originalPath)), "email") {
-		// Handle case where path is like "test-email/email/Health_Cloud/file.email-meta.xml"
-		// Extract relative path from the email directory
-		pathParts := strings.Split(originalPath, string(filepath.Separator))
-		emailIndex := -1
-		for i, part := range pathParts {
-			if part == "email" {
-				emailIndex = i
-				break
-			}
-		}
-		if emailIndex >= 0 && emailIndex < len(pathParts)-1 {
-			relativePath = strings.Join(pathParts[emailIndex+1:], string(filepath.Separator))
-		}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "email"); ok {
+		relativePath = within
 	}
 
 	if relativePath == "" {

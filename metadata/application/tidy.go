@@ -14,8 +14,9 @@ func (pao ProfileActionOverrideList) Tidy() {
 		if pao[i].ActionName != pao[j].ActionName {
 			return pao[i].ActionName < pao[j].ActionName
 		}
-		if pao[i].RecordType != nil && pao[j].RecordType != nil && *pao[i].RecordType != *pao[j].RecordType {
-			return *pao[i].RecordType < *pao[j].RecordType
+		if recordType(pao[i]) != recordType(pao[j]) {
+			// Overrides without a record type sort first
+			return recordType(pao[i]) < recordType(pao[j])
 		}
 		if pao[i].FormFactor != pao[j].FormFactor {
 			return pao[i].FormFactor > pao[j].FormFactor
@@ -26,6 +27,20 @@ func (pao ProfileActionOverrideList) Tidy() {
 		if pao[i].Type != pao[j].Type {
 			return pao[i].Type < pao[j].Type
 		}
-		return *pao[i].Content < *pao[j].Content
+		return content(pao[i]) < content(pao[j])
 	})
+}
+
+func recordType(o ProfileActionOverride) string {
+	if o.RecordType == nil {
+		return ""
+	}
+	return *o.RecordType
+}
+
+func content(o ProfileActionOverride) string {
+	if o.Content == nil {
+		return ""
+	}
+	return *o.Content
 }

@@ -26,6 +26,16 @@ Clean up metadata by sorting groups of elements in natural order.
 $ force-md permissionset tidy src/permissionsets/*
 ```
 
+### Tidy All Metadata In A Directory
+
+Tidy every tidyable metadata file in a directory and its subdirectories.
+Files that are not metadata and hidden directories such as `.git` are
+skipped.  Add `-l` to list the files that need tidying without changing them.
+
+```
+$ force-md tidy -r force-app/main/default
+```
+
 ### Clone Field Permissions
 
 Add field permissions for a new field to Permission Sets by copying the

@@ -22,6 +22,13 @@ func (t *TextLiteral) String() string {
 	return html.UnescapeString(t.Text)
 }
 
+// NillableText is an element written as <name xsi:nil="true"/> when it has
+// no value.  The root element of the metadata declares the xsi namespace.
+type NillableText struct {
+	Text string `xml:",innerxml"`
+	Nil  string `xml:"xsi:nil,attr,omitempty"`
+}
+
 var TrueText = BooleanText{
 	Text: "true",
 }

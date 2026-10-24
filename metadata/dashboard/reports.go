@@ -14,19 +14,14 @@ func (d *Dashboard) GetReports() []string {
 			}
 		}
 	}
-	if d.LeftSection != nil {
-		for _, c := range d.LeftSection.Components {
-			reports = append(reports, c.Report)
+	for _, section := range []*DashboardSection{d.LeftSection, d.MiddleSection, d.RightSection} {
+		if section == nil {
+			continue
 		}
-	}
-	if d.MiddleSection != nil {
-		for _, c := range d.MiddleSection.Components {
-			reports = append(reports, c.Report)
-		}
-	}
-	if d.RightSection != nil {
-		for _, c := range d.RightSection.Components {
-			reports = append(reports, c.Report)
+		for _, c := range section.Components {
+			if c.Report != nil {
+				reports = append(reports, *c.Report)
+			}
 		}
 	}
 	return reports

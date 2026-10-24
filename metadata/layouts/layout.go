@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	. "github.com/ForceCLI/force-md/general"
+
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -27,6 +29,25 @@ type Layout struct {
 	ExcludeButtons []struct {
 		Text string `xml:",chardata"`
 	} `xml:"excludeButtons"`
+	FeedLayout *struct {
+		AutocollapsePublisher *TextLiteral `xml:"autocollapsePublisher"`
+		CompactFeed           *TextLiteral `xml:"compactFeed"`
+		FeedFilterPosition    *TextLiteral `xml:"feedFilterPosition"`
+		FeedFilters           []struct {
+			FeedFilterType TextLiteral  `xml:"feedFilterType"`
+			FeedItemType   *TextLiteral `xml:"feedItemType"`
+		} `xml:"feedFilters"`
+		FullWidthFeed              *TextLiteral `xml:"fullWidthFeed"`
+		HideSidebar                *TextLiteral `xml:"hideSidebar"`
+		HighlightExternalFeedItems *TextLiteral `xml:"highlightExternalFeedItems"`
+		LeftComponents             []struct {
+			ComponentType TextLiteral `xml:"componentType"`
+		} `xml:"leftComponents"`
+		RightComponents []struct {
+			ComponentType TextLiteral `xml:"componentType"`
+		} `xml:"rightComponents"`
+		UseInlineFiltersInConsole *TextLiteral `xml:"useInlineFiltersInConsole"`
+	} `xml:"feedLayout"`
 	LayoutSections []struct {
 		CustomLabel struct {
 			Text string `xml:",chardata"`

@@ -40,6 +40,7 @@ func defaultObjectPermissions(objectName string) ObjectPermissions {
 		AllowEdit:        FalseText,
 		AllowRead:        FalseText,
 		ModifyAllRecords: FalseText,
+		ViewAllFields:    &BooleanText{Text: "false"},
 		ViewAllRecords:   FalseText,
 	}
 	return op
@@ -165,6 +166,9 @@ func (p *PermissionSet) CloneObjectPermissions(src, dest string) error {
 			clone.AllowEdit.Text = f.AllowEdit.Text
 			clone.AllowRead.Text = f.AllowRead.Text
 			clone.ModifyAllRecords.Text = f.ModifyAllRecords.Text
+			if f.ViewAllFields != nil {
+				clone.ViewAllFields = &BooleanText{Text: f.ViewAllFields.Text}
+			}
 			clone.ViewAllRecords.Text = f.ViewAllRecords.Text
 			clone.Object = dest
 			p.ObjectPermissions = append(p.ObjectPermissions, clone)

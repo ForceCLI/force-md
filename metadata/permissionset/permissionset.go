@@ -30,14 +30,14 @@ type ApexClass struct {
 type ApexClassList []ApexClass
 
 type ObjectPermissions struct {
-	AllowCreate      BooleanText `xml:"allowCreate"`
-	AllowDelete      BooleanText `xml:"allowDelete"`
-	AllowEdit        BooleanText `xml:"allowEdit"`
-	AllowRead        BooleanText `xml:"allowRead"`
-	ModifyAllRecords BooleanText `xml:"modifyAllRecords"`
-	Object           string      `xml:"object"`
-	ViewAllFields    BooleanText `xml:"viewAllFields"`
-	ViewAllRecords   BooleanText `xml:"viewAllRecords"`
+	AllowCreate      BooleanText  `xml:"allowCreate"`
+	AllowDelete      BooleanText  `xml:"allowDelete"`
+	AllowEdit        BooleanText  `xml:"allowEdit"`
+	AllowRead        BooleanText  `xml:"allowRead"`
+	ModifyAllRecords BooleanText  `xml:"modifyAllRecords"`
+	Object           string       `xml:"object"`
+	ViewAllFields    *BooleanText `xml:"viewAllFields"`
+	ViewAllRecords   BooleanText  `xml:"viewAllRecords"`
 }
 
 type ObjectPermissionsList []ObjectPermissions
@@ -138,9 +138,9 @@ type PermissionSet struct {
 	CustomPermissions                   CustomPermissionList                  `xml:"customPermissions"`
 	CustomSettingAccesses               CustomSettingList                     `xml:"customSettingAccesses"`
 	Description                         *Description                          `xml:"description"`
+	ExternalCredentialPrincipalAccesses ExternalCredentialPrincipalAccessList `xml:"externalCredentialPrincipalAccesses"`
 	FieldPermissions                    FieldPermissionsList                  `xml:"fieldPermissions"`
 	FlowAccesses                        FlowAccessList                        `xml:"flowAccesses"`
-	ExternalCredentialPrincipalAccesses ExternalCredentialPrincipalAccessList `xml:"externalCredentialPrincipalAccesses"`
 	HasActivationRequired               BooleanText                           `xml:"hasActivationRequired"`
 	Label                               string                                `xml:"label"`
 	License                             *License                              `xml:"license"`

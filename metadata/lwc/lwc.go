@@ -44,32 +44,43 @@ type LightningComponentBundle struct {
 			Text string `xml:",chardata"`
 		} `xml:"target"`
 	} `xml:"targets"`
-	TargetConfigs *struct {
-		TargetConfig []struct {
-			Xmlns    *string `xml:"xmlns,attr"`
-			Targets  string  `xml:"targets,attr"`
-			Property []struct {
-				Name        string  `xml:"name,attr"`
-				Label       *string `xml:"label,attr"`
-				Type        string  `xml:"type,attr"`
-				Role        *string `xml:"role,attr"`
-				Description *string `xml:"description,attr"`
-				Datasource  *string `xml:"datasource,attr"`
-				Default     *string `xml:"default,attr"`
-				Required    *string `xml:"required,attr"`
-			} `xml:"property"`
-			SupportedFormFactors *struct {
-				SupportedFormFactor []struct {
-					Type string `xml:"type,attr"`
-				} `xml:"supportedFormFactor"`
-			} `xml:"supportedFormFactors"`
-			ActionType *struct {
-				Text string `xml:",chardata"`
-			} `xml:"actionType"`
-		} `xml:"targetConfig"`
-	} `xml:"targetConfigs"`
-	BundleFiles map[string][]byte `xml:"-"`
-	SourcePath  string            `xml:"-"`
+	TargetConfigs *TargetConfigs    `xml:"targetConfigs"`
+	BundleFiles   map[string][]byte `xml:"-"`
+	SourcePath    string            `xml:"-"`
+}
+
+type TargetConfigs struct {
+	TargetConfig []TargetConfig `xml:"targetConfig"`
+}
+
+type TargetConfig struct {
+	Xmlns    *string                `xml:"xmlns,attr"`
+	Targets  string                 `xml:"targets,attr"`
+	Property []TargetConfigProperty `xml:"property"`
+	Objects  *struct {
+		Object []struct {
+			Text string `xml:",chardata"`
+		} `xml:"object"`
+	} `xml:"objects"`
+	SupportedFormFactors *struct {
+		SupportedFormFactor []struct {
+			Type string `xml:"type,attr"`
+		} `xml:"supportedFormFactor"`
+	} `xml:"supportedFormFactors"`
+	ActionType *struct {
+		Text string `xml:",chardata"`
+	} `xml:"actionType"`
+}
+
+type TargetConfigProperty struct {
+	Name        string  `xml:"name,attr"`
+	Label       *string `xml:"label,attr"`
+	Type        string  `xml:"type,attr"`
+	Role        *string `xml:"role,attr"`
+	Description *string `xml:"description,attr"`
+	Datasource  *string `xml:"datasource,attr"`
+	Default     *string `xml:"default,attr"`
+	Required    *string `xml:"required,attr"`
 }
 
 func (c *LightningComponentBundle) SetMetadata(m metadata.MetadataInfo) {

@@ -20,636 +20,143 @@ func init() {
 
 type Dashboard struct {
 	metadata.MetadataInfo
-	XMLName            xml.Name `xml:"Dashboard"`
-	Xmlns              string   `xml:"xmlns,attr"`
-	Xsi                *string  `xml:"xsi,attr"`
-	BackgroundEndColor struct {
-		Text string `xml:",chardata"`
-	} `xml:"backgroundEndColor"`
-	BackgroundFadeDirection struct {
-		Text string `xml:",chardata"`
-	} `xml:"backgroundFadeDirection"`
-	BackgroundStartColor struct {
-		Text string `xml:",chardata"`
-	} `xml:"backgroundStartColor"`
-	ChartTheme *struct {
-		Text string `xml:",chardata"`
-	} `xml:"chartTheme"`
-	ColorPalette *struct {
-		Text string `xml:",chardata"`
-	} `xml:"colorPalette"`
-	DashboardChartTheme *struct {
-		Text string `xml:",chardata"`
-	} `xml:"dashboardChartTheme"`
-	DashboardColorPalette *struct {
-		Text string `xml:",chardata"`
-	} `xml:"dashboardColorPalette"`
-	DashboardFilters []struct {
+	XMLName                 xml.Name     `xml:"Dashboard"`
+	Xmlns                   string       `xml:"xmlns,attr"`
+	Xsi                     string       `xml:"xmlns:xsi,attr,omitempty"`
+	BackgroundEndColor      TextLiteral  `xml:"backgroundEndColor"`
+	BackgroundFadeDirection TextLiteral  `xml:"backgroundFadeDirection"`
+	BackgroundStartColor    TextLiteral  `xml:"backgroundStartColor"`
+	ChartTheme              *TextLiteral `xml:"chartTheme"`
+	ColorPalette            *TextLiteral `xml:"colorPalette"`
+	DashboardChartTheme     *TextLiteral `xml:"dashboardChartTheme"`
+	DashboardColorPalette   *TextLiteral `xml:"dashboardColorPalette"`
+	DashboardFilters        []struct {
 		DashboardFilterOptions []struct {
-			Operator struct {
-				Text string `xml:",chardata"`
-			} `xml:"operator"`
-			Values struct {
-				Text string `xml:",chardata"`
-			} `xml:"values"`
+			Operator TextLiteral   `xml:"operator"`
+			Values   []TextLiteral `xml:"values"`
 		} `xml:"dashboardFilterOptions"`
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
+		Name TextLiteral `xml:"name"`
 	} `xml:"dashboardFilters"`
 	DashboardGridLayout *struct {
 		DashboardGridComponents []struct {
-			ColSpan struct {
-				Text string `xml:",chardata"`
-			} `xml:"colSpan"`
-			ColumnIndex struct {
-				Text string `xml:",chardata"`
-			} `xml:"columnIndex"`
-			DashboardComponent struct {
-				AutoselectColumnsFromReport struct {
-					Text string `xml:",chardata"`
-				} `xml:"autoselectColumnsFromReport"`
-				ChartAxisRange *struct {
-					Text string `xml:",chardata"`
-				} `xml:"chartAxisRange"`
-				ChartAxisRangeMax *struct {
-					Text string `xml:",chardata"`
-				} `xml:"chartAxisRangeMax"`
-				ChartSummary *struct {
-					Aggregate *struct {
-						Text string `xml:",chardata"`
-					} `xml:"aggregate"`
-					AxisBinding *struct {
-						Text string `xml:",chardata"`
-					} `xml:"axisBinding"`
-					Column struct {
-						Text string `xml:",chardata"`
-					} `xml:"column"`
-				} `xml:"chartSummary"`
-				ComponentType struct {
-					Text string `xml:",chardata"`
-				} `xml:"componentType"`
-				DashboardComponentContents *struct {
-					RichTextContent struct {
-						Text string `xml:",chardata"`
-					} `xml:"richTextContent"`
-				} `xml:"dashboardComponentContents"`
-				DashboardFilterColumns []struct {
-					Column struct {
-						Text string `xml:",chardata"`
-					} `xml:"column"`
-				} `xml:"dashboardFilterColumns"`
-				DecimalPrecision *struct {
-					Text string `xml:",chardata"`
-				} `xml:"decimalPrecision"`
-				DisplayUnits *struct {
-					Text string `xml:",chardata"`
-				} `xml:"displayUnits"`
-				DrillEnabled *struct {
-					Text string `xml:",chardata"`
-				} `xml:"drillEnabled"`
-				DrillToDetailEnabled *struct {
-					Text string `xml:",chardata"`
-				} `xml:"drillToDetailEnabled"`
-				EnableHover *struct {
-					Text string `xml:",chardata"`
-				} `xml:"enableHover"`
-				ExpandOthers *struct {
-					Text string `xml:",chardata"`
-				} `xml:"expandOthers"`
-				FlexComponentProperties *struct {
-					DecimalPrecision *struct {
-						Text string `xml:",chardata"`
-					} `xml:"decimalPrecision"`
-					FlexTableColumn []struct {
-						BreakPoint1 *struct {
-							Text string `xml:",chardata"`
-						} `xml:"breakPoint1"`
-						BreakPoint2 *struct {
-							Text string `xml:",chardata"`
-						} `xml:"breakPoint2"`
-						BreakPointOrder *struct {
-							Text string `xml:",chardata"`
-						} `xml:"breakPointOrder"`
-						HighRangeColor *struct {
-							Text string `xml:",chardata"`
-						} `xml:"highRangeColor"`
-						LowRangeColor *struct {
-							Text string `xml:",chardata"`
-						} `xml:"lowRangeColor"`
-						MidRangeColor *struct {
-							Text string `xml:",chardata"`
-						} `xml:"midRangeColor"`
-						ReportColumn struct {
-							Text string `xml:",chardata"`
-						} `xml:"reportColumn"`
-						ShowSubTotal struct {
-							Text string `xml:",chardata"`
-						} `xml:"showSubTotal"`
-						ShowTotal struct {
-							Text string `xml:",chardata"`
-						} `xml:"showTotal"`
-						Type struct {
-							Text string `xml:",chardata"`
-						} `xml:"type"`
-					} `xml:"flexTableColumn"`
-					FlexTableSortInfo struct {
-						SortColumn *struct {
-							Text string `xml:",chardata"`
-						} `xml:"sortColumn"`
-						SortOrder struct {
-							Text string `xml:",chardata"`
-						} `xml:"sortOrder"`
-					} `xml:"flexTableSortInfo"`
-					HideChatterPhotos struct {
-						Text string `xml:",chardata"`
-					} `xml:"hideChatterPhotos"`
-				} `xml:"flexComponentProperties"`
-				Footer *struct {
-					Text string `xml:",chardata"`
-				} `xml:"footer"`
-				GroupingColumn []struct {
-					Text string `xml:",chardata"`
-				} `xml:"groupingColumn"`
-				GaugeMax *struct {
-					Text string `xml:",chardata"`
-				} `xml:"gaugeMax"`
-				GaugeMin *struct {
-					Text string `xml:",chardata"`
-				} `xml:"gaugeMin"`
-				GroupingSortProperties struct {
-					GroupingSorts []struct {
-						GroupingLevel struct {
-							Text string `xml:",chardata"`
-						} `xml:"groupingLevel"`
-						SortColumn *struct {
-							Text string `xml:",chardata"`
-						} `xml:"sortColumn"`
-						SortOrder *struct {
-							Text string `xml:",chardata"`
-						} `xml:"sortOrder"`
-						InheritedReportGroupingSort *struct {
-							Text string `xml:",chardata"`
-						} `xml:"inheritedReportGroupingSort"`
-					} `xml:"groupingSorts"`
-				} `xml:"groupingSortProperties"`
-				Header *struct {
-					Text string `xml:",chardata"`
-				} `xml:"header"`
-				IndicatorBreakpoint1 *struct {
-					Text string `xml:",chardata"`
-				} `xml:"indicatorBreakpoint1"`
-				IndicatorBreakpoint2 *struct {
-					Text string `xml:",chardata"`
-				} `xml:"indicatorBreakpoint2"`
-				IndicatorHighColor *struct {
-					Text string `xml:",chardata"`
-				} `xml:"indicatorHighColor"`
-				IndicatorLowColor *struct {
-					Text string `xml:",chardata"`
-				} `xml:"indicatorLowColor"`
-				IndicatorMiddleColor *struct {
-					Text string `xml:",chardata"`
-				} `xml:"indicatorMiddleColor"`
-				LegendPosition *struct {
-					Text string `xml:",chardata"`
-				} `xml:"legendPosition"`
-				MaxValuesDisplayed *struct {
-					Text string `xml:",chardata"`
-				} `xml:"maxValuesDisplayed"`
-				MetricLabel *struct {
-					Text string `xml:",chardata"`
-				} `xml:"metricLabel"`
-				Report         *string `xml:"report"`
-				ShowPercentage *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showPercentage"`
-				ShowPicturesOnCharts *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showPicturesOnCharts"`
-				ShowPicturesOnTables *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showPicturesOnTables"`
-				ShowRange *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showRange"`
-				ShowTotal *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showTotal"`
-				ShowValues *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showValues"`
-				SortBy *struct {
-					Text string `xml:",chardata"`
-				} `xml:"sortBy"`
-				Title *struct {
-					Text string `xml:",chardata"`
-				} `xml:"title"`
-				UseReportChart *struct {
-					Text string `xml:",chardata"`
-				} `xml:"useReportChart"`
-			} `xml:"dashboardComponent"`
-			RowIndex struct {
-				Text string `xml:",chardata"`
-			} `xml:"rowIndex"`
-			RowSpan struct {
-				Text string `xml:",chardata"`
-			} `xml:"rowSpan"`
+			ColSpan            TextLiteral        `xml:"colSpan"`
+			ColumnIndex        TextLiteral        `xml:"columnIndex"`
+			DashboardComponent DashboardComponent `xml:"dashboardComponent"`
+			RowIndex           TextLiteral        `xml:"rowIndex"`
+			RowSpan            TextLiteral        `xml:"rowSpan"`
 		} `xml:"dashboardGridComponents"`
-		NumberOfColumns struct {
-			Text string `xml:",chardata"`
-		} `xml:"numberOfColumns"`
-		RowHeight struct {
-			Text string `xml:",chardata"`
-		} `xml:"rowHeight"`
+		NumberOfColumns TextLiteral `xml:"numberOfColumns"`
+		RowHeight       TextLiteral `xml:"rowHeight"`
 	} `xml:"dashboardGridLayout"`
-	DashboardType *TextLiteral `xml:"dashboardType"`
-	Description   *TextLiteral `xml:"description"`
-	IsGridLayout  *struct {
-		Text string `xml:",chardata"`
-	} `xml:"isGridLayout"`
-	LeftSection *struct {
-		ColumnSize struct {
-			Text string `xml:",chardata"`
-		} `xml:"columnSize"`
-		Components []struct {
-			AutoselectColumnsFromReport struct {
-				Text string `xml:",chardata"`
-			} `xml:"autoselectColumnsFromReport"`
-			ChartAxisRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"chartAxisRange"`
-			ComponentType struct {
-				Text string `xml:",chardata"`
-			} `xml:"componentType"`
-			DashboardFilterColumns []struct {
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-			} `xml:"dashboardFilterColumns"`
-			DashboardTableColumn []struct {
-				AggregateType *struct {
-					Text string `xml:",chardata"`
-				} `xml:"aggregateType"`
-				CalculatePercent *struct {
-					Text string `xml:",chardata"`
-				} `xml:"calculatePercent"`
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-				ShowTotal *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showTotal"`
-				SortBy *struct {
-					Text string `xml:",chardata"`
-				} `xml:"sortBy"`
-			} `xml:"dashboardTableColumn"`
-			DisplayUnits *struct {
-				Text string `xml:",chardata"`
-			} `xml:"displayUnits"`
-			DrillEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillEnabled"`
-			DrillToDetailEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillToDetailEnabled"`
-			EnableHover *struct {
-				Text string `xml:",chardata"`
-			} `xml:"enableHover"`
-			ExpandOthers *struct {
-				Text string `xml:",chardata"`
-			} `xml:"expandOthers"`
-			Footer *struct {
-				Text string `xml:",chardata"`
-			} `xml:"footer"`
-			GaugeMax *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMax"`
-			GaugeMin *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMin"`
-			GroupingSortProperties struct {
-			} `xml:"groupingSortProperties"`
-			Header *struct {
-				Text string `xml:",chardata"`
-			} `xml:"header"`
-			IndicatorBreakpoint1 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint1"`
-			IndicatorBreakpoint2 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint2"`
-			IndicatorHighColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorHighColor"`
-			IndicatorLowColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorLowColor"`
-			IndicatorMiddleColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorMiddleColor"`
-			LegendPosition *struct {
-				Text string `xml:",chardata"`
-			} `xml:"legendPosition"`
-			MaxValuesDisplayed *struct {
-				Text string `xml:",chardata"`
-			} `xml:"maxValuesDisplayed"`
-			MetricLabel *struct {
-				Text string `xml:",chardata"`
-			} `xml:"metricLabel"`
-			Report         string `xml:"report"`
-			ShowPercentage *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPercentage"`
-			ShowPicturesOnCharts *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnCharts"`
-			ShowPicturesOnTables *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnTables"`
-			ShowRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showRange"`
-			ShowTotal *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showTotal"`
-			ShowValues *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showValues"`
-			SortBy *struct {
-				Text string `xml:",chardata"`
-			} `xml:"sortBy"`
-			Title *struct {
-				Text string `xml:",chardata"`
-			} `xml:"title"`
-			UseReportChart *struct {
-				Text string `xml:",chardata"`
-			} `xml:"useReportChart"`
-		} `xml:"components"`
-	} `xml:"leftSection"`
-	MiddleSection *struct {
-		ColumnSize struct {
-			Text string `xml:",chardata"`
-		} `xml:"columnSize"`
-		Components []struct {
-			AutoselectColumnsFromReport struct {
-				Text string `xml:",chardata"`
-			} `xml:"autoselectColumnsFromReport"`
-			ChartAxisRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"chartAxisRange"`
-			ChartSummary *struct {
-				AxisBinding struct {
-					Text string `xml:",chardata"`
-				} `xml:"axisBinding"`
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-			} `xml:"chartSummary"`
-			ComponentType struct {
-				Text string `xml:",chardata"`
-			} `xml:"componentType"`
-			DashboardFilterColumns []struct {
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-			} `xml:"dashboardFilterColumns"`
-			DashboardTableColumn []struct {
-				CalculatePercent *struct {
-					Text string `xml:",chardata"`
-				} `xml:"calculatePercent"`
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-				ShowTotal *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showTotal"`
-				SortBy *struct {
-					Text string `xml:",chardata"`
-				} `xml:"sortBy"`
-			} `xml:"dashboardTableColumn"`
-			DisplayUnits *struct {
-				Text string `xml:",chardata"`
-			} `xml:"displayUnits"`
-			DrillDownUrl *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillDownUrl"`
-			DrillEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillEnabled"`
-			DrillToDetailEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillToDetailEnabled"`
-			EnableHover *struct {
-				Text string `xml:",chardata"`
-			} `xml:"enableHover"`
-			ExpandOthers *struct {
-				Text string `xml:",chardata"`
-			} `xml:"expandOthers"`
-			Footer *struct {
-				Text string `xml:",chardata"`
-			} `xml:"footer"`
-			GaugeMax *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMax"`
-			GaugeMin *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMin"`
-			GroupingColumn []struct {
-				Text string `xml:",chardata"`
-			} `xml:"groupingColumn"`
-			GroupingSortProperties struct {
-			} `xml:"groupingSortProperties"`
-			Header *struct {
-				Text string `xml:",chardata"`
-			} `xml:"header"`
-			IndicatorBreakpoint1 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint1"`
-			IndicatorBreakpoint2 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint2"`
-			IndicatorHighColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorHighColor"`
-			IndicatorLowColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorLowColor"`
-			IndicatorMiddleColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorMiddleColor"`
-			LegendPosition *struct {
-				Text string `xml:",chardata"`
-			} `xml:"legendPosition"`
-			MaxValuesDisplayed *struct {
-				Text string `xml:",chardata"`
-			} `xml:"maxValuesDisplayed"`
-			MetricLabel *struct {
-				Text string `xml:",chardata"`
-			} `xml:"metricLabel"`
-			Report         string `xml:"report"`
-			ShowPercentage *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPercentage"`
-			ShowPicturesOnCharts *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnCharts"`
-			ShowPicturesOnTables *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnTables"`
-			ShowRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showRange"`
-			ShowTotal *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showTotal"`
-			ShowValues *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showValues"`
-			SortBy *struct {
-				Text string `xml:",chardata"`
-			} `xml:"sortBy"`
-			Title *struct {
-				Text string `xml:",chardata"`
-			} `xml:"title"`
-			UseReportChart *struct {
-				Text string `xml:",chardata"`
-			} `xml:"useReportChart"`
-		} `xml:"components"`
-	} `xml:"middleSection"`
-	Owner        *TextLiteral `xml:"owner"`
-	RightSection *struct {
-		ColumnSize struct {
-			Text string `xml:",chardata"`
-		} `xml:"columnSize"`
-		Components []struct {
-			AutoselectColumnsFromReport struct {
-				Text string `xml:",chardata"`
-			} `xml:"autoselectColumnsFromReport"`
-			ChartAxisRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"chartAxisRange"`
-			ComponentType struct {
-				Text string `xml:",chardata"`
-			} `xml:"componentType"`
-			DashboardFilterColumns []struct {
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-			} `xml:"dashboardFilterColumns"`
-			DashboardTableColumn []struct {
-				AggregateType *struct {
-					Text string `xml:",chardata"`
-				} `xml:"aggregateType"`
-				CalculatePercent *struct {
-					Text string `xml:",chardata"`
-				} `xml:"calculatePercent"`
-				Column struct {
-					Text string `xml:",chardata"`
-				} `xml:"column"`
-				ShowTotal *struct {
-					Text string `xml:",chardata"`
-				} `xml:"showTotal"`
-				SortBy *struct {
-					Text string `xml:",chardata"`
-				} `xml:"sortBy"`
-			} `xml:"dashboardTableColumn"`
-			DisplayUnits *struct {
-				Text string `xml:",chardata"`
-			} `xml:"displayUnits"`
-			DrillEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillEnabled"`
-			DrillToDetailEnabled *struct {
-				Text string `xml:",chardata"`
-			} `xml:"drillToDetailEnabled"`
-			EnableHover *struct {
-				Text string `xml:",chardata"`
-			} `xml:"enableHover"`
-			ExpandOthers *struct {
-				Text string `xml:",chardata"`
-			} `xml:"expandOthers"`
-			Footer *struct {
-				Text string `xml:",chardata"`
-			} `xml:"footer"`
-			GaugeMax *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMax"`
-			GaugeMin *struct {
-				Text string `xml:",chardata"`
-			} `xml:"gaugeMin"`
-			GroupingSortProperties struct {
-			} `xml:"groupingSortProperties"`
-			Header *struct {
-				Text string `xml:",chardata"`
-			} `xml:"header"`
-			IndicatorBreakpoint1 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint1"`
-			IndicatorBreakpoint2 *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorBreakpoint2"`
-			IndicatorHighColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorHighColor"`
-			IndicatorLowColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorLowColor"`
-			IndicatorMiddleColor *struct {
-				Text string `xml:",chardata"`
-			} `xml:"indicatorMiddleColor"`
-			LegendPosition *struct {
-				Text string `xml:",chardata"`
-			} `xml:"legendPosition"`
-			MaxValuesDisplayed *struct {
-				Text string `xml:",chardata"`
-			} `xml:"maxValuesDisplayed"`
-			MetricLabel *struct {
-				Text string `xml:",chardata"`
-			} `xml:"metricLabel"`
-			Report         string `xml:"report"`
-			ShowPercentage *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPercentage"`
-			ShowPicturesOnCharts *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnCharts"`
-			ShowPicturesOnTables *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showPicturesOnTables"`
-			ShowRange *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showRange"`
-			ShowTotal *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showTotal"`
-			ShowValues *struct {
-				Text string `xml:",chardata"`
-			} `xml:"showValues"`
-			SortBy *struct {
-				Text string `xml:",chardata"`
-			} `xml:"sortBy"`
-			Title *struct {
-				Text string `xml:",chardata"`
-			} `xml:"title"`
-			UseReportChart *struct {
-				Text string `xml:",chardata"`
-			} `xml:"useReportChart"`
-		} `xml:"components"`
-	} `xml:"rightSection"`
-	RunningUser *TextLiteral `xml:"runningUser"`
-	TextColor   struct {
-		Text string `xml:",chardata"`
-	} `xml:"textColor"`
-	Title struct {
-		Text string `xml:",chardata"`
-	} `xml:"title"`
-	TitleColor struct {
-		Text string `xml:",chardata"`
-	} `xml:"titleColor"`
-	TitleSize struct {
-		Text string `xml:",chardata"`
-	} `xml:"titleSize"`
+	DashboardType *TextLiteral      `xml:"dashboardType"`
+	Description   *TextLiteral      `xml:"description"`
+	IsGridLayout  *TextLiteral      `xml:"isGridLayout"`
+	LeftSection   *DashboardSection `xml:"leftSection"`
+	MiddleSection *DashboardSection `xml:"middleSection"`
+	Owner         *TextLiteral      `xml:"owner"`
+	RightSection  *DashboardSection `xml:"rightSection"`
+	RunningUser   *TextLiteral      `xml:"runningUser"`
+	TextColor     TextLiteral       `xml:"textColor"`
+	Title         TextLiteral       `xml:"title"`
+	TitleColor    TextLiteral       `xml:"titleColor"`
+	TitleSize     TextLiteral       `xml:"titleSize"`
+}
+
+// DashboardSection is a column of components in a dashboard that does not
+// use a grid layout
+type DashboardSection struct {
+	ColumnSize TextLiteral          `xml:"columnSize"`
+	Components []DashboardComponent `xml:"components"`
+}
+
+// DashboardComponent is a component of a dashboard, in either a grid layout
+// or a section
+type DashboardComponent struct {
+	AutoselectColumnsFromReport *TextLiteral `xml:"autoselectColumnsFromReport"`
+	ChartAxisRange              *TextLiteral `xml:"chartAxisRange"`
+	ChartAxisRangeMax           *TextLiteral `xml:"chartAxisRangeMax"`
+	ChartAxisRangeMin           *TextLiteral `xml:"chartAxisRangeMin"`
+	ChartSummary                []struct {
+		Aggregate   *TextLiteral `xml:"aggregate"`
+		AxisBinding *TextLiteral `xml:"axisBinding"`
+		Column      TextLiteral  `xml:"column"`
+	} `xml:"chartSummary"`
+	ComponentChartTheme        *TextLiteral `xml:"componentChartTheme"`
+	ComponentType              TextLiteral  `xml:"componentType"`
+	DashboardComponentContents *struct {
+		RichTextContent TextLiteral `xml:"richTextContent"`
+	} `xml:"dashboardComponentContents"`
+	DashboardFilterColumns []struct {
+		Column TextLiteral `xml:"column"`
+	} `xml:"dashboardFilterColumns"`
+	DashboardTableColumn []struct {
+		AggregateType    *TextLiteral `xml:"aggregateType"`
+		CalculatePercent *TextLiteral `xml:"calculatePercent"`
+		Column           TextLiteral  `xml:"column"`
+		ShowSubTotal     *TextLiteral `xml:"showSubTotal"`
+		ShowTotal        *TextLiteral `xml:"showTotal"`
+		SortBy           *TextLiteral `xml:"sortBy"`
+	} `xml:"dashboardTableColumn"`
+	DecimalPrecision        *TextLiteral `xml:"decimalPrecision"`
+	DisplayUnits            *TextLiteral `xml:"displayUnits"`
+	DrillDownUrl            *TextLiteral `xml:"drillDownUrl"`
+	DrillEnabled            *TextLiteral `xml:"drillEnabled"`
+	DrillToDetailEnabled    *TextLiteral `xml:"drillToDetailEnabled"`
+	EnableHover             *TextLiteral `xml:"enableHover"`
+	ExpandOthers            *TextLiteral `xml:"expandOthers"`
+	FlexComponentProperties *struct {
+		DecimalPrecision *TextLiteral `xml:"decimalPrecision"`
+		FlexTableColumn  []struct {
+			BreakPoint1     *TextLiteral `xml:"breakPoint1"`
+			BreakPoint2     *TextLiteral `xml:"breakPoint2"`
+			BreakPointOrder *TextLiteral `xml:"breakPointOrder"`
+			HighRangeColor  *TextLiteral `xml:"highRangeColor"`
+			LowRangeColor   *TextLiteral `xml:"lowRangeColor"`
+			MidRangeColor   *TextLiteral `xml:"midRangeColor"`
+			ReportColumn    NillableText `xml:"reportColumn"`
+			ShowSubTotal    TextLiteral  `xml:"showSubTotal"`
+			ShowTotal       TextLiteral  `xml:"showTotal"`
+			Type            TextLiteral  `xml:"type"`
+		} `xml:"flexTableColumn"`
+		FlexTableSortInfo *struct {
+			SortColumn *TextLiteral `xml:"sortColumn"`
+			SortOrder  TextLiteral  `xml:"sortOrder"`
+		} `xml:"flexTableSortInfo"`
+		HideChatterPhotos     *TextLiteral `xml:"hideChatterPhotos"`
+		UseReportTableSetting *TextLiteral `xml:"useReportTableSetting"`
+	} `xml:"flexComponentProperties"`
+	Footer                 *TextLiteral   `xml:"footer"`
+	GaugeMax               *TextLiteral   `xml:"gaugeMax"`
+	GaugeMin               *TextLiteral   `xml:"gaugeMin"`
+	GroupingColumn         []NillableText `xml:"groupingColumn"`
+	GroupingSortProperties *struct {
+		GroupingSorts []struct {
+			GroupingLevel               TextLiteral  `xml:"groupingLevel"`
+			InheritedReportGroupingSort *TextLiteral `xml:"inheritedReportGroupingSort"`
+			SortColumn                  *TextLiteral `xml:"sortColumn"`
+			SortOrder                   *TextLiteral `xml:"sortOrder"`
+		} `xml:"groupingSorts"`
+	} `xml:"groupingSortProperties"`
+	Header               *TextLiteral `xml:"header"`
+	IndicatorBreakpoint1 *TextLiteral `xml:"indicatorBreakpoint1"`
+	IndicatorBreakpoint2 *TextLiteral `xml:"indicatorBreakpoint2"`
+	IndicatorHighColor   *TextLiteral `xml:"indicatorHighColor"`
+	IndicatorLowColor    *TextLiteral `xml:"indicatorLowColor"`
+	IndicatorMiddleColor *TextLiteral `xml:"indicatorMiddleColor"`
+	LegendPosition       *TextLiteral `xml:"legendPosition"`
+	MaxValuesDisplayed   *TextLiteral `xml:"maxValuesDisplayed"`
+	MetricLabel          *TextLiteral `xml:"metricLabel"`
+	Report               *string      `xml:"report"`
+	ShowPercentage       *TextLiteral `xml:"showPercentage"`
+	ShowPicturesOnCharts *TextLiteral `xml:"showPicturesOnCharts"`
+	ShowPicturesOnTables *TextLiteral `xml:"showPicturesOnTables"`
+	ShowRange            *TextLiteral `xml:"showRange"`
+	ShowTotal            *TextLiteral `xml:"showTotal"`
+	ShowValues           *TextLiteral `xml:"showValues"`
+	SortBy               *TextLiteral `xml:"sortBy"`
+	SortLegendValues     *TextLiteral `xml:"sortLegendValues"`
+	Title                *TextLiteral `xml:"title"`
+	UseReportChart       *TextLiteral `xml:"useReportChart"`
 }
 
 func (c *Dashboard) SetMetadata(m metadata.MetadataInfo) {
@@ -673,12 +180,8 @@ func (c *Dashboard) Files(format metadata.Format) (map[string][]byte, error) {
 
 	// Get relative path within the dashboards directory
 	var relativePath string
-	if strings.Contains(originalPath, "dashboards/") {
-		// Extract everything after "dashboards/"
-		parts := strings.Split(originalPath, "dashboards/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-		}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "dashboards"); ok {
+		relativePath = within
 	}
 
 	if relativePath == "" {

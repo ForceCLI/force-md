@@ -57,12 +57,8 @@ func (c *Document) Files(format metadata.Format) (map[string][]byte, error) {
 
 	// Extract the folder structure from the original path
 	var relativePath string
-	if strings.Contains(originalPath, "documents/") {
-		// Extract everything after "documents/"
-		parts := strings.Split(originalPath, "documents/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-		}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "documents"); ok {
+		relativePath = within
 	}
 
 	if relativePath == "" {

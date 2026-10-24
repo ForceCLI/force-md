@@ -72,11 +72,12 @@ type Rule struct {
 		} `xml:"operation"`
 		Value *TextLiteral `xml:"value"`
 	} `xml:"criteriaItems"`
-	Description          *TextLiteral `xml:"description"`
-	Formula              *TextLiteral `xml:"formula"`
-	TriggerType          *TextLiteral `xml:"triggerType"`
-	WorkflowTimeTriggers *struct {
-		Actions struct {
+	Description                *TextLiteral `xml:"description"`
+	FailedMigrationToolVersion *TextLiteral `xml:"failedMigrationToolVersion"`
+	Formula                    *TextLiteral `xml:"formula"`
+	TriggerType                *TextLiteral `xml:"triggerType"`
+	WorkflowTimeTriggers       []struct {
+		Actions []struct {
 			Name struct {
 				Text string `xml:",chardata"`
 			} `xml:"name"`
@@ -84,59 +85,48 @@ type Rule struct {
 				Text string `xml:",chardata"`
 			} `xml:"type"`
 		} `xml:"actions"`
-		OffsetFromField struct {
-			Text string `xml:",chardata"`
-		} `xml:"offsetFromField"`
-		TimeLength struct {
-			Text string `xml:",chardata"`
-		} `xml:"timeLength"`
-		WorkflowTimeTriggerUnit struct {
-			Text string `xml:",chardata"`
-		} `xml:"workflowTimeTriggerUnit"`
+		OffsetFromField         *TextLiteral `xml:"offsetFromField"`
+		TimeLength              *TextLiteral `xml:"timeLength"`
+		WorkflowTimeTriggerUnit TextLiteral  `xml:"workflowTimeTriggerUnit"`
 	} `xml:"workflowTimeTriggers"`
 }
 
+type OutboundMessage struct {
+	FullName           TextLiteral   `xml:"fullName"`
+	ApiVersion         TextLiteral   `xml:"apiVersion"`
+	Description        *TextLiteral  `xml:"description"`
+	EndpointUrl        TextLiteral   `xml:"endpointUrl"`
+	Fields             []TextLiteral `xml:"fields"`
+	IncludeSessionId   TextLiteral   `xml:"includeSessionId"`
+	IntegrationUser    TextLiteral   `xml:"integrationUser"`
+	Name               TextLiteral   `xml:"name"`
+	Protected          TextLiteral   `xml:"protected"`
+	UseDeadLetterQueue *TextLiteral  `xml:"useDeadLetterQueue"`
+}
+
 type Task struct {
-	FullName struct {
-		Text string `xml:",chardata"`
-	} `xml:"fullName"`
-	AssignedTo struct {
-		Text string `xml:",chardata"`
-	} `xml:"assignedTo"`
-	AssignedToType struct {
-		Text string `xml:",chardata"`
-	} `xml:"assignedToType"`
-	DueDateOffset struct {
-		Text string `xml:",chardata"`
-	} `xml:"dueDateOffset"`
-	NotifyAssignee struct {
-		Text string `xml:",chardata"`
-	} `xml:"notifyAssignee"`
-	OffsetFromField struct {
-		Text string `xml:",chardata"`
-	} `xml:"offsetFromField"`
-	Priority struct {
-		Text string `xml:",chardata"`
-	} `xml:"priority"`
-	Protected struct {
-		Text string `xml:",chardata"`
-	} `xml:"protected"`
-	Status struct {
-		Text string `xml:",chardata"`
-	} `xml:"status"`
-	Subject struct {
-		Text string `xml:",chardata"`
-	} `xml:"subject"`
+	FullName        TextLiteral  `xml:"fullName"`
+	AssignedTo      *TextLiteral `xml:"assignedTo"`
+	AssignedToType  TextLiteral  `xml:"assignedToType"`
+	Description     *TextLiteral `xml:"description"`
+	DueDateOffset   TextLiteral  `xml:"dueDateOffset"`
+	NotifyAssignee  TextLiteral  `xml:"notifyAssignee"`
+	OffsetFromField *TextLiteral `xml:"offsetFromField"`
+	Priority        TextLiteral  `xml:"priority"`
+	Protected       TextLiteral  `xml:"protected"`
+	Status          TextLiteral  `xml:"status"`
+	Subject         TextLiteral  `xml:"subject"`
 }
 
 type Workflow struct {
 	metadata.MetadataInfo
-	XMLName      xml.Name      `xml:"Workflow"`
-	Xmlns        string        `xml:"xmlns,attr"`
-	Alerts       []Alert       `xml:"alerts"`
-	FieldUpdates []FieldUpdate `xml:"fieldUpdates"`
-	Rules        []Rule        `xml:"rules"`
-	Tasks        []Task        `xml:"tasks"`
+	XMLName          xml.Name          `xml:"Workflow"`
+	Xmlns            string            `xml:"xmlns,attr"`
+	Alerts           []Alert           `xml:"alerts"`
+	FieldUpdates     []FieldUpdate     `xml:"fieldUpdates"`
+	OutboundMessages []OutboundMessage `xml:"outboundMessages"`
+	Rules            []Rule            `xml:"rules"`
+	Tasks            []Task            `xml:"tasks"`
 }
 
 func (c *Workflow) SetMetadata(m metadata.MetadataInfo) {

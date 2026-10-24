@@ -29,7 +29,7 @@ type MatchingRule struct {
 	BooleanFilter *struct {
 		Text string `xml:",chardata"`
 	} `xml:"booleanFilter"`
-	Description struct {
+	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
 	Label struct {

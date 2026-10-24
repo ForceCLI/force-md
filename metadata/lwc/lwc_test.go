@@ -1,6 +1,7 @@
 package lwc
 
 import (
+	"github.com/ForceCLI/force-md/internal"
 	"os"
 	"path/filepath"
 	"testing"
@@ -52,80 +53,18 @@ func TestLightningComponentBundleTidy(t *testing.T) {
 		{
 			name: "Sort targetConfigs and properties",
 			lwc: &LightningComponentBundle{
-				TargetConfigs: &struct {
-					TargetConfig []struct {
-						Xmlns    *string `xml:"xmlns,attr"`
-						Targets  string  `xml:"targets,attr"`
-						Property []struct {
-							Name        string  `xml:"name,attr"`
-							Label       *string `xml:"label,attr"`
-							Type        string  `xml:"type,attr"`
-							Role        *string `xml:"role,attr"`
-							Description *string `xml:"description,attr"`
-							Datasource  *string `xml:"datasource,attr"`
-							Default     *string `xml:"default,attr"`
-							Required    *string `xml:"required,attr"`
-						} `xml:"property"`
-						SupportedFormFactors *struct {
-							SupportedFormFactor []struct {
-								Type string `xml:"type,attr"`
-							} `xml:"supportedFormFactor"`
-						} `xml:"supportedFormFactors"`
-						ActionType *struct {
-							Text string `xml:",chardata"`
-						} `xml:"actionType"`
-					} `xml:"targetConfig"`
-				}{
-					TargetConfig: []struct {
-						Xmlns    *string `xml:"xmlns,attr"`
-						Targets  string  `xml:"targets,attr"`
-						Property []struct {
-							Name        string  `xml:"name,attr"`
-							Label       *string `xml:"label,attr"`
-							Type        string  `xml:"type,attr"`
-							Role        *string `xml:"role,attr"`
-							Description *string `xml:"description,attr"`
-							Datasource  *string `xml:"datasource,attr"`
-							Default     *string `xml:"default,attr"`
-							Required    *string `xml:"required,attr"`
-						} `xml:"property"`
-						SupportedFormFactors *struct {
-							SupportedFormFactor []struct {
-								Type string `xml:"type,attr"`
-							} `xml:"supportedFormFactor"`
-						} `xml:"supportedFormFactors"`
-						ActionType *struct {
-							Text string `xml:",chardata"`
-						} `xml:"actionType"`
-					}{
+				TargetConfigs: &TargetConfigs{
+					TargetConfig: []TargetConfig{
 						{
 							Targets: "lightning__RecordPage",
-							Property: []struct {
-								Name        string  `xml:"name,attr"`
-								Label       *string `xml:"label,attr"`
-								Type        string  `xml:"type,attr"`
-								Role        *string `xml:"role,attr"`
-								Description *string `xml:"description,attr"`
-								Datasource  *string `xml:"datasource,attr"`
-								Default     *string `xml:"default,attr"`
-								Required    *string `xml:"required,attr"`
-							}{
+							Property: []TargetConfigProperty{
 								{Name: "recordId", Type: "String"},
 								{Name: "objectApiName", Type: "String"},
 							},
 						},
 						{
 							Targets: "lightning__AppPage",
-							Property: []struct {
-								Name        string  `xml:"name,attr"`
-								Label       *string `xml:"label,attr"`
-								Type        string  `xml:"type,attr"`
-								Role        *string `xml:"role,attr"`
-								Description *string `xml:"description,attr"`
-								Datasource  *string `xml:"datasource,attr"`
-								Default     *string `xml:"default,attr"`
-								Required    *string `xml:"required,attr"`
-							}{
+							Property: []TargetConfigProperty{
 								{Name: "title", Type: "String"},
 							},
 						},
@@ -133,79 +72,17 @@ func TestLightningComponentBundleTidy(t *testing.T) {
 				},
 			},
 			expected: &LightningComponentBundle{
-				TargetConfigs: &struct {
-					TargetConfig []struct {
-						Xmlns    *string `xml:"xmlns,attr"`
-						Targets  string  `xml:"targets,attr"`
-						Property []struct {
-							Name        string  `xml:"name,attr"`
-							Label       *string `xml:"label,attr"`
-							Type        string  `xml:"type,attr"`
-							Role        *string `xml:"role,attr"`
-							Description *string `xml:"description,attr"`
-							Datasource  *string `xml:"datasource,attr"`
-							Default     *string `xml:"default,attr"`
-							Required    *string `xml:"required,attr"`
-						} `xml:"property"`
-						SupportedFormFactors *struct {
-							SupportedFormFactor []struct {
-								Type string `xml:"type,attr"`
-							} `xml:"supportedFormFactor"`
-						} `xml:"supportedFormFactors"`
-						ActionType *struct {
-							Text string `xml:",chardata"`
-						} `xml:"actionType"`
-					} `xml:"targetConfig"`
-				}{
-					TargetConfig: []struct {
-						Xmlns    *string `xml:"xmlns,attr"`
-						Targets  string  `xml:"targets,attr"`
-						Property []struct {
-							Name        string  `xml:"name,attr"`
-							Label       *string `xml:"label,attr"`
-							Type        string  `xml:"type,attr"`
-							Role        *string `xml:"role,attr"`
-							Description *string `xml:"description,attr"`
-							Datasource  *string `xml:"datasource,attr"`
-							Default     *string `xml:"default,attr"`
-							Required    *string `xml:"required,attr"`
-						} `xml:"property"`
-						SupportedFormFactors *struct {
-							SupportedFormFactor []struct {
-								Type string `xml:"type,attr"`
-							} `xml:"supportedFormFactor"`
-						} `xml:"supportedFormFactors"`
-						ActionType *struct {
-							Text string `xml:",chardata"`
-						} `xml:"actionType"`
-					}{
+				TargetConfigs: &TargetConfigs{
+					TargetConfig: []TargetConfig{
 						{
 							Targets: "lightning__AppPage",
-							Property: []struct {
-								Name        string  `xml:"name,attr"`
-								Label       *string `xml:"label,attr"`
-								Type        string  `xml:"type,attr"`
-								Role        *string `xml:"role,attr"`
-								Description *string `xml:"description,attr"`
-								Datasource  *string `xml:"datasource,attr"`
-								Default     *string `xml:"default,attr"`
-								Required    *string `xml:"required,attr"`
-							}{
+							Property: []TargetConfigProperty{
 								{Name: "title", Type: "String"},
 							},
 						},
 						{
 							Targets: "lightning__RecordPage",
-							Property: []struct {
-								Name        string  `xml:"name,attr"`
-								Label       *string `xml:"label,attr"`
-								Type        string  `xml:"type,attr"`
-								Role        *string `xml:"role,attr"`
-								Description *string `xml:"description,attr"`
-								Datasource  *string `xml:"datasource,attr"`
-								Default     *string `xml:"default,attr"`
-								Required    *string `xml:"required,attr"`
-							}{
+							Property: []TargetConfigProperty{
 								{Name: "objectApiName", Type: "String"},
 								{Name: "recordId", Type: "String"},
 							},
@@ -383,4 +260,32 @@ func TestLightningComponentBundleFilesUnsupportedFormat(t *testing.T) {
 	_, err = lwc.Files(metadata.Format("invalid"))
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "unsupported format")
+}
+
+func TestLightningComponentBundleKeepsTargetConfigObjects(t *testing.T) {
+	metaPath := filepath.Join(t.TempDir(), "ribbon", "ribbon.js-meta.xml")
+	require.NoError(t, os.MkdirAll(filepath.Dir(metaPath), 0755))
+	metaContent := `<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Program__c</object>
+            </objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
+`
+	require.NoError(t, os.WriteFile(metaPath, []byte(metaContent), 0644))
+
+	bundle, err := Open(metaPath)
+	require.NoError(t, err)
+	out, err := internal.Marshal(bundle)
+	require.NoError(t, err)
+	assert.Equal(t, metaContent, string(out))
 }

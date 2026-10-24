@@ -20,12 +20,12 @@ type WaveDataflow struct {
 	metadata.MetadataInfo
 	XMLName     xml.Name `xml:"WaveDataflow"`
 	Xmlns       string   `xml:"xmlns,attr"`
-	Xsi         string   `xml:"xsi,attr"`
+	Xsi         string   `xml:"xmlns:xsi,attr,omitempty"`
 	Application *struct {
 		Text string `xml:",chardata"`
 	} `xml:"application"`
 	Content struct {
-		Nil string `xml:"nil,attr"`
+		Nil string `xml:"xsi:nil,attr,omitempty"`
 	} `xml:"content"`
 	DataflowType struct {
 		Text string `xml:",chardata"`

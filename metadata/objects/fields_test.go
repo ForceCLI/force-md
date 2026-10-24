@@ -180,19 +180,7 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						} `xml:"valueSetDefinition"`
 						ValueSetName *struct {
 							Text string `xml:",chardata"`
@@ -210,33 +198,9 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						}{
-							Value: []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							}{
+							Value: []field.ValueSetValue{
 								{FullName: "Active"},
 								{FullName: "Inactive"},
 							},
@@ -275,19 +239,7 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						} `xml:"valueSetDefinition"`
 						ValueSetName *struct {
 							Text string `xml:",chardata"`
@@ -305,33 +257,9 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						}{
-							Value: []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							}{
+							Value: []field.ValueSetValue{
 								{FullName: "Active"},
 							},
 						},
@@ -395,19 +323,7 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						} `xml:"valueSetDefinition"`
 						ValueSetName *struct {
 							Text string `xml:",chardata"`
@@ -425,33 +341,9 @@ func TestAddPicklistValue(t *testing.T) {
 							Sorted struct {
 								Text string `xml:",chardata"`
 							} `xml:"sorted"`
-							Value []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							} `xml:"value"`
+							Value []field.ValueSetValue `xml:"value"`
 						}{
-							Value: []struct {
-								FullName string `xml:"fullName"`
-								Default  struct {
-									Text string `xml:",chardata"`
-								} `xml:"default"`
-								IsActive *BooleanText `xml:"isActive"`
-								Label    struct {
-									Text string `xml:",innerxml"`
-								} `xml:"label"`
-								Color *struct {
-									Text string `xml:",chardata"`
-								} `xml:"color"`
-							}{
+							Value: []field.ValueSetValue{
 								{FullName: "Active"},
 							},
 						},

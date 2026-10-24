@@ -52,20 +52,31 @@ type GuestUser struct {
 
 // SharedTo represents who a rule shares to
 type SharedTo struct {
-	Group               *Group               `xml:"group"`
-	Role                *Role                `xml:"role"`
-	AllInternalUsers    *AllInternalUsers    `xml:"allInternalUsers"`
-	RoleAndSubordinates *RoleAndSubordinates `xml:"roleAndSubordinates"`
-	GuestUser           *GuestUser           `xml:"guestUser"`
+	Group                       *Group               `xml:"group"`
+	Role                        *Role                `xml:"role"`
+	AllCustomerPortalUsers      *AllInternalUsers    `xml:"allCustomerPortalUsers"`
+	AllInternalUsers            *AllInternalUsers    `xml:"allInternalUsers"`
+	AllPartnerUsers             *AllInternalUsers    `xml:"allPartnerUsers"`
+	PortalRole                  *Role                `xml:"portalRole"`
+	PortalRoleAndSubordinates   *RoleAndSubordinates `xml:"portalRoleAndSubordinates"`
+	Queue                       *Queue               `xml:"queue"`
+	RoleAndSubordinates         *RoleAndSubordinates `xml:"roleAndSubordinates"`
+	RoleAndSubordinatesInternal *RoleAndSubordinates `xml:"roleAndSubordinatesInternal"`
+	GuestUser                   *GuestUser           `xml:"guestUser"`
 }
 
 // SharedFrom represents who a rule shares from
 type SharedFrom struct {
-	RoleAndSubordinates *RoleAndSubordinates `xml:"roleAndSubordinates"`
-	Group               *Group               `xml:"group"`
-	Queue               *Queue               `xml:"queue"`
-	Role                *Role                `xml:"role"`
-	AllInternalUsers    *AllInternalUsers    `xml:"allInternalUsers"`
+	RoleAndSubordinates         *RoleAndSubordinates `xml:"roleAndSubordinates"`
+	RoleAndSubordinatesInternal *RoleAndSubordinates `xml:"roleAndSubordinatesInternal"`
+	Group                       *Group               `xml:"group"`
+	Queue                       *Queue               `xml:"queue"`
+	Role                        *Role                `xml:"role"`
+	PortalRole                  *Role                `xml:"portalRole"`
+	PortalRoleAndSubordinates   *RoleAndSubordinates `xml:"portalRoleAndSubordinates"`
+	AllCustomerPortalUsers      *AllInternalUsers    `xml:"allCustomerPortalUsers"`
+	AllInternalUsers            *AllInternalUsers    `xml:"allInternalUsers"`
+	AllPartnerUsers             *AllInternalUsers    `xml:"allPartnerUsers"`
 }
 
 // BooleanFilter represents a boolean filter expression

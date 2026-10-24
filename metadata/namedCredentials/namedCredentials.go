@@ -44,23 +44,30 @@ type NamedCredential struct {
 	AuthProvider *struct {
 		Text string `xml:",chardata"`
 	} `xml:"authProvider"`
-	NamedCredentialParameters []struct {
-		ExternalCredential *struct {
-			Text string `xml:",chardata"`
-		} `xml:"externalCredential"`
-		ParameterName struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterName"`
-		ParameterType struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterType"`
-		ParameterValue *struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterValue"`
-	} `xml:"namedCredentialParameters"`
-	NamedCredentialType struct {
+	NamedCredentialParameters []NamedCredentialParameter `xml:"namedCredentialParameters"`
+	NamedCredentialType       struct {
 		Text string `xml:",chardata"`
 	} `xml:"namedCredentialType"`
+}
+
+// NamedCredentialParameter is one parameter of a named credential, such as
+// its URL or the external credential it authenticates with
+type NamedCredentialParameter struct {
+	ExternalCredential *struct {
+		Text string `xml:",chardata"`
+	} `xml:"externalCredential"`
+	ParameterName struct {
+		Text string `xml:",chardata"`
+	} `xml:"parameterName"`
+	ParameterType struct {
+		Text string `xml:",chardata"`
+	} `xml:"parameterType"`
+	ParameterValue *struct {
+		Text string `xml:",chardata"`
+	} `xml:"parameterValue"`
+	SequenceNumber *struct {
+		Text string `xml:",chardata"`
+	} `xml:"sequenceNumber"`
 }
 
 func (c *NamedCredential) SetMetadata(m metadata.MetadataInfo) {

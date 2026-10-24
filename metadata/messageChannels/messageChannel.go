@@ -17,15 +17,15 @@ type LightningMessageChannel struct {
 	metadata.MetadataInfo
 	XMLName     xml.Name `xml:"LightningMessageChannel"`
 	Xmlns       string   `xml:"xmlns,attr"`
-	MasterLabel struct {
+	Description *struct {
 		Text string `xml:",chardata"`
-	} `xml:"masterLabel"`
+	} `xml:"description"`
 	IsExposed struct {
 		Text string `xml:",chardata"`
 	} `xml:"isExposed"`
-	Description struct {
+	MasterLabel struct {
 		Text string `xml:",chardata"`
-	} `xml:"description"`
+	} `xml:"masterLabel"`
 }
 
 func (c *LightningMessageChannel) SetMetadata(m metadata.MetadataInfo) {

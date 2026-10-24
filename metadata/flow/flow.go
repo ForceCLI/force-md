@@ -109,9 +109,10 @@ type Rule struct {
 // Condition is one condition an element evaluates. Decision rules and
 // Collection Filters share the shape.
 type Condition struct {
-	LeftValueReference string `xml:"leftValueReference"`
-	Operator           string `xml:"operator"`
-	RightValue         *Value `xml:"rightValue"`
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	LeftValueReference    string                 `xml:"leftValueReference"`
+	Operator              string                 `xml:"operator"`
+	RightValue            *Value                 `xml:"rightValue"`
 }
 
 type Decision struct {
@@ -143,10 +144,11 @@ type Value struct {
 	ElementReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"elementReference"`
-	StringValue   *TextLiteral `xml:"stringValue"`
-	DateValue     *TextLiteral `xml:"dateValue"`
-	DateTimeValue *TextLiteral `xml:"dateTimeValue"`
-	NumberValue   *struct {
+	InputConfiguratorMode *TextLiteral `xml:"inputConfiguratorMode"`
+	StringValue           *TextLiteral `xml:"stringValue"`
+	DateValue             *TextLiteral `xml:"dateValue"`
+	DateTimeValue         *TextLiteral `xml:"dateTimeValue"`
+	NumberValue           *struct {
 		Text string `xml:",chardata"`
 	} `xml:"numberValue"`
 	BooleanValue *BooleanText `xml:"booleanValue"`
@@ -371,7 +373,8 @@ type RecordCreate struct {
 		Text string `xml:",chardata"`
 	} `xml:"inputReference"`
 	InputAssignments []struct {
-		Field struct {
+		ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+		Field                 struct {
 			Text string `xml:",chardata"`
 		} `xml:"field"`
 		Value *Value `xml:"value"`
@@ -430,12 +433,8 @@ type RecordUpdate struct {
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
-	LocationX struct {
-		Text string `xml:",chardata"`
-	} `xml:"locationX"`
-	LocationY struct {
-		Text string `xml:",chardata"`
-	} `xml:"locationY"`
+	LocationX NillableText `xml:"locationX"`
+	LocationY NillableText `xml:"locationY"`
 	Connector *struct {
 		IsGoTo *struct {
 			Text string `xml:",chardata"`
@@ -481,13 +480,9 @@ type Field struct {
 		} `xml:"name"`
 		Value *Value `xml:"value"`
 	} `xml:"processMetadataValues"`
-	Name                           *string  `xml:"name"`
-	ChoiceReferences               []string `xml:"choiceReferences"`
-	DataType                       *string  `xml:"dataType"`
-	DefaultSelectedChoiceReference *struct {
-		Text string `xml:",chardata"`
-	} `xml:"defaultSelectedChoiceReference"`
-	DefaultValue     *Value `xml:"defaultValue"`
+	Name             *string  `xml:"name"`
+	ChoiceReferences []string `xml:"choiceReferences"`
+	DataType         *string  `xml:"dataType"`
 	DataTypeMappings []struct {
 		TypeName struct {
 			Text string `xml:",chardata"`
@@ -496,19 +491,23 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"typeValue"`
 	} `xml:"dataTypeMappings"`
-	ExtensionName   *string      `xml:"extensionName"`
-	FieldText       *TextLiteral `xml:"fieldText"`
-	FieldType       string       `xml:"fieldType"`
-	Fields          []Field      `xml:"fields"`
+	DefaultSelectedChoiceReference *struct {
+		Text string `xml:",chardata"`
+	} `xml:"defaultSelectedChoiceReference"`
+	DefaultValue  *Value       `xml:"defaultValue"`
+	ExtensionName *string      `xml:"extensionName"`
+	FieldText     *TextLiteral `xml:"fieldText"`
+	FieldType     string       `xml:"fieldType"`
+	Fields        []Field      `xml:"fields"`
+	HelpText      *struct {
+		Text string `xml:",chardata"`
+	} `xml:"helpText"`
 	InputParameters []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		Value *Value `xml:"value"`
 	} `xml:"inputParameters"`
-	HelpText *struct {
-		Text string `xml:",chardata"`
-	} `xml:"helpText"`
 	InputsOnNextNavToAssocScrn *struct {
 		Text string `xml:",chardata"`
 	} `xml:"inputsOnNextNavToAssocScrn"`
@@ -521,18 +520,9 @@ type Field struct {
 	IsRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isRequired"`
-	StoreOutputAutomatically *struct {
+	ObjectFieldReference *struct {
 		Text string `xml:",chardata"`
-	} `xml:"storeOutputAutomatically"`
-	Scale *struct {
-		Text string `xml:",chardata"`
-	} `xml:"scale"`
-	ValidationRule *struct {
-		ErrorMessage struct {
-			Text string `xml:",chardata"`
-		} `xml:"errorMessage"`
-		FormulaExpression TextLiteral `xml:"formulaExpression"`
-	} `xml:"validationRule"`
+	} `xml:"objectFieldReference"`
 	OutputParameters []struct {
 		AssignToReference struct {
 			Text string `xml:",chardata"`
@@ -544,6 +534,22 @@ type Field struct {
 	RegionContainerType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"regionContainerType"`
+	Scale *struct {
+		Text string `xml:",chardata"`
+	} `xml:"scale"`
+	StoreOutputAutomatically *struct {
+		Text string `xml:",chardata"`
+	} `xml:"storeOutputAutomatically"`
+	StyleProperties *struct {
+		VerticalAlignment *Value `xml:"verticalAlignment"`
+		Width             *Value `xml:"width"`
+	} `xml:"styleProperties"`
+	ValidationRule *struct {
+		ErrorMessage struct {
+			Text string `xml:",chardata"`
+		} `xml:"errorMessage"`
+		FormulaExpression TextLiteral `xml:"formulaExpression"`
+	} `xml:"validationRule"`
 	VisibilityRule *struct {
 		ConditionLogic struct {
 			Text string `xml:",chardata"`
@@ -558,9 +564,6 @@ type Field struct {
 			RightValue *Value `xml:"rightValue"`
 		} `xml:"conditions"`
 	} `xml:"visibilityRule"`
-	ObjectFieldReference *struct {
-		Text string `xml:",chardata"`
-	} `xml:"objectFieldReference"`
 }
 
 type Screen struct {
@@ -610,6 +613,11 @@ type Screen struct {
 			Text string `xml:",chardata"`
 		} `xml:"elementReference"`
 	} `xml:"stageReference"`
+	StyleSettings []struct {
+		PropertyName  TextLiteral `xml:"propertyName"`
+		PropertyValue Value       `xml:"propertyValue"`
+		Scope         TextLiteral `xml:"scope"`
+	} `xml:"styleSettings"`
 }
 
 // Stage is a flow stage resource: one step of the flow's screen progress
@@ -788,7 +796,7 @@ type Assignment struct {
 
 type ProcessMetadataValue struct {
 	Name  string `xml:"name"`
-	Value Value  `xml:"value"`
+	Value *Value `xml:"value"`
 }
 
 type ActionCall struct {
@@ -833,6 +841,7 @@ type ActionCall struct {
 	NameSegment *struct {
 		Text string `xml:",chardata"`
 	} `xml:"nameSegment"`
+	Offset           *TextLiteral `xml:"offset"`
 	OutputParameters []struct {
 		AssignToReference struct {
 			Text string `xml:",chardata"`
@@ -847,6 +856,7 @@ type ActionCall struct {
 	VersionSegment *struct {
 		Text string `xml:",chardata"`
 	} `xml:"versionSegment"`
+	VersionString *TextLiteral `xml:"versionString"`
 }
 
 // Transform is a Transform element. It either maps a source collection onto a
@@ -927,8 +937,9 @@ type Flow struct {
 	ApiVersion  *struct {
 		Text string `xml:",chardata"`
 	} `xml:"apiVersion"`
-	Assignments []Assignment `xml:"assignments"`
-	Choices     []struct {
+	AreMetricsLoggedToDataCloud *TextLiteral `xml:"areMetricsLoggedToDataCloud"`
+	Assignments                 []Assignment `xml:"assignments"`
+	Choices                     []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
@@ -992,7 +1003,7 @@ type Flow struct {
 			Text string `xml:",chardata"`
 			Nil  string `xml:"xsi:nil,attr,omitempty"`
 		} `xml:"object"`
-		OutputAssignments *struct {
+		OutputAssignments []struct {
 			AssignToReference struct {
 				Text string `xml:",chardata"`
 			} `xml:"assignToReference"`
@@ -1069,7 +1080,8 @@ type Flow struct {
 			TargetReference ElementName `xml:"targetReference"`
 		} `xml:"noMoreValuesConnector"`
 	} `xml:"loops"`
-	ProcessMetadataValues []struct {
+	MigratedFromWorkflowRuleName *TextLiteral `xml:"migratedFromWorkflowRuleName"`
+	ProcessMetadataValues        []struct {
 		Name struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
@@ -1096,6 +1108,7 @@ type Flow struct {
 	Status *struct {
 		Text string `xml:",chardata"`
 	} `xml:"status"`
+	Steps    []Step `xml:"steps"`
 	Subflows []struct {
 		Description *TextLiteral `xml:"description"`
 		Name        struct {
@@ -1138,7 +1151,8 @@ type Flow struct {
 		} `xml:"storeOutputAutomatically"`
 	} `xml:"subflows"`
 	TextTemplates []struct {
-		Name struct {
+		Description *TextLiteral `xml:"description"`
+		Name        struct {
 			Text string `xml:",chardata"`
 		} `xml:"name"`
 		IsViewedAsPlainText struct {
@@ -1152,6 +1166,18 @@ type Flow struct {
 	Transforms []Transform `xml:"transforms"`
 	Variables  []Variable  `xml:"variables"`
 	Waits      []Wait      `xml:"waits"`
+}
+
+// Step is a step element from the legacy Cloud Flow Designer.
+type Step struct {
+	Description *TextLiteral `xml:"description"`
+	Name        ElementName  `xml:"name"`
+	Label       TextLiteral  `xml:"label"`
+	LocationX   TextLiteral  `xml:"locationX"`
+	LocationY   TextLiteral  `xml:"locationY"`
+	Connectors  []struct {
+		TargetReference ElementName `xml:"targetReference"`
+	} `xml:"connectors"`
 }
 
 // Wait is a Wait element. Each wait event whose conditions are met is armed
@@ -1232,6 +1258,16 @@ type WaitEvent struct {
 	OffsetUnit struct {
 		Text string `xml:",chardata"`
 	} `xml:"offsetUnit"`
+}
+
+// KeepEmptyElements marks flows as written with empty text elements open, as
+// Salesforce writes them.
+func (c *Flow) KeepEmptyElements() {}
+
+// SelfClosedElements lists the flow elements of type Value, which Salesforce
+// writes self-closed when they are empty.
+func (c *Flow) SelfClosedElements() []string {
+	return []string{"collectionElements", "defaultValue", "propertyValue", "rightValue", "value", "verticalAlignment", "width"}
 }
 
 func (c *Flow) SetMetadata(m metadata.MetadataInfo) {

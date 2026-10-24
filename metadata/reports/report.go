@@ -22,6 +22,7 @@ type Report struct {
 	metadata.MetadataInfo
 	XMLName    xml.Name `xml:"Report"`
 	Xmlns      string   `xml:"xmlns,attr"`
+	Xsi        string   `xml:"xmlns:xsi,attr,omitempty"`
 	Aggregates []struct {
 		AcrossGroupingContext *struct {
 			Text string `xml:",chardata"`
@@ -30,6 +31,7 @@ type Report struct {
 		Datatype          struct {
 			Text string `xml:",chardata"`
 		} `xml:"datatype"`
+		Description   *TextLiteral `xml:"description"`
 		DeveloperName struct {
 			Text string `xml:",chardata"`
 		} `xml:"developerName"`
@@ -49,8 +51,10 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"scale"`
 	} `xml:"aggregates"`
-	Buckets []ReportBucket `xml:"buckets"`
-	Chart   *struct {
+	Block     []ReportBlock    `xml:"block"`
+	BlockInfo *ReportBlockInfo `xml:"blockInfo"`
+	Buckets   []ReportBucket   `xml:"buckets"`
+	Chart     *struct {
 		BackgroundColor1 struct {
 			Text string `xml:",chardata"`
 		} `xml:"backgroundColor1"`
@@ -60,7 +64,7 @@ type Report struct {
 		BackgroundFadeDir struct {
 			Text string `xml:",chardata"`
 		} `xml:"backgroundFadeDir"`
-		ChartSummaries struct {
+		ChartSummaries []struct {
 			Aggregate *struct {
 				Text string `xml:",chardata"`
 			} `xml:"aggregate"`
@@ -101,7 +105,7 @@ type Report struct {
 		ShowTotal struct {
 			Text string `xml:",chardata"`
 		} `xml:"showTotal"`
-		ShowValues struct {
+		ShowValues *struct {
 			Text string `xml:",chardata"`
 		} `xml:"showValues"`
 		Size struct {
@@ -127,6 +131,7 @@ type Report struct {
 		} `xml:"titleSize"`
 	} `xml:"chart"`
 	ColorRanges []struct {
+		Aggregate  *TextLiteral `xml:"aggregate"`
 		ColumnName struct {
 			Text string `xml:",chardata"`
 		} `xml:"columnName"`
@@ -146,21 +151,8 @@ type Report struct {
 			Text string `xml:",chardata"`
 		} `xml:"midColor"`
 	} `xml:"colorRanges"`
-	Columns      []ReportColumn `xml:"columns"`
-	CrossFilters []struct {
-		Operation struct {
-			Text string `xml:",chardata"`
-		} `xml:"operation"`
-		PrimaryTableColumn struct {
-			Text string `xml:",chardata"`
-		} `xml:"primaryTableColumn"`
-		RelatedTable struct {
-			Text string `xml:",chardata"`
-		} `xml:"relatedTable"`
-		RelatedTableJoinColumn struct {
-			Text string `xml:",chardata"`
-		} `xml:"relatedTableJoinColumn"`
-	} `xml:"crossFilters"`
+	Columns              []ReportColumn      `xml:"columns"`
+	CrossFilters         []ReportCrossFilter `xml:"crossFilters"`
 	CustomDetailFormulas []struct {
 		CalculatedFormula struct {
 			Text string `xml:",chardata"`
@@ -185,6 +177,7 @@ type Report struct {
 	Filter          *ReportFilter `xml:"filter"`
 	Format          TextLiteral   `xml:"format"`
 	FormattingRules []struct {
+		Aggregate  *TextLiteral `xml:"aggregate"`
 		ColumnName struct {
 			Text string `xml:",chardata"`
 		} `xml:"columnName"`
@@ -197,18 +190,11 @@ type Report struct {
 			} `xml:"rangeUpperBound"`
 		} `xml:"values"`
 	} `xml:"formattingRules"`
-	GroupingsAcross []ReportGroupingAcross `xml:"groupingsAcross"`
-	GroupingsDown   []ReportGroupingDown   `xml:"groupingsDown"`
-	Name            TextLiteral            `xml:"name"`
-	Params          []struct {
-		Name struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-		Value struct {
-			Text string `xml:",chardata"`
-		} `xml:"value"`
-	} `xml:"params"`
-	ReportType          TextLiteral `xml:"reportType"`
+	GroupingsAcross     []ReportGroupingAcross `xml:"groupingsAcross"`
+	GroupingsDown       []ReportGroupingDown   `xml:"groupingsDown"`
+	Name                TextLiteral            `xml:"name"`
+	Params              []ReportParam          `xml:"params"`
+	ReportType          TextLiteral            `xml:"reportType"`
 	RoleHierarchyFilter []struct {
 		Text string `xml:",chardata"`
 	} `xml:"roleHierarchyFilter"`
@@ -230,22 +216,16 @@ type Report struct {
 	SortOrder *struct {
 		Text string `xml:",chardata"`
 	} `xml:"sortOrder"`
-	TimeFrameFilter *struct {
-		DateColumn struct {
-			Text string `xml:",chardata"`
-		} `xml:"dateColumn"`
-		Interval struct {
-			Text string `xml:",chardata"`
-		} `xml:"interval"`
-		StartDate *struct {
-			Text string `xml:",chardata"`
-		} `xml:"startDate"`
-	} `xml:"timeFrameFilter"`
+	TimeFrameFilter *ReportTimeFrameFilter `xml:"timeFrameFilter"`
 }
 
 func (c *Report) SetMetadata(m metadata.MetadataInfo) {
 	c.MetadataInfo = m
 }
+
+// KeepEmptyElements marks reports as written with empty elements open, as
+// Salesforce writes <value></value> in filter criteria.
+func (c *Report) KeepEmptyElements() {}
 
 func (c *Report) Type() metadata.MetadataType {
 	return NAME
@@ -264,12 +244,8 @@ func (c *Report) Files(format metadata.Format) (map[string][]byte, error) {
 
 	// Get relative path within the reports directory
 	var relativePath string
-	if strings.Contains(originalPath, "reports/") {
-		// Extract everything after "reports/"
-		parts := strings.Split(originalPath, "reports/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-		}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "reports"); ok {
+		relativePath = within
 	}
 
 	if relativePath == "" {

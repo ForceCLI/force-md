@@ -25,7 +25,7 @@ type LeadConvertSettings struct {
 		InputObject struct {
 			Text string `xml:",chardata"`
 		} `xml:"inputObject"`
-		MappingFields struct {
+		MappingFields []struct {
 			InputField struct {
 				Text string `xml:",chardata"`
 			} `xml:"inputField"`

@@ -3,6 +3,7 @@ package duplicateRule
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -15,93 +16,52 @@ func init() {
 
 type DuplicateRule struct {
 	metadata.MetadataInfo
-	XMLName        xml.Name `xml:"DuplicateRule"`
-	Xmlns          string   `xml:"xmlns,attr"`
-	Xsi            string   `xml:"xsi,attr"`
-	ActionOnInsert struct {
-		Text string `xml:",chardata"`
-	} `xml:"actionOnInsert"`
-	ActionOnUpdate struct {
-		Text string `xml:",chardata"`
-	} `xml:"actionOnUpdate"`
-	AlertText struct {
-		Text string `xml:",chardata"`
-	} `xml:"alertText"`
-	Description struct {
-		Text string `xml:",chardata"`
-		Nil  string `xml:"nil,attr"`
-	} `xml:"description"`
-	DuplicateRuleFilter struct {
-		Nil           string `xml:"nil,attr"`
-		BooleanFilter struct {
-			Nil string `xml:"nil,attr"`
-		} `xml:"booleanFilter"`
-		DuplicateRuleFilterItems []struct {
-			Field struct {
-				Text string `xml:",chardata"`
-			} `xml:"field"`
-			Operation struct {
-				Text string `xml:",chardata"`
-			} `xml:"operation"`
-			Value struct {
-				Text string `xml:",chardata"`
-			} `xml:"value"`
-			SortOrder struct {
-				Text string `xml:",chardata"`
-			} `xml:"sortOrder"`
-			Table struct {
-				Text string `xml:",chardata"`
-			} `xml:"table"`
+	XMLName             xml.Name      `xml:"DuplicateRule"`
+	Xmlns               string        `xml:"xmlns,attr"`
+	Xsi                 string        `xml:"xmlns:xsi,attr,omitempty"`
+	ActionOnInsert      TextLiteral   `xml:"actionOnInsert"`
+	ActionOnUpdate      TextLiteral   `xml:"actionOnUpdate"`
+	AlertText           *NillableText `xml:"alertText"`
+	Description         *NillableText `xml:"description"`
+	DuplicateRuleFilter *struct {
+		Nil           string        `xml:"xsi:nil,attr,omitempty"`
+		BooleanFilter *NillableText `xml:"booleanFilter"`
+		Items         []struct {
+			Field     TextLiteral `xml:"field"`
+			Operation TextLiteral `xml:"operation"`
+			Value     TextLiteral `xml:"value"`
+			SortOrder TextLiteral `xml:"sortOrder"`
+			Table     TextLiteral `xml:"table"`
 		} `xml:"duplicateRuleFilterItems"`
 	} `xml:"duplicateRuleFilter"`
-	DuplicateRuleMatchRules struct {
-		MatchRuleSObjectType struct {
-			Text string `xml:",chardata"`
-		} `xml:"matchRuleSObjectType"`
-		MatchingRule struct {
-			Text string `xml:",chardata"`
-		} `xml:"matchingRule"`
-		ObjectMapping struct {
-			Nil         string `xml:"nil,attr"`
-			InputObject struct {
-				Text string `xml:",chardata"`
-			} `xml:"inputObject"`
+	DuplicateRuleMatchRules []struct {
+		MatchRuleSObjectType TextLiteral `xml:"matchRuleSObjectType"`
+		MatchingRule         TextLiteral `xml:"matchingRule"`
+		ObjectMapping        *struct {
+			Nil           string       `xml:"xsi:nil,attr,omitempty"`
+			InputObject   *TextLiteral `xml:"inputObject"`
 			MappingFields []struct {
-				InputField struct {
-					Text string `xml:",chardata"`
-				} `xml:"inputField"`
-				OutputField struct {
-					Text string `xml:",chardata"`
-				} `xml:"outputField"`
+				InputField  TextLiteral `xml:"inputField"`
+				OutputField TextLiteral `xml:"outputField"`
 			} `xml:"mappingFields"`
-			OutputObject struct {
-				Text string `xml:",chardata"`
-			} `xml:"outputObject"`
+			OutputObject *TextLiteral `xml:"outputObject"`
 		} `xml:"objectMapping"`
 	} `xml:"duplicateRuleMatchRules"`
-	IsActive struct {
-		Text string `xml:",chardata"`
-	} `xml:"isActive"`
-	MasterLabel struct {
-		Text string `xml:",chardata"`
-	} `xml:"masterLabel"`
-	OperationsOnUpdate []struct {
-		Text string `xml:",chardata"`
-	} `xml:"operationsOnUpdate"`
-	SecurityOption struct {
-		Text string `xml:",chardata"`
-	} `xml:"securityOption"`
-	SortOrder struct {
-		Text string `xml:",chardata"`
-	} `xml:"sortOrder"`
-	OperationsOnInsert []struct {
-		Text string `xml:",chardata"`
-	} `xml:"operationsOnInsert"`
+	IsActive           TextLiteral   `xml:"isActive"`
+	MasterLabel        TextLiteral   `xml:"masterLabel"`
+	OperationsOnInsert []TextLiteral `xml:"operationsOnInsert"`
+	OperationsOnUpdate []TextLiteral `xml:"operationsOnUpdate"`
+	SecurityOption     TextLiteral   `xml:"securityOption"`
+	SortOrder          TextLiteral   `xml:"sortOrder"`
 }
 
 func (c *DuplicateRule) SetMetadata(m metadata.MetadataInfo) {
 	c.MetadataInfo = m
 }
+
+// KeepEmptyElements marks duplicate rules as written with empty elements
+// open, as Salesforce writes <value></value> in filter items.
+func (c *DuplicateRule) KeepEmptyElements() {}
 
 func (c *DuplicateRule) Type() metadata.MetadataType {
 	return NAME

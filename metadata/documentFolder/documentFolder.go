@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
@@ -49,17 +48,13 @@ func (c *DocumentFolder) Files(format metadata.Format) (map[string][]byte, error
 
 	// Extract the relative path within the documents directory to preserve folder structure
 	var relativePath string
-	if strings.Contains(originalPath, "documents/") {
-		// Extract everything after "documents/"
-		parts := strings.Split(originalPath, "documents/")
-		if len(parts) > 1 {
-			relativePath = parts[1]
-			// Remove the file name to get just the directory path
-			relativePath = filepath.Dir(relativePath)
-			// If it's just ".", we're in the root
-			if relativePath == "." {
-				relativePath = ""
-			}
+	if within, ok := metadata.PathWithinDirectory(originalPath, "documents"); ok {
+		relativePath = within
+		// Remove the file name to get just the directory path
+		relativePath = filepath.Dir(relativePath)
+		// If it's just ".", we're in the root
+		if relativePath == "." {
+			relativePath = ""
 		}
 	}
 

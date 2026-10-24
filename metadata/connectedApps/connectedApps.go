@@ -3,6 +3,8 @@ package connectedapps
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
+
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -15,54 +17,37 @@ func init() {
 
 type ConnectedApp struct {
 	metadata.MetadataInfo
-	XMLName      xml.Name `xml:"ConnectedApp"`
-	Xmlns        string   `xml:"xmlns,attr"`
-	ContactEmail struct {
-		Text string `xml:",chardata"`
-	} `xml:"contactEmail"`
-	Description *struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
-	OauthConfig struct {
-		CallbackUrl struct {
-			Text string `xml:",chardata"`
-		} `xml:"callbackUrl"`
-		Certificate struct {
-			Text string `xml:",chardata"`
-		} `xml:"certificate"`
-		ConsumerKey struct {
-			Text string `xml:",chardata"`
-		} `xml:"consumerKey"`
-		IsAdminApproved struct {
-			Text string `xml:",chardata"`
-		} `xml:"isAdminApproved"`
-		IsConsumerSecretOptional struct {
-			Text string `xml:",chardata"`
-		} `xml:"isConsumerSecretOptional"`
-		IsIntrospectAllTokens struct {
-			Text string `xml:",chardata"`
-		} `xml:"isIntrospectAllTokens"`
-		IsSecretRequiredForRefreshToken struct {
-			Text string `xml:",chardata"`
-		} `xml:"isSecretRequiredForRefreshToken"`
-		Scopes []struct {
-			Text string `xml:",chardata"`
-		} `xml:"scopes"`
+	XMLName      xml.Name     `xml:"ConnectedApp"`
+	Xmlns        string       `xml:"xmlns,attr"`
+	ContactEmail TextLiteral  `xml:"contactEmail"`
+	ContactPhone *TextLiteral `xml:"contactPhone"`
+	Description  *TextLiteral `xml:"description"`
+	Label        TextLiteral  `xml:"label"`
+	OauthConfig  *struct {
+		CallbackUrl                      *TextLiteral  `xml:"callbackUrl"`
+		Certificate                      *TextLiteral  `xml:"certificate"`
+		ConsumerKey                      *TextLiteral  `xml:"consumerKey"`
+		IsAdminApproved                  *TextLiteral  `xml:"isAdminApproved"`
+		IsClientCredentialEnabled        *TextLiteral  `xml:"isClientCredentialEnabled"`
+		IsCodeCredentialEnabled          *TextLiteral  `xml:"isCodeCredentialEnabled"`
+		IsCodeCredentialPostOnly         *TextLiteral  `xml:"isCodeCredentialPostOnly"`
+		IsConsumerSecretOptional         *TextLiteral  `xml:"isConsumerSecretOptional"`
+		IsIntrospectAllTokens            *TextLiteral  `xml:"isIntrospectAllTokens"`
+		IsNamedUserJwtEnabled            *TextLiteral  `xml:"isNamedUserJwtEnabled"`
+		IsPkceRequired                   *TextLiteral  `xml:"isPkceRequired"`
+		IsRefreshTokenRotationEnabled    *TextLiteral  `xml:"isRefreshTokenRotationEnabled"`
+		IsSecretRequiredForRefreshToken  *TextLiteral  `xml:"isSecretRequiredForRefreshToken"`
+		IsSecretRequiredForTokenExchange *TextLiteral  `xml:"isSecretRequiredForTokenExchange"`
+		IsTokenExchangeEnabled           *TextLiteral  `xml:"isTokenExchangeEnabled"`
+		Scopes                           []TextLiteral `xml:"scopes"`
 	} `xml:"oauthConfig"`
-	OauthPolicy struct {
-		IpRelaxation struct {
-			Text string `xml:",chardata"`
-		} `xml:"ipRelaxation"`
-		RefreshTokenPolicy struct {
-			Text string `xml:",chardata"`
-		} `xml:"refreshTokenPolicy"`
+	OauthPolicy *struct {
+		IpRelaxation               *TextLiteral `xml:"ipRelaxation"`
+		IsTokenExchangeFlowEnabled *TextLiteral `xml:"isTokenExchangeFlowEnabled"`
+		RefreshTokenPolicy         *TextLiteral `xml:"refreshTokenPolicy"`
 	} `xml:"oauthPolicy"`
-	PermissionSetName *struct {
-		Text string `xml:",chardata"`
-	} `xml:"permissionSetName"`
+	PermissionSetName []TextLiteral `xml:"permissionSetName"`
+	ProfileName       []TextLiteral `xml:"profileName"`
 }
 
 func (c *ConnectedApp) SetMetadata(m metadata.MetadataInfo) {

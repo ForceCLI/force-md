@@ -17,10 +17,10 @@ type InstalledPackage struct {
 	metadata.MetadataInfo
 	XMLName     xml.Name `xml:"InstalledPackage"`
 	Xmlns       string   `xml:"xmlns,attr"`
-	Xsi         string   `xml:"xsi,attr"`
+	Xsi         string   `xml:"xmlns:xsi,attr,omitempty"`
 	ActivateRSS struct {
 		Text string `xml:",chardata"`
-		Nil  string `xml:"nil,attr"`
+		Nil  string `xml:"xsi:nil,attr,omitempty"`
 	} `xml:"activateRSS"`
 	VersionNumber struct {
 		Text string `xml:",chardata"`

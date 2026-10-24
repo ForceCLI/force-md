@@ -3,6 +3,8 @@ package assignmentRules
 import (
 	"encoding/xml"
 
+	. "github.com/ForceCLI/force-md/general"
+
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -18,35 +20,28 @@ type AssignmentRules struct {
 	XMLName        xml.Name `xml:"AssignmentRules"`
 	Xmlns          string   `xml:"xmlns,attr"`
 	AssignmentRule []struct {
-		FullName struct {
-			Text string `xml:",chardata"`
-		} `xml:"fullName"`
-		Active struct {
-			Text string `xml:",chardata"`
-		} `xml:"active"`
+		FullName  TextLiteral `xml:"fullName"`
+		Active    TextLiteral `xml:"active"`
 		RuleEntry []struct {
-			AssignedTo struct {
-				Text string `xml:",chardata"`
-			} `xml:"assignedTo"`
-			AssignedToType struct {
-				Text string `xml:",chardata"`
-			} `xml:"assignedToType"`
-			CriteriaItems struct {
-				Field struct {
-					Text string `xml:",chardata"`
-				} `xml:"field"`
-				Operation struct {
-					Text string `xml:",chardata"`
-				} `xml:"operation"`
-				Value struct {
-					Text string `xml:",chardata"`
-				} `xml:"value"`
-			} `xml:"criteriaItems"`
-			Template *struct {
-				Text string `xml:",chardata"`
-			} `xml:"template"`
+			AssignedTo            *TextLiteral  `xml:"assignedTo"`
+			AssignedToType        *TextLiteral  `xml:"assignedToType"`
+			BooleanFilter         *TextLiteral  `xml:"booleanFilter"`
+			CriteriaItems         []FilterItem  `xml:"criteriaItems"`
+			Formula               *TextLiteral  `xml:"formula"`
+			NotifyCcRecipients    *TextLiteral  `xml:"notifyCcRecipients"`
+			OverrideExistingTeams *TextLiteral  `xml:"overrideExistingTeams"`
+			Team                  []TextLiteral `xml:"team"`
+			Template              *TextLiteral  `xml:"template"`
 		} `xml:"ruleEntry"`
 	} `xml:"assignmentRule"`
+}
+
+// FilterItem is one criterion of a rule entry
+type FilterItem struct {
+	Field      TextLiteral  `xml:"field"`
+	Operation  TextLiteral  `xml:"operation"`
+	Value      *TextLiteral `xml:"value"`
+	ValueField *TextLiteral `xml:"valueField"`
 }
 
 func (c *AssignmentRules) SetMetadata(m metadata.MetadataInfo) {

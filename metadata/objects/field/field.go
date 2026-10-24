@@ -24,10 +24,26 @@ type CustomField struct {
 	Field
 }
 
+// ValueSetValue is one value of a picklist field's value set.
+type ValueSetValue struct {
+	FullName string `xml:"fullName"`
+	Color    *struct {
+		Text string `xml:",chardata"`
+	} `xml:"color"`
+	Default struct {
+		Text string `xml:",chardata"`
+	} `xml:"default"`
+	Description *TextLiteral `xml:"description"`
+	IsActive    *BooleanText `xml:"isActive"`
+	Label       struct {
+		Text string `xml:",innerxml"`
+	} `xml:"label"`
+}
+
 type Field struct {
 	FullName          string       `xml:"fullName"`
-	BusinessStatus    *TextLiteral `xml:"businessStatus"`
 	BusinessOwnerUser *TextLiteral `xml:"businessOwnerUser"`
+	BusinessStatus    *TextLiteral `xml:"businessStatus"`
 	CaseSensitive     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"caseSensitive"`
@@ -65,6 +81,7 @@ type Field struct {
 	IsNameField         *BooleanText `xml:"isNameField"`
 	IsSortingDisabled   *BooleanText `xml:"isSortingDisabled"`
 	Label               *TextLiteral `xml:"label"`
+	Length              *IntegerText `xml:"length"`
 	LookupFilter        *struct {
 		Active struct {
 			Text string `xml:",chardata"`
@@ -92,28 +109,37 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"isOptional"`
 	} `xml:"lookupFilter"`
-	Precision *IntegerText `xml:"precision"`
-	Length    *IntegerText `xml:"length"`
-	MaskChar  *TextLiteral `xml:"maskChar"`
-	MaskType  *TextLiteral `xml:"maskType"`
+	MaskChar                             *TextLiteral `xml:"maskChar"`
+	MaskType                             *TextLiteral `xml:"maskType"`
+	MetadataRelationshipControllingField *struct {
+		Text string `xml:",chardata"`
+	} `xml:"metadataRelationshipControllingField"`
+	// MktDataLakeFieldAttributes is present on a Data Lake Object (__dll)
+	// field; MktDataModelFieldAttributes on a Data Model Object (__dlm) field.
+	MktDataLakeFieldAttributes  *MktDataLakeFieldAttributes  `xml:"mktDataLakeFieldAttributes"`
+	MktDataModelFieldAttributes *MktDataModelFieldAttributes `xml:"mktDataModelFieldAttributes"`
 	// Picklist holds a picklist field's values in API versions before 38.0,
 	// which replaced it with valueSet.
-	Picklist *Picklist `xml:"picklist"`
+	Picklist  *Picklist    `xml:"picklist"`
+	Precision *IntegerText `xml:"precision"`
 	// ReadOnlyProxy marks an external object field whose value the external
 	// system supplies.
-	ReadOnlyProxy          *BooleanText `xml:"readOnlyProxy"`
-	ReferenceTo            *TextLiteral `xml:"referenceTo"`
-	RelationshipLabel      *TextLiteral `xml:"relationshipLabel"`
-	RelationshipName       *TextLiteral `xml:"relationshipName"`
-	RestrictedAdminField   *TextLiteral `xml:"restrictedAdminField"`
+	ReadOnlyProxy     *BooleanText `xml:"readOnlyProxy"`
+	ReferenceTo       *TextLiteral `xml:"referenceTo"`
+	RelationshipLabel *TextLiteral `xml:"relationshipLabel"`
+	RelationshipName  *TextLiteral `xml:"relationshipName"`
+	RelationshipOrder *struct {
+		Text string `xml:",chardata"`
+	} `xml:"relationshipOrder"`
+	ReparentableMasterDetail *struct {
+		Text string `xml:",chardata"`
+	} `xml:"reparentableMasterDetail"`
 	Required               *BooleanText `xml:"required"`
+	RestrictedAdminField   *TextLiteral `xml:"restrictedAdminField"`
 	Scale                  *IntegerText `xml:"scale"`
 	SecurityClassification *TextLiteral `xml:"securityClassification"`
 	// StartingNumber is an auto-number field's first number.
-	StartingNumber   *IntegerText `xml:"startingNumber"`
-	TrackFeedHistory *struct {
-		Text string `xml:",chardata"`
-	} `xml:"trackFeedHistory"`
+	StartingNumber  *IntegerText `xml:"startingNumber"`
 	SummarizedField *struct {
 		Text string `xml:",chardata"`
 	} `xml:"summarizedField"`
@@ -134,27 +160,14 @@ type Field struct {
 	SummaryOperation *struct {
 		Text string `xml:",chardata"`
 	} `xml:"summaryOperation"`
-	RelationshipOrder *struct {
+	TrackFeedHistory *struct {
 		Text string `xml:",chardata"`
-	} `xml:"relationshipOrder"`
-	ReparentableMasterDetail *struct {
-		Text string `xml:",chardata"`
-	} `xml:"reparentableMasterDetail"`
-	MetadataRelationshipControllingField *struct {
-		Text string `xml:",chardata"`
-	} `xml:"metadataRelationshipControllingField"`
-	// MktDataLakeFieldAttributes is present on a Data Lake Object (__dll)
-	// field; MktDataModelFieldAttributes on a Data Model Object (__dlm) field.
-	MktDataLakeFieldAttributes  *MktDataLakeFieldAttributes  `xml:"mktDataLakeFieldAttributes"`
-	MktDataModelFieldAttributes *MktDataModelFieldAttributes `xml:"mktDataModelFieldAttributes"`
-	TrackHistory                *BooleanText                 `xml:"trackHistory"`
-	TrackTrending               *BooleanText                 `xml:"trackTrending"`
-	Type                        *TextLiteral                 `xml:"type"`
-	Unique                      *BooleanText                 `xml:"unique"`
-	WriteRequiresMasterRead     *struct {
-		Text string `xml:",chardata"`
-	} `xml:"writeRequiresMasterRead"`
-	ValueSet *struct {
+	} `xml:"trackFeedHistory"`
+	TrackHistory  *BooleanText `xml:"trackHistory"`
+	TrackTrending *BooleanText `xml:"trackTrending"`
+	Type          *TextLiteral `xml:"type"`
+	Unique        *BooleanText `xml:"unique"`
+	ValueSet      *struct {
 		ControllingField *struct {
 			Text string `xml:",chardata"`
 		} `xml:"controllingField"`
@@ -165,19 +178,7 @@ type Field struct {
 			Sorted struct {
 				Text string `xml:",chardata"`
 			} `xml:"sorted"`
-			Value []struct {
-				FullName string `xml:"fullName"`
-				Default  struct {
-					Text string `xml:",chardata"`
-				} `xml:"default"`
-				IsActive *BooleanText `xml:"isActive"`
-				Label    struct {
-					Text string `xml:",innerxml"`
-				} `xml:"label"`
-				Color *struct {
-					Text string `xml:",chardata"`
-				} `xml:"color"`
-			} `xml:"value"`
+			Value []ValueSetValue `xml:"value"`
 		} `xml:"valueSetDefinition"`
 		ValueSetName *struct {
 			Text string `xml:",chardata"`
@@ -194,6 +195,9 @@ type Field struct {
 	VisibleLines *struct {
 		Text string `xml:",chardata"`
 	} `xml:"visibleLines"`
+	WriteRequiresMasterRead *struct {
+		Text string `xml:",chardata"`
+	} `xml:"writeRequiresMasterRead"`
 }
 
 func (c *CustomField) SetMetadata(m metadata.MetadataInfo) {

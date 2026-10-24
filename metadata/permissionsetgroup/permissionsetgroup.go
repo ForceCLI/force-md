@@ -23,7 +23,7 @@ type PermissionSetGroup struct {
 	metadata.MetadataInfo
 	XMLName     xml.Name `xml:"PermissionSetGroup"`
 	Xmlns       string   `xml:"xmlns,attr"`
-	Description struct {
+	Description *struct {
 		Text string `xml:",innerxml"`
 	} `xml:"description"`
 	HasActivationRequired *struct {

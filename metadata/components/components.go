@@ -23,12 +23,12 @@ type ApexComponent struct {
 	ApiVersion struct {
 		Text string `xml:",chardata"`
 	} `xml:"apiVersion"`
-	Label struct {
-		Text string `xml:",chardata"`
-	} `xml:"label"`
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
 
 	// Non-XML fields
 	ComponentCode []byte `xml:"-"` // The actual component code

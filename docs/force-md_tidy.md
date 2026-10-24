@@ -14,13 +14,16 @@ $ force-md tidy sfdx/main/default/objects/*/{fields,validationRules}/* sfdx/main
 
 $ force-md tidy src/objects/*
 
+$ force-md tidy -r force-app/main/default
+
 ```
 
 ### Options
 
 ```
-  -h, --help   help for tidy
-  -l, --list   list files that need tidying
+  -h, --help        help for tidy
+  -l, --list        list files that need tidying
+  -r, --recursive   tidy metadata files in directories and their subdirectories
 ```
 
 ### Options inherited from parent commands

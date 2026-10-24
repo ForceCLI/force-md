@@ -58,12 +58,15 @@ type CustomTab struct {
 	LwcComponent *struct {
 		Text string `xml:",chardata"`
 	} `xml:"lwcComponent"`
-	Motif struct {
+	Motif *struct {
 		Text string `xml:",chardata"`
 	} `xml:"motif"`
 	Page *struct {
 		Text string `xml:",chardata"`
 	} `xml:"page"`
+	SplashPageLink *struct {
+		Text string `xml:",chardata"`
+	} `xml:"splashPageLink"`
 	URL *struct {
 		Text string `xml:",chardata"`
 	} `xml:"url"`

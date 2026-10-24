@@ -263,19 +263,7 @@ func (o *CustomObject) AddPicklistValue(fieldName string, picklistValue string, 
 					return errors.New("picklist value already exists")
 				}
 			}
-			newValue := struct {
-				FullName string `xml:"fullName"`
-				Default  struct {
-					Text string `xml:",chardata"`
-				} `xml:"default"`
-				IsActive *BooleanText `xml:"isActive"`
-				Label    struct {
-					Text string `xml:",innerxml"`
-				} `xml:"label"`
-				Color *struct {
-					Text string `xml:",chardata"`
-				} `xml:"color"`
-			}{
+			newValue := field.ValueSetValue{
 				FullName: picklistValue,
 			}
 			newValue.Default.Text = "false"

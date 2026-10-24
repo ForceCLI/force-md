@@ -18,9 +18,8 @@ func init() {
 // kept verbatim in the Schema field for the consumer to parse.
 type ExternalServiceRegistration struct {
 	metadata.MetadataInfo
-	XMLName xml.Name `xml:"ExternalServiceRegistration"`
-	Xmlns   string   `xml:"xmlns,attr"`
-
+	XMLName     xml.Name `xml:"ExternalServiceRegistration"`
+	Xmlns       string   `xml:"xmlns,attr"`
 	Description *struct {
 		Text string `xml:",chardata"`
 	} `xml:"description"`
@@ -36,12 +35,20 @@ type ExternalServiceRegistration struct {
 	NamedCredentialReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"namedCredentialReference"`
-	RegistrationUrl *struct {
-		Text string `xml:",chardata"`
-	} `xml:"registrationUrl"`
+	Operations []struct {
+		Active *struct {
+			Text string `xml:",chardata"`
+		} `xml:"active"`
+		Name *struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+	} `xml:"operations"`
 	RegistrationProviderType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"registrationProviderType"`
+	RegistrationUrl *struct {
+		Text string `xml:",chardata"`
+	} `xml:"registrationUrl"`
 	Schema *struct {
 		Text string `xml:",chardata"`
 	} `xml:"schema"`
@@ -54,20 +61,15 @@ type ExternalServiceRegistration struct {
 	SchemaUploadFileName *struct {
 		Text string `xml:",chardata"`
 	} `xml:"schemaUploadFileName"`
+	ServiceBinding *struct {
+		Text string `xml:",chardata"`
+	} `xml:"serviceBinding"`
 	Status *struct {
 		Text string `xml:",chardata"`
 	} `xml:"status"`
 	SystemVersion *struct {
 		Text string `xml:",chardata"`
 	} `xml:"systemVersion"`
-	Operations []struct {
-		Active *struct {
-			Text string `xml:",chardata"`
-		} `xml:"active"`
-		Name *struct {
-			Text string `xml:",chardata"`
-		} `xml:"name"`
-	} `xml:"operations"`
 }
 
 func (c *ExternalServiceRegistration) SetMetadata(m metadata.MetadataInfo) {

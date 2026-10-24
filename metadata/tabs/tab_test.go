@@ -83,3 +83,44 @@ func TestOpenAuraComponent(t *testing.T) {
 		t.Errorf("round trip =\n%s\nwant\n%s", out, sampleAuraTab)
 	}
 }
+
+// A standard tab has no motif, and a tab can link to a splash page; both are
+// written back as they were.
+func TestTabWithoutMotifAndWithSplashPageRoundTrip(t *testing.T) {
+	for name, content := range map[string]string{
+		"standard-home.tab": `<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <content>Home_Page_Default2</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+    </actionOverrides>
+</CustomTab>
+`,
+		"dlrs__LookupRollupSummary__c.tab": `<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <motif>Custom55: Ruler</motif>
+    <splashPageLink>dlrs__Welcome</splashPageLink>
+</CustomTab>
+`,
+	} {
+		path := filepath.Join(t.TempDir(), name)
+		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+		c, err := Open(path)
+		if err != nil {
+			t.Fatalf("Open: %v", err)
+		}
+		out, err := internal.Marshal(c)
+		if err != nil {
+			t.Fatalf("Marshal: %v", err)
+		}
+		if string(out) != content {
+			t.Errorf("round trip changed %s:\n%s", name, out)
+		}
+	}
+}

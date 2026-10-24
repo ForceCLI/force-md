@@ -21,6 +21,9 @@ type StandardValue struct {
 	Default struct {
 		Text string `xml:",chardata"`
 	} `xml:"default"`
+	IsActive *struct {
+		Text string `xml:",chardata"`
+	} `xml:"isActive"`
 	Label struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`

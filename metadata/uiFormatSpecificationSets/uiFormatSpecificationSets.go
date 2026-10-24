@@ -40,6 +40,9 @@ type UiFormatSpecificationSet struct {
 			Text string `xml:",chardata"`
 		} `xml:"order"`
 		VisibilityRule struct {
+			BooleanFilter *struct {
+				Text string `xml:",chardata"`
+			} `xml:"booleanFilter"`
 			Criteria []struct {
 				LeftValue struct {
 					Text string `xml:",chardata"`
@@ -51,9 +54,6 @@ type UiFormatSpecificationSet struct {
 					Text string `xml:",chardata"`
 				} `xml:"rightValue"`
 			} `xml:"criteria"`
-			BooleanFilter struct {
-				Text string `xml:",chardata"`
-			} `xml:"booleanFilter"`
 		} `xml:"visibilityRule"`
 	} `xml:"uiFormatSpecifications"`
 }

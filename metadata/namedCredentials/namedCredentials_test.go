@@ -51,20 +51,7 @@ func TestNamedCredentialMarshalOmitsUnsetLegacyRootFields(t *testing.T) {
 	namedCredential.Label.Text = "Modern Credential"
 	namedCredential.NamedCredentialType.Text = "SecuredEndpoint"
 	namedCredential.GenerateAuthorizationHeader.Text = "true"
-	namedCredential.NamedCredentialParameters = []struct {
-		ExternalCredential *struct {
-			Text string `xml:",chardata"`
-		} `xml:"externalCredential"`
-		ParameterName struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterName"`
-		ParameterType struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterType"`
-		ParameterValue *struct {
-			Text string `xml:",chardata"`
-		} `xml:"parameterValue"`
-	}{
+	namedCredential.NamedCredentialParameters = []NamedCredentialParameter{
 		{
 			ParameterName: struct {
 				Text string `xml:",chardata"`

@@ -50,6 +50,47 @@ type ActionOverride struct {
 
 type ProfileActionOverrideList []ProfileActionOverride
 
+type ConsoleConfig struct {
+	DetailPageRefreshMethod *TextLiteral `xml:"detailPageRefreshMethod"`
+	FooterColor             *TextLiteral `xml:"footerColor"`
+	HeaderColor             *TextLiteral `xml:"headerColor"`
+	KeyboardShortcuts       *struct {
+		CustomShortcuts []struct {
+			Action      TextLiteral  `xml:"action"`
+			Active      TextLiteral  `xml:"active"`
+			Description *TextLiteral `xml:"description"`
+			EventName   TextLiteral  `xml:"eventName"`
+			KeyCommand  TextLiteral  `xml:"keyCommand"`
+		} `xml:"customShortcuts"`
+		DefaultShortcuts []struct {
+			Action     TextLiteral `xml:"action"`
+			Active     TextLiteral `xml:"active"`
+			KeyCommand TextLiteral `xml:"keyCommand"`
+		} `xml:"defaultShortcuts"`
+	} `xml:"keyboardShortcuts"`
+	ListPlacement *struct {
+		Height   *TextLiteral `xml:"height"`
+		Location TextLiteral  `xml:"location"`
+		Units    *TextLiteral `xml:"units"`
+		Width    *TextLiteral `xml:"width"`
+	} `xml:"listPlacement"`
+	ListRefreshMethod  *TextLiteral  `xml:"listRefreshMethod"`
+	PrimaryTabColor    *TextLiteral  `xml:"primaryTabColor"`
+	WhitelistedDomains []TextLiteral `xml:"whitelistedDomains"`
+}
+
+type Preferences struct {
+	EnableCustomizeMyTabs        TextLiteral `xml:"enableCustomizeMyTabs"`
+	EnableKeyboardShortcuts      TextLiteral `xml:"enableKeyboardShortcuts"`
+	EnableListViewHover          TextLiteral `xml:"enableListViewHover"`
+	EnableListViewReskin         TextLiteral `xml:"enableListViewReskin"`
+	EnableMultiMonitorComponents TextLiteral `xml:"enableMultiMonitorComponents"`
+	EnablePinTabs                TextLiteral `xml:"enablePinTabs"`
+	EnableTabHover               TextLiteral `xml:"enableTabHover"`
+	EnableTabLimits              TextLiteral `xml:"enableTabLimits"`
+	SaveUserSessions             TextLiteral `xml:"saveUserSessions"`
+}
+
 type CustomApplication struct {
 	metadata.MetadataInfo
 	XMLName         xml.Name         `xml:"CustomApplication"`
@@ -69,6 +110,7 @@ type CustomApplication struct {
 			Text string `xml:",chardata"`
 		} `xml:"shouldOverrideOrgTheme"`
 	} `xml:"brand"`
+	ConsoleConfig     *ConsoleConfig `xml:"consoleConfig"`
 	DefaultLandingTab *struct {
 		Text string `xml:",chardata"`
 	} `xml:"defaultLandingTab"`
@@ -87,7 +129,9 @@ type CustomApplication struct {
 	IsNavTabPersistenceDisabled *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isNavTabPersistenceDisabled"`
-	Label *struct {
+	IsOmniPinnedViewEnabled *TextLiteral `xml:"isOmniPinnedViewEnabled"`
+	IsServiceCloudConsole   *TextLiteral `xml:"isServiceCloudConsole"`
+	Label                   *struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	Logo *struct {
@@ -96,6 +140,7 @@ type CustomApplication struct {
 	NavType *struct {
 		Text string `xml:",chardata"`
 	} `xml:"navType"`
+	Preferences            *Preferences              `xml:"preferences"`
 	ProfileActionOverrides ProfileActionOverrideList `xml:"profileActionOverrides"`
 	SetupExperience        *struct {
 		Text string `xml:",chardata"`

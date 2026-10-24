@@ -61,6 +61,10 @@ type SharingRules struct {
 	SharingOwnerRules    OwnerRuleList    `xml:"sharingOwnerRules"`
 }
 
+// KeepEmptyElements marks sharing rules as written with empty elements open,
+// such as <allInternalUsers></allInternalUsers>, as Salesforce writes them.
+func (c *SharingRules) KeepEmptyElements() {}
+
 func (c *SharingRules) SetMetadata(m metadata.MetadataInfo) {
 	c.MetadataInfo = m
 }
