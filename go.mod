@@ -10,20 +10,21 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/thediveo/enumflag v0.10.1
 	golang.org/x/net v0.55.0
 )
 
 require (
 	github.com/nbio/xml v0.0.0-20260302224236-9f64bb3b5a9e
+	github.com/octoberswimmer/apexfmt v0.69.0
 	github.com/octoberswimmer/sformula v0.18.0
 	github.com/stretchr/testify v1.8.4
 )
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect

@@ -6,7 +6,10 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
+	"sort"
 	"strings"
+	"sync"
 
 	cmdrepo "github.com/ForceCLI/force-md/cmd/repo"
 	"github.com/ForceCLI/force-md/repo"
@@ -14,13 +17,14 @@ import (
 	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 
+	"github.com/octoberswimmer/apexfmt/formatter"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	tidyCmd.Flags().BoolP("list", "l", false, "list files that need tidying")
-	tidyCmd.Flags().BoolP("recursive", "r", false, "tidy metadata files in directories and their subdirectories")
+	tidyCmd.Flags().BoolP("recursive", "r", false, "tidy metadata files, and format Apex classes and triggers with apexfmt, in directories and their subdirectories")
 
 	RootCmd.AddCommand(tidyCmd)
 }
@@ -38,7 +42,8 @@ $ force-md tidy -r force-app/main/default
 	Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		recursive, _ := cmd.Flags().GetBool("recursive")
-		if err := openTidyArgs(cmdrepo.Metadata, args, recursive); err != nil {
+		apexFiles, err := openTidyArgs(cmdrepo.Metadata, args, recursive)
+		if err != nil {
 			return err
 		}
 		changes := false
@@ -69,6 +74,15 @@ $ force-md tidy -r force-app/main/default
 				}
 			}
 		}
+		if list {
+			unformatted := listUnformattedApex(apexFiles)
+			for _, file := range unformatted {
+				fmt.Println(file)
+			}
+			changes = len(unformatted) > 0 || changes
+		} else {
+			formatApex(apexFiles)
+		}
 		if changes {
 			os.Exit(1)
 		}
@@ -80,30 +94,40 @@ $ force-md tidy -r force-app/main/default
 // directory in args is walked and every metadata file below it is opened.
 // The walk skips files that are not metadata and hidden directories such as
 // .git, and logs a warning for a metadata file that fails to open instead of
-// stopping.
-func openTidyArgs(r *repo.Repo, args []string, recursive bool) error {
+// stopping.  Also with recursive set, the Apex class and trigger source files
+// found, whether named in args or below a directory in args, are returned
+// for formatting with apexfmt.
+func openTidyArgs(r *repo.Repo, args []string, recursive bool) ([]string, error) {
+	var apexFiles []string
 	for _, arg := range args {
 		if recursive {
 			info, err := os.Stat(arg)
 			if err != nil {
-				return fmt.Errorf("invalid file %s: %w", arg, err)
+				return nil, fmt.Errorf("invalid file %s: %w", arg, err)
 			}
 			if info.IsDir() {
-				if err := openMetadataInDir(r, arg); err != nil {
-					return err
+				found, err := openMetadataInDir(r, arg)
+				if err != nil {
+					return nil, err
 				}
+				apexFiles = append(apexFiles, found...)
+				continue
+			}
+			if isApexSource(arg) {
+				apexFiles = append(apexFiles, arg)
 				continue
 			}
 		}
 		if _, err := r.Open(arg); err != nil {
-			return fmt.Errorf("invalid file %s: %w", arg, err)
+			return nil, fmt.Errorf("invalid file %s: %w", arg, err)
 		}
 	}
-	return nil
+	return apexFiles, nil
 }
 
-func openMetadataInDir(r *repo.Repo, dir string) error {
-	return filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+func openMetadataInDir(r *repo.Repo, dir string) ([]string, error) {
+	var apexFiles []string
+	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -111,6 +135,10 @@ func openMetadataInDir(r *repo.Repo, dir string) error {
 			if path != dir && strings.HasPrefix(d.Name(), ".") {
 				return filepath.SkipDir
 			}
+			return nil
+		}
+		if isApexSource(path) {
+			apexFiles = append(apexFiles, path)
 			return nil
 		}
 		if !repo.IsMetadataFile(path) {
@@ -121,6 +149,71 @@ func openMetadataInDir(r *repo.Repo, dir string) error {
 		}
 		return nil
 	})
+	return apexFiles, err
+}
+
+// isApexSource reports whether path is the source of an Apex class or
+// trigger, as opposed to its -meta.xml file.
+func isApexSource(path string) bool {
+	return strings.HasSuffix(path, ".cls") || strings.HasSuffix(path, ".trigger")
+}
+
+// formatApex formats each file with apexfmt and writes the files whose
+// formatting changed.  A file that fails to format, such as one with a
+// syntax error, is logged and left unchanged.  apexfmt's errors start with
+// the file name, so the log message does not repeat it.
+func formatApex(files []string) {
+	eachApexFile(files, func(f *formatter.Formatter) {
+		changed, err := f.Changed()
+		if err != nil {
+			log.Warnf("formatting failed: %s", err.Error())
+			return
+		}
+		if !changed {
+			return
+		}
+		if err := f.Write(); err != nil {
+			log.Warnf("writing %s failed: %s", f.SourceName(), err.Error())
+		}
+	})
+}
+
+// listUnformattedApex returns, sorted, the files whose formatting differs
+// from apexfmt's.
+func listUnformattedApex(files []string) []string {
+	var mu sync.Mutex
+	var unformatted []string
+	eachApexFile(files, func(f *formatter.Formatter) {
+		changed, err := f.Changed()
+		if err != nil {
+			log.Warnf("formatting failed: %s", err.Error())
+			return
+		}
+		if changed {
+			mu.Lock()
+			unformatted = append(unformatted, f.SourceName())
+			mu.Unlock()
+		}
+	})
+	sort.Strings(unformatted)
+	return unformatted
+}
+
+// eachApexFile calls fn with a formatter for each file, running one call per
+// CPU at a time.
+func eachApexFile(files []string, fn func(*formatter.Formatter)) {
+	var wg sync.WaitGroup
+	sem := make(chan struct{}, runtime.GOMAXPROCS(0))
+	for _, file := range files {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(file string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+			fn(formatter.NewFormatter(file, nil))
+		}(file)
+	}
+	wg.Wait()
 }
 
 func checkIfChanged(o general.Tidyable, orig []byte) (changed bool) {

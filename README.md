@@ -28,9 +28,12 @@ $ force-md permissionset tidy src/permissionsets/*
 
 ### Tidy All Metadata In A Directory
 
-Tidy every tidyable metadata file in a directory and its subdirectories.
-Files that are not metadata and hidden directories such as `.git` are
-skipped.  Add `-l` to list the files that need tidying without changing them.
+Tidy every tidyable metadata file in a directory and its subdirectories, and
+format every Apex class (`.cls`) and trigger (`.trigger`) with
+[apexfmt](https://github.com/octoberswimmer/apexfmt).  Files that are not
+metadata and hidden directories such as `.git` are skipped, and an Apex file
+that apexfmt cannot parse is reported and left unchanged.  Add `-l` to list
+the files that need tidying or formatting without changing them.
 
 ```
 $ force-md tidy -r force-app/main/default
