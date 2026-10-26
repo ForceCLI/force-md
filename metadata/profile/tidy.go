@@ -10,6 +10,7 @@ func (p *Profile) Tidy() {
 	p.ApplicationVisibilities.Tidy()
 	p.ClassAccesses.Tidy()
 	p.CustomPermissions.Tidy()
+	p.ExternalDataSourceAccesses.Tidy()
 	p.FieldPermissions.Tidy()
 	p.ObjectPermissions.Tidy()
 	p.LayoutAssignments.Tidy()

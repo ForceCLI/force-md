@@ -94,14 +94,15 @@ type Profile struct {
 	Custom                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"custom"`
-	CustomMetadataTypeAccesses permissionset.CustomMetadataTypeList `xml:"customMetadataTypeAccesses"`
-	CustomPermissions          permissionset.CustomPermissionList   `xml:"customPermissions"`
-	CustomSettingAccesses      permissionset.CustomSettingList      `xml:"customSettingAccesses"`
-	Description                *string                              `xml:"description"`
-	FieldPermissions           permissionset.FieldPermissionsList   `xml:"fieldPermissions"`
-	FlowAccesses               permissionset.FlowAccessList         `xml:"flowAccesses"`
-	LayoutAssignments          LayoutAssignmentList                 `xml:"layoutAssignments"`
-	LoginFlows                 *LoginFlow                           `xml:"loginFlows"`
+	CustomMetadataTypeAccesses permissionset.CustomMetadataTypeList       `xml:"customMetadataTypeAccesses"`
+	CustomPermissions          permissionset.CustomPermissionList         `xml:"customPermissions"`
+	CustomSettingAccesses      permissionset.CustomSettingList            `xml:"customSettingAccesses"`
+	Description                *string                                    `xml:"description"`
+	ExternalDataSourceAccesses permissionset.ExternalDataSourceAccessList `xml:"externalDataSourceAccesses"`
+	FieldPermissions           permissionset.FieldPermissionsList         `xml:"fieldPermissions"`
+	FlowAccesses               permissionset.FlowAccessList               `xml:"flowAccesses"`
+	LayoutAssignments          LayoutAssignmentList                       `xml:"layoutAssignments"`
+	LoginFlows                 *LoginFlow                                 `xml:"loginFlows"`
 	LoginHours                 *struct {
 		Text string `xml:",chardata"`
 	} `xml:"loginHours"`

@@ -114,6 +114,13 @@ type ExternalCredentialPrincipalAccess struct {
 
 type ExternalCredentialPrincipalAccessList []ExternalCredentialPrincipalAccess
 
+type ExternalDataSourceAccess struct {
+	Enabled            BooleanText `xml:"enabled"`
+	ExternalDataSource string      `xml:"externalDataSource"`
+}
+
+type ExternalDataSourceAccessList []ExternalDataSourceAccess
+
 type FlowAccess struct {
 	Enabled BooleanText `xml:"enabled"`
 	Flow    string      `xml:"flow"`
@@ -139,6 +146,7 @@ type PermissionSet struct {
 	CustomSettingAccesses               CustomSettingList                     `xml:"customSettingAccesses"`
 	Description                         *Description                          `xml:"description"`
 	ExternalCredentialPrincipalAccesses ExternalCredentialPrincipalAccessList `xml:"externalCredentialPrincipalAccesses"`
+	ExternalDataSourceAccesses          ExternalDataSourceAccessList          `xml:"externalDataSourceAccesses"`
 	FieldPermissions                    FieldPermissionsList                  `xml:"fieldPermissions"`
 	FlowAccesses                        FlowAccessList                        `xml:"flowAccesses"`
 	HasActivationRequired               BooleanText                           `xml:"hasActivationRequired"`

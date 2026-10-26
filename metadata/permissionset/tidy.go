@@ -18,6 +18,7 @@ func (p *PermissionSet) Tidy() {
 	p.TabSettings.Tidy()
 	p.UserPermissions.Tidy()
 	p.ExternalCredentialPrincipalAccesses.Tidy()
+	p.ExternalDataSourceAccesses.Tidy()
 }
 
 func (op ObjectPermissionsList) Tidy() {
@@ -81,6 +82,12 @@ func (cp CustomSettingList) Tidy() {
 func (ec ExternalCredentialPrincipalAccessList) Tidy() {
 	sort.Slice(ec, func(i, j int) bool {
 		return ec[i].ExternalCredentialPrincipal < ec[j].ExternalCredentialPrincipal
+	})
+}
+
+func (ed ExternalDataSourceAccessList) Tidy() {
+	sort.Slice(ed, func(i, j int) bool {
+		return ed[i].ExternalDataSource < ed[j].ExternalDataSource
 	})
 }
 
