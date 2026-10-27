@@ -233,3 +233,53 @@ External Event – conferences</helpText>
 </Flow>
 `)
 }
+
+// A screen keeps the actions it runs while displayed and the triggers that
+// name the events which run them.
+func TestScreenActionsAndTriggersRoundTrip(t *testing.T) {
+	assertFlowRoundTrip(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <label>Inquiry</label>
+    <processType>Flow</processType>
+    <screens>
+        <name>Screen_Identity</name>
+        <label>Identity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actions>
+            <name>Zip_Lookup</name>
+            <actionName>Inquiry_Zip_Lookup</actionName>
+            <actionType>flow</actionType>
+            <inputParameters>
+                <name>zip</name>
+                <value>
+                    <elementReference>CallerZip</elementReference>
+                </value>
+            </inputParameters>
+            <label>Zip Lookup</label>
+            <nameSegment>Inquiry_Zip_Lookup</nameSegment>
+        </actions>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+        <triggers>
+            <eventName>flow__screeninit</eventName>
+            <eventSource>Screen_Identity</eventSource>
+            <handlers>
+                <screenActionName>Zip_Lookup</screenActionName>
+            </handlers>
+        </triggers>
+        <triggers>
+            <eventName>flow__screenfieldattributechange</eventName>
+            <eventSource>CallerZip</eventSource>
+            <handlers>
+                <screenActionName>Zip_Lookup</screenActionName>
+            </handlers>
+        </triggers>
+    </screens>
+</Flow>
+`)
+}

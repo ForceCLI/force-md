@@ -578,6 +578,7 @@ type Screen struct {
 	LocationY struct {
 		Text string `xml:",chardata"`
 	} `xml:"locationY"`
+	Actions   []ScreenAction `xml:"actions"`
 	AllowBack struct {
 		Text string `xml:",chardata"`
 	} `xml:"allowBack"`
@@ -618,6 +619,43 @@ type Screen struct {
 		PropertyValue Value       `xml:"propertyValue"`
 		Scope         TextLiteral `xml:"scope"`
 	} `xml:"styleSettings"`
+	Triggers []ScreenTrigger `xml:"triggers"`
+}
+
+// ScreenAction is an action a screen runs while it is displayed, such as a
+// subflow, without navigating away from the screen. The screen's triggers
+// name the events that run it.
+type ScreenAction struct {
+	Name       ElementName `xml:"name"`
+	ActionName struct {
+		Text string `xml:",chardata"`
+	} `xml:"actionName"`
+	ActionType      string `xml:"actionType"`
+	InputParameters []struct {
+		Name struct {
+			Text string `xml:",chardata"`
+		} `xml:"name"`
+		Value *Value `xml:"value"`
+	} `xml:"inputParameters"`
+	Label struct {
+		Text string `xml:",chardata"`
+	} `xml:"label"`
+	NameSegment *struct {
+		Text string `xml:",chardata"`
+	} `xml:"nameSegment"`
+	VersionSegment *struct {
+		Text string `xml:",chardata"`
+	} `xml:"versionSegment"`
+}
+
+// ScreenTrigger runs screen actions when an event, such as the screen
+// initializing or a field's value changing, fires on its event source.
+type ScreenTrigger struct {
+	EventName   TextLiteral `xml:"eventName"`
+	EventSource TextLiteral `xml:"eventSource"`
+	Handlers    []struct {
+		ScreenActionName TextLiteral `xml:"screenActionName"`
+	} `xml:"handlers"`
 }
 
 // Stage is a flow stage resource: one step of the flow's screen progress
