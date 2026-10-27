@@ -130,4 +130,4 @@ docs:
 clean:
 	-rm -f $(EXECUTABLE) $(EXECUTABLE)_* *.zip SHA256SUMS-*
 
-.PHONY: default dist clean docs checksum release tag
+.PHONY: default dist clean docs checksum release tag $(ALL)
