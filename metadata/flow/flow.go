@@ -320,10 +320,14 @@ type RecordLookup struct {
 }
 
 type RecordRollback struct {
-	Name struct {
+	ProcessMetadataValues []ProcessMetadataValue `xml:"processMetadataValues"`
+	Description           *TextLiteral           `xml:"description"`
+	Name                  struct {
 		Text string `xml:",chardata"`
 	} `xml:"name"`
-	Label struct {
+	ElementSubtype *TextLiteral `xml:"elementSubtype"`
+	Group          *TextLiteral `xml:"group"`
+	Label          struct {
 		Text string `xml:",chardata"`
 	} `xml:"label"`
 	LocationX struct {
@@ -480,9 +484,10 @@ type Field struct {
 		} `xml:"name"`
 		Value *Value `xml:"value"`
 	} `xml:"processMetadataValues"`
-	Name             *string  `xml:"name"`
-	ChoiceReferences []string `xml:"choiceReferences"`
-	DataType         *string  `xml:"dataType"`
+	Description      *TextLiteral `xml:"description"`
+	Name             *string      `xml:"name"`
+	ChoiceReferences []string     `xml:"choiceReferences"`
+	DataType         *string      `xml:"dataType"`
 	DataTypeMappings []struct {
 		TypeName struct {
 			Text string `xml:",chardata"`
@@ -520,6 +525,7 @@ type Field struct {
 	IsRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"isRequired"`
+	IsVisible            *BooleanText `xml:"isVisible"`
 	ObjectFieldReference *struct {
 		Text string `xml:",chardata"`
 	} `xml:"objectFieldReference"`
@@ -537,12 +543,15 @@ type Field struct {
 	Scale *struct {
 		Text string `xml:",chardata"`
 	} `xml:"scale"`
-	StoreOutputAutomatically *struct {
+	SourceTemplateApiName      *TextLiteral `xml:"sourceTemplateApiName"`
+	SourceTemplateProviderType *TextLiteral `xml:"sourceTemplateProviderType"`
+	StoreOutputAutomatically   *struct {
 		Text string `xml:",chardata"`
 	} `xml:"storeOutputAutomatically"`
 	StyleProperties *struct {
-		VerticalAlignment *Value `xml:"verticalAlignment"`
-		Width             *Value `xml:"width"`
+		StyleSettings     []StyleSetting `xml:"styleSettings"`
+		VerticalAlignment *Value         `xml:"verticalAlignment"`
+		Width             *Value         `xml:"width"`
 	} `xml:"styleProperties"`
 	ValidationRule *struct {
 		ErrorMessage struct {
@@ -614,12 +623,16 @@ type Screen struct {
 			Text string `xml:",chardata"`
 		} `xml:"elementReference"`
 	} `xml:"stageReference"`
-	StyleSettings []struct {
-		PropertyName  TextLiteral `xml:"propertyName"`
-		PropertyValue Value       `xml:"propertyValue"`
-		Scope         TextLiteral `xml:"scope"`
-	} `xml:"styleSettings"`
-	Triggers []ScreenTrigger `xml:"triggers"`
+	StyleSettings []StyleSetting  `xml:"styleSettings"`
+	Triggers      []ScreenTrigger `xml:"triggers"`
+}
+
+// StyleSetting is a style override Flow Builder saves on a screen or a screen
+// field, such as the background color of a Display Text component.
+type StyleSetting struct {
+	PropertyName  TextLiteral  `xml:"propertyName"`
+	PropertyValue Value        `xml:"propertyValue"`
+	Scope         *TextLiteral `xml:"scope"`
 }
 
 // ScreenAction is an action a screen runs while it is displayed, such as a

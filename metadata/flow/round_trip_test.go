@@ -283,3 +283,151 @@ func TestScreenActionsAndTriggersRoundTrip(t *testing.T) {
 </Flow>
 `)
 }
+
+// A rollback element keeps its description, which it inherits from FlowElement
+// like the other flow elements do.
+func TestRecordRollbackDescriptionRoundTrip(t *testing.T) {
+	assertFlowRoundTrip(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <label>Inquiry</label>
+    <processType>Flow</processType>
+    <recordRollbacks>
+        <description>Undoes every save in this run when any save step
+fails</description>
+        <name>Roll_Back</name>
+        <label>Roll Back</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Screen_Error</targetReference>
+        </connector>
+    </recordRollbacks>
+</Flow>
+`)
+}
+
+// Style settings are kept on a screen field, inside styleProperties and before
+// verticalAlignment, and on the screen itself. A setting without a scope is not
+// given an empty one.
+func TestStyleSettingsRoundTrip(t *testing.T) {
+	assertFlowRoundTrip(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <label>Inquiry</label>
+    <processType>Flow</processType>
+    <screens>
+        <name>Screen_Identity</name>
+        <label>Identity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Header_Old</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Old Inquiry&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <styleSettings>
+                    <propertyName>--flowruntime-c-displaytext-background-color</propertyName>
+                    <propertyValue>
+                        <stringValue>#F0D8A8</stringValue>
+                    </propertyValue>
+                </styleSettings>
+                <styleSettings>
+                    <propertyName>--flowruntime-c-displaytext-border-color</propertyName>
+                    <propertyValue>
+                        <stringValue>#333333</stringValue>
+                    </propertyValue>
+                </styleSettings>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+        <styleSettings>
+            <propertyName>--flowruntime-c-flow-background-color</propertyName>
+            <propertyValue>
+                <stringValue>#FFFFFF</stringValue>
+            </propertyValue>
+        </styleSettings>
+        <styleSettings>
+            <propertyName>--flowruntime-c-flow-header-color</propertyName>
+            <propertyValue>
+                <stringValue>#777</stringValue>
+            </propertyValue>
+            <scope>Header</scope>
+        </styleSettings>
+    </screens>
+</Flow>
+`)
+}
+
+// A rollback element keeps the fields it inherits from FlowBaseElement and
+// FlowNode, in the positions Salesforce writes them.
+func TestRecordRollbackInheritedFieldsRoundTrip(t *testing.T) {
+	assertFlowRoundTrip(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <label>Inquiry</label>
+    <processType>Flow</processType>
+    <recordRollbacks>
+        <processMetadataValues>
+            <name>BuilderType</name>
+            <value>
+                <stringValue>LightningFlowBuilder</stringValue>
+            </value>
+        </processMetadataValues>
+        <description>Undoes every save in this run</description>
+        <name>Roll_Back</name>
+        <elementSubtype>RollbackRecords</elementSubtype>
+        <group>Error_Handling</group>
+        <label>Roll Back</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+    </recordRollbacks>
+</Flow>
+`)
+}
+
+// A screen field keeps its description, its visibility flag and the template
+// it was created from, in the positions Salesforce writes them.
+func TestScreenFieldDescriptionVisibilityAndTemplateRoundTrip(t *testing.T) {
+	assertFlowRoundTrip(t, `<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <label>Inquiry</label>
+    <processType>Flow</processType>
+    <screens>
+        <name>Screen_Identity</name>
+        <label>Identity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <description>Collects the caller's zip code</description>
+            <name>Caller_Zip</name>
+            <dataType>String</dataType>
+            <fieldText>Zip</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <isVisible>false</isVisible>
+            <scale>0</scale>
+            <sourceTemplateApiName>Zip_Template</sourceTemplateApiName>
+            <sourceTemplateProviderType>Standard</sourceTemplateProviderType>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+</Flow>
+`)
+}
