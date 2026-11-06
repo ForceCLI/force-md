@@ -102,6 +102,7 @@ import (
 	_ "github.com/ForceCLI/force-md/metadata/settings"
 	_ "github.com/ForceCLI/force-md/metadata/sharingSets"
 	_ "github.com/ForceCLI/force-md/metadata/sharingrules"
+	_ "github.com/ForceCLI/force-md/metadata/siteDotComSites"
 	_ "github.com/ForceCLI/force-md/metadata/sites"
 	_ "github.com/ForceCLI/force-md/metadata/skills"
 	_ "github.com/ForceCLI/force-md/metadata/slackapps"
