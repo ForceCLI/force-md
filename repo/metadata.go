@@ -175,7 +175,15 @@ func IsMetadataFile(path string) bool {
 	return false
 }
 
+// utf8ByteOrderMark is the encoding of U+FEFF that editors on Windows write at
+// the start of UTF-8 files. Salesforce deploys metadata files that begin with
+// it.
+var utf8ByteOrderMark = []byte("\xef\xbb\xbf")
+
 func RootElementName(xmlData []byte) (string, error) {
+	// encoding/xml returns a leading byte order mark as character data, which
+	// the check below would report as text before the root element.
+	xmlData = bytes.TrimPrefix(xmlData, utf8ByteOrderMark)
 	decoder := xml.NewDecoder(io.NopCloser(bytes.NewReader(xmlData)))
 
 	foundXML := false
