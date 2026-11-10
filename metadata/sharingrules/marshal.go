@@ -13,3 +13,7 @@ func (o CriteriaRule) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (o OwnerRule) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	return internal.MarshalXml(o, e, start)
 }
+
+func (o GuestRule) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return internal.MarshalXml(o, e, start)
+}

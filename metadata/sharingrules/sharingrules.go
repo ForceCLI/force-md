@@ -43,13 +43,14 @@ type OwnerRule struct {
 type GuestRuleList []GuestRule
 
 type GuestRule struct {
-	FullName               string       `xml:"fullName"`
-	AccessLevel            AccessLevel  `xml:"accessLevel"`
-	Description            *Description `xml:"description"`
-	Label                  Label        `xml:"label"`
-	SharedTo               SharedTo     `xml:"sharedTo"`
-	CriteriaItems          CriteriaItem `xml:"criteriaItems"`
-	IncludeHVUOwnedRecords *TextLiteral `xml:"includeHVUOwnedRecords"`
+	FullName               string         `xml:"fullName"`
+	AccessLevel            AccessLevel    `xml:"accessLevel"`
+	Description            *Description   `xml:"description"`
+	Label                  Label          `xml:"label"`
+	SharedTo               SharedTo       `xml:"sharedTo"`
+	BooleanFilter          *BooleanFilter `xml:"booleanFilter"`
+	CriteriaItems          []CriteriaItem `xml:"criteriaItems"`
+	IncludeHVUOwnedRecords *TextLiteral   `xml:"includeHVUOwnedRecords"`
 }
 
 type SharingRules struct {
