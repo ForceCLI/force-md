@@ -82,12 +82,7 @@ func ParseMetadataXmlIfPossible(i MetadataPointer, path string) ([]byte, error) 
 	if err != nil {
 		return nil, errors.Wrap(err, "reading file")
 	}
-	r := bytes.NewReader(escapeBareAmpersands(contents))
-	dec := xml.NewDecoder(r)
-	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = true
-
-	if err := dec.Decode(i); err != nil {
+	if err := UnmarshalXml(contents, i); err != nil {
 		return contents, errors.Wrap(err, "decoding xml")
 	}
 
@@ -117,12 +112,7 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	if err != nil {
 		return errors.Wrap(err, "reading file")
 	}
-	r := bytes.NewReader(escapeBareAmpersands(contents))
-	dec := xml.NewDecoder(r)
-	dec.CharsetReader = charset.NewReaderLabel
-	dec.Strict = true
-
-	if err := dec.Decode(i); err != nil {
+	if err := UnmarshalXml(contents, i); err != nil {
 		return errors.Wrap(err, "parsing xml in "+path)
 	}
 
@@ -134,6 +124,16 @@ func ParseMetadataXml(i MetadataPointer, path string) error {
 	i.SetMetadata(meta)
 
 	return nil
+}
+
+// UnmarshalXml decodes the metadata XML in contents into v, the way metadata
+// files are read: with github.com/nbio/xml in strict mode, after bare
+// ampersands are escaped.
+func UnmarshalXml(contents []byte, v any) error {
+	dec := xml.NewDecoder(bytes.NewReader(escapeBareAmpersands(contents)))
+	dec.CharsetReader = charset.NewReaderLabel
+	dec.Strict = true
+	return dec.Decode(v)
 }
 
 var (

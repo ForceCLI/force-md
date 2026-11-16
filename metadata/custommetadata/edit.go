@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/ForceCLI/force-md/general"
 )
 
 func (p *CustomMetadata) UpdateFieldValue(field string, value string) error {
@@ -12,7 +14,7 @@ func (p *CustomMetadata) UpdateFieldValue(field string, value string) error {
 	for i, u := range p.Values {
 		if strings.ToLower(u.Field) == strings.ToLower(field) {
 			found = true
-			p.Values[i].Value.Text = value
+			p.Values[i].Value.Set(value)
 		}
 	}
 	if !found {
@@ -40,6 +42,6 @@ func (m *CustomMetadata) AddValue(key string, value any) {
 	if stringValue == "" {
 		m.Values = append(m.Values, Value{Field: key, Value: TypedValue{Nil: "true"}})
 	} else {
-		m.Values = append(m.Values, Value{Field: key, Value: TypedValue{Text: stringValue, Type: valueType}})
+		m.Values = append(m.Values, Value{Field: key, Value: TypedValue{TextLiteral: *general.NewTextLiteral(stringValue), Type: valueType}})
 	}
 }

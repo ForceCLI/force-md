@@ -3,6 +3,7 @@ package weblink
 import (
 	"encoding/xml"
 
+	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 	"github.com/ForceCLI/force-md/metadata/objects/split"
@@ -82,9 +83,7 @@ type WebLink struct {
 	ShowsStatus *struct {
 		Text string `xml:",chardata"`
 	} `xml:"showsStatus"`
-	URL *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"url"`
+	URL   *general.TextLiteral `xml:"url"`
 	Width *struct {
 		Text string `xml:",chardata"`
 	} `xml:"width"`

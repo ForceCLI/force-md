@@ -40,6 +40,6 @@ func listFieldUpdates(file string) {
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	fieldUpdates := w.GetFieldUpdates()
 	for _, r := range fieldUpdates {
-		fmt.Printf("%s.%s\n", objectName, r.FullName.Text)
+		fmt.Printf("%s.%s\n", objectName, r.FullName.String())
 	}
 }

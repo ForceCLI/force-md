@@ -397,7 +397,7 @@ func TestWaits(t *testing.T) {
 	if first.InputParameters[0].Name.Text != "TimeTableColumnEnumOrId" ||
 		first.InputParameters[0].Value == nil ||
 		first.InputParameters[0].Value.StringValue == nil ||
-		first.InputParameters[0].Value.StringValue.Text != "Showing__c" {
+		first.InputParameters[0].Value.StringValue.String() != "Showing__c" {
 		t.Errorf("event 0 input parameter 0 = %+v", first.InputParameters[0])
 	}
 	if first.InputParameters[1].Name.Text != "TimeOffset" ||
@@ -497,10 +497,10 @@ func TestTransformElements(t *testing.T) {
 	if records.Connector == nil || string(records.Connector.TargetReference) != "Update_Records" {
 		t.Errorf("connector = %+v", records.Connector)
 	}
-	if records.DataType == nil || records.DataType.Text != "SObject" {
+	if records.DataType == nil || records.DataType.String() != "SObject" {
 		t.Errorf("dataType = %+v", records.DataType)
 	}
-	if records.ObjectType == nil || records.ObjectType.Text != "Account" {
+	if records.ObjectType == nil || records.ObjectType.String() != "Account" {
 		t.Errorf("objectType = %+v", records.ObjectType)
 	}
 	if records.IsCollection == nil || !records.IsCollection.ToBool() {
@@ -516,10 +516,10 @@ func TestTransformElements(t *testing.T) {
 	if len(actions) != 2 {
 		t.Fatalf("expected 2 transformValueActions, got %d", len(actions))
 	}
-	if actions[0].OutputFieldApiName == nil || actions[0].OutputFieldApiName.Text != "Id" {
+	if actions[0].OutputFieldApiName == nil || actions[0].OutputFieldApiName.String() != "Id" {
 		t.Errorf("outputFieldApiName = %+v", actions[0].OutputFieldApiName)
 	}
-	if actions[0].TransformType == nil || actions[0].TransformType.Text != "Map" {
+	if actions[0].TransformType == nil || actions[0].TransformType.String() != "Map" {
 		t.Errorf("transformType = %+v", actions[0].TransformType)
 	}
 	if actions[0].Value == nil || actions[0].Value.ElementReference == nil ||
@@ -528,10 +528,10 @@ func TestTransformElements(t *testing.T) {
 	}
 	// A mapped value may be a formula rather than a reference.
 	if actions[1].Value == nil || actions[1].Value.FormulaExpression == nil ||
-		actions[1].Value.FormulaExpression.Text != "{!var_Prefix} + ' - ' + {!Get_Records[$EachItem].Name}" {
+		actions[1].Value.FormulaExpression.String() != "{!var_Prefix} + ' - ' + {!Get_Records[$EachItem].Name}" {
 		t.Errorf("formulaExpression = %+v", actions[1].Value)
 	}
-	if actions[1].Value.FormulaDataType == nil || actions[1].Value.FormulaDataType.Text != "String" {
+	if actions[1].Value.FormulaDataType == nil || actions[1].Value.FormulaDataType.String() != "String" {
 		t.Errorf("formulaDataType = %+v", actions[1].Value)
 	}
 
@@ -627,10 +627,10 @@ func TestDateValueCondition(t *testing.T) {
 	if len(conditions) != 2 {
 		t.Fatalf("expected 2 conditions, got %d", len(conditions))
 	}
-	if got := conditions[0].RightValue; got == nil || got.DateValue == nil || got.DateValue.Text != "2020-12-15" {
+	if got := conditions[0].RightValue; got == nil || got.DateValue == nil || got.DateValue.String() != "2020-12-15" {
 		t.Errorf("dateValue = %+v", got)
 	}
-	if got := conditions[1].RightValue; got == nil || got.DateTimeValue == nil || got.DateTimeValue.Text != "2020-12-15T07:00:00.000Z" {
+	if got := conditions[1].RightValue; got == nil || got.DateTimeValue == nil || got.DateTimeValue.String() != "2020-12-15T07:00:00.000Z" {
 		t.Errorf("dateTimeValue = %+v", got)
 	}
 }
@@ -648,13 +648,13 @@ func TestRecordCreateInputAssignmentValues(t *testing.T) {
 	if len(assignments) != 5 {
 		t.Fatalf("expected 5 inputAssignments, got %d", len(assignments))
 	}
-	if got := assignments[0].Value; got == nil || got.StringValue == nil || got.StringValue.Text != "Literal" {
+	if got := assignments[0].Value; got == nil || got.StringValue == nil || got.StringValue.String() != "Literal" {
 		t.Errorf("stringValue = %+v", got)
 	}
-	if got := assignments[1].Value; got == nil || got.DateValue == nil || got.DateValue.Text != "2021-03-04" {
+	if got := assignments[1].Value; got == nil || got.DateValue == nil || got.DateValue.String() != "2021-03-04" {
 		t.Errorf("dateValue = %+v", got)
 	}
-	if got := assignments[2].Value; got == nil || got.DateTimeValue == nil || got.DateTimeValue.Text != "2021-03-04T09:30:00.000Z" {
+	if got := assignments[2].Value; got == nil || got.DateTimeValue == nil || got.DateTimeValue.String() != "2021-03-04T09:30:00.000Z" {
 		t.Errorf("dateTimeValue = %+v", got)
 	}
 	if got := assignments[3].Value; got == nil || got.NumberValue == nil || got.NumberValue.Text != "7.25" {
@@ -1049,7 +1049,7 @@ func TestCollectionElementsValue(t *testing.T) {
 	if got := value.CollectionElements[0].ElementReference; got == nil || got.Text != "varToAddress" {
 		t.Errorf("first element = %+v", value.CollectionElements[0])
 	}
-	if got := value.CollectionElements[1].StringValue; got == nil || got.Text != "second@example.com" {
+	if got := value.CollectionElements[1].StringValue; got == nil || got.String() != "second@example.com" {
 		t.Errorf("second element = %+v", value.CollectionElements[1])
 	}
 }

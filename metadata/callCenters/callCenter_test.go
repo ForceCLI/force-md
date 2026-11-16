@@ -77,18 +77,18 @@ func TestOpen(t *testing.T) {
 		t.Fatalf("len(section[0].Items) = %d, want 2", got)
 	}
 	description := general.Items[0]
-	if description.Value.Nil != "true" || description.Value.Text != "" {
+	if description.Value.Nil != "true" || description.Value.String() != "" {
 		t.Errorf("reqDescription value = %+v, want nil", description.Value)
 	}
 	adapter := general.Items[1]
 	if got := adapter.Name.String(); got != "reqAdapterUrl" {
 		t.Errorf("item[1].Name = %q, want reqAdapterUrl", got)
 	}
-	if adapter.Value.Nil != "" || adapter.Value.Text != "https://example.com/adapter" {
+	if adapter.Value.Nil != "" || adapter.Value.String() != "https://example.com/adapter" {
 		t.Errorf("reqAdapterUrl value = %+v, want https://example.com/adapter", adapter.Value)
 	}
 
-	if got := c.Sections[1].Items[0].Value.Text; got != "9" {
+	if got := c.Sections[1].Items[0].Value.String(); got != "9" {
 		t.Errorf("reqOutsidePrefix value = %q, want 9", got)
 	}
 }

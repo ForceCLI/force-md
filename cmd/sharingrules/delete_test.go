@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata/sharingrules"
 )
@@ -23,24 +24,24 @@ func TestDeleteRule(t *testing.T) {
 			{
 				FullName:    "TestCriteriaRule1",
 				AccessLevel: sharingrules.AccessLevel{Text: "Read"},
-				Label:       sharingrules.Label{Text: "Test Criteria Rule 1"},
+				Label:       *general.NewTextLiteral("Test Criteria Rule 1"),
 			},
 			{
 				FullName:    "TestCriteriaRule2",
 				AccessLevel: sharingrules.AccessLevel{Text: "Edit"},
-				Label:       sharingrules.Label{Text: "Test Criteria Rule 2"},
+				Label:       *general.NewTextLiteral("Test Criteria Rule 2"),
 			},
 		},
 		SharingOwnerRules: []sharingrules.OwnerRule{
 			{
 				FullName:    "TestOwnerRule1",
 				AccessLevel: sharingrules.AccessLevel{Text: "Read"},
-				Label:       sharingrules.Label{Text: "Test Owner Rule 1"},
+				Label:       *general.NewTextLiteral("Test Owner Rule 1"),
 			},
 			{
 				FullName:    "TestOwnerRule2",
 				AccessLevel: sharingrules.AccessLevel{Text: "Edit"},
-				Label:       sharingrules.Label{Text: "Test Owner Rule 2"},
+				Label:       *general.NewTextLiteral("Test Owner Rule 2"),
 			},
 		},
 	}

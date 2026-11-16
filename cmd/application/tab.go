@@ -105,6 +105,6 @@ func listTabs(file string) {
 	}
 	tabs := p.GetTabs()
 	for _, a := range tabs {
-		fmt.Println(a.Text)
+		fmt.Println(a.String())
 	}
 }

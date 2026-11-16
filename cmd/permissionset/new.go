@@ -52,9 +52,7 @@ func addPermissionSet(file string) {
 		Label:                 label,
 	}
 	if description != "" {
-		p.Description = &permissionset.Description{
-			Text: description,
-		}
+		p.Description = NewTextLiteral(description)
 	}
 	err := internal.WriteToFile(p, file)
 	if err != nil {

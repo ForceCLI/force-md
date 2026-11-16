@@ -16,19 +16,19 @@ func TestCloneField(t *testing.T) {
 		Fields: []field.Field{
 			{
 				FullName:       "Source_Field__c",
-				Type:           &TextLiteral{Text: "Text"},
-				Label:          &TextLiteral{Text: "Source Field"},
+				Type:           NewTextLiteral("Text"),
+				Label:          NewTextLiteral("Source Field"),
 				Length:         &IntegerText{Text: "255"},
 				Required:       &BooleanText{Text: "false"},
 				Unique:         &BooleanText{Text: "false"},
 				ExternalId:     &BooleanText{Text: "false"},
-				Description:    &TextLiteral{Text: "This is a source field"},
-				InlineHelpText: &TextLiteral{Text: "Help text for source field"},
+				Description:    NewTextLiteral("This is a source field"),
+				InlineHelpText: NewTextLiteral("Help text for source field"),
 			},
 			{
 				FullName:  "Another_Field__c",
-				Type:      &TextLiteral{Text: "Number"},
-				Label:     &TextLiteral{Text: "Another Field"},
+				Type:      NewTextLiteral("Number"),
+				Label:     NewTextLiteral("Another Field"),
 				Precision: &IntegerText{Text: "18"},
 				Scale:     &IntegerText{Text: "2"},
 			},
@@ -55,20 +55,20 @@ func TestCloneField(t *testing.T) {
 
 		// Verify the target field has the same properties as source
 		assert.NotNil(t, targetField.Type)
-		assert.Equal(t, "Text", targetField.Type.Text)
+		assert.Equal(t, "Text", targetField.Type.String())
 
 		assert.NotNil(t, targetField.Length)
 		assert.Equal(t, "255", targetField.Length.Text)
 
 		assert.NotNil(t, targetField.Description)
-		assert.Equal(t, "This is a source field", targetField.Description.Text)
+		assert.Equal(t, "This is a source field", targetField.Description.String())
 
 		assert.NotNil(t, targetField.InlineHelpText)
-		assert.Equal(t, "Help text for source field", targetField.InlineHelpText.Text)
+		assert.Equal(t, "Help text for source field", targetField.InlineHelpText.String())
 
 		// Verify the label was updated
 		assert.NotNil(t, targetField.Label)
-		assert.Equal(t, "Target Field", targetField.Label.Text)
+		assert.Equal(t, "Target Field", targetField.Label.String())
 
 		// Verify source field still exists
 		sourceFieldFound := false
@@ -89,11 +89,11 @@ func TestCloneField(t *testing.T) {
 		obj.Fields = []field.Field{
 			{
 				FullName: "Source_Field__c",
-				Type:     &TextLiteral{Text: "Text"},
+				Type:     NewTextLiteral("Text"),
 			},
 			{
 				FullName: "Another_Field__c",
-				Type:     &TextLiteral{Text: "Number"},
+				Type:     NewTextLiteral("Number"),
 			},
 		}
 
@@ -111,11 +111,11 @@ func TestCloneField(t *testing.T) {
 		obj.Fields = []field.Field{
 			{
 				FullName: "Source_Field__c",
-				Type:     &TextLiteral{Text: "Text"},
+				Type:     NewTextLiteral("Text"),
 			},
 			{
 				FullName: "Another_Field__c",
-				Type:     &TextLiteral{Text: "Number"},
+				Type:     NewTextLiteral("Number"),
 			},
 		}
 
@@ -131,7 +131,7 @@ func TestCloneField(t *testing.T) {
 		for _, f := range obj.Fields {
 			if f.FullName == "Another_Field__c" {
 				assert.NotNil(t, f.Type)
-				assert.Equal(t, "Number", f.Type.Text)
+				assert.Equal(t, "Number", f.Type.String())
 				break
 			}
 		}
@@ -142,8 +142,8 @@ func TestCloneField(t *testing.T) {
 		obj.Fields = []field.Field{
 			{
 				FullName: "Source_Field__c",
-				Type:     &TextLiteral{Text: "Text"},
-				Label:    &TextLiteral{Text: "Source Field"},
+				Type:     NewTextLiteral("Text"),
+				Label:    NewTextLiteral("Source Field"),
 			},
 		}
 
@@ -168,7 +168,7 @@ func TestAddPicklistValue(t *testing.T) {
 			Fields: []field.Field{
 				{
 					FullName: "Status__c",
-					Type:     &TextLiteral{Text: "Picklist"},
+					Type:     NewTextLiteral("Picklist"),
 					ValueSet: &struct {
 						ControllingField *struct {
 							Text string `xml:",chardata"`
@@ -186,10 +186,8 @@ func TestAddPicklistValue(t *testing.T) {
 							Text string `xml:",chardata"`
 						} `xml:"valueSetName"`
 						ValueSettings []struct {
-							ControllingFieldValue []struct {
-								Text string `xml:",innerxml"`
-							} `xml:"controllingFieldValue"`
-							ValueName struct {
+							ControllingFieldValue []TextLiteral `xml:"controllingFieldValue"`
+							ValueName             struct {
 								Text string `xml:",chardata"`
 							} `xml:"valueName"`
 						} `xml:"valueSettings"`
@@ -227,7 +225,7 @@ func TestAddPicklistValue(t *testing.T) {
 			Fields: []field.Field{
 				{
 					FullName: "Status__c",
-					Type:     &TextLiteral{Text: "Picklist"},
+					Type:     NewTextLiteral("Picklist"),
 					ValueSet: &struct {
 						ControllingField *struct {
 							Text string `xml:",chardata"`
@@ -245,10 +243,8 @@ func TestAddPicklistValue(t *testing.T) {
 							Text string `xml:",chardata"`
 						} `xml:"valueSetName"`
 						ValueSettings []struct {
-							ControllingFieldValue []struct {
-								Text string `xml:",innerxml"`
-							} `xml:"controllingFieldValue"`
-							ValueName struct {
+							ControllingFieldValue []TextLiteral `xml:"controllingFieldValue"`
+							ValueName             struct {
 								Text string `xml:",chardata"`
 							} `xml:"valueName"`
 						} `xml:"valueSettings"`
@@ -296,7 +292,7 @@ func TestAddPicklistValue(t *testing.T) {
 			Fields: []field.Field{
 				{
 					FullName: "Status__c",
-					Type:     &TextLiteral{Text: "Text"},
+					Type:     NewTextLiteral("Text"),
 				},
 			},
 		}
@@ -311,7 +307,7 @@ func TestAddPicklistValue(t *testing.T) {
 			Fields: []field.Field{
 				{
 					FullName: "Status__c",
-					Type:     &TextLiteral{Text: "Picklist"},
+					Type:     NewTextLiteral("Picklist"),
 					ValueSet: &struct {
 						ControllingField *struct {
 							Text string `xml:",chardata"`
@@ -329,10 +325,8 @@ func TestAddPicklistValue(t *testing.T) {
 							Text string `xml:",chardata"`
 						} `xml:"valueSetName"`
 						ValueSettings []struct {
-							ControllingFieldValue []struct {
-								Text string `xml:",innerxml"`
-							} `xml:"controllingFieldValue"`
-							ValueName struct {
+							ControllingFieldValue []TextLiteral `xml:"controllingFieldValue"`
+							ValueName             struct {
 								Text string `xml:",chardata"`
 							} `xml:"valueName"`
 						} `xml:"valueSettings"`

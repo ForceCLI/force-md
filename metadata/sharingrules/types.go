@@ -1,5 +1,7 @@
 package sharingrules
 
+import "github.com/ForceCLI/force-md/general"
+
 // AccessLevel represents an access level field
 type AccessLevel struct {
 	Text string `xml:",chardata"`
@@ -13,14 +15,10 @@ type AccountSettings struct {
 }
 
 // Description represents a description field
-type Description struct {
-	Text string `xml:",innerxml"`
-}
+type Description = general.TextLiteral
 
 // Label represents a label field
-type Label struct {
-	Text string `xml:",innerxml"`
-}
+type Label = general.TextLiteral
 
 // Group represents a group reference
 type Group struct {

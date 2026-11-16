@@ -53,7 +53,7 @@ func (p *FlexiPage) DeleteField(fieldName string) error {
 		for _, instance := range region.ItemInstances {
 			// Check if this is a field instance with the field we want to delete
 			if instance.FieldInstance != nil {
-				fieldItemText := instance.FieldInstance.FieldItem.Text
+				fieldItemText := instance.FieldInstance.FieldItem.String()
 
 				// Match exact field name or field name with Record. prefix
 				if fieldItemText == fieldName || fieldItemText == "Record."+fieldName {

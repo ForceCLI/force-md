@@ -166,7 +166,7 @@ func (v Value) String() string {
 		return v.ElementReference.Text
 	}
 	if v.StringValue != nil {
-		return v.StringValue.Text
+		return v.StringValue.String()
 	}
 	if v.BooleanValue != nil {
 		return v.BooleanValue.String()

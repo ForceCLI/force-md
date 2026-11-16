@@ -36,10 +36,10 @@ func TestOpenParsesPartitionAndCacheTypes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Open: %v", err)
 	}
-	if p.MasterLabel.Text != "aerreg" {
-		t.Errorf("masterLabel = %q", p.MasterLabel.Text)
+	if p.MasterLabel.String() != "aerreg" {
+		t.Errorf("masterLabel = %q", p.MasterLabel.String())
 	}
-	if p.Description == nil || p.Description.Text != "Platform cache partition for tests." {
+	if p.Description == nil || p.Description.String() != "Platform cache partition for tests." {
 		t.Errorf("description = %+v", p.Description)
 	}
 	if p.IsDefaultPartition == nil || p.IsDefaultPartition.ToBool() {
@@ -49,10 +49,10 @@ func TestOpenParsesPartitionAndCacheTypes(t *testing.T) {
 		t.Fatalf("expected 2 platformCachePartitionTypes, got %d", len(p.PlatformCachePartitionTypes))
 	}
 	org := p.PlatformCachePartitionTypes[0]
-	if org.CacheType.Text != "Organization" || org.AllocatedCapacity == nil || org.AllocatedCapacity.Text != "1" {
+	if org.CacheType.String() != "Organization" || org.AllocatedCapacity == nil || org.AllocatedCapacity.Text != "1" {
 		t.Errorf("first type = %+v", org)
 	}
-	if session := p.PlatformCachePartitionTypes[1]; session.CacheType.Text != "Session" || session.AllocatedPartnerCapacity != nil {
+	if session := p.PlatformCachePartitionTypes[1]; session.CacheType.String() != "Session" || session.AllocatedPartnerCapacity != nil {
 		t.Errorf("second type = %+v", session)
 	}
 }

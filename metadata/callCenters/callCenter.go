@@ -42,10 +42,7 @@ type CallCenterItem struct {
 
 // CallCenterItemValue is an item's setting; an item with no value is written
 // as <value xsi:nil="true"/>.
-type CallCenterItemValue struct {
-	Text string `xml:",innerxml"`
-	Nil  string `xml:"xsi:nil,attr,omitempty"`
-}
+type CallCenterItemValue = NillableText
 
 func (c *CallCenter) SetMetadata(m metadata.MetadataInfo) {
 	c.MetadataInfo = m

@@ -78,11 +78,11 @@ func tableCustomMetadata(files []string, filter string, wantedFields map[string]
 			}
 			// Convert boolean strings to actual booleans for filtering
 			if v.Value.Type == "xsd:boolean" {
-				fields[v.Field] = v.Value.Text == "true"
+				fields[v.Field] = v.Value.String() == "true"
 			} else {
-				fields[v.Field] = v.Value.Text
+				fields[v.Field] = v.Value.String()
 			}
-			displayFields[v.Field] = v.Value.Text
+			displayFields[v.Field] = v.Value.String()
 		}
 		if program == nil {
 			program, err = expr.Compile(filter, expr.Env(fields))
@@ -137,9 +137,9 @@ func listCustomMetadata(files []string, filter string) {
 		for _, v := range m.Values {
 			// Convert boolean strings to actual booleans for filtering
 			if v.Value.Type == "xsd:boolean" {
-				fields[v.Field] = v.Value.Text == "true"
+				fields[v.Field] = v.Value.String() == "true"
 			} else {
-				fields[v.Field] = v.Value.Text
+				fields[v.Field] = v.Value.String()
 			}
 		}
 		if program == nil {

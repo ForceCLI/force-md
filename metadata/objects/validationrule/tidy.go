@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/ForceCLI/force-md/internal"
 	"github.com/octoberswimmer/sformula/formatter"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,11 +14,8 @@ func (rules ValidationRuleList) Tidy() {
 	})
 	for _, f := range rules {
 		if f.ErrorConditionFormula != nil {
-			formatted, err := formatter.Format(f.ErrorConditionFormula.String())
-			if err != nil {
+			if err := f.ErrorConditionFormula.Reformat(formatter.Format); err != nil {
 				log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
-			} else {
-				f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
 			}
 		}
 	}
@@ -27,11 +23,8 @@ func (rules ValidationRuleList) Tidy() {
 
 func (f ValidationRule) Tidy() {
 	if f.ErrorConditionFormula != nil {
-		formatted, err := formatter.Format(f.ErrorConditionFormula.String())
-		if err != nil {
+		if err := f.ErrorConditionFormula.Reformat(formatter.Format); err != nil {
 			log.Warn(fmt.Sprintf("error formatting %s: %s", f.FullName, err.Error()))
-		} else {
-			f.ErrorConditionFormula.Text = internal.FormulaEscaper.Replace(formatted)
 		}
 	}
 }

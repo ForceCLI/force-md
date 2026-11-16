@@ -108,14 +108,14 @@ func listAlerts(file string) {
 	objectName := internal.TrimSuffixToEnd(path.Base(file), ".workflow")
 	if senderType != 0 {
 		filters = append(filters, func(a workflow.Alert) bool {
-			return strings.ToLower(a.SenderType.Text) == strings.ToLower(SenderTypeIds[senderType][0])
+			return strings.ToLower(a.SenderType.String()) == strings.ToLower(SenderTypeIds[senderType][0])
 		})
 	}
 	if recipient != "" {
 		filters = append(filters, func(a workflow.Alert) bool {
 			t := strings.ToLower(recipient)
 			for _, r := range a.Recipients {
-				if strings.ToLower(r.Type.Text) == "user" && strings.ToLower(r.Recipient.Text) == t {
+				if strings.ToLower(r.Type.Text) == "user" && strings.ToLower(r.Recipient.String()) == t {
 					return true
 				}
 			}
@@ -131,7 +131,7 @@ func listAlerts(file string) {
 		filters = append(filters, func(a workflow.Alert) bool {
 			t := strings.ToLower(group)
 			for _, r := range a.Recipients {
-				if strings.ToLower(r.Type.Text) == "group" && strings.ToLower(r.Recipient.Text) == t {
+				if strings.ToLower(r.Type.Text) == "group" && strings.ToLower(r.Recipient.String()) == t {
 					return true
 				}
 			}

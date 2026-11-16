@@ -78,7 +78,7 @@ func checkUnassignedPicklistOptions(o *objects.CustomObject) {
 		return
 	}
 	filter := func(f field.Field) bool {
-		if f.Type != nil && (strings.ToLower(f.Type.Text) == "picklist" || strings.ToLower(f.Type.Text) == "multiselectpicklist") {
+		if f.Type != nil && (strings.ToLower(f.Type.String()) == "picklist" || strings.ToLower(f.Type.String()) == "multiselectpicklist") {
 			return true
 		}
 		return false
@@ -136,7 +136,7 @@ PICKLIST:
 
 func addMissingRecordTypePicklistFields(o *objects.CustomObject) {
 	filter := func(f field.Field) bool {
-		if f.Type != nil && (strings.ToLower(f.Type.Text) == "picklist" || strings.ToLower(f.Type.Text) == "multiselectpicklist") {
+		if f.Type != nil && (strings.ToLower(f.Type.String()) == "picklist" || strings.ToLower(f.Type.String()) == "multiselectpicklist") {
 			return true
 		}
 		return false

@@ -29,16 +29,12 @@ type Rule struct {
 	Active   struct {
 		Text string `xml:",chardata"`
 	} `xml:"active"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
+	Description           *TextLiteral `xml:"description"`
 	ErrorConditionFormula *TextLiteral `xml:"errorConditionFormula"`
 	ErrorDisplayField     *struct {
 		Text string `xml:",chardata"`
 	} `xml:"errorDisplayField"`
-	ErrorMessage struct {
-		Text string `xml:",innerxml"`
-	} `xml:"errorMessage"`
+	ErrorMessage TextLiteral `xml:"errorMessage"`
 }
 
 func (c *ValidationRule) SetMetadata(m metadata.MetadataInfo) {

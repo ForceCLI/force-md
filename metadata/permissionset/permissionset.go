@@ -14,9 +14,7 @@ func init() {
 	internal.TypeRegistry.Register(NAME, func(path string) (metadata.RegisterableMetadata, error) { return Open(path) })
 }
 
-type Description struct {
-	Text string `xml:",innerxml"`
-}
+type Description = TextLiteral
 
 type License struct {
 	Text string `xml:",chardata"`

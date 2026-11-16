@@ -3,6 +3,7 @@ package permissionsetgroup
 import (
 	"encoding/xml"
 
+	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 )
@@ -21,11 +22,9 @@ type PermissionSetList []PermissionSet
 
 type PermissionSetGroup struct {
 	metadata.MetadataInfo
-	XMLName     xml.Name `xml:"PermissionSetGroup"`
-	Xmlns       string   `xml:"xmlns,attr"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
+	XMLName               xml.Name             `xml:"PermissionSetGroup"`
+	Xmlns                 string               `xml:"xmlns,attr"`
+	Description           *general.TextLiteral `xml:"description"`
 	HasActivationRequired *struct {
 		Text string `xml:",chardata"`
 	} `xml:"hasActivationRequired"`

@@ -75,7 +75,7 @@ func editCustomMetadataLabel(file string, label string) {
 		Protected: p.Protected,
 	}
 	for _, v := range p.Values {
-		m.AddValue(v.Field, v.Value.Text)
+		m.AddValue(v.Field, v.Value.String())
 	}
 	m.Tidy()
 	err = internal.WriteToFile(m, file)

@@ -14,7 +14,7 @@ const unbalancedFormulaFlow = `<?xml version="1.0" encoding="UTF-8"?>
     <formulas>
         <name>Unbalanced</name>
         <dataType>String</dataType>
-        <expression>{!$Record.Account__c.Name + &quot;-&quot;+TEXT(YEAR(DATEVALUE({!$Record.CreatedDate})))</expression>
+        <expression>{!$Record.Account__c.Name + "-"+TEXT(YEAR(DATEVALUE({!$Record.CreatedDate})))</expression>
     </formulas>
     <formulas>
         <name>Balanced</name>
@@ -62,10 +62,10 @@ func TestTidyLogsUnparseableFormulaInInvalidDraftAtDebug(t *testing.T) {
 	if len(entries) != 1 || entries[0].Level != log.DebugLevel {
 		t.Fatalf("expected one debug entry, got %v", entries)
 	}
-	if got, want := f.Formulas[0].Expression.Text, `{!$Record.Account__c.Name + &quot;-&quot;+TEXT(YEAR(DATEVALUE({!$Record.CreatedDate})))`; got != want {
+	if got, want := f.Formulas[0].Expression.String(), `{!$Record.Account__c.Name + "-"+TEXT(YEAR(DATEVALUE({!$Record.CreatedDate})))`; got != want {
 		t.Errorf("unparseable formula changed: got %q, want %q", got, want)
 	}
-	if got, want := f.Formulas[1].Expression.Text, `{!$Record.Referral_Date__c} + 14`; got != want {
+	if got, want := f.Formulas[1].Expression.String(), `{!$Record.Referral_Date__c} + 14`; got != want {
 		t.Errorf("parseable formula not formatted: got %q, want %q", got, want)
 	}
 }

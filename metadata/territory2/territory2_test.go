@@ -82,11 +82,11 @@ func TestOpenParsesTerritory2CustomFields(t *testing.T) {
 		t.Fatalf("customFields length = %d, want 2", len(m.CustomFields))
 	}
 	activation := m.CustomFields[0]
-	if activation.Name.Text != "Activation_DateTime__c" || activation.Value.Type != "xsd:dateTime" || activation.Value.Text != "2014-07-16T05:05:00.000Z" || activation.Value.Nil != "" {
+	if activation.Name.Text != "Activation_DateTime__c" || activation.Value.Type != "xsd:dateTime" || activation.Value.String() != "2014-07-16T05:05:00.000Z" || activation.Value.Nil != "" {
 		t.Errorf("customFields[0] = %+v, want Activation_DateTime__c xsd:dateTime 2014-07-16T05:05:00.000Z", activation)
 	}
 	phone := m.CustomFields[1]
-	if phone.Name.Text != "ManagersPhone__c" || phone.Value.Nil != "true" || phone.Value.Text != "" || phone.Value.Type != "" {
+	if phone.Name.Text != "ManagersPhone__c" || phone.Value.Nil != "true" || phone.Value.String() != "" || phone.Value.Type != "" {
 		t.Errorf("customFields[1] = %+v, want ManagersPhone__c nil", phone)
 	}
 }

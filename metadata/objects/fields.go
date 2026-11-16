@@ -135,7 +135,7 @@ func (o *CustomObject) CloneField(sourceFieldName string, targetFieldName string
 			labelText = strings.TrimSuffix(labelText, "__c")
 		}
 		labelText = strings.ReplaceAll(labelText, "_", " ")
-		targetField.Label = &TextLiteral{Text: labelText}
+		targetField.Label = NewTextLiteral(labelText)
 	}
 
 	// Add the new field
@@ -267,7 +267,7 @@ func (o *CustomObject) AddPicklistValue(fieldName string, picklistValue string, 
 				FullName: picklistValue,
 			}
 			newValue.Default.Text = "false"
-			newValue.Label.Text = picklistValue
+			newValue.Label.Set(picklistValue)
 			o.Fields[i].ValueSet.ValueSetDefinition.Value = append(o.Fields[i].ValueSet.ValueSetDefinition.Value, newValue)
 			break
 		}

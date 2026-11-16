@@ -14,11 +14,7 @@ func init() {
 	internal.TypeRegistry.Register(NAME, func(path string) (metadata.RegisterableMetadata, error) { return Open(path) })
 }
 
-type TypedValue struct {
-	Text string `xml:",innerxml"`
-	Type string `xml:"xsi:type,attr,omitempty"`
-	Nil  string `xml:"xsi:nil,attr,omitempty"`
-}
+type TypedValue = TypedText
 
 type Value struct {
 	Field string     `xml:"field"`

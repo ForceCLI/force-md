@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata"
 	"github.com/ForceCLI/force-md/registry"
@@ -28,11 +29,7 @@ type FieldValue struct {
 // TypedValue is a custom field value written with its XML schema type,
 // <value xsi:type="xsd:string">, or as <value xsi:nil="true"/> when the field
 // has no value.
-type TypedValue struct {
-	Text string `xml:",innerxml"`
-	Type string `xml:"xsi:type,attr,omitempty"`
-	Nil  string `xml:"xsi:nil,attr,omitempty"`
-}
+type TypedValue = general.TypedText
 
 type Territory2Model struct {
 	metadata.MetadataInfo

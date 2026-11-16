@@ -293,7 +293,7 @@ func (r *Report) DeleteField(fieldName string) error {
 	filteredColumns := r.Columns[:0]
 	for _, column := range r.Columns {
 		// Match exact field name or field name with object prefix (e.g., Object__c$Field__c)
-		fieldText := column.Field.Text
+		fieldText := column.Field.String()
 		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
 			fieldDeleted = true
 			// Skip this column
@@ -306,7 +306,7 @@ func (r *Report) DeleteField(fieldName string) error {
 	// Also check and remove the field from groupingsAcross
 	filteredGroupingsAcross := r.GroupingsAcross[:0]
 	for _, grouping := range r.GroupingsAcross {
-		fieldText := grouping.Field.Text
+		fieldText := grouping.Field.String()
 		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
 			fieldDeleted = true
 			// Skip this grouping
@@ -319,7 +319,7 @@ func (r *Report) DeleteField(fieldName string) error {
 	// Also check and remove the field from groupingsDown
 	filteredGroupingsDown := r.GroupingsDown[:0]
 	for _, grouping := range r.GroupingsDown {
-		fieldText := grouping.Field.Text
+		fieldText := grouping.Field.String()
 		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
 			fieldDeleted = true
 			// Skip this grouping
@@ -333,7 +333,7 @@ func (r *Report) DeleteField(fieldName string) error {
 	if r.Filter != nil {
 		filteredCriteriaItems := r.Filter.CriteriaItems[:0]
 		for _, criteria := range r.Filter.CriteriaItems {
-			fieldText := criteria.Column.Text
+			fieldText := criteria.Column.String()
 			if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
 				fieldDeleted = true
 				// Skip this criteria
@@ -347,7 +347,7 @@ func (r *Report) DeleteField(fieldName string) error {
 	// Also check and remove the field from buckets sourceColumnName
 	filteredBuckets := r.Buckets[:0]
 	for _, bucket := range r.Buckets {
-		fieldText := bucket.SourceColumnName.Text
+		fieldText := bucket.SourceColumnName.String()
 		if fieldText == fieldName || strings.HasSuffix(fieldText, "$"+fieldName) {
 			fieldDeleted = true
 			// Skip this bucket

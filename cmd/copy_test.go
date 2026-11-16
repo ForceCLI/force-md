@@ -32,8 +32,8 @@ func TestCopyToSourceFormat(t *testing.T) {
 		Fields: []field.Field{
 			{
 				FullName: "TestField__c",
-				Label:    &TextLiteral{Text: "Test Field"},
-				Type:     &TextLiteral{Text: "Text"},
+				Label:    NewTextLiteral("Test Field"),
+				Type:     NewTextLiteral("Text"),
 				Length:   &IntegerText{Text: "255"},
 			},
 		},
@@ -89,8 +89,8 @@ func TestCopyToMetadataFormat(t *testing.T) {
 		Xmlns: "http://soap.sforce.com/2006/04/metadata",
 		Field: field.Field{
 			FullName: "TestField__c",
-			Label:    &TextLiteral{Text: "Test Field"},
-			Type:     &TextLiteral{Text: "Text"},
+			Label:    NewTextLiteral("Test Field"),
+			Type:     NewTextLiteral("Text"),
 			Length:   &IntegerText{Text: "255"},
 		},
 	}
@@ -142,8 +142,8 @@ func TestCopyWithPackageFilter(t *testing.T) {
 		Fields: []field.Field{
 			{
 				FullName: "Field1__c",
-				Label:    &TextLiteral{Text: "Field 1"},
-				Type:     &TextLiteral{Text: "Text"},
+				Label:    NewTextLiteral("Field 1"),
+				Type:     NewTextLiteral("Text"),
 				Length:   &IntegerText{Text: "100"},
 			},
 		},
@@ -159,8 +159,8 @@ func TestCopyWithPackageFilter(t *testing.T) {
 		Fields: []field.Field{
 			{
 				FullName: "Field2__c",
-				Label:    &TextLiteral{Text: "Field 2"},
-				Type:     &TextLiteral{Text: "Number"},
+				Label:    NewTextLiteral("Field 2"),
+				Type:     NewTextLiteral("Number"),
 			},
 		},
 	}
@@ -1282,8 +1282,8 @@ func TestCopyToMetadataFormatWritesObjectsThatOnlyHaveFields(t *testing.T) {
 			Xmlns: "http://soap.sforce.com/2006/04/metadata",
 			Field: field.Field{
 				FullName: objectName + "Field__c",
-				Label:    &TextLiteral{Text: "Test Field"},
-				Type:     &TextLiteral{Text: "Text"},
+				Label:    NewTextLiteral("Test Field"),
+				Type:     NewTextLiteral("Text"),
 				Length:   &IntegerText{Text: "255"},
 			},
 		}

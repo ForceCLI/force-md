@@ -67,9 +67,7 @@ type CustomObject struct {
 	Deprecated *struct {
 		Text string `xml:",chardata"`
 	} `xml:"deprecated"`
-	Description *struct {
-		Text string `xml:",innerxml"`
-	} `xml:"description"`
+	Description      *TextLiteral `xml:"description"`
 	EnableActivities *struct {
 		Text string `xml:",chardata"`
 	} `xml:"enableActivities"`

@@ -11,58 +11,58 @@ func TestDeleteField(t *testing.T) {
 	// Create a test report with field references in multiple places
 	testReport := &Report{
 		Xmlns:      "http://soap.sforce.com/2006/04/metadata",
-		Name:       TextLiteral{Text: "TestReport"},
-		Format:     TextLiteral{Text: "Tabular"},
-		ReportType: TextLiteral{Text: "AccountList"},
+		Name:       *NewTextLiteral("TestReport"),
+		Format:     *NewTextLiteral("Tabular"),
+		ReportType: *NewTextLiteral("AccountList"),
 		Columns: []ReportColumn{
 			{
-				Field: TextLiteral{Text: "ACCOUNT.NAME"},
+				Field: *NewTextLiteral("ACCOUNT.NAME"),
 			},
 			{
-				Field: TextLiteral{Text: "CRC_Inquiry__c$TestField__c"},
+				Field: *NewTextLiteral("CRC_Inquiry__c$TestField__c"),
 			},
 			{
-				Field: TextLiteral{Text: "ACCOUNT.TYPE"},
+				Field: *NewTextLiteral("ACCOUNT.TYPE"),
 			},
 		},
 		GroupingsAcross: []ReportGroupingAcross{
 			{
-				Field:     TextLiteral{Text: "CRC_Inquiry__c$TestField__c"},
-				SortOrder: TextLiteral{Text: "Asc"},
+				Field:     *NewTextLiteral("CRC_Inquiry__c$TestField__c"),
+				SortOrder: *NewTextLiteral("Asc"),
 			},
 			{
-				Field:     TextLiteral{Text: "ACCOUNT.TYPE"},
-				SortOrder: TextLiteral{Text: "Asc"},
+				Field:     *NewTextLiteral("ACCOUNT.TYPE"),
+				SortOrder: *NewTextLiteral("Asc"),
 			},
 		},
 		GroupingsDown: []ReportGroupingDown{
 			{
-				Field:     TextLiteral{Text: "AnotherField__c"},
-				SortOrder: TextLiteral{Text: "Asc"},
+				Field:     *NewTextLiteral("AnotherField__c"),
+				SortOrder: *NewTextLiteral("Asc"),
 			},
 		},
 		Filter: &ReportFilter{
 			CriteriaItems: []ReportFilterCriteriaItem{
 				{
-					Column:   TextLiteral{Text: "CRC_Inquiry__c$TestField__c"},
-					Operator: TextLiteral{Text: "equals"},
-					Value:    TextLiteral{Text: "TestValue"},
+					Column:   *NewTextLiteral("CRC_Inquiry__c$TestField__c"),
+					Operator: *NewTextLiteral("equals"),
+					Value:    *NewTextLiteral("TestValue"),
 				},
 				{
-					Column:   TextLiteral{Text: "ACCOUNT.NAME"},
-					Operator: TextLiteral{Text: "notEqual"},
-					Value:    TextLiteral{Text: ""},
+					Column:   *NewTextLiteral("ACCOUNT.NAME"),
+					Operator: *NewTextLiteral("notEqual"),
+					Value:    *NewTextLiteral(""),
 				},
 			},
 		},
 		Buckets: []ReportBucket{
 			{
-				DeveloperName:    TextLiteral{Text: "TestBucket"},
-				SourceColumnName: TextLiteral{Text: "CRC_Inquiry__c$TestField__c"},
+				DeveloperName:    *NewTextLiteral("TestBucket"),
+				SourceColumnName: *NewTextLiteral("CRC_Inquiry__c$TestField__c"),
 			},
 			{
-				DeveloperName:    TextLiteral{Text: "AnotherBucket"},
-				SourceColumnName: TextLiteral{Text: "ACCOUNT.TYPE"},
+				DeveloperName:    *NewTextLiteral("AnotherBucket"),
+				SourceColumnName: *NewTextLiteral("ACCOUNT.TYPE"),
 			},
 		},
 	}
@@ -74,14 +74,14 @@ func TestDeleteField(t *testing.T) {
 
 		// Check that TestField__c (with object prefix) is not in columns
 		for _, column := range testReport.Columns {
-			if column.Field.Text == "CRC_Inquiry__c$TestField__c" || column.Field.Text == "TestField__c" {
+			if column.Field.String() == "CRC_Inquiry__c$TestField__c" || column.Field.String() == "TestField__c" {
 				t.Error("TestField__c should have been deleted from columns")
 			}
 		}
 
 		// Check that TestField__c (with object prefix) is not in groupingsAcross
 		for _, grouping := range testReport.GroupingsAcross {
-			if grouping.Field.Text == "CRC_Inquiry__c$TestField__c" || grouping.Field.Text == "TestField__c" {
+			if grouping.Field.String() == "CRC_Inquiry__c$TestField__c" || grouping.Field.String() == "TestField__c" {
 				t.Error("TestField__c should have been deleted from groupingsAcross")
 			}
 		}
@@ -89,7 +89,7 @@ func TestDeleteField(t *testing.T) {
 		// Check that TestField__c (with object prefix) is not in filter criteria
 		if testReport.Filter != nil {
 			for _, criteria := range testReport.Filter.CriteriaItems {
-				if criteria.Column.Text == "CRC_Inquiry__c$TestField__c" || criteria.Column.Text == "TestField__c" {
+				if criteria.Column.String() == "CRC_Inquiry__c$TestField__c" || criteria.Column.String() == "TestField__c" {
 					t.Error("TestField__c should have been deleted from filter criteria")
 				}
 			}
@@ -97,7 +97,7 @@ func TestDeleteField(t *testing.T) {
 
 		// Check that TestField__c (with object prefix) is not in buckets
 		for _, bucket := range testReport.Buckets {
-			if bucket.SourceColumnName.Text == "CRC_Inquiry__c$TestField__c" || bucket.SourceColumnName.Text == "TestField__c" {
+			if bucket.SourceColumnName.String() == "CRC_Inquiry__c$TestField__c" || bucket.SourceColumnName.String() == "TestField__c" {
 				t.Error("TestField__c should have been deleted from buckets")
 			}
 		}
@@ -106,10 +106,10 @@ func TestDeleteField(t *testing.T) {
 		accountNameFound := false
 		accountTypeFound := false
 		for _, column := range testReport.Columns {
-			if column.Field.Text == "ACCOUNT.NAME" {
+			if column.Field.String() == "ACCOUNT.NAME" {
 				accountNameFound = true
 			}
-			if column.Field.Text == "ACCOUNT.TYPE" {
+			if column.Field.String() == "ACCOUNT.TYPE" {
 				accountTypeFound = true
 			}
 		}
@@ -120,7 +120,7 @@ func TestDeleteField(t *testing.T) {
 		// Verify other groupings are still present
 		accountTypeGroupingFound := false
 		for _, grouping := range testReport.GroupingsAcross {
-			if grouping.Field.Text == "ACCOUNT.TYPE" {
+			if grouping.Field.String() == "ACCOUNT.TYPE" {
 				accountTypeGroupingFound = true
 			}
 		}
@@ -129,7 +129,7 @@ func TestDeleteField(t *testing.T) {
 		// Verify other buckets are still present
 		anotherBucketFound := false
 		for _, bucket := range testReport.Buckets {
-			if bucket.SourceColumnName.Text == "ACCOUNT.TYPE" {
+			if bucket.SourceColumnName.String() == "ACCOUNT.TYPE" {
 				anotherBucketFound = true
 			}
 		}
@@ -140,10 +140,10 @@ func TestDeleteField(t *testing.T) {
 		// Reset the report for this test
 		testReport.Columns = []ReportColumn{
 			{
-				Field: TextLiteral{Text: "ACCOUNT.NAME"},
+				Field: *NewTextLiteral("ACCOUNT.NAME"),
 			},
 			{
-				Field: TextLiteral{Text: "ACCOUNT.TYPE"},
+				Field: *NewTextLiteral("ACCOUNT.TYPE"),
 			},
 		}
 
@@ -161,10 +161,10 @@ func TestDeleteField(t *testing.T) {
 		report := &Report{
 			Columns: []ReportColumn{
 				{
-					Field: TextLiteral{Text: "Account.Name"},
+					Field: *NewTextLiteral("Account.Name"),
 				},
 				{
-					Field: TextLiteral{Text: "CustomObject__c$CustomField__c"},
+					Field: *NewTextLiteral("CustomObject__c$CustomField__c"),
 				},
 			},
 		}
@@ -175,6 +175,6 @@ func TestDeleteField(t *testing.T) {
 
 		// Verify the field was deleted
 		assert.Equal(t, 1, len(report.Columns))
-		assert.Equal(t, "Account.Name", report.Columns[0].Field.Text)
+		assert.Equal(t, "Account.Name", report.Columns[0].Field.String())
 	})
 }

@@ -11,26 +11,26 @@ func TestDeleteField(t *testing.T) {
 	// Create a test flexipage with field instances
 	testFlexiPage := &FlexiPage{
 		Xmlns:         "http://soap.sforce.com/2006/04/metadata",
-		MasterLabel:   TextLiteral{Text: "Test Page"},
-		FlexiPageType: TextLiteral{Text: "RecordPage"},
+		MasterLabel:   *NewTextLiteral("Test Page"),
+		FlexiPageType: *NewTextLiteral("RecordPage"),
 		FlexiPageRegions: []FlexiPageRegion{
 			{
-				Name: TextLiteral{Text: "main"},
-				Type: TextLiteral{Text: "Region"},
+				Name: *NewTextLiteral("main"),
+				Type: *NewTextLiteral("Region"),
 				ItemInstances: []ItemInstance{
 					{
 						FieldInstance: &FieldInstance{
-							FieldItem: TextLiteral{Text: "Account.Name"},
+							FieldItem: *NewTextLiteral("Account.Name"),
 						},
 					},
 					{
 						FieldInstance: &FieldInstance{
-							FieldItem: TextLiteral{Text: "Record.Share_With_Program_Text__c"},
+							FieldItem: *NewTextLiteral("Record.Share_With_Program_Text__c"),
 						},
 					},
 					{
 						FieldInstance: &FieldInstance{
-							FieldItem: TextLiteral{Text: "Account.Type"},
+							FieldItem: *NewTextLiteral("Account.Type"),
 						},
 					},
 				},
@@ -51,7 +51,7 @@ func TestDeleteField(t *testing.T) {
 		accountTypeFound := false
 		for _, instance := range testFlexiPage.FlexiPageRegions[0].ItemInstances {
 			if instance.FieldInstance != nil {
-				fieldText := instance.FieldInstance.FieldItem.Text
+				fieldText := instance.FieldInstance.FieldItem.String()
 				if fieldText == "Account.Name" {
 					accountNameFound = true
 				}

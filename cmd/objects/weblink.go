@@ -68,7 +68,7 @@ func listWebLinks(file string) {
 	for _, f := range webLinks {
 		// Apply URL filter if specified
 		if urlFilter != "" {
-			if f.URL == nil || !strings.Contains(f.URL.Text, urlFilter) {
+			if f.URL == nil || !strings.Contains(f.URL.String(), urlFilter) {
 				continue
 			}
 		}

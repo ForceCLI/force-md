@@ -9,9 +9,7 @@ import (
 func TextValue(cmd *cobra.Command, flag string) (t *TextLiteral) {
 	if cmd.Flags().Changed(flag) {
 		val, _ := cmd.Flags().GetString(flag)
-		t = &TextLiteral{
-			Text: val,
-		}
+		t = NewTextLiteral(val)
 	}
 	return t
 }

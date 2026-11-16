@@ -12,15 +12,13 @@ var TabExistsError = errors.New("tab already exists")
 
 func (p *CustomApplication) AddTab(tabName string) error {
 	for _, t := range p.Tabs {
-		if strings.ToLower(t.Text) == strings.ToLower(tabName) {
+		if strings.ToLower(t.String()) == strings.ToLower(tabName) {
 			return TabExistsError
 		}
 	}
-	p.Tabs = append(p.Tabs, TextLiteral{
-		Text: tabName,
-	})
+	p.Tabs = append(p.Tabs, *NewTextLiteral(tabName))
 	sort.Slice(p.Tabs, func(i, j int) bool {
-		return p.Tabs[i].Text < p.Tabs[j].Text
+		return p.Tabs[i].String() < p.Tabs[j].String()
 	})
 	return nil
 }
@@ -29,7 +27,7 @@ func (p *CustomApplication) DeleteTab(tabName string) error {
 	found := false
 	newTabs := p.Tabs[:0]
 	for _, f := range p.Tabs {
-		if strings.ToLower(f.Text) == strings.ToLower(tabName) {
+		if strings.ToLower(f.String()) == strings.ToLower(tabName) {
 			found = true
 		} else {
 			newTabs = append(newTabs, f)

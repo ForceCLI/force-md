@@ -35,9 +35,7 @@ type ValueSetValue struct {
 	} `xml:"default"`
 	Description *TextLiteral `xml:"description"`
 	IsActive    *BooleanText `xml:"isActive"`
-	Label       struct {
-		Text string `xml:",innerxml"`
-	} `xml:"label"`
+	Label       TextLiteral  `xml:"label"`
 }
 
 type Field struct {
@@ -87,10 +85,8 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"active"`
 		BooleanFilter *TextLiteral `xml:"booleanFilter"`
-		ErrorMessage  *struct {
-			Text string `xml:",innerxml"`
-		} `xml:"errorMessage"`
-		FilterItems []struct {
+		ErrorMessage  *TextLiteral `xml:"errorMessage"`
+		FilterItems   []struct {
 			Field struct {
 				Text string `xml:",chardata"`
 			} `xml:"field"`
@@ -184,10 +180,8 @@ type Field struct {
 			Text string `xml:",chardata"`
 		} `xml:"valueSetName"`
 		ValueSettings []struct {
-			ControllingFieldValue []struct {
-				Text string `xml:",innerxml"`
-			} `xml:"controllingFieldValue"`
-			ValueName struct {
+			ControllingFieldValue []TextLiteral `xml:"controllingFieldValue"`
+			ValueName             struct {
 				Text string `xml:",chardata"`
 			} `xml:"valueName"`
 		} `xml:"valueSettings"`

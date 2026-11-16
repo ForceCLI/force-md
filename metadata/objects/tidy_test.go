@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/ForceCLI/force-md/general"
-	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata/objects/field"
 	"github.com/ForceCLI/force-md/metadata/objects/listview"
 	"github.com/ForceCLI/force-md/metadata/objects/recordtype"
@@ -81,10 +80,10 @@ func TestFieldListTidyFormatsFormulasUsingEveryFunction(t *testing.T) {
 		fields := FieldList{
 			field.Field{
 				FullName: "Formula__c",
-				Formula:  &general.TextLiteral{Text: formula},
+				Formula:  general.NewTextLiteral(formula),
 			},
 		}
 		assert.NotPanics(t, fields.Tidy, formula)
-		assert.Equal(t, internal.FormulaEscaper.Replace(formula), fields[0].Formula.Text)
+		assert.Equal(t, formula, fields[0].Formula.String())
 	}
 }

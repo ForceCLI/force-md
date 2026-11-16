@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ForceCLI/force-md/general"
 	"github.com/ForceCLI/force-md/internal"
 	"github.com/ForceCLI/force-md/metadata/sharingrules"
 )
@@ -24,7 +25,7 @@ func TestListAllRules(t *testing.T) {
 			{
 				FullName:    "TestCriteriaRule1",
 				AccessLevel: sharingrules.AccessLevel{Text: "Read"},
-				Label:       sharingrules.Label{Text: "Test Criteria Rule 1"},
+				Label:       *general.NewTextLiteral("Test Criteria Rule 1"),
 				SharedTo: sharingrules.SharedTo{
 					Group: &sharingrules.Group{Text: "TestGroup"},
 				},
@@ -39,7 +40,7 @@ func TestListAllRules(t *testing.T) {
 			{
 				FullName:    "TestCriteriaRule2",
 				AccessLevel: sharingrules.AccessLevel{Text: "Edit"},
-				Label:       sharingrules.Label{Text: "Test Criteria Rule 2"},
+				Label:       *general.NewTextLiteral("Test Criteria Rule 2"),
 				SharedTo: sharingrules.SharedTo{
 					Role: &sharingrules.Role{Text: "TestRole"},
 				},
@@ -56,7 +57,7 @@ func TestListAllRules(t *testing.T) {
 			{
 				FullName:    "TestOwnerRule1",
 				AccessLevel: sharingrules.AccessLevel{Text: "Read"},
-				Label:       sharingrules.Label{Text: "Test Owner Rule 1"},
+				Label:       *general.NewTextLiteral("Test Owner Rule 1"),
 				SharedFrom: sharingrules.SharedFrom{
 					Role: &sharingrules.Role{Text: "SourceRole"},
 				},

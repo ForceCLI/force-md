@@ -5,13 +5,9 @@ import (
 )
 
 func (o *Dashboard) UpdateRunningUser(user string) {
-	o.RunningUser = &TextLiteral{
-		Text: user,
-	}
+	o.RunningUser = NewTextLiteral(user)
 }
 
 func (o *Dashboard) UpdateDashboardType(dashboardType string) {
-	o.DashboardType = &TextLiteral{
-		Text: dashboardType,
-	}
+	o.DashboardType = NewTextLiteral(dashboardType)
 }

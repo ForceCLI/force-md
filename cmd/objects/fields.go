@@ -310,7 +310,7 @@ func listFields(file string, attributes field.Field) {
 	var filters []field.FieldFilter
 	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
-		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
+		isMasterDetail := f.Type != nil && f.Type.String() == "MasterDetail"
 		return isRequired || isMasterDetail
 	}
 	if attributes.Required.IsTrue() {
@@ -353,7 +353,7 @@ func listFields(file string, attributes field.Field) {
 		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
-				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+				if f.Type != nil && strings.ToLower(f.Type.String()) == t {
 					return true
 				}
 			}
@@ -363,13 +363,13 @@ func listFields(file string, attributes field.Field) {
 	if references != "" {
 		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
-			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
+			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.String()) == r
 		})
 	}
 	if label != "" {
 		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
-			return f.Label != nil && strings.ToLower(f.Label.Text) == l
+			return f.Label != nil && strings.ToLower(f.Label.String()) == l
 		})
 	}
 	fields := o.GetFields(filters...)
@@ -388,7 +388,7 @@ func graphFields(file string, attributes field.Field, objectsOnly bool) {
 	var filters []field.FieldFilter
 	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
-		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
+		isMasterDetail := f.Type != nil && f.Type.String() == "MasterDetail"
 		return isRequired || isMasterDetail
 	}
 	if attributes.Required.IsTrue() {
@@ -425,7 +425,7 @@ func graphFields(file string, attributes field.Field, objectsOnly bool) {
 		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
-				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+				if f.Type != nil && strings.ToLower(f.Type.String()) == t {
 					return true
 				}
 			}
@@ -435,13 +435,13 @@ func graphFields(file string, attributes field.Field, objectsOnly bool) {
 	if references != "" {
 		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
-			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
+			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.String()) == r
 		})
 	}
 	if label != "" {
 		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
-			return f.Label != nil && strings.ToLower(f.Label.Text) == l
+			return f.Label != nil && strings.ToLower(f.Label.String()) == l
 		})
 	}
 	fields := o.GetFields(filters...)
@@ -450,9 +450,9 @@ func graphFields(file string, attributes field.Field, objectsOnly bool) {
 			continue
 		}
 		if objectsOnly {
-			fmt.Printf("%s %s\n", objectName, f.ReferenceTo.Text)
+			fmt.Printf("%s %s\n", objectName, f.ReferenceTo.String())
 		} else {
-			fmt.Printf("%s.%s %s.Id\n", objectName, f.FullName, f.ReferenceTo.Text)
+			fmt.Printf("%s.%s %s.Id\n", objectName, f.FullName, f.ReferenceTo.String())
 		}
 	}
 }
@@ -461,7 +461,7 @@ func tableFields(files []string, attributes field.Field) {
 	var filters []field.FieldFilter
 	requiredFilter := func(f field.Field) bool {
 		isRequired := alwaysRequired[f.FullName] || (f.Required != nil && f.Required.Text == "true")
-		isMasterDetail := f.Type != nil && f.Type.Text == "MasterDetail"
+		isMasterDetail := f.Type != nil && f.Type.String() == "MasterDetail"
 		return isRequired || isMasterDetail
 	}
 	if attributes.Required.IsTrue() {
@@ -504,7 +504,7 @@ func tableFields(files []string, attributes field.Field) {
 		filters = append(filters, func(f field.Field) bool {
 			for _, t := range fieldTypes {
 				t = strings.ToLower(t)
-				if f.Type != nil && strings.ToLower(f.Type.Text) == t {
+				if f.Type != nil && strings.ToLower(f.Type.String()) == t {
 					return true
 				}
 			}
@@ -514,13 +514,13 @@ func tableFields(files []string, attributes field.Field) {
 	if references != "" {
 		filters = append(filters, func(f field.Field) bool {
 			r := strings.ToLower(references)
-			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.Text) == r
+			return f.ReferenceTo != nil && strings.ToLower(f.ReferenceTo.String()) == r
 		})
 	}
 	if label != "" {
 		filters = append(filters, func(f field.Field) bool {
 			l := strings.ToLower(label)
-			return f.Label != nil && strings.ToLower(f.Label.Text) == l
+			return f.Label != nil && strings.ToLower(f.Label.String()) == l
 		})
 	}
 	type field struct {
@@ -629,7 +629,7 @@ func showField(file string, fieldName string) {
 	}
 	if formulaField {
 		if fields[0].Formula != nil {
-			fmt.Println(html.UnescapeString(fields[0].Formula.Text))
+			fmt.Println(fields[0].Formula.String())
 		}
 		return
 	}

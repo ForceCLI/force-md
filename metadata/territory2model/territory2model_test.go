@@ -56,7 +56,7 @@ func TestOpenParsesTerritory2ModelCustomFields(t *testing.T) {
 		t.Fatalf("customFields length = %d, want 1", len(m.CustomFields))
 	}
 	field := m.CustomFields[0]
-	if field.Name.Text != "AutoNumber__c" || field.Value.Type != "xsd:string" || field.Value.Text != "M# 000001" {
+	if field.Name.Text != "AutoNumber__c" || field.Value.Type != "xsd:string" || field.Value.String() != "M# 000001" {
 		t.Errorf("customFields[0] = %+v, want AutoNumber__c xsd:string M# 000001", field)
 	}
 }

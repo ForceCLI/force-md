@@ -5,9 +5,7 @@ import (
 )
 
 func (o *PlatformEventSubscriberConfig) UpdateUser(user string) {
-	o.User = &TextLiteral{
-		Text: user,
-	}
+	o.User = NewTextLiteral(user)
 }
 
 func (o *PlatformEventSubscriberConfig) DeleteUser() {

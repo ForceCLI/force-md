@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"testing"
 
+	nbioxml "github.com/nbio/xml"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +29,7 @@ func TestParseExternalObject(t *testing.T) {
 </CustomObject>
 `)
 	obj := &CustomObject{}
-	err := xml.Unmarshal(src, obj)
+	err := nbioxml.Unmarshal(src, obj)
 	assert.NoError(t, err)
 	if assert.NotNil(t, obj.ExternalDataSource) {
 		assert.Equal(t, "Orders_Source", obj.ExternalDataSource.Text)
@@ -40,7 +42,7 @@ func TestParseExternalObject(t *testing.T) {
 	}
 	if assert.Len(t, obj.Fields, 1) {
 		if assert.NotNil(t, obj.Fields[0].ExternalDeveloperName) {
-			assert.Equal(t, "total", obj.Fields[0].ExternalDeveloperName.Text)
+			assert.Equal(t, "total", obj.Fields[0].ExternalDeveloperName.String())
 		}
 		if assert.NotNil(t, obj.Fields[0].ReadOnlyProxy) {
 			assert.Equal(t, "true", obj.Fields[0].ReadOnlyProxy.Text)
